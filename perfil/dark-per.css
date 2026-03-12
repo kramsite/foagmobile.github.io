@@ -1,0 +1,128 @@
+/* ==================== VARIÁVEIS MODO ESCURO ==================== */
+:root {
+  --dark-bg: #0f172a;         /* Azul muito escuro */
+  --dark-surface: #1e293b;    /* Azul escuro */
+  --dark-primary: #669ada;    /* Azul vibrante */
+  --dark-secondary: #3b82f6;  /* Azul mais claro */
+  --dark-text: #e2e8f0;       /* Cinza claro */
+  --dark-border: #334155;     /* Borda azulada */
+  --dark-card: #1e293b;       /* Cor do card */
+}
+
+/* ==================== BASE ==================== */
+body.dark-mode {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* ==================== CONTAINER PRINCIPAL ==================== */
+body.dark-mode .container {
+  background-color: var(--dark-card) !important;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ==================== PAINEL ESQUERDO ==================== */
+body.dark-mode .left-panel {
+  background-color: var(--dark-primary) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .left-panel p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .left-panel .avatar {
+  border: 3px solid var(--dark-border) !important;
+}
+
+/* ==================== PAINEL DIREITO ==================== */
+body.dark-mode .right-panel {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+}
+
+/* ==================== LABELS ==================== */
+body.dark-mode .campo-info label {
+  color: var(--dark-text) !important;
+}
+
+/* ==================== INPUTS ==================== */
+body.dark-mode .campo-info input,
+body.dark-mode .campo-info select {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .campo-info input:focus,
+body.dark-mode .campo-info select:focus {
+  border-color: var(--dark-primary) !important;
+  outline: none;
+}
+
+/* ==================== BOTÕES ==================== */
+body.dark-mode .salvar {
+  background-color: var(--dark-primary) !important;
+  color: white !important;
+}
+
+body.dark-mode .salvar:hover {
+  background-color: var(--dark-secondary) !important;
+}
+
+body.dark-mode .cancelar {
+  background-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .cancelar:hover {
+  background-color: #475569 !important;
+}
+
+body.dark-mode .btn-seta {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .btn-seta:hover {
+  background-color: var(--dark-primary) !important;
+}
+
+/* ==================== BOTÃO SAIR ==================== */
+body.dark-mode .btn-sair {
+  background-color: #dc2626 !important;
+  color: white !important;
+}
+
+body.dark-mode .btn-sair:hover {
+  background-color: #ef4444 !important;
+}
+
+/* ==================== UPLOAD ==================== */
+body.dark-mode .label-upload {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-primary) !important;
+}
+
+body.dark-mode .label-upload:hover {
+  background-color: var(--dark-border) !important;
+}
+
+/* ==================== ÁREA DE INFORMAÇÕES ==================== */
+body.dark-mode .texto-info {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ==================== SELECT ==================== */
+body.dark-mode .campo-info select {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .campo-info select option {
+  background-color: var(--dark-bg);
+  color: var(--dark-text);
+}

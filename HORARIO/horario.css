@@ -1,0 +1,273 @@
+/* Reset de margens, paddings e box-sizing */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Corpo da página */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: white;
+}
+
+/* Cabeçalho do site */
+header.cabecalho {
+    font-family: 'Snap ITC', sans-serif;
+    width: 100%;
+    background-color: #38a5ff;
+    color: white;
+    text-align: left;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+
+}
+
+/* Container geral (menu e conteúdo principal) */
+.container {
+    display: flex;
+    flex: 1;
+}
+
+/* Menu lateral */
+nav.menu {
+  width: 260px;
+  background: #38a5ff;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, .15);
+}
+
+nav.menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background .2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+  background: rgba(255, 255, 255, .18);
+}
+
+.cabecalho {
+  position: relative;
+  padding: 10px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2); 
+}
+
+/* Container dos botões no header */
+.header-icons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 15px;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-icons i:hover {
+  color: #006cc5; /* muda a cor no hover, pode ajustar */
+  transform: translateY(-13%) scale(1.1);
+}
+
+/* Fundo escuro do modal */
+.modal {
+  display: none; /* escondido por padrão */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Caixa branca do modal */
+.modal-content {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: aparecer 0.3s ease;
+}
+
+/* Botões do modal */
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-buttons button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+/* Botão "Sim" */
+#confirm-logout {
+  background-color: #38a5ff;
+  color: #fff;
+}
+
+#confirm-logout:hover {
+  background-color: #006cc5;
+}
+
+/* Botão "Cancelar" */
+#cancel-logout {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+#cancel-logout:hover {
+  background-color: #bdbdbd;
+}
+
+/* Animação */
+@keyframes aparecer {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Área principal para o conteúdo da tabela */
+.main-content {
+    flex: 1;
+    padding: 30px;
+    overflow-x: auto;
+}
+
+/* Título da tabela */
+.titulo-tabela {
+    font-family: 'snap ITC', sans-serif;
+    font-size: 60px;
+    font-weight: bold;
+    color: #2e8fde;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+
+/* Estilos da tabela */
+table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse; /* Para que as bordas internas fiquem finas */
+    background: white;
+    border-radius: 10px; /* Borda externa arredondada */
+    border: 1px solid #ddd; /* Borda externa da tabela */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+}
+
+/* Borda interna fina para células */
+th, td {
+    border: 1px solid #ddd; /* Borda fina interna */
+    padding: 15px;
+    text-align: center;
+}
+
+/* Cabeçalho */
+th {
+    background: #38a5ff;
+    color: white;
+    font-weight: bold;
+    border-radius: 10px 10px 0 0; /* Borda arredondada apenas na parte superior da tabela */
+}
+
+tr:nth-child(even) {
+    background: #f1f1f1;
+}
+
+td[contenteditable="true"] {
+    background-color: #ececec;
+    cursor: text;
+}
+
+td:first-child {
+    background-color: #38a5ff;
+    color: white;
+    font-weight: bold;
+}
+
+/* FIX — Garantir que o modal fica acima de TUDO */
+.modal-sucesso {
+    position: fixed !important;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.4);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+    z-index: 999999 !important;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.modal-sucesso .modal-box {
+    background: #fff;
+    padding: 25px 30px;
+    border-radius: 18px;
+    width: 330px;
+    text-align: center;
+    box-shadow: 0 0 18px rgba(0,0,0,0.15);
+    transform: translateY(20px);
+    transition: transform 0.25s ease;
+    z-index: 1000000 !important;
+}
+
+
+/* Botões */
+button {
+    margin: 15px 0;
+    padding: 12px 18px;
+    background-color: #38a5ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s, transform 0.2s ease-in-out;
+}
+
+button:hover {
+    background-color: #0056b3;
+    transform: scale(1.02); /* Efeito de aumento */
+}
+
+footer {
+    background-color: #232323;
+    color: #ffffff;
+    text-align: center;
+    padding: 3px;
+    width: 100%;
+    font-size: 0.9em; /* Corrigido para tamanho legível */
+}

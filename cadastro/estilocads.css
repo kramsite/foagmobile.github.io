@@ -1,0 +1,375 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Corpo com imagem de fundo desfocada */
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100vh;
+  background: url('../img/livro.png') no-repeat center center/cover;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Camada de desfoque */
+body::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: inherit;
+  filter: blur(6px) brightness(0.7);
+  z-index: -1;
+}
+
+/* Logo fixa no topo */
+.logo {
+  font-family: 'Snap ITC', sans-serif;
+  background-color: #38a5ff;
+  color: white;
+  font-size: 2em;
+  padding: 15px 20px;
+  width: 100%;
+  text-align: left;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Bloco branco centralizado */
+.form-container {
+  background: #fff;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  margin-top: 50px;
+  z-index: 1;
+}
+
+/* Título */
+h2 {
+  text-align: center;
+  color: #007bff;
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
+/* Formulário */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Labels */
+label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #333;
+}
+
+/* Inputs e Select padronizados */
+input, select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  appearance: none; /* Remove estilo padrão */
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Foco e hover */
+input:focus, select:focus {
+  border-color: #38a5ff;
+  box-shadow: 0 0 4px rgba(56, 165, 255, 0.4);
+  outline: none;
+}
+
+/* Campos lado a lado */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+.form-row > div {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Botão */
+button {
+  background-color: #38a5ff;
+  color: white;
+  border: none;
+  padding: 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+}
+button:hover {
+  background-color: #3099ef;
+  transform: translateY(-2px);
+}
+button:active {
+  transform: translateY(1px);
+}
+
+/* Checkbox */
+label.termos {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+}
+label.termos a {
+  color: #007bff;
+  text-decoration: none;
+}
+label.termos a:hover {
+  text-decoration: underline;
+}
+
+/* Ajustes extras para o select */
+select {
+  display: inline-block;
+  height: 42px; /* igual à altura média dos inputs */
+  line-height: 1.5;
+  background-color: #fff;
+  color: #333;
+  font-size: 0.9rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  padding: 0 40px 0 12px; /* espaço para texto e setinha */
+  appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2338a5ff"><path d="M7 10l5 5 5-5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 18px;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+select:hover {
+  border-color: #38a5ff;
+}
+
+select:focus {
+  border-color: #38a5ff;
+  box-shadow: 0 0 4px rgba(56, 165, 255, 0.4);
+  outline: none;
+}
+
+/* Espaçamento do campo Escola/Faculdade */
+label[for="escola"] {
+  margin-bottom: 4px;
+  display: block;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-row .form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row label {
+  margin-bottom: 6px;
+  margin-top: 0;
+}
+
+.form-row select {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.9rem;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #333;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-row select:hover {
+  border-color: #38a5ff;
+}
+
+.form-row select:focus {
+  border-color: #38a5ff;
+  box-shadow: 0 0 4px rgba(56, 165, 255, 0.4);
+  outline: none;
+}
+
+/* Para telas pequenas (mobile), empilha os campos */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+}
+
+#escola {
+  margin-bottom: 12px; /* Espaço entre o select e os outros campos */
+}
+
+/* Estilo do container do checkbox */
+label.termos {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+/* Esconde o checkbox padrão e cria estilo customizado */
+label.termos input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid #38a5ff;
+  border-radius: 3px;
+  background: #fff;
+  cursor: pointer;
+  position: relative;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Efeito quando passa o mouse */
+label.termos input[type="checkbox"]:hover {
+  box-shadow: 0 0 4px rgba(56, 165, 255, 0.4);
+}
+
+/* Quando está marcado */
+label.termos input[type="checkbox"]:checked {
+  background-color: #38a5ff;
+  border-color: #38a5ff;
+}
+
+/* Check mais fino e centralizado */
+label.termos input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 4px;
+  width: 4px;
+  height: 8px;
+  border: solid #fff;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Container do campo senha (pai do input + balão) */
+.form-row > div:first-child {
+  position: relative;
+  max-width: 300px; /* ajuste conforme seu layout */
+}
+
+/* Balão de requisitos */
+#requisitos-senha {
+  position: absolute;
+  top: 50%;
+  left: -280px; /* distância à direita do input, ajuste se precisar */
+  transform: translateY(-50%);
+  width: 260px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 10px 15px;
+  border-radius: 5px;
+  box-shadow: 0 0 6px rgba(0,0,0,0.1);
+  font-size: 14px;
+  color: #333;
+  z-index: 10;
+  transition: opacity 0.3s ease;
+}
+
+/* Esconde o balão */
+.tooltip-hidden {
+  display: none;
+}
+
+/* Estilo dos itens da lista */
+#requisitos-senha ul {
+  margin: 5px 0 0 20px;
+  padding: 0;
+  list-style-type: disc;
+}
+
+/* Item válido - verde */
+#requisitos-senha li.valid {
+  color: green;
+  font-weight: 600;
+}
+
+/* Item inválido - vermelho */
+#requisitos-senha li.invalid {
+  color: red;
+  font-weight: 600;
+}
+
+/* Opcional: título do balão */
+#requisitos-senha p {
+  margin: 0 0 5px 0;
+  font-weight: 700;
+}
+
+.password-wrapper {
+  position: relative;
+  flex: 1;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 30px; /* espaço pro macaco */
+  box-sizing: border-box;
+}
+
+.toggle-visibility {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-10%);
+  cursor: pointer;
+  font-size: 24px;  /* macaco maior */
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.toggle-visibility.active {
+  transform: translateY(-11%) scale(1.1); /* anima quando ativo */
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .form-container {
+    padding: 20px;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "nome": "Rafaella",
+        "email": "rafaellagomes1314@gmail.com",
+        "senha": "$2y$10$ZFIoq8lUoKbSW8Nk2gaON.ioe1HZU7QXI6NBLzrYA2zUio7JoTlTG",
+        "nascimento": "2008-09-22",
+        "telefone": "(65) 99313-7382",
+        "serie": "2º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
+        "termos_aceitos": true,
+        "cadastrado_em": "2025-11-22 22:29:32"
+    },
+    {
+        "id": 2,
+        "nome": "marianna",
+        "email": "marianna@gmail.com",
+        "senha": "$2y$10$7JnMbiCkTB89.6bc7IE\/5esjIOk9HkpyJBj3mMj.z1zXoYXaZoQdu",
+        "nascimento": "2008-11-28",
+        "telefone": "(65) 9234-6361",
+        "serie": "2º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
+        "termos_aceitos": true,
+        "cadastrado_em": "2025-11-25 13:13:10"
+    },
+    {
+        "id": 3,
+        "nome": "Iza",
+        "email": "Iza@gmail.com",
+        "senha": "$2y$10$5s4Rx53CUZPBNxWeL3Xmgu9mCHxfB83iEaIlcvD1pOIv\/dn9hQkpO",
+        "nascimento": "2010-03-03",
+        "telefone": "(65) 98765-0034",
+        "serie": "1º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
+        "termos_aceitos": true,
+        "cadastrado_em": "2025-11-25 15:08:58"
+    },
+    {
+        "id": 4,
+        "nome": "Gabrielly",
+        "email": "e2362701@edu.mt.gov.br",
+        "senha": "$2y$10$nocU9k3An8BVp4sps9xymOIwz\/LaTNOwLT4EZG\/XzfMZPyrl6.SC6",
+        "nascimento": "2009-10-06",
+        "telefone": "(65) 99611-2624",
+        "serie": "1º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
+        "termos_aceitos": true,
+        "cadastrado_em": "2025-11-25 15:13:54"
+    },
+    {
+        "id": 5,
+        "nome": "kezia",
+        "email": "kezia@gmail.com",
+        "senha": "$2y$10$vYWfI7hxA63YuHeoU5RC5eQlOQzHJXk21qSKur37QS83tBRjIqP\/q",
+        "nascimento": "2009-04-21",
+        "telefone": "(65) 99324-4876",
+        "serie": "2º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
+        "termos_aceitos": true,
+        "cadastrado_em": "2025-11-25 15:23:44"
+    }
+]

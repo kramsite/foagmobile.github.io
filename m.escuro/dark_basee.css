@@ -1,0 +1,76 @@
+/* ================================
+   dark_base.css — Modo escuro global
+   Somente: variáveis + body + header + menu + footer
+================================ */
+
+/* Paleta global do dark mode */
+:root {
+  --dark-bg: #0f172a;        /* fundo geral */
+  --dark-surface: #1e293b;   /* superfícies */
+  --dark-primary: #669ada;   /* azul vibrante menus/header */
+  --dark-text: #e2e8f0;      /* texto claro */
+  --dark-text-soft: #94a3b8; /* texto suave */
+  --dark-border: #334155;    /* borda */
+}
+
+/* =============================
+      BODY
+============================= */
+body.dark-mode {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  transition: background-color .2s ease, color .2s ease;
+}
+
+/* =============================
+      CABEÇALHO
+============================= */
+body.dark-mode header.cabecalho {
+  background-color: var(--dark-primary) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,.6) !important;
+}
+
+/* ícones do cabeçalho */
+body.dark-mode .header-icons i {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .header-icons i:hover {
+  color: #bcdcff !important;
+}
+
+/* =============================
+      MENU LATERAL
+============================= */
+body.dark-mode nav.menu {
+  background-color: var(--dark-primary) !important;
+  box-shadow: 4px 0 15px rgba(0,0,0,.6) !important;
+}
+
+body.dark-mode nav.menu a {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background-color: rgba(255,255,255,0.15) !important;
+  color: white !important;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.9) !important;
+}
+
+
+/* =============================
+      FOOTER
+============================= */
+body.dark-mode footer {
+  background-color: #020617 !important;
+  color: var(--dark-text-soft) !important;
+  border-top: 1px solid var(--dark-border) !important;
+}

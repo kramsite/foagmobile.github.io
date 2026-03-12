@@ -1,0 +1,758 @@
+/* ===========================
+   RESET + BASE
+   =========================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+}
+
+/* Reset + fonte global */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Corpo da página */
+body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: white;
+}
+
+/* Cabeçalho do site */
+header.cabecalho {
+    font-family: 'Snap ITC', sans-serif;
+    width: 100%;
+    background-color: #38a5ff;
+    color: white;
+    text-align: left;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Container geral (menu e conteúdo principal) */
+.container {
+    display: flex;
+    flex: 1;
+}
+
+/* Menu lateral */
+nav.menu {
+  width: 260px;
+  background: #38a5ff;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, .15);
+}
+
+nav.menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background .2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+  background: rgba(255, 255, 255, .18);
+}
+
+.cabecalho {
+  position: relative;
+  padding: 10px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Ícones no header */
+.header-icons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 15px;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-icons i:hover {
+  color: #006cc5;
+  transform: translateY(-13%) scale(1.1);
+}
+
+/* Modal fundo */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal box */
+.modal-content {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: aparecer 0.3s ease;
+}
+
+/* Botões do modal */
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-buttons button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#confirm-logout {
+  background-color: #38a5ff;
+  color: #fff;
+}
+
+#confirm-logout:hover {
+  background-color: #006cc5;
+}
+
+#cancel-logout {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+#cancel-logout:hover {
+  background-color: #bdbdbd;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* ===========================
+   CONTEÚDO
+   =========================== */
+.main-content {
+    flex: 1;
+    padding: 30px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    overflow-y: auto;
+}
+
+/* ===========================
+   CARDS
+   =========================== */
+.card-notas {
+    width: 100%;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px 22px;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.12);
+    border: 1px solid #e3e8ef;
+    overflow-x: auto; /* se a tabela ficar grande, rola horizontal sem quebrar nada */
+}
+
+.card-notas:first-of-type::before {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 3px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #38a5ff, #0a76d9);
+    margin-bottom: 10px;
+}
+
+.titulo-tabela {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.sub-notas {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+.config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pill-tipo {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background-color: #e0f2fe;
+    color: #0f172a;
+    border: 1px solid #bae6fd;
+}
+
+/* ===========================
+   CONFIGURAÇÕES
+   =========================== */
+.card-config {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.config-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px 18px;
+    margin-top: 6px;
+}
+
+.config-field,
+.config-field-periodo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.config-field label,
+.config-field-periodo label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ===========================
+   INPUTS (inclui nome da matéria)
+   =========================== */
+.config-field input,
+.config-field-periodo select,
+.config-field-periodo input {
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+    background-color: #f9fafb;
+}
+
+.config-field input,
+.config-field-periodo input,
+.main-content input[type="text"] {
+  padding: 9px 12px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  font-size: 14px;
+  color: #111827;
+  width: 100%;
+  max-width: 100%;
+
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    background-color 0.15s ease,
+    transform 0.08s ease;
+}
+
+.config-field input::placeholder,
+.config-field-periodo input::placeholder,
+.main-content input[type="text"]::placeholder {
+  color: #9ca3af;
+  font-size: 13px;
+}
+
+/* Foco */
+.config-field input:focus,
+.config-field-periodo input:focus,
+.main-content input[type="text"]:focus {
+  border-color: #38a5ff;
+  background-color: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 1px rgba(56,165,255,0.4), 0 6px 14px rgba(15,23,42,0.12);
+  transform: translateY(-1px);
+}
+
+/* ===========================
+   TABELA DE NOTAS
+   =========================== */
+.tabela-notas {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.tabela-notas th,
+.tabela-notas td {
+    padding: 8px;
+    border: 1px solid #e5e7eb;
+    text-align: center;
+    font-size: 13px;
+    vertical-align: middle;
+}
+
+/* inputs dentro da tabela (notas + nome da matéria na tabela) */
+.tabela-notas td input[type="text"],
+.tabela-notas td input[type="number"] {
+    width: 100%;
+    max-width: 100%;
+    padding: 6px 8px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background-color: #f9fafb;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.tabela-notas td input[type="text"]:focus,
+.tabela-notas td input[type="number"]:focus {
+    border-color: #38a5ff;
+    background-color: #ffffff;
+    outline: none;
+    box-shadow: 0 0 0 1px rgba(56,165,255,0.35);
+}
+
+/* garantir que as colunas tenham espaço mínimo */
+.tabela-notas th:nth-child(1),
+.tabela-notas td:nth-child(1) {
+    min-width: 130px; /* nome da matéria */
+}
+
+.tabela-notas th:not(:first-child),
+.tabela-notas td:not(:first-child) {
+    min-width: 80px; /* colunas de notas */
+}
+
+/* ===========================
+   RESUMO
+   =========================== */
+.resumo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.resumo-card {
+    border-radius: 10px;
+    padding: 10px 12px;
+    background-color: #f9fafb;
+    border: 1px solid #e3e8ef;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.resumo-label {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.resumo-valor {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+/* ===========================
+   FOOTER
+   =========================== */
+footer {
+    background-color: #232323;
+    color: #ffffff;
+    text-align: center;
+    padding: 3px;
+    width: 100%;
+    font-size: 0.9em;
+}
+
+/* ===========================
+   RESPONSIVO
+   =========================== */
+@media (max-width: 900px) {
+
+    nav.menu {
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .container {
+        flex-direction: column;
+        height: calc(100vh - 70px - 48px);
+    }
+}
+
+@media (max-width: 480px) {
+
+    header.cabecalho {
+        font-size: 20px;
+    }
+
+    nav.menu a {
+        font-size: 14px;
+    }
+}
+
+/* =========================================
+   BOTÃO PRINCIPAL (SALVAR ALTERAÇÕES)
+   ========================================= */
+
+.btn-destaque {
+  border: none;
+  padding: 10px 18px;
+  border-radius: 999px;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #38a5ff, #0a76d9);
+  color: #ffffff;
+
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  box-shadow: 0 6px 14px rgba(56, 165, 255, 0.35);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease,
+    background 0.15s ease;
+}
+
+.btn-destaque:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(56, 165, 255, 0.45);
+  filter: brightness(1.03);
+}
+
+.btn-destaque:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 3px 8px rgba(15, 23, 42, 0.25);
+  filter: brightness(0.97);
+}
+
+.btn-destaque:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 3px;
+}
+
+.btn-destaque:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  box-shadow: none;
+  filter: none;
+}
+
+/* =========================================
+   BOTÕES GENÉRICOS DE AÇÃO (se usar)
+   ========================================= */
+
+.btn-acao {
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #1f2933;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.btn-acao:hover {
+  background: #e5f3ff;
+  border-color: #38a5ff;
+  box-shadow: 0 4px 10px rgba(56, 165, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.btn-acao:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.18);
+}
+
+.btn-acao:focus-visible {
+  outline: 2px solid #38a5ff;
+  outline-offset: 3px;
+}
+
+/* Versão principal de ação */
+.btn-acao-primaria {
+  border-radius: 999px;
+  padding: 8px 16px;
+  border: none;
+  background: linear-gradient(135deg, #38a5ff, #0a76d9);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  box-shadow: 0 6px 14px rgba(56,165,255,0.35);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.btn-acao-primaria:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 18px rgba(56,165,255,0.45);
+  filter: brightness(1.03);
+}
+
+.btn-acao-primaria:active {
+  transform: translateY(1px) scale(0.98);
+  box-shadow: 0 3px 8px rgba(15,23,42,0.25);
+  filter: brightness(0.97);
+}
+
+.btn-acao-primaria:focus-visible {
+  outline: 2px solid #0f172a;
+  outline-offset: 3px;
+}
+
+.btn-secundario {
+  border-radius: 999px;
+  padding: 9px 16px;
+  border: 1px solid #d1d5db;
+  background-color: #f9fafb;
+  color: #374151;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: 0.15s ease;
+}
+
+.btn-secundario:hover {
+  background-color: #e5f3ff;
+  border-color: #38a5ff;
+}
+
+.btn-secundario:focus-visible {
+  outline: 2px solid #38a5ff;
+  outline-offset: 3px;
+}
+
+/* ===========================
+   BOTÕES DA ÁREA DE NOTAS
+   =========================== */
+
+.buttons-notas {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+/* Adicionar, remover, etc – menos o salvar */
+.buttons-notas button:not(.btn-destaque) {
+  border-radius: 999px;
+  padding: 8px 14px;
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #1f2933;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.1s ease;
+}
+
+.buttons-notas button:not(.btn-destaque):hover {
+  background: #e5f3ff;
+  border-color: #38a5ff;
+  box-shadow: 0 4px 10px rgba(56, 165, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+.buttons-notas button:not(.btn-destaque):active {
+  transform: translateY(0);
+  box-shadow: 0 2px 5px rgba(15, 23, 42, 0.18);
+}
+
+.buttons-notas button:not(.btn-destaque):focus-visible {
+  outline: 2px solid #38a5ff;
+  outline-offset: 3px;
+}
+
+/* Deixar o "Limpar tudo" com cara de botão de perigo suave */
+.buttons-notas button[name="limpar_tudo"] {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.buttons-notas button[name="limpar_tudo"]:hover {
+  background: #fee2e2;
+  border-color: #fca5a5;
+  box-shadow: 0 4px 10px rgba(248, 113, 113, 0.35);
+}
+
+/* ===========================
+   BOTÃO "LIMPAR LINHA" (AÇÕES DA TABELA)
+   =========================== */
+
+.btn-linha {
+    border-radius: 999px;
+    padding: 6px 14px;
+    border: 1px solid #fecaca;
+    background: #fef2f2;
+    color: #b91c1c;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+
+    width: auto;
+    white-space: nowrap;
+
+    transition:
+        background 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        transform 0.1s ease;
+}
+
+.btn-linha:hover {
+    background: #fee2e2;
+    border-color: #fca5a5;
+    box-shadow: 0 3px 8px rgba(248, 113, 113, 0.35);
+    transform: translateY(-1px);
+}
+
+.btn-linha:active {
+    transform: scale(0.96);
+}
+
+.btn-linha:focus-visible {
+    outline: 2px solid #fca5a5;
+    outline-offset: 3px;
+}
+
+/* =======================================
+   BOTÃO "SALVAR CONFIGURAÇÕES" — MÉDIO/SLIM
+   ======================================= */
+
+.btn-config {
+  border: none;
+  padding: 8px 18px;        /* médio, confortável e não gordo */
+  border-radius: 7px;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #38a5ff, #0a76d9);
+  color: #ffffff;
+
+  font-size: 14px;          /* não tão grande, nem tão pequeno */
+  font-weight: 500;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 38px;             /* altura ideal, não “fina” nem “gorda” */
+  line-height: 1;
+
+  box-shadow: 0 2px 6px rgba(56,165,255,0.25);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    filter 0.15s ease;
+}
+
+.btn-config:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(56,165,255,0.35);
+  filter: brightness(1.04);
+}
+
+.btn-config:active {
+  transform: scale(0.97);
+}
+
+.btn-config:focus-visible {
+  outline: 2px solid rgba(56,165,255,0.7);
+  outline-offset: 2px;
+}
+
+/* Alinhar o botão Salvar Configurações sem mudar de posição */
+.btn-config {
+  align-self: center;   /* centraliza o botão dentro da célula onde ele já está */
+  margin-top: 22px;     /* opcional, só pra não ficar grudado */
+}

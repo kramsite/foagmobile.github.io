@@ -1,0 +1,128 @@
+/* ==================== CARDS E ÁREAS ==================== */
+body.dark-mode #notas,
+body.dark-mode #tarefas {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* ==================== TEXTAREA ==================== */
+body.dark-mode #notas textarea {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* ==================== LISTA DE NOTAS ==================== */
+body.dark-mode .notas-container {
+  background-color: transparent !important;
+}
+
+body.dark-mode .nota-item {
+  background-color: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+  border-left-color: var(--dark-primary) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .nota-titulo {
+  color: var(--dark-secondary) !important;
+}
+
+body.dark-mode .nota-data,
+body.dark-mode .sem-notas {
+  color: #94a3b8 !important;
+}
+
+/* ==================== MODAL DE EXCLUSÃO ==================== */
+body.dark-mode .modal-excluir .modal-content {
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border-top: 5px solid #ff5c5c !important;
+}
+
+body.dark-mode .modal-excluir h3 {
+  color: #ff5c5c !important;
+}
+
+body.dark-mode .modal-excluir p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .modal-excluir .btn-cancelar {
+  background: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-excluir .btn-cancelar:hover {
+  background: var(--dark-primary) !important;
+}
+
+/* ==================== BOTÕES ESPECÍFICOS ==================== */
+body.dark-mode .btn-pequeno,
+body.dark-mode .btn-nota {
+  background-color: var(--dark-primary) !important;
+  color: white !important;
+}
+
+body.dark-mode .btn-pequeno:hover,
+body.dark-mode .btn-nota:hover {
+  background-color: var(--dark-secondary) !important;
+}
+
+body.dark-mode .btn-excluir,
+body.dark-mode .btn-excluir-nota {
+  background-color: #e04444 !important;
+}
+
+body.dark-mode .btn-excluir:hover,
+body.dark-mode .btn-excluir-nota:hover {
+  background-color: #ff5c5c !important;
+}
+
+/* ==================== TÍTULOS ==================== */
+body.dark-mode .titulo-tabela {
+  color: var(--dark-secondary) !important;
+}
+
+/* ==================== TABELA ESPECÍFICA ==================== */
+body.dark-mode table th {
+  background-color: var(--dark-primary) !important;
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode table td {
+  background-color: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+/* ==================== INPUT DATE ==================== */
+body.dark-mode td input[type="date"] {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ==================== MODAL NOMEAR NOTA ==================== */
+body.dark-mode .modal-nomear-nota .modal-content {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-nomear-nota input {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #cancelar-nome-nota {
+  background-color: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #cancelar-nome-nota:hover {
+  background-color: var(--dark-primary) !important;
+}

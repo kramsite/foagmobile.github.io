@@ -1,0 +1,611 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #f9f9f9;
+}
+
+header.cabecalho {
+    font-family: 'Snap ITC', cursive, sans-serif;
+    width: 100%;
+    background-color: #38a5ff;
+    color: white;
+    text-align: left;
+    padding: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    position: relative;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    display: flex;
+    gap: 15px;
+    font-size: 22px;
+    color: #ffffff;
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-icons i:hover {
+    color: #006cc5;
+    transform: translateY(-13%) scale(1.1);
+}
+
+.container {
+    display: flex;
+    flex: 1;
+}
+
+nav.menu {
+  width: 260px;
+  background: #38a5ff;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, .15);
+}
+
+nav.menu a {
+  text-decoration: none;
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  transition: background .2s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+  background: rgba(255, 255, 255, .18);
+}
+
+
+.main-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px 20px;
+    flex-direction: column;
+    gap: 40px;
+}
+
+#container-notas {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+#notas, #tarefas {
+    width: 48%;
+    background-color: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+#notas textarea {
+    width: 100%;
+    height: 250px;
+    border: 1px solid #ddd;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 16px;
+    resize: vertical;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+#saved-notes {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Estilos para o modal de nomear nota */
+.modal-nomear-nota {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-nomear-nota .modal-content {
+    background: #fff;
+    color: #333;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    animation: aparecer 0.3s ease;
+}
+
+.modal-nomear-nota h3 {
+    margin-bottom: 15px;
+    color: #38a5ff;
+}
+
+.modal-nomear-nota input {
+    width: 100%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-nomear-nota .modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-nomear-nota .modal-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s;
+    width: auto;
+    margin-top: 0;
+}
+
+.modal-nomear-nota #confirmar-nome-nota {
+    background-color: #38a5ff;
+    color: #fff;
+}
+
+.modal-nomear-nota #confirmar-nome-nota:hover {
+    background-color: #006cc5;
+}
+
+.modal-nomear-nota #cancelar-nome-nota {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+.modal-nomear-nota #cancelar-nome-nota:hover {
+    background-color: #bdbdbd;
+}
+
+/* Estilos para o bloco de notas */
+.notas-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.nota-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-left: 4px solid #38a5ff;
+    padding: 15px;
+    border-radius: 0 8px 8px 0;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.nota-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.15);
+}
+
+.nota-titulo {
+    font-weight: bold;
+    font-size: 16px;
+    color: #38a5ff;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.nota-data {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.nota-conteudo {
+    font-size: 14px;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin-bottom: 10px;
+}
+
+.nota-acoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.btn-nota {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: auto;
+    margin-top: 0;
+}
+
+.btn-editar {
+    background-color: #38a5ff;
+    color: white;
+}
+
+.btn-editar:hover {
+    background-color: #2691c8;
+}
+
+.btn-excluir-nota {
+    background-color: #ff5c5c;
+    color: white;
+}
+
+.btn-excluir-nota:hover {
+    background-color: #e04444;
+}
+
+.sem-notas {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-style: italic;
+}
+
+.titulo-tabela {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 15px;
+    color: #38a5ff;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
+table th, table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+    word-break: break-word;
+}
+
+table th {
+    background-color: #38a5ff;
+    color: white;
+}
+
+table td {
+    white-space: normal;
+    overflow-wrap: break-word;
+}
+
+#tabela-tarefas th:nth-child(2),
+#tabela-tarefas td:nth-child(2),
+#tabela-nao-esquecer th:nth-child(2),
+#tabela-nao-esquecer td:nth-child(2) {
+    width: 40%;
+}
+
+button {
+    padding: 12px 25px;
+    background-color: #38a5ff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 15px;
+    font-size: 16px;
+    width: 100%;
+}
+
+button:hover {
+    background-color: #2691c8;
+}
+
+.btn-pequeno {
+    background-color: #38a5ff;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    margin-left: 8px;
+    width: auto;
+}
+
+.btn-pequeno:hover {
+    background-color: #2691c8;
+}
+
+.btn-excluir {
+    background-color: #ff5c5c;
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+    width: auto;
+}
+
+.btn-excluir:hover {
+    background-color: #e04444;
+}
+
+/* ==================== MODAL DE EXCLUSÃO ==================== */
+.modal-excluir {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 3000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-excluir .modal-content {
+    background: #fff;
+    color: #333;
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    width: 400px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    animation: aparecer 0.3s ease;
+    border-top: 5px solid #ff5c5c;
+}
+
+.excluir-icon {
+    font-size: 48px;
+    color: #ff5c5c;
+    margin-bottom: 15px;
+}
+
+.modal-excluir h3 {
+    color: #ff5c5c;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.modal-excluir p {
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.modal-excluir .modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn-excluir-confirmar {
+    background: linear-gradient(135deg, #ff5c5c, #e04444) !important;
+    color: white !important;
+    padding: 12px 25px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(255, 92, 92, 0.3) !important;
+    width: auto !important;
+    margin-top: 0 !important;
+}
+
+.btn-excluir-confirmar:hover {
+    background: linear-gradient(135deg, #ff4444, #cc3333) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(255, 92, 92, 0.4) !important;
+}
+
+.modal-excluir .btn-cancelar {
+    background: #f0f0f0 !important;
+    color: #333 !important;
+    padding: 12px 25px !important;
+    border: none !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    transition: all 0.3s ease !important;
+    width: auto !important;
+    margin-top: 0 !important;
+}
+
+.modal-excluir .btn-cancelar:hover {
+    background: #e0e0e0 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* Animação de tremor para o ícone */
+@keyframes tremor {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+}
+
+.modal-excluir .excluir-icon {
+    animation: tremor 0.5s ease-in-out;
+}
+
+td input[type="date"] {
+    width: 100%;
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    max-width: 100%;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 2000;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: #fff;
+    color: #333;
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    width: 320px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    animation: aparecer 0.3s ease;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.modal-buttons button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: background 0.3s;
+    width: auto;
+    margin-top: 0;
+}
+
+#confirm-logout {
+    background-color: #38a5ff;
+    color: #fff;
+}
+
+#confirm-logout:hover {
+    background-color: #006cc5;
+}
+
+#cancel-logout {
+    background-color: #e0e0e0;
+    color: #333;
+}
+
+#cancel-logout:hover {
+    background-color: #bdbdbd;
+}
+
+@keyframes aparecer {
+    from { transform: scale(0.8); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+footer {
+    background-color: #232323;
+    color: #ffffff;
+    text-align: center;
+    padding: 10px;
+    width: 100%;
+    font-size: 1em;
+}
+
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+    }
+
+    nav.menu {
+        width: 100%;
+        padding: 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .main-content {
+        padding: 10px;
+    }
+
+    #container-notas {
+        flex-direction: column;
+    }
+
+    #notas, #tarefas {
+        width: 100%;
+    }
+
+    table {
+        font-size: 14px;
+    }
+
+    table th, table td {
+        padding: 8px;
+    }
+
+    button {
+        width: 100%;
+    }
+    
+    .modal-nomear-nota .modal-content {
+        width: 90%;
+        margin: 0 auto;
+    }
+}

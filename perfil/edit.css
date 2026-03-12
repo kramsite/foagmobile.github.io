@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #aad5f8;
+}
+
+.container {
+  display: flex;
+  width: 80%;
+  max-width: 900px;
+  margin: 40px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+.left-panel {
+  background-color: #38a5ff;
+  color: #ffffff;
+  flex: 1;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.left-panel .avatar {
+  width: 150px;
+  height: 150px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid white;
+}
+
+.left-panel h2 {
+  font-size: 30px;
+  margin-bottom: 10px;
+}
+
+.left-panel p {
+  font-size: 15px;
+  color: #ffffff;
+}
+
+.label-upload {
+  display: inline-block;
+  margin-top: 15px;
+  background-color: #ffffff;
+  color: #38a5ff;
+  padding: 8px 15px;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.label-upload:hover {
+  background-color: #e0e0e0;
+}
+
+.input-upload {
+  display: none;
+}
+
+.btn-seta {
+  margin-top: 20px;
+  padding: 13px 18px;
+  background-color: #0b3557;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.right-panel {
+  flex: 2;
+  padding: 40px 30px;
+}
+
+.campo-info {
+  margin-bottom: 20px;
+}
+
+.campo-info label {
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 5px;
+}
+
+.campo-info input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.botoes {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.cancelar {
+  padding: 10px 20px;
+  background-color: #ddd;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.salvar {
+  padding: 10px 20px;
+  background-color: #38a5ff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.campo-info select {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: white;
+}

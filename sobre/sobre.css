@@ -1,0 +1,219 @@
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Corpo da página */
+body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: white;
+}
+
+/* Cabeçalho */
+header.cabecalho {
+  font-family: 'Snap ITC', cursive;
+  width: 100%;
+  background-color: #38a5ff;
+  color: white;
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 24px;
+  font-weight: bold;
+  position: relative;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Ícones do cabeçalho */
+.header-icons {
+  position: absolute;
+  top: 50%;
+  right: 20px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 15px;
+  font-size: 22px;
+  color: #ffffff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.header-icons i:hover {
+  color: #006cc5;
+  transform: translateY(-13%) scale(1.1);
+}
+
+/* Container principal: menu + conteúdo */
+.container {
+  display: flex;
+  flex: 1;
+  min-height: calc(100vh - 90px); /* Ajusta altura para footer */
+}
+
+/* Menu lateral */
+nav.menu {
+  width: 15%;
+  background-color: #38a5ff;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+nav.menu a {
+  text-decoration: none;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  transition: background-color 0.3s, border-radius 0.3s;
+}
+
+nav.menu a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+}
+
+/* Conteúdo principal */
+.conteudo-principal {
+  width: 85%;
+  padding: 20px 40px;
+  overflow-y: auto;
+}
+
+.sobre-completo {
+  background: linear-gradient(180deg, #f9f9f9, #e0f7fa);
+  padding: 50px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.container-sobre {
+  max-width: 1020px;
+  background: #fff;
+  border-radius: 15px;
+  padding: 40px 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  text-align: left;
+}
+
+.container-sobre h2 {
+  font-family: 'Snap ITC', cursive;
+  color: #38a5ff;
+  font-size: 2.5rem;
+  margin-bottom: 30px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.container-sobre h3 {
+  font-family: 'Snap ITC', cursive;
+  color: #0087f5;
+  font-size: 1.9rem;
+  margin-top: 30px;
+  margin-bottom: 15px;
+  border-left: 5px solid #38a5ff;
+  padding-left: 10px;
+}
+
+.container-sobre p {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.container-sobre ul {
+  list-style-type: disc;
+  margin-left: 20px;
+  padding-left: 0;
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 20px;
+}
+
+.container-sobre ul li {
+  margin-bottom: 15px;
+}
+
+
+/* Modal de logout */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110%;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  color: #333;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+  width: 320px;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+  animation: aparecer 0.3s ease;
+}
+
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+}
+
+.modal-buttons button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  transition: background 0.3s;
+}
+
+#confirm-logout {
+  background-color: #38a5ff;
+  color: #fff;
+}
+
+#confirm-logout:hover {
+  background-color: #006cc5;
+}
+
+#cancel-logout {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+#cancel-logout:hover {
+  background-color: #bdbdbd;
+}
+
+@keyframes aparecer {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+/* Rodapé */
+footer {
+  background-color: #232323;
+  color: #ffffff;
+  text-align: center;
+  padding: 8px 0;
+  font-size: 0.9em;
+  width: 100%;
+  margin-top: auto;
+}

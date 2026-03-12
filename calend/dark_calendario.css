@@ -1,0 +1,289 @@
+/* =====================
+   DARK MODE — CALENDÁRIO
+   =====================*/
+
+/* Fundo geral */
+.dark-mode .calendario-container {
+  background-color: var(--dark-bg) !important;
+}
+
+.dark-mode .calendario {
+  background: transparent !important;
+}
+
+/* ======= CARD DO MÊS ======= */
+.dark-mode .mes {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded {
+  background: var(--dark-surface) !important;
+  border: 2px solid var(--dark-primary) !important;
+  box-shadow: 0 0 25px rgba(56,165,255,0.35) !important;
+}
+
+/* Título do mês */
+.dark-mode .header-mes {
+  background: var(--dark-primary) !important;
+  color: #fff !important;
+  border-radius: 5px;
+}
+
+/* ======== DIAS DO MÊS ======== */
+.dark-mode .dia {
+  background: #1e293b !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded .dia {
+  background: #1e293b !important;
+}
+
+/* Cabeçalho dos dias */
+.dark-mode .dia.header-dia {
+  background: transparent !important;
+  color: var(--dark-text) !important;
+}
+
+/* Fim de semana */
+.dark-mode .dia.fim-de-semana {
+  background: #232a3a !important;
+}
+
+/* ======= CORES DOS STATUS ======== */
+.dark-mode .dia.vermelho {
+  background: #e74c3c !important;
+  color: #fff !important;
+}
+
+.dark-mode .dia.amarelo {
+  background: #f1c40f !important;
+  color: #000 !important;
+}
+
+.dark-mode .dia.sem-aula {
+  background: #f39c12 !important;
+  color: #000 !important;
+}
+
+.dark-mode .dia.roxo {
+  background: #8e44ad !important;
+  color: #fff !important;
+}
+
+/* ======== FERIADOS ======== */
+.dark-mode .dia.feriado {
+  background: rgba(56,165,255,0.25) !important;
+  color: #cce4ff !important;
+  border: 1px solid rgba(56,165,255,0.35) !important;
+}
+
+.dark-mode .dia.feriado:hover::after {
+  background: #0f172a !important;
+}
+
+/* ===== Dots ===== */
+.dark-mode .dot.tarefa { background: #60a5fa !important; }
+.dark-mode .dot.vermelho { background: #e74c3c !important; }
+.dark-mode .dot.amarelo { background: #f1c40f !important; }
+.dark-mode .dot.semaula { background: #f39c12 !important; }
+.dark-mode .dot.roxo    { background: #8e44ad !important; }
+
+/* ===========================
+   COLUNA DIREITA – INFO MÊS
+   =========================== */
+.dark-mode .mes.expanded .info-mes {
+  background: var(--dark-surface) !important;
+  border-left: 2px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Toolbar */
+.dark-mode .mes.expanded .info-mes .toolbar-cal {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .toolbar-cal label {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .toolbar-cal .anoSelect {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ===== Paleta de cores ===== */
+.dark-mode .mes.expanded .info-mes .bloco-cores {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .texto-cores {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .cor-item span {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .btn-cor {
+  border: 2px solid rgba(255,255,255,0.2) !important;
+}
+
+/* ===== Painel de metas ===== */
+.dark-mode .mes.expanded .info-mes .painel-metas {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .progress-wrap {
+  background: var(--dark-bg) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .progress-bar {
+  background: var(--dark-primary) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .label-presenca {
+  color: var(--dark-text) !important;
+}
+
+/* ===== Mini-agenda ===== */
+.dark-mode .mes.expanded .info-mes .mini-agenda {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-data {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-notas {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-opcoes button {
+  background: #4b5563 !important;
+  color: #e5e7eb !important;
+}
+
+.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-salvar {
+  background: var(--dark-primary) !important;
+  color: #fff !important;
+}
+
+.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-fechar {
+  background: #374151 !important;
+  color: #e5e7eb !important;
+}
+
+/* ===== Botão fechar ===== */
+.dark-mode .mes.expanded .fechar-btn {
+  background: var(--dark-primary) !important;
+  color: white !important;
+}
+
+/* ===== Backdrop do mês ===== */
+.dark-mode #cal-backdrop {
+  background: rgba(0,0,0,0.55) !important;
+}
+
+/* ======= AJUSTES QUE FALTAVAM ======= */
+
+/* Texto de resumos */
+.dark-mode .mes.expanded .info-mes .resumos {
+  color: var(--dark-text) !important;
+}
+
+/* Texto dentro dos spans */
+.dark-mode .mes.expanded .info-mes .resumos span {
+  color: var(--dark-text) !important;
+}
+
+/* Dias vazios */
+.dark-mode .dia:not([data-date]) {
+  background: #0f172a !important;
+  border: 1px solid #1e293b !important;
+}
+
+/* Hover dia (não pintado) */
+.dark-mode .mes.expanded .dia:not(.header-dia):hover {
+  background-color: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+/* Barra de progresso — fundo */
+.dark-mode .mes.expanded .info-mes .progress-wrap {
+  background: #0f172a !important;
+  border: 1px solid #1e293b !important;
+}
+
+/* Mini agenda — texto */
+.dark-mode .mes.expanded .info-mes .mini-agenda,
+.dark-mode .mes.expanded .info-mes .agenda-resumo,
+.dark-mode .mes.expanded .info-mes .agenda-bloco,
+.dark-mode .mes.expanded .info-mes .agenda-bloco ul li {
+  color: var(--dark-text) !important;
+}
+
+/* Cards de horários dentro da mini-agenda */
+.dark-mode .mes.expanded .info-mes .agenda-bloco {
+  background: var(--dark-bg) !important;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--dark-border);
+}
+
+/* Texto "Horários do dia" */
+.dark-mode .mes.expanded .info-mes .agenda-bloco strong {
+  color: var(--dark-text) !important;
+}
+
+/* Botões dentro da mini-agenda */
+.dark-mode .mes.expanded .info-mes .agenda-opcoes button {
+  background: #374151 !important;
+  color: #e5e7eb !important;
+}
+
+.dark-mode .mes.expanded .info-mes .agenda-opcoes button:hover {
+  background: #4b5563 !important;
+}
+
+/* ==== FORÇAR CORES DOS DIAS NO MODO ESCURO ==== */
+
+/* Faltou */
+.dark-mode .dia.vermelho,
+.dark-mode .mes.expanded .dia.vermelho {
+  background-color: #e74c3c !important;
+  color: #ffffff !important;
+}
+
+/* Atestado */
+.dark-mode .dia.amarelo,
+.dark-mode .mes.expanded .dia.amarelo {
+  background-color: #f1c40f !important;
+  color: #000000 !important;
+}
+
+/* Sem aula */
+.dark-mode .dia.sem-aula,
+.dark-mode .mes.expanded .dia.sem-aula {
+  background-color: #f39c12 !important;
+  color: #000000 !important;
+}
+
+/* Prova */
+.dark-mode .dia.roxo,
+.dark-mode .mes.expanded .dia.roxo {
+  background-color: #8e44ad !important;
+  color: #ffffff !important;
+}
+

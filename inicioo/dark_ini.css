@@ -1,0 +1,213 @@
+/* dark_inicio.css - Modo Escuro Corrigido */
+:root {
+    --dark-bg: #0f172a;
+    --dark-surface: #1e293b;
+    --dark-primary: #669ada;
+    --dark-secondary: #3b82f6;
+    --dark-text: #e2e8f0;
+    --dark-border: #334155;
+}
+
+/* ============= BASE ============= */
+body.dark-mode {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) !important;
+    color: var(--dark-text) !important;
+}
+
+/* ============= HEADER ============= */
+body.dark-mode header.cabecalho {
+    background: rgba(30, 41, 59, 0.9) !important;
+    border-bottom: 1px solid var(--dark-border) !important;
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .logo {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .top-menu a {
+    background: rgba(51, 65, 85, 0.4) !important;
+    border: 1px solid var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .top-menu a:hover {
+    background: rgba(56, 154, 218, 0.2) !important;
+    border-color: var(--dark-primary) !important;
+}
+
+body.dark-mode .top-menu a.active {
+    background: rgba(56, 154, 218, 0.3) !important;
+    border-color: var(--dark-primary) !important;
+    color: white !important;
+}
+
+body.dark-mode .header-icons i:hover {
+    color: var(--dark-primary) !important;
+}
+
+/* ============= CONTEÚDO PRINCIPAL ============= */
+body.dark-mode .main-content {
+    background: rgba(15, 23, 42, 0.8) !important;
+}
+
+/* ============= CARDS E CONTAINERS ============= */
+body.dark-mode .welcome-header,
+body.dark-mode .stat-card-large,
+body.dark-mode .motivational-quote-large,
+body.dark-mode .quick-tips,
+body.dark-mode .info-card {
+    background: rgba(30, 41, 59, 0.8) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+/* ============= TEXTO ============= */
+body.dark-mode .welcome-header h1,
+body.dark-mode .stat-number-large,
+body.dark-mode .motivational-quote-large p,
+body.dark-mode .quick-tips h3,
+body.dark-mode .card-header h2,
+body.dark-mode .metric-value,
+body.dark-mode .note-text,
+body.dark-mode .reminder-text {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .subtitle,
+body.dark-mode .stat-label-large,
+body.dark-mode .metric-label,
+body.dark-mode .progress-text,
+body.dark-mode .note-date,
+body.dark-mode .reminder-time,
+body.dark-mode .quick-tips li {
+    color: rgba(226, 232, 240, 0.8) !important;
+}
+
+/* ============= CARDS INTERNOS ============= */
+body.dark-mode .metric,
+body.dark-mode .note-item,
+body.dark-mode .reminder-item {
+    background: rgba(51, 65, 85, 0.4) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .stat-icon-large {
+    background: rgba(56, 154, 218, 0.2) !important;
+    color: var(--dark-primary) !important;
+}
+
+body.dark-mode .motivational-quote-large {
+    border-left-color: var(--dark-primary) !important;
+}
+
+body.dark-mode .motivational-quote-large i {
+    color: var(--dark-primary) !important;
+}
+
+/* ============= BOTÕES ============= */
+body.dark-mode .btn-primary {
+    background: var(--dark-primary) !important;
+    color: white !important;
+}
+
+body.dark-mode .btn-primary:hover {
+    background: var(--dark-secondary) !important;
+}
+
+body.dark-mode .btn-add {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .btn-add:hover {
+    background: var(--dark-secondary) !important;
+}
+
+/* ============= PROGRESS BAR ============= */
+body.dark-mode .progress-bar {
+    background: rgba(51, 65, 85, 0.6) !important;
+}
+
+body.dark-mode .progress-fill {
+    background: linear-gradient(90deg, var(--dark-primary), var(--dark-secondary)) !important;
+}
+
+/* ============= LEMBRETES ============= */
+body.dark-mode .reminder-icon {
+    color: #fbbf24 !important;
+}
+
+/* ============= ESTADOS VAZIOS ============= */
+body.dark-mode .empty-notes,
+body.dark-mode .empty-reminders {
+    color: rgba(226, 232, 240, 0.6) !important;
+}
+
+body.dark-mode .empty-notes i,
+body.dark-mode .empty-reminders i {
+    color: rgba(226, 232, 240, 0.4) !important;
+}
+
+/* ============= MODAIS ============= */
+body.dark-mode .modal-content {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: var(--dark-border) !important;
+}
+
+body.dark-mode .modal-header h3 {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-close {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-close:hover {
+    background: var(--dark-border) !important;
+}
+
+body.dark-mode #note-text {
+    background: var(--dark-bg) !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .btn-secondary {
+    background: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .btn-secondary:hover {
+    background: #475569 !important;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.9) !important;
+}
+
+
+/* ============= FOOTER ============= */
+body.dark-mode footer {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-top: 1px solid var(--dark-border);
+}
+
+/* ============= ANIMAÇÕES ============= */
+body.dark-mode .stat-card-large:hover,
+body.dark-mode .info-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============= RESPONSIVIDADE ============= */
+@media (max-width: 768px) {
+    body.dark-mode .top-menu a span {
+        display: none;
+    }
+}
