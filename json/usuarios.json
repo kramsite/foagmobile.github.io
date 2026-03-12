@@ -58,5 +58,17 @@
         "escola": "Escola Estadual Militar Dom Pedro II",
         "termos_aceitos": true,
         "cadastrado_em": "2025-11-25 15:23:44"
+    },
+    {
+        "id": 6,
+        "nome": "aa",
+        "email": "aa@gmail.com",
+        "senha": "$2y$10$tTqhN9Wb3iWRnzNzARRvAeFcNkFEDiWGV89dVdAyelGNs6TeA2m1a",
+        "nascimento": "2008-09-22",
+        "telefone": "",
+        "serie": "",
+        "escola": "",
+        "termos_aceitos": true,
+        "cadastrado_em": "2026-03-12 13:25:22"
     }
 ]

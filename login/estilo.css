@@ -7,12 +7,7 @@
 
 body {
   background-color: #ffffff;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  flex-direction: column;
-  overflow: hidden;
+  /* Removido o overflow: hidden para permitir scroll no mobile */
 }
 
 /* Cabeçalho */
@@ -31,33 +26,33 @@ body {
   display: flex;
   align-items: center;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 68px; /* Altura definida para o cálculo do calc() */
 }
 
 .login-page {
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  min-height: calc(100vh - 68px); 
   display: flex;
-  margin-top: 60px;
+  margin-top: 68px; 
 }
 
-/* Seção esquerda com imagem */
 .left-section {
   width: 50%;
-  height: 100vh;
-  background: url('https://source.unsplash.com/1024x768/?nature') no-repeat center center/cover;
   position: relative;
+  overflow: hidden;
 }
+
+/* Efeito de fade lateral (só aparece no desktop) */
 .left-section::after {
   content: '';
   position: absolute;
   top: 0;
-  right: -50px;
-  width: 50px;
+  right: 0;
+  width: 100px;
   height: 100%;
   background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
 }
 
-/* Seção direita */
 .right-section {
   width: 50%;
   background-color: #ffffff;
@@ -65,9 +60,10 @@ body {
   flex-direction: column;
   justify-content: center;
   padding: 60px 40px;
-  height: 100vh;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 68px);
 }
+
+/* Mantenha seus estilos de H1, FORM, INPUT e BUTTON aqui normalmente... */
 
 h1 {
   font-size: 3em;
@@ -154,12 +150,93 @@ button:active {
 }
 
 @media (max-width: 768px) {
+  body, html {
+    overflow: hidden; 
+    height: 100%;
+  }
+
   .login-page {
     flex-direction: column;
+    margin-top: 0;
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #e3f2ff 0%, #ffffff 100%);
   }
-  .left-section,
+
+  .left-section {
+    display: none; 
+  }
+
   .right-section {
     width: 100%;
-    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background: transparent;
+  }
+
+  /* Container Menor */
+  form {
+    background-color: #ffffff;
+    padding: 25px 20px; /* Reduzi o preenchimento interno */
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+    max-width: 320px; /* Reduzido de 380px para 320px */
+    width: 85%;
+    margin: 0;
+  }
+
+  /* Título menor */
+  h1 {
+    font-size: 1.6rem; /* Reduzido de 2.2rem */
+    color: #38a5ff;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  /* Labels menores */
+  label {
+    font-size: 0.85rem;
+    color: #555;
+  }
+
+  /* Inputs menores */
+  input[type="email"],
+  input[type="password"],
+  input[type="text"] {
+    height: 40px; /* Reduzido de 50px */
+    padding: 10px 12px;
+    font-size: 0.9rem; /* Fonte menor interna */
+    margin-bottom: 0.3em;
+  }
+
+  /* Botão menor */
+  button {
+    padding: 10px; /* Reduzido de 14px */
+    font-size: 1rem; /* Reduzido de 1.2rem */
+    margin-top: 10px;
+  }
+
+  /* Link menor */
+  form a {
+    font-size: 0.8rem;
+    margin: 10px 0 15px 0;
+  }
+
+  /* Ícone do macaquinho ajustado para o novo tamanho */
+  .toggle-visibility {
+    font-size: 1.2rem;
+    right: 8px;
+  }
+
+  /* Ajuste do Logo para não ocupar muito espaço visual */
+  .logo {
+    height: 55px;
+    font-size: 1.5em;
+    justify-content: center;
   }
 }
