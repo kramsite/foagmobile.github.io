@@ -1,53 +1,74 @@
 <?php
 session_start();
+
 if (!isset($_SESSION['usuario'])) {
     header('Location: index.php');
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+
+    <!-- Responsividade -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Bem-vindo</title>
+
     <style>
-         body {
-            font-family:'Poppins', sans-serif;
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
             background: linear-gradient(to right, #38a5ff, rgb(46, 154, 241));
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 700px;
+            padding: 30px 20px;
         }
         
         h1 {
-            font-size: 5em;
-            font-family: 'Snap ITC', sans-serif;
-            color: rgb(255, 255, 255);
-            margin-bottom: 20px;
+            font-size: clamp(3rem, 12vw, 5rem);
+            font-family: 'Snap ITC', 'Poppins', sans-serif;
+            color: white;
+            margin: 0 0 20px;
+            line-height: 1;
         }
 
         h2 {
-            font-size: 2.5em;
-            color: rgb(255, 255, 255);
-            margin-bottom: -1px;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
+            color: white;
+            margin: 0 0 15px;
+            line-height: 1.2;
+            word-break: break-word;
         }
 
         p {
-            font-size: 1.5em;
+            font-size: clamp(1rem, 4vw, 1.5rem);
             color: white;
-            margin-bottom: 20px;
+            margin: 0 0 25px;
         }
 
         a {
             display: inline-block;
-            background-color: #ffffff;
+            background-color: white;
             color: #38a5ff;
-            font-size: 1.2em;
-            padding: 12px 25px;
-            border-radius: 8px;
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            padding: 12px 28px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: bold;
             transition: background-color 0.3s ease, transform 0.2s ease-in-out;
@@ -61,12 +82,36 @@ if (!isset($_SESSION['usuario'])) {
         a:active {
             transform: translateY(1px);
         }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                padding: 20px 10px;
+            }
+
+            a {
+                width: 100%;
+                max-width: 260px;
+                padding: 14px 20px;
+            }
+        }
     </style>
 </head>
+
 <body>
-    <h1>FOAG</h1>  
-    <h2>Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario']); ?>!</h2>
-    <p>Você está logado com sucesso.</p>
-    <a href="../inicioo/inicio.php">Entrar</a>
+    <div class="container">
+        <h1>FOAG</h1>  
+
+        <h2>
+            Bem-vindo, <?php echo htmlspecialchars($_SESSION['usuario']); ?>!
+        </h2>
+
+        <p>Você está logado com sucesso.</p>
+
+        <a href="../inicioo/inicio.php">Entrar</a>
+    </div>
 </body>
 </html>
