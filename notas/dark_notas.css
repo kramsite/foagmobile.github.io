@@ -4,82 +4,82 @@
    ============================ */
 
 /* =============== MAIN / FUNDO INTERNO =============== */
-body.dark-mode .main-content {
+.dark-mode .main-content {
   background: radial-gradient(circle at top, #111827 0, #020617 60%) !important;
   color: var(--dark-text) !important;
 }
 
 /* =============== CARDS PRINCIPAIS =============== */
-body.dark-mode .card-notas {
+.dark-mode .card-notas {
   background-color: var(--dark-surface, #020617) !important;
   border: 1px solid var(--dark-border, #1f2937) !important;
   box-shadow: 0 10px 30px rgba(0,0,0,.85) !important;
 }
 
 /* barrinha decorativa antes do primeiro card */
-body.dark-mode .card-notas:first-of-type::before {
+.dark-mode .card-notas:first-of-type::before {
   background: linear-gradient(90deg, #38a5ff, #0ea5e9) !important;
 }
 
 /* textos do cabeçalho do card */
-body.dark-mode .titulo-tabela {
+.dark-mode .titulo-tabela {
   color: var(--dark-text, #f9fafb) !important;
 }
 
-body.dark-mode .sub-notas {
+.dark-mode .sub-notas {
   color: var(--dark-text, #e5e7eb) !important;
 }
 
 /* pill de tipo de curso */
-body.dark-mode .pill-tipo {
+.dark-mode .pill-tipo {
   background-color: rgba(37, 99, 235, 0.25) !important;
   border-color: rgba(129, 199, 255, 0.8) !important;
   color: #e0f2fe !important;
 }
 
-/* =============== TEXTOS GERAIS =============== */
-body.dark-mode,
-body.dark-mode p,
-body.dark-mode span,
-body.dark-mode label,
-body.dark-mode small,
-body.dark-mode strong,
-body.dark-mode b {
+/* =============== TEXTO GERAL (PÁGINA DE NOTAS) =============== */
+.dark-mode .main-content,
+.dark-mode .main-content p,
+.dark-mode .main-content span,
+.dark-mode .main-content label,
+.dark-mode .main-content small,
+.dark-mode .main-content strong,
+.dark-mode .main-content b {
   color: var(--dark-text, #f9fafb) !important;
 }
 
 /* =============== FORM CONFIGURAÇÕES =============== */
-body.dark-mode .config-field label,
-body.dark-mode .config-field-periodo label {
+.dark-mode .config-field label,
+.dark-mode .config-field-periodo label {
   color: var(--dark-text, #f9fafb) !important;
 }
 
-body.dark-mode .config-field input,
-body.dark-mode .config-field-periodo select,
-body.dark-mode .config-field-periodo input,
-body.dark-mode .main-content input[type="text"] {
+.dark-mode .config-field input,
+.dark-mode .config-field-periodo select,
+.dark-mode .config-field-periodo input,
+.dark-mode .main-content input[type="text"] {
   background-color: var(--dark-soft, #020617) !important;
   color: var(--dark-text, #f9fafb) !important;
   border: 1px solid var(--dark-border, #1f2937) !important;
 }
 
-body.dark-mode .config-field input::placeholder,
-body.dark-mode .config-field-periodo input::placeholder,
-body.dark-mode .main-content input[type="text"]::placeholder {
+.dark-mode .config-field input::placeholder,
+.dark-mode .config-field-periodo input::placeholder,
+.dark-mode .main-content input[type="text"]::placeholder {
   color: #9ca3af !important;
 }
 
-body.dark-mode .config-field input:focus,
-body.dark-mode .config-field-periodo select:focus,
-body.dark-mode .config-field-periodo input:focus,
-body.dark-mode .main-content input[type="text"]:focus {
+.dark-mode .config-field input:focus,
+.dark-mode .config-field-periodo select:focus,
+.dark-mode .config-field-periodo input:focus,
+.dark-mode .main-content input[type="text"]:focus {
   border-color: var(--dark-primary, #38a5ff) !important;
   box-shadow: 0 0 0 2px rgba(56,165,255,0.4) !important;
   background-color: #020617 !important;
 }
 
 /* botão “salvar configurações” */
-body.dark-mode .btn-config {
+.dark-mode .btn-config {
   background: linear-gradient(135deg, #3b82f6, #0ea5e9) !important;
   color: #e5f3ff !important;
   box-shadow: 0 4px 12px rgba(37,99,235,0.55) !important;
@@ -87,166 +87,170 @@ body.dark-mode .btn-config {
 
 /* =============== BOTÕES DA ÁREA DE NOTAS =============== */
 
-/* todos os botões de notes, menos o “limpar tudo” e o .btn-destaque seguem tema azul */
-body.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]) {
+/* todos os botões da área de notas, menos o “limpar tudo” e o .btn-destaque */
+.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]) {
   background: linear-gradient(90deg, #3b82f6, #38bdf8) !important;
   color: #020617 !important;
   border: none !important;
   box-shadow: 0 8px 20px rgba(56,165,255,.45) !important;
 }
 
-body.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]):hover {
+.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]):hover {
   filter: brightness(1.06) !important;
 }
 
 /* botão de salvar principal (btn-destaque) */
-body.dark-mode .btn-destaque {
+.dark-mode .btn-destaque {
   background: linear-gradient(135deg, #38a5ff, #0ea5e9) !important;
   color: #020617 !important;
   box-shadow: 0 10px 24px rgba(56,165,255,.6) !important;
 }
 
 /* “Limpar tudo” em clima danger */
-body.dark-mode .buttons-notas button[name="limpar_tudo"] {
+.dark-mode .buttons-notas button[name="limpar_tudo"] {
   background-color: #450a0a !important;
   border-color: #b91c1c !important;
   color: #fee2e2 !important;
   box-shadow: 0 6px 18px rgba(127,29,29,0.8) !important;
 }
 
-body.dark-mode .buttons-notas button[name="limpar_tudo"]:hover {
+.dark-mode .buttons-notas button[name="limpar_tudo"]:hover {
   background-color: #7f1d1d !important;
 }
 
 /* botão limpar linha */
-body.dark-mode .btn-linha {
+.dark-mode .btn-linha {
   background-color: #111827 !important;
   color: var(--dark-text, #f9fafb) !important;
   border: 1px solid var(--dark-border, #1f2937) !important;
 }
 
-body.dark-mode .btn-linha:hover {
+.dark-mode .btn-linha:hover {
   background-color: #020617 !important;
 }
 
 /* =============== TABELA DE NOTAS =============== */
-body.dark-mode .tabela-notas th,
-body.dark-mode .tabela-notas td {
+.dark-mode .tabela-notas {
+  border-collapse: collapse;
+}
+
+.dark-mode .tabela-notas th,
+.dark-mode .tabela-notas td {
   border-color: var(--dark-border, #1f2937) !important;
   color: var(--dark-text, #f9fafb) !important;
 }
 
-body.dark-mode .tabela-notas th {
+.dark-mode .tabela-notas th {
   background: linear-gradient(90deg, #020617, #111827) !important;
 }
 
-body.dark-mode .tabela-notas td {
+.dark-mode .tabela-notas td {
   background-color: #020617 !important;
 }
 
-body.dark-mode .tabela-notas tbody tr:hover {
+.dark-mode .tabela-notas tbody tr:hover {
   background-color: #111827 !important;
 }
 
 /* inputs da tabela */
-body.dark-mode .tabela-notas td input[type="text"],
-body.dark-mode .tabela-notas td input[type="number"] {
+.dark-mode .tabela-notas td input[type="text"],
+.dark-mode .tabela-notas td input[type="number"] {
   background-color: #020617 !important;
   color: var(--dark-text, #f9fafb) !important;
   border: 1px solid var(--dark-border, #1f2937) !important;
 }
 
-body.dark-mode .tabela-notas td input[type="text"]::placeholder,
-body.dark-mode .tabela-notas td input[type="number"]::placeholder {
+.dark-mode .tabela-notas td input[type="text"]::placeholder,
+.dark-mode .tabela-notas td input[type="number"]::placeholder {
   color: #9ca3af !important;
 }
 
-body.dark-mode .tabela-notas td input[type="text"]:focus,
-body.dark-mode .tabela-notas td input[type="number"]:focus {
+.dark-mode .tabela-notas td input[type="text"]:focus,
+.dark-mode .tabela-notas td input[type="number"]:focus {
   border-color: var(--dark-primary, #38a5ff) !important;
   box-shadow: 0 0 0 2px rgba(56,165,255,0.35) !important;
 }
 
 /* nota inválida */
-body.dark-mode .input-nota.nota-invalida {
+.dark-mode .input-nota.nota-invalida {
   border-color: #f97373 !important;
   background-color: #450a0a !important;
   color: #fee2e2 !important;
 }
 
 /* =============== STATUS / MÉDIA / PRECISA =============== */
-body.dark-mode .celula-media {
+.dark-mode .celula-media {
   color: var(--dark-text, #f9fafb) !important;
 }
 
-body.dark-mode .status-aprovado {
+.dark-mode .status-aprovado {
   background-color: #166534 !important;
   color: #dcfce7 !important;
 }
 
-body.dark-mode .status-recuperacao {
+.dark-mode .status-recuperacao {
   background-color: #854d0e !important;
   color: #fef9c3 !important;
 }
 
-body.dark-mode .status-reprovado {
+.dark-mode .status-reprovado {
   background-color: #991b1b !important;
   color: #fee2e2 !important;
 }
 
-body.dark-mode .badge-precisa.impossivel {
+.dark-mode .badge-precisa.impossivel {
   background-color: #7f1d1d !important;
   color: #fee2e2 !important;
 }
 
 /* =============== RESUMO GERAL =============== */
-body.dark-mode .resumo-card {
+.dark-mode .resumo-card {
   background-color: #020617 !important;
   border-color: var(--dark-border, #1f2937) !important;
 }
 
-body.dark-mode .resumo-label {
+.dark-mode .resumo-label {
   color: var(--dark-text, #e5e7eb) !important;
 }
 
-body.dark-mode .resumo-valor {
+.dark-mode .resumo-valor {
   color: var(--dark-text, #f9fafb) !important;
 }
 
 /* variantes de resumo por status */
-body.dark-mode .resumo-card.aprovado {
+.dark-mode .resumo-card.aprovado {
   background-color: #166534 !important;
   border-color: #15803d !important;
   color: #dcfce7 !important;
 }
 
-body.dark-mode .resumo-card.recuperacao {
+.dark-mode .resumo-card.recuperacao {
   background-color: #854d0e !important;
   border-color: #a16207 !important;
   color: #fef9c3 !important;
 }
 
-body.dark-mode .resumo-card.reprovado {
+.dark-mode .resumo-card.reprovado {
   background-color: #7f1d1d !important;
   border-color: #b91c1c !important;
   color: #fee2e2 !important;
 }
 
-body.dark-mode .resumo-card.geral {
+.dark-mode .resumo-card.geral {
   background-color: #1d4ed8 !important;
   border-color: #2563eb !important;
   color: #dbeafe !important;
 }
 
 /* dica FOAG */
-body.dark-mode .dica-foag {
+.dark-mode .dica-foag {
   background-color: #020617 !important;
   border-color: #1d4ed8 !important;
   color: #e5e7eb !important;
 }
 
 /* =============== MODAL =============== */
-body.dark-mode .modal-content {
+.dark-mode .modal-content {
   background-color: var(--dark-surface, #020617) !important;
   color: var(--dark-text, #f9fafb) !important;
   border: 1px solid var(--dark-border, #1f2937) !important;

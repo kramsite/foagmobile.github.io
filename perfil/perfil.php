@@ -41,7 +41,7 @@ $foto_perfil = (!empty($usuario_logado["foto"]) && file_exists($pasta_fotos . $u
   <script src="../m.escuro/dark-mode.js"></script>
 </head>
 <body>
-  <button class="btn-sair" onclick="location.href='../inicio/inicio.php'">Sair</button>
+  <button class="btn-sair" onclick="location.href='../inicioo/inicio.php'">Inicio</button>
 
   <div class="container">
     <div class="left-panel">

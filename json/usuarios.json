@@ -3,12 +3,13 @@
         "id": 1,
         "nome": "Rafaella",
         "email": "rafaellagomes1314@gmail.com",
-        "senha": "$2y$10$hpHqJfRza7nE5HCt\/bdCFubJrYKvonemp21zHMmdOC\/q\/kXRIq3wi",
+        "senha": "$2y$10$FomQFR.ig7Z1TUW1fj1nVuaMfagFCEmpJW1wMKRdtBNmgb6aiiJEG",
         "nascimento": "2008-09-22",
-        "telefone": "",
-        "serie": "",
-        "escola": "",
+        "telefone": "(65) 98122-6920",
+        "serie": "3º ano do Ensino Médio",
+        "escola": "Escola Estadual Militar Dom Pedro II",
         "termos_aceitos": true,
-        "cadastrado_em": "2026-05-28 16:20:33"
+        "cadastrado_em": "2026-07-23 16:47:04",
+        "foto": "pf_6a622b2711c891.79615228.webp"
     }
 ]
