@@ -45,7 +45,10 @@
 
         <label class="termos">
           <input type="checkbox" name="termos" required>
-          Aceito os <a href="#">termos de uso</a>.
+
+          <span>
+            Aceito os <a href="termos.php">termos de uso</a>
+          </span>
         </label>
 
         <div class="btn-group">

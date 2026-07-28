@@ -132,17 +132,34 @@ button:hover {
   background-color: #aaa;
 }
 
-label.termos {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.8rem;
-  cursor: pointer;
-}
-
 /* --- No topo do arquivo (Desktop) --- */
 .mobile-only {
   display: none !important; /* Esconde no PC */
+}
+
+label.termos {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+  margin: 5px 0;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+label.termos input[type="checkbox"] {
+  width: 18px !important;
+  height: 18px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  flex: 0 0 18px;
+}
+
+label.termos span {
+  display: inline;
+  width: auto;
 }
 
 /* --- Dentro da @media (max-width: 768px) --- */
@@ -167,21 +184,7 @@ label.termos {
   }
 
   /* 2. ALINHAR CHECKBOX E TEXTO */
-  label.termos {
-    display: flex;
-    align-items: center; /* Alinha o check com o texto no meio */
-    justify-content: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    margin: 10px 0;
-    text-align: left;
-  }
-
-  label.termos input {
-    width: 18px; /* Tamanho fixo para o quadradinho */
-    height: 18px;
-    margin: 0;
-  }
+  
 
   /* 3. BOTÕES LADO A LADO */
   .btn-group {
