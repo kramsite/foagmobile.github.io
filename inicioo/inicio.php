@@ -137,7 +137,7 @@ try {
         <div class="header-left">
             <div class="logo">FOAG</div>
             <nav class="top-menu">
-                <a href="../inicio/inicio.php" class="active">
+                <a href="../inicioo/inicio.php" class="active">
                     <i class="fa-solid fa-house"></i> Início
                 </a>
                 <a href="../calend/calendario.php">
