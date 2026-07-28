@@ -1,1 +1,10 @@
-[]
+{
+    "disciplines": [
+        "Geral",
+        "Matematica",
+        "aa",
+        "eu"
+    ],
+    "sessions": [],
+    "goals": []
+}
