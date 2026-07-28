@@ -1,3 +1,12 @@
+/* =====================================================
+   FOAG — AGENDA + HORÁRIO
+   CSS COMPLETO MESCLADO
+===================================================== */
+
+/* =========================
+   RESET E BASE
+========================= */
+
 * {
     margin: 0;
     padding: 0;
@@ -5,37 +14,67 @@
     font-family: 'Poppins', sans-serif;
 }
 
+html,
 body {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    background-color: #f9f9f9;
+    width: 100%;
+    min-height: 100%;
 }
 
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7fb;
+    color: #232323;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
 header.cabecalho {
-    font-family: 'Snap ITC', cursive, sans-serif;
     width: 100%;
-    background-color: #38a5ff;
-    color: white;
-    text-align: left;
     padding: 15px;
+    position: relative;
+    z-index: 100;
+
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    font-family: 'Snap ITC', cursive, sans-serif;
     font-size: 24px;
     font-weight: bold;
-    position: relative;
+    text-align: left;
+
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
 }
+
+/* Ícones do cabeçalho */
 
 .header-icons {
     position: absolute;
     top: 50%;
     right: 20px;
     transform: translateY(-50%);
+
     display: flex;
+    align-items: center;
     gap: 15px;
-    font-size: 22px;
+
     color: #ffffff;
+    font-size: 22px;
+
     cursor: pointer;
     user-select: none;
+}
+
+.header-icons i {
+    color: #ffffff;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
 }
 
 .header-icons i:hover {
@@ -43,285 +82,490 @@ header.cabecalho {
     transform: translateY(-13%) scale(1.1);
 }
 
+/* =========================
+   ESTRUTURA PRINCIPAL
+========================= */
+
 .container {
-    display: flex;
+    width: 100%;
     flex: 1;
+    display: flex;
+    min-height: 0;
 }
 
+/* =========================
+   MENU LATERAL
+========================= */
+
 nav.menu {
-  width: 260px;
-  background: #38a5ff;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  box-shadow: 5px 5px 15px rgba(0, 0, 0, .15);
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    background: #38a5ff;
+
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
 }
 
 nav.menu a {
-  text-decoration: none;
-  color: #fff;
-  font-size: 16px;
-  padding: 10px 12px;
-  border-radius: 8px;
-  transition: background .2s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+    width: 100%;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ffffff;
+    background: transparent;
+
+    font-size: 16px;
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav.menu a i {
+    width: 22px;
+    text-align: center;
 }
 
 nav.menu a:hover,
 nav.menu a.active {
-  background: rgba(255, 255, 255, .18);
+    background: rgba(255, 255, 255, 0.18);
 }
 
+nav.menu a:hover {
+    transform: translateX(2px);
+}
+
+/* =========================
+   CONTEÚDO PRINCIPAL
+========================= */
 
 .main-content {
     flex: 1;
+    min-width: 0;
+    width: 100%;
+
+    padding: 30px;
+
     display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px 20px;
     flex-direction: column;
-    gap: 40px;
+    align-items: stretch;
+    gap: 30px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
 }
+
+/* =====================================================
+   HORÁRIO NO TOPO
+===================================================== */
+
+.horario-agenda-card {
+    width: 100%;
+    padding: 25px;
+
+    background: #ffffff;
+
+    border: 1px solid #e0e6ee;
+    border-radius: 14px;
+
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+
+.horario-agenda-header {
+    margin-bottom: 20px;
+}
+
+.horario-agenda-header h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    margin-bottom: 6px;
+
+    color: #2e8fde;
+    font-size: 24px;
+}
+
+.horario-agenda-header p {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+/* Container com rolagem da tabela */
+
+.horario-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+
+    border: 1px solid #d9e0e8;
+    border-radius: 10px;
+}
+
+/* Tabela específica do horário */
+
+#scheduleTable {
+    width: 100%;
+    min-width: 850px;
+
+    margin: 0;
+
+    border-collapse: collapse;
+    table-layout: fixed;
+
+    background: #ffffff;
+
+    box-shadow: none;
+}
+
+#scheduleTable th,
+#scheduleTable td {
+    padding: 14px 12px;
+
+    border: 1px solid #dddddd;
+
+    text-align: center;
+    font-size: 14px;
+
+    word-break: break-word;
+}
+
+#scheduleTable th {
+    background: #38a5ff;
+    color: #ffffff;
+    font-weight: 600;
+}
+
+#scheduleTable td {
+    min-width: 125px;
+
+    background-color: #f8fafc;
+    color: #232323;
+
+    cursor: text;
+    outline: none;
+}
+
+#scheduleTable tbody tr:nth-child(even) td {
+    background-color: #f1f5f9;
+}
+
+/* Primeira coluna do horário */
+
+#scheduleTable td:first-child {
+    min-width: 100px;
+
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    font-weight: 600;
+}
+
+/* Campo sendo editado */
+
+#scheduleTable td[contenteditable="true"]:focus {
+    background-color: #ffffff;
+    box-shadow: inset 0 0 0 2px #38a5ff;
+}
+
+/* Botões do horário */
+
+.horario-buttons {
+    margin-top: 20px;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.horario-buttons button {
+    width: auto;
+    min-height: 42px;
+
+    margin: 0;
+    padding: 10px 16px;
+
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 8px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.horario-buttons button:hover {
+    background-color: #2691c8;
+    transform: translateY(-1px);
+
+    box-shadow: 0 5px 14px rgba(56, 165, 255, 0.25);
+}
+
+/* =====================================================
+   ÁREA DA AGENDA
+===================================================== */
 
 #container-notas {
-    display: flex;
-    gap: 30px;
-    justify-content: space-between;
     width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
     flex-wrap: wrap;
+
+    gap: 30px;
 }
 
-#notas, #tarefas {
-    width: 48%;
-    background-color: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+#notas,
+#tarefas {
+    width: calc(50% - 15px);
+    padding: 22px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #e3e8ef;
+    border-radius: 12px;
+
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
+
+/* =========================
+   BLOCO DE NOTAS
+========================= */
 
 #notas textarea {
     width: 100%;
-    height: 250px;
-    border: 1px solid #ddd;
-    padding: 12px;
+    min-height: 250px;
+
+    padding: 14px;
+
+    background: #ffffff;
+    color: #232323;
+
+    border: 1px solid #d8dee7;
     border-radius: 8px;
+
     font-size: 16px;
+    line-height: 1.6;
+
     resize: vertical;
     overflow-y: auto;
+
     white-space: pre-wrap;
-    word-wrap: break-word;
+    word-break: break-word;
     overflow-wrap: break-word;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+
+    outline: none;
+
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.07);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
+
+#notas textarea:focus {
+    border-color: #38a5ff;
+    box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.15);
+}
+
+#btn-salvar-nota {
+    width: 100%;
+}
+
+/* Notas salvas */
 
 #saved-notes {
-    margin-top: 20px;
+    margin-top: 25px;
+
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
-/* Estilos para o modal de nomear nota */
-.modal-nomear-nota {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
+#saved-notes h2 {
+    color: #2e8fde;
+    font-size: 20px;
 }
 
-.modal-nomear-nota .modal-content {
-    background: #fff;
-    color: #333;
-    padding: 25px;
-    border-radius: 10px;
-    text-align: center;
-    width: 400px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    animation: aparecer 0.3s ease;
-}
-
-.modal-nomear-nota h3 {
-    margin-bottom: 15px;
-    color: #38a5ff;
-}
-
-.modal-nomear-nota input {
-    width: 100%;
-    padding: 10px;
-    margin: 15px 0;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-.modal-nomear-nota .modal-buttons {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-}
-
-.modal-nomear-nota .modal-buttons button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    transition: background 0.3s;
-    width: auto;
-    margin-top: 0;
-}
-
-.modal-nomear-nota #confirmar-nome-nota {
-    background-color: #38a5ff;
-    color: #fff;
-}
-
-.modal-nomear-nota #confirmar-nome-nota:hover {
-    background-color: #006cc5;
-}
-
-.modal-nomear-nota #cancelar-nome-nota {
-    background-color: #e0e0e0;
-    color: #333;
-}
-
-.modal-nomear-nota #cancelar-nome-nota:hover {
-    background-color: #bdbdbd;
-}
-
-/* Estilos para o bloco de notas */
 .notas-container {
+    margin-top: 10px;
+
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    margin-top: 20px;
+    gap: 18px;
 }
 
 .nota-item {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-left: 4px solid #38a5ff;
-    padding: 15px;
-    border-radius: 0 8px 8px 0;
-    box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
     position: relative;
-    transition: transform 0.2s, box-shadow 0.2s;
+
+    padding: 16px;
+
+    background-color: #ffffff;
+
+    border: 1px solid #dddddd;
+    border-left: 4px solid #38a5ff;
+    border-radius: 0 8px 8px 0;
+
+    box-shadow: 2px 2px 7px rgba(0, 0, 0, 0.09);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .nota-item:hover {
     transform: translateY(-2px);
-    box-shadow: 3px 3px 8px rgba(0,0,0,0.15);
+
+    box-shadow: 3px 5px 12px rgba(0, 0, 0, 0.13);
 }
 
 .nota-titulo {
-    font-weight: bold;
-    font-size: 16px;
-    color: #38a5ff;
-    margin-bottom: 8px;
     display: block;
+
+    margin-bottom: 6px;
+
+    color: #38a5ff;
+    font-size: 16px;
+    font-weight: bold;
 }
 
 .nota-data {
-    font-size: 12px;
-    color: #666;
-    margin-bottom: 8px;
     display: block;
+
+    margin-bottom: 10px;
+
+    color: #666666;
+    font-size: 12px;
 }
 
 .nota-conteudo {
+    margin-bottom: 12px;
+
+    color: #333333;
+
     font-size: 14px;
-    line-height: 1.4;
+    line-height: 1.6;
+
     white-space: pre-wrap;
     word-break: break-word;
-    margin-bottom: 10px;
 }
 
 .nota-acoes {
+    margin-top: 12px;
+
     display: flex;
     justify-content: flex-end;
-    gap: 10px;
-    margin-top: 10px;
-}
-
-.btn-nota {
-    padding: 5px 10px;
-    font-size: 12px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    width: auto;
-    margin-top: 0;
-}
-
-.btn-editar {
-    background-color: #38a5ff;
-    color: white;
-}
-
-.btn-editar:hover {
-    background-color: #2691c8;
-}
-
-.btn-excluir-nota {
-    background-color: #ff5c5c;
-    color: white;
-}
-
-.btn-excluir-nota:hover {
-    background-color: #e04444;
+    flex-wrap: wrap;
+    gap: 8px;
 }
 
 .sem-notas {
-    text-align: center;
     padding: 20px;
-    color: #666;
+
+    color: #666666;
+
+    text-align: center;
     font-style: italic;
 }
 
+/* =========================
+   TÍTULOS DAS TABELAS
+========================= */
+
 .titulo-tabela {
-    font-size: 20px;
-    font-weight: bold;
     margin-top: 25px;
     margin-bottom: 15px;
+
     color: #38a5ff;
+
+    font-size: 20px;
+    font-weight: bold;
     text-align: center;
 }
 
-table {
+#tarefas .titulo-tabela:first-child {
+    margin-top: 0;
+}
+
+/* =========================
+   TABELAS DA AGENDA
+========================= */
+
+#tabela-tarefas,
+#tabela-nao-esquecer {
     width: 100%;
+
+    margin: 0 0 15px;
+
     border-collapse: collapse;
     table-layout: fixed;
-    word-wrap: break-word;
+
+    background: #ffffff;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    box-shadow: 0 4px 9px rgba(0, 0, 0, 0.07);
 }
 
-table th, table td {
-    padding: 12px;
-    border: 1px solid #ddd;
+#tabela-tarefas th,
+#tabela-tarefas td,
+#tabela-nao-esquecer th,
+#tabela-nao-esquecer td {
+    padding: 11px 8px;
+
+    border: 1px solid #dddddd;
+
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
+
     word-break: break-word;
-}
-
-table th {
-    background-color: #38a5ff;
-    color: white;
-}
-
-table td {
-    white-space: normal;
     overflow-wrap: break-word;
 }
+
+#tabela-tarefas th,
+#tabela-nao-esquecer th {
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    font-weight: 600;
+}
+
+#tabela-tarefas td,
+#tabela-nao-esquecer td {
+    background: #ffffff;
+    white-space: normal;
+}
+
+#tabela-tarefas tbody tr:nth-child(even) td,
+#tabela-nao-esquecer tbody tr:nth-child(even) td {
+    background: #f8fafc;
+}
+
+/* Coluna do texto */
 
 #tabela-tarefas th:nth-child(2),
 #tabela-tarefas td:nth-child(2),
@@ -330,214 +574,254 @@ table td {
     width: 40%;
 }
 
+/* Coluna do número */
+
+#tabela-tarefas th:first-child,
+#tabela-tarefas td:first-child,
+#tabela-nao-esquecer th:first-child,
+#tabela-nao-esquecer td:first-child {
+    width: 45px;
+}
+
+/* Células editáveis */
+
+#tabela-tarefas td[contenteditable="true"],
+#tabela-nao-esquecer td[contenteditable="true"] {
+    cursor: text;
+    outline: none;
+}
+
+#tabela-tarefas td[contenteditable="true"]:focus,
+#tabela-nao-esquecer td[contenteditable="true"]:focus {
+    background: #eef8ff;
+
+    box-shadow: inset 0 0 0 2px #38a5ff;
+}
+
+/* Campo de data */
+
+td input[type="date"] {
+    width: 100%;
+    max-width: 100%;
+
+    padding: 6px;
+
+    background: #ffffff;
+    color: #232323;
+
+    border: 1px solid #cccccc;
+    border-radius: 5px;
+
+    font-size: 13px;
+    outline: none;
+}
+
+td input[type="date"]:focus {
+    border-color: #38a5ff;
+}
+
+/* =========================
+   BOTÕES GERAIS
+========================= */
+
 button {
-    padding: 12px 25px;
+    padding: 12px 20px;
+
     background-color: #38a5ff;
-    color: white;
+    color: #ffffff;
+
     border: none;
     border-radius: 8px;
+
+    font-size: 15px;
+    font-weight: 500;
+
     cursor: pointer;
-    transition: background-color 0.3s;
-    margin-top: 15px;
-    font-size: 16px;
-    width: 100%;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 button:hover {
     background-color: #2691c8;
+    transform: translateY(-1px);
 }
 
+/* Botões principais da agenda */
+
+#btn-salvar-nota,
+#add-tarefa,
+#add-nao-esquecer {
+    width: 100%;
+    margin-top: 15px;
+}
+
+/* Botões pequenos das notas */
+
+.btn-nota,
+.btn-pequeno,
+.btn-excluir {
+    width: auto;
+    margin: 0;
+    padding: 6px 11px;
+
+    border-radius: 5px;
+
+    font-size: 12px;
+}
+
+.btn-editar,
 .btn-pequeno {
     background-color: #38a5ff;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-    margin-left: 8px;
-    width: auto;
+    color: #ffffff;
 }
 
+.btn-editar:hover,
 .btn-pequeno:hover {
     background-color: #2691c8;
 }
 
+.btn-excluir-nota,
 .btn-excluir {
     background-color: #ff5c5c;
-    color: white;
-    padding: 6px 12px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-    width: auto;
+    color: #ffffff;
 }
 
+.btn-excluir-nota:hover,
 .btn-excluir:hover {
     background-color: #e04444;
 }
 
-/* ==================== MODAL DE EXCLUSÃO ==================== */
+/* =====================================================
+   MODAIS GERAIS
+===================================================== */
+
+.modal,
+.modal-nomear-nota,
 .modal-excluir {
     display: none;
+
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    inset: 0;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
     z-index: 3000;
+
     justify-content: center;
     align-items: center;
 }
 
-.modal-excluir .modal-content {
-    background: #fff;
-    color: #333;
-    padding: 30px;
-    border-radius: 15px;
+/* Caixa padrão */
+
+.modal-content {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 26px;
+
+    background: #ffffff;
+    color: #333333;
+
+    border-radius: 12px;
+
     text-align: center;
-    width: 400px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+
     animation: aparecer 0.3s ease;
-    border-top: 5px solid #ff5c5c;
 }
 
-.excluir-icon {
-    font-size: 48px;
-    color: #ff5c5c;
-    margin-bottom: 15px;
-}
-
-.modal-excluir h3 {
-    color: #ff5c5c;
+.modal-content h3 {
     margin-bottom: 10px;
-    font-size: 24px;
 }
 
-.modal-excluir p {
-    color: #666;
-    margin-bottom: 25px;
-    font-size: 16px;
+.modal-content h4,
+.modal-content p {
+    margin-bottom: 15px;
     line-height: 1.5;
 }
 
-.modal-excluir .modal-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.btn-excluir-confirmar {
-    background: linear-gradient(135deg, #ff5c5c, #e04444) !important;
-    color: white !important;
-    padding: 12px 25px !important;
-    border: none !important;
-    border-radius: 8px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    transition: all 0.3s ease !important;
-    box-shadow: 0 4px 15px rgba(255, 92, 92, 0.3) !important;
-    width: auto !important;
-    margin-top: 0 !important;
-}
-
-.btn-excluir-confirmar:hover {
-    background: linear-gradient(135deg, #ff4444, #cc3333) !important;
-    transform: translateY(-2px) !important;
-    box-shadow: 0 6px 20px rgba(255, 92, 92, 0.4) !important;
-}
-
-.modal-excluir .btn-cancelar {
-    background: #f0f0f0 !important;
-    color: #333 !important;
-    padding: 12px 25px !important;
-    border: none !important;
-    border-radius: 8px !important;
-    cursor: pointer !important;
-    font-size: 16px !important;
-    font-weight: bold !important;
-    transition: all 0.3s ease !important;
-    width: auto !important;
-    margin-top: 0 !important;
-}
-
-.modal-excluir .btn-cancelar:hover {
-    background: #e0e0e0 !important;
-    transform: translateY(-2px) !important;
-}
-
-/* Animação de tremor para o ícone */
-@keyframes tremor {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-3px); }
-    75% { transform: translateX(3px); }
-}
-
-.modal-excluir .excluir-icon {
-    animation: tremor 0.5s ease-in-out;
-}
-
-td input[type="date"] {
-    width: 100%;
-    padding: 5px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    font-size: 14px;
-    max-width: 100%;
-}
-
-.modal {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    z-index: 2000;
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-content {
-    background: #fff;
-    color: #333;
-    padding: 25px;
-    border-radius: 10px;
-    text-align: center;
-    width: 320px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    animation: aparecer 0.3s ease;
-}
+/* Botões do modal */
 
 .modal-buttons {
     margin-top: 20px;
+
     display: flex;
     justify-content: center;
-    gap: 15px;
+    flex-wrap: wrap;
+    gap: 12px;
 }
 
 .modal-buttons button {
-    padding: 8px 16px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+    width: auto;
+    margin: 0;
+
+    padding: 9px 17px;
+
     font-size: 14px;
     font-weight: bold;
-    transition: background 0.3s;
-    width: auto;
-    margin-top: 0;
 }
+
+/* =========================
+   MODAL PARA NOMEAR NOTA
+========================= */
+
+.modal-nomear-nota .modal-content {
+    max-width: 400px;
+}
+
+.modal-nomear-nota h3 {
+    color: #38a5ff;
+}
+
+.modal-nomear-nota input {
+    width: 100%;
+
+    margin: 15px 0;
+    padding: 11px;
+
+    border: 1px solid #dddddd;
+    border-radius: 6px;
+
+    font-size: 15px;
+    outline: none;
+}
+
+.modal-nomear-nota input:focus {
+    border-color: #38a5ff;
+    box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.15);
+}
+
+#confirmar-nome-nota {
+    background-color: #38a5ff;
+    color: #ffffff;
+}
+
+#confirmar-nome-nota:hover {
+    background-color: #006cc5;
+}
+
+#cancelar-nome-nota {
+    background-color: #e0e0e0;
+    color: #333333;
+}
+
+#cancelar-nome-nota:hover {
+    background-color: #bdbdbd;
+}
+
+/* =========================
+   MODAL DE LOGOUT
+========================= */
 
 #confirm-logout {
     background-color: #38a5ff;
-    color: #fff;
+    color: #ffffff;
 }
 
 #confirm-logout:hover {
@@ -546,66 +830,388 @@ td input[type="date"] {
 
 #cancel-logout {
     background-color: #e0e0e0;
-    color: #333;
+    color: #333333;
 }
 
 #cancel-logout:hover {
     background-color: #bdbdbd;
 }
 
-@keyframes aparecer {
-    from { transform: scale(0.8); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
+/* =========================
+   MODAL DE EXCLUSÃO
+========================= */
+
+.modal-excluir {
+    background: rgba(0, 0, 0, 0.7);
 }
 
+.modal-excluir .modal-content {
+    max-width: 400px;
+
+    padding: 30px;
+
+    border-top: 5px solid #ff5c5c;
+    border-radius: 15px;
+}
+
+.excluir-icon {
+    margin-bottom: 15px;
+
+    color: #ff5c5c;
+    font-size: 48px;
+
+    animation: tremor 0.5s ease-in-out;
+}
+
+.modal-excluir h3 {
+    margin-bottom: 10px;
+
+    color: #ff5c5c;
+    font-size: 24px;
+}
+
+.modal-excluir p {
+    margin-bottom: 25px;
+
+    color: #666666;
+
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.btn-excluir-confirmar {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 11px 22px !important;
+
+    background: #ff5c5c !important;
+    color: #ffffff !important;
+
+    border-radius: 8px !important;
+
+    font-size: 15px !important;
+    font-weight: bold !important;
+
+    box-shadow: 0 4px 15px rgba(255, 92, 92, 0.3) !important;
+}
+
+.btn-excluir-confirmar:hover {
+    background: #e04444 !important;
+    transform: translateY(-2px) !important;
+}
+
+.modal-excluir .btn-cancelar {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 11px 22px !important;
+
+    background: #f0f0f0 !important;
+    color: #333333 !important;
+
+    border-radius: 8px !important;
+
+    font-size: 15px !important;
+    font-weight: bold !important;
+}
+
+.modal-excluir .btn-cancelar:hover {
+    background: #e0e0e0 !important;
+    transform: translateY(-2px) !important;
+}
+
+/* =========================
+   MODAL DE SUCESSO
+========================= */
+
+#modal-sucesso {
+    z-index: 999999;
+}
+
+#modal-sucesso .modal-content {
+    max-width: 360px;
+}
+
+#modal-sucesso .btn-modal {
+    width: auto;
+    margin-top: 10px;
+}
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: scale(0.8);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes tremor {
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-3px);
+    }
+
+    75% {
+        transform: translateX(3px);
+    }
+}
+
+/* =====================================================
+   FOGi
+===================================================== */
+
+#icon-fogi {
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+#fogi-modal {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    z-index: 9999;
+
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+
+    align-items: center;
+    justify-content: center;
+}
+
+#fogi-modal .fogi-container {
+    width: 90%;
+    max-width: 1100px;
+    height: 80vh;
+
+    background: #ffffff;
+
+    border-radius: 12px;
+
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+}
+
+#fogi-modal .fogi-header {
+    padding: 8px 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    background: #38a5ff;
+    color: #ffffff;
+
+    font-size: 0.95rem;
+    font-weight: 600;
+}
+
+#fogi-close {
+    width: auto;
+    margin: 0;
+    padding: 4px 10px;
+
+    background: #ffffff;
+    color: #333333;
+
+    border-radius: 6px;
+
+    font-size: 0.85rem;
+}
+
+#fogi-close:hover {
+    background: #f1f1f1;
+}
+
+#fogi-iframe {
+    flex: 1;
+    width: 100%;
+    height: 100%;
+
+    border: none;
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
 footer {
+    width: 100%;
+    padding: 10px;
+
     background-color: #232323;
     color: #ffffff;
+
     text-align: center;
-    padding: 10px;
-    width: 100%;
-    font-size: 1em;
+    font-size: 14px;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 1000px) {
+    #container-notas {
+        flex-direction: column;
+    }
+
+    #notas,
+    #tarefas {
+        width: 100%;
+    }
 }
 
 @media (max-width: 768px) {
+    header.cabecalho {
+        padding: 12px 15px;
+        font-size: 21px;
+    }
+
+    .header-icons {
+        right: 15px;
+        gap: 11px;
+        font-size: 19px;
+    }
+
     .container {
         flex-direction: column;
     }
 
     nav.menu {
         width: 100%;
-        padding: 15px;
+        min-width: 100%;
+
+        padding: 14px;
+
         flex-direction: row;
         flex-wrap: wrap;
         justify-content: center;
+
+        gap: 8px;
+    }
+
+    nav.menu a {
+        width: auto;
     }
 
     .main-content {
-        padding: 10px;
+        padding: 18px 12px;
+        gap: 20px;
     }
 
-    #container-notas {
+    .horario-agenda-card,
+    #notas,
+    #tarefas {
+        padding: 18px;
+    }
+
+    .horario-buttons {
         flex-direction: column;
     }
 
-    #notas, #tarefas {
+    .horario-buttons button {
         width: 100%;
     }
 
-    table {
+    .nota-acoes {
+        justify-content: flex-start;
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+
+    #fogi-modal .fogi-container {
+        width: 96%;
+        height: 90vh;
+    }
+}
+
+@media (max-width: 520px) {
+    header.cabecalho {
+        padding: 11px 10px;
+        font-size: 19px;
+    }
+
+    .header-icons {
+        right: 10px;
+        gap: 9px;
+        font-size: 17px;
+    }
+
+    nav.menu {
+        flex-direction: column;
+    }
+
+    nav.menu a {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 12px 8px;
+    }
+
+    .horario-agenda-card,
+    #notas,
+    #tarefas {
+        padding: 14px;
+        border-radius: 10px;
+    }
+
+    .horario-agenda-header h2 {
+        font-size: 20px;
+    }
+
+    #notas textarea {
+        min-height: 200px;
         font-size: 14px;
     }
 
-    table th, table td {
-        padding: 8px;
+    #tabela-tarefas th,
+    #tabela-tarefas td,
+    #tabela-nao-esquecer th,
+    #tabela-nao-esquecer td {
+        padding: 7px 4px;
+        font-size: 12px;
     }
 
-    button {
+    td input[type="date"] {
+        font-size: 11px;
+        padding: 4px;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+    }
+
+    .modal-buttons button {
         width: 100%;
     }
-    
-    .modal-nomear-nota .modal-content {
-        width: 90%;
-        margin: 0 auto;
+
+    .nota-acoes {
+        flex-direction: column;
+    }
+
+    .nota-acoes button {
+        width: 100%;
     }
 }
