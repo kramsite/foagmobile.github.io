@@ -61,7 +61,7 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="pomodoro.css">
-  <link rel="stylesheet" href="../m.escuro/dark_base.css">
+  <link rel="stylesheet" href="../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_pomo.css">
   <!-- Chart.js para os gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -76,10 +76,11 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
 <body>
   <!-- Cabeçalho -->
   <header class="cabecalho">
-    <div class="logo">FOAG</div>
+    FOAG
     <div class="header-icons">
       <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
       <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
+      <i id="icon-fogi" class="fa-solid fa-robot" title="Assistente FOAG — FOGi"></i>
       <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
     </div>
   </header>
