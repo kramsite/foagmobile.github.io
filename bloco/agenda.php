@@ -925,15 +925,7 @@ if (!isset($horarioData['html'])) {
         };
     </script>
 
-    <!-- JavaScript do horário -->
-    <script
-        src="../horario/horario.js?v=<?= time() ?>">
-    </script>
-
-    <!-- JavaScript da Agenda -->
-    <script
-        src="./agendar.js?v=<?= time() ?>">
-    </script>
+    <script src="./agendar.js?v=<?= time() ?>"></script>
 
     <script>
         document.addEventListener(
