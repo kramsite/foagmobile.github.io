@@ -293,7 +293,10 @@ file_put_contents(
            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja
             </a>
-
+            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
+            </a>
+            
         </nav>
 
         <!-- ======================================

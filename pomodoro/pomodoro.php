@@ -110,6 +110,9 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
             <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja
             </a>
+                   <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
+            </a>     
 
     </nav>
 

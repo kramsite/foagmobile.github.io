@@ -1,0 +1,894 @@
+/* =====================================================
+   RANKING — FOAG
+===================================================== */
+
+/* =========================
+   RESET E BASE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7fb;
+    color: #232323;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+header.cabecalho {
+    width: 100%;
+    padding: 15px;
+    position: relative;
+    z-index: 100;
+
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    font-family: 'Snap ITC', cursive, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    color: #ffffff;
+    font-size: 22px;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-icons i {
+    color: #ffffff;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.header-icons i:hover {
+    color: #006cc5;
+    transform: translateY(-13%) scale(1.1);
+}
+
+/* =========================
+   ESTRUTURA PRINCIPAL
+========================= */
+
+.container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+nav.menu {
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    background: #38a5ff;
+
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+nav.menu a {
+    width: 100%;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ffffff;
+    background: transparent;
+
+    font-size: 16px;
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav.menu a i {
+    width: 22px;
+    text-align: center;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+nav.menu a:hover {
+    transform: translateX(2px);
+}
+
+/* =========================
+   CONTEÚDO PRINCIPAL
+========================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 25px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =====================================================
+   HEADER DO RANKING
+===================================================== */
+
+.ranking-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 25px 30px;
+
+    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+    border-radius: 16px;
+
+    color: #ffffff;
+
+    box-shadow: 0 8px 30px rgba(26, 35, 126, 0.3);
+}
+
+.ranking-titulo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.ranking-titulo h1 i {
+    color: #ffd700;
+}
+
+.ranking-titulo p {
+    opacity: 0.9;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.ranking-stats {
+    display: flex;
+    gap: 25px;
+    align-items: center;
+}
+
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: rgba(255, 255, 255, 0.12);
+    padding: 10px 18px;
+    border-radius: 12px;
+
+    font-size: 18px;
+    font-weight: 700;
+
+    backdrop-filter: blur(10px);
+}
+
+.stat-item i {
+    color: #ffd700;
+}
+
+.stat-item .label {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-left: 4px;
+}
+
+/* =====================================================
+   GRID DE RANKINGS
+===================================================== */
+
+.rankings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 25px;
+
+    padding: 5px 0;
+}
+
+/* =====================================================
+   CARD DO RANKING
+===================================================== */
+
+.rank-card {
+    background: #ffffff;
+    border-radius: 16px;
+    overflow: hidden;
+
+    border: 1px solid #e3e8ef;
+
+    transition: all 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+}
+
+.rank-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+}
+
+.rank-header {
+    padding: 18px 20px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: 4px solid #38a5ff;
+    background: #f8fafc;
+}
+
+.rank-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.rank-title i {
+    font-size: 22px;
+}
+
+.rank-title h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a2a3a;
+}
+
+.rank-count {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    background: #eef4fa;
+    padding: 4px 12px;
+    border-radius: 20px;
+}
+
+.rank-body {
+    padding: 12px 16px;
+    flex: 1;
+}
+
+/* =====================================================
+   ITEM DO RANKING
+===================================================== */
+
+.rank-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 12px;
+    margin-bottom: 6px;
+
+    border-radius: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.rank-item:hover {
+    background: #f1f5f9;
+}
+
+.rank-item.usuario-destaque {
+    background: #e3f2fd;
+    border: 2px solid #38a5ff;
+    box-shadow: 0 0 20px rgba(56, 165, 255, 0.15);
+}
+
+.rank-item.usuario-destaque .rank-nome {
+    font-weight: 700;
+}
+
+.rank-item .rank-position {
+    min-width: 35px;
+}
+
+.rank-number {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+
+    border-radius: 50%;
+
+    background: #eef4fa;
+    color: #4a6a8a;
+
+    font-size: 12px;
+    font-weight: 700;
+
+    text-align: center;
+    line-height: 30px;
+}
+
+.rank-item .rank-avatar {
+    font-size: 28px;
+    width: 40px;
+    text-align: center;
+}
+
+.rank-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.rank-nome {
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a2a3a;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.badge-eu {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #38a5ff;
+    padding: 1px 8px;
+    border-radius: 10px;
+}
+
+.rank-valor {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.rank-nivel {
+    min-width: 70px;
+    text-align: right;
+}
+
+.nivel-badge {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    padding: 3px 10px;
+    border-radius: 12px;
+}
+
+/* =====================================================
+   RODAPÉ DO CARD
+===================================================== */
+
+.rank-footer {
+    padding: 12px 18px;
+
+    border-top: 1px solid #e3e8ef;
+    background: #f8fafc;
+
+    display: flex;
+    justify-content: center;
+}
+
+.btn-ver-todos {
+    padding: 8px 24px;
+
+    background: transparent;
+    color: #38a5ff;
+
+    border: 2px solid #38a5ff;
+    border-radius: 25px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.btn-ver-todos:hover {
+    background: #38a5ff;
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(56, 165, 255, 0.3);
+}
+
+.btn-ver-todos i {
+    margin-left: 6px;
+    transition: transform 0.3s ease;
+}
+
+.btn-ver-todos:hover i {
+    transform: translateX(4px);
+}
+
+/* =====================================================
+   MODAL DE CATEGORIA
+===================================================== */
+
+.modal-categoria {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+
+    z-index: 9999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-categoria .modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+
+    display: flex;
+    flex-direction: column;
+
+    animation: slideUp 0.3s ease;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+
+    border-bottom: 2px solid #e3e8ef;
+}
+
+.modal-header h2 {
+    font-size: 22px;
+    color: #1a2a3a;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.modal-header .btn-fechar {
+    width: 36px;
+    height: 36px;
+
+    background: #f1f3f5;
+    border: none;
+    border-radius: 50%;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.modal-header .btn-fechar:hover {
+    background: #e3e8ef;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.categoria-stats {
+    display: flex;
+    gap: 20px;
+
+    padding: 12px 16px;
+
+    background: #f8fafc;
+    border-radius: 12px;
+
+    margin-bottom: 16px;
+
+    font-size: 14px;
+    color: #4a6a8a;
+}
+
+.categoria-stats i {
+    margin-right: 4px;
+}
+
+.categoria-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.categoria-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    padding: 10px 14px;
+
+    border-radius: 10px;
+
+    transition: all 0.3s ease;
+}
+
+.categoria-item:hover {
+    background: #f1f5f9;
+}
+
+.categoria-item.usuario-destaque {
+    background: #e3f2fd;
+    border: 2px solid #38a5ff;
+}
+
+.categoria-pos {
+    min-width: 35px;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4a6a8a;
+}
+
+.categoria-avatar {
+    font-size: 28px;
+}
+
+.categoria-nome {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    color: #1a2a3a;
+}
+
+.categoria-valor {
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.categoria-nivel {
+    font-size: 12px;
+    color: #64748b;
+    background: #eef4fa;
+    padding: 2px 10px;
+    border-radius: 12px;
+}
+
+.categoria-item .badge-eu {
+    font-size: 10px;
+    font-weight: 700;
+    color: #ffffff;
+    background: #38a5ff;
+    padding: 1px 8px;
+    border-radius: 10px;
+}
+
+/* =====================================================
+   MODAL DE LOGOUT
+===================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    z-index: 3000;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal .modal-content {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 26px;
+
+    background: #ffffff;
+    color: #333333;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+
+    animation: slideUp 0.3s ease;
+}
+
+.modal .modal-content h3 {
+    margin-bottom: 10px;
+}
+
+.modal .modal-content h4 {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.modal-buttons button {
+    width: auto;
+    margin: 0;
+
+    padding: 9px 17px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#confirm-logout {
+    background-color: #38a5ff;
+    color: #ffffff;
+}
+
+#confirm-logout:hover {
+    background-color: #006cc5;
+}
+
+#cancel-logout {
+    background-color: #e0e0e0;
+    color: #333333;
+}
+
+#cancel-logout:hover {
+    background-color: #bdbdbd;
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+    width: 100%;
+    padding: 10px;
+
+    background-color: #232323;
+    color: #ffffff;
+
+    text-align: center;
+    font-size: 14px;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 768px) {
+    header.cabecalho {
+        padding: 12px 15px;
+        font-size: 21px;
+    }
+
+    .header-icons {
+        right: 15px;
+        gap: 11px;
+        font-size: 19px;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    nav.menu {
+        width: 100%;
+        min-width: 100%;
+
+        padding: 14px;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        gap: 8px;
+    }
+
+    nav.menu a {
+        width: auto;
+    }
+
+    .main-content {
+        padding: 18px 12px;
+        gap: 20px;
+    }
+
+    .ranking-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .ranking-titulo h1 {
+        font-size: 22px;
+        justify-content: center;
+    }
+
+    .ranking-stats {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .stat-item {
+        font-size: 15px;
+        padding: 8px 14px;
+    }
+
+    .rankings-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+
+    .rank-item {
+        padding: 8px 10px;
+    }
+
+    .rank-item .rank-avatar {
+        font-size: 22px;
+        width: 32px;
+    }
+
+    .rank-nome {
+        font-size: 13px;
+    }
+
+    .rank-valor {
+        font-size: 12px;
+    }
+
+    .modal-categoria .modal-content {
+        padding: 20px;
+        max-height: 70vh;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+    }
+
+    .categoria-item {
+        flex-wrap: wrap;
+        gap: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    header.cabecalho {
+        padding: 11px 10px;
+        font-size: 19px;
+    }
+
+    .header-icons {
+        right: 10px;
+        gap: 9px;
+        font-size: 17px;
+    }
+
+    nav.menu {
+        flex-direction: column;
+    }
+
+    nav.menu a {
+        width: 100%;
+    }
+
+    .main-content {
+        padding: 12px 8px;
+    }
+
+    .ranking-header {
+        padding: 15px;
+    }
+
+    .rank-card {
+        border-radius: 12px;
+    }
+
+    .rank-header {
+        padding: 14px 16px;
+    }
+
+    .rank-title h2 {
+        font-size: 14px;
+    }
+
+    .rank-body {
+        padding: 10px 12px;
+    }
+
+    .rank-item {
+        padding: 6px 8px;
+        gap: 8px;
+    }
+
+    .rank-number {
+        width: 24px;
+        height: 24px;
+        font-size: 10px;
+        line-height: 24px;
+    }
+
+    .rank-item .rank-avatar {
+        font-size: 20px;
+        width: 28px;
+    }
+
+    .rank-nivel {
+        min-width: 50px;
+    }
+
+    .nivel-badge {
+        font-size: 9px;
+        padding: 2px 8px;
+    }
+}
