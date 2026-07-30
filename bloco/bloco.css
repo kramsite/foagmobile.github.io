@@ -169,19 +169,24 @@ nav.menu a:hover {
 }
 
 /* =====================================================
-   HORÁRIO NO TOPO
+   HORÁRIO - ESTILO DIFERENCIADO (NO TOPO)
 ===================================================== */
 
 .horario-agenda-card {
     width: 100%;
     padding: 25px;
 
-    background: #ffffff;
-
-    border: 1px solid #e0e6ee;
+    /* Fundo com gradiente azul claro para diferenciar */
+    background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%) !important;
+    
+    /* Borda azul mais grossa */
+    border: 2px solid #38a5ff !important;
+    border-left: 6px solid #38a5ff !important;
+    
     border-radius: 14px;
 
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    /* Sombra com tom azul */
+    box-shadow: 0 8px 30px rgba(56, 165, 255, 0.15) !important;
 }
 
 .horario-agenda-header {
@@ -195,28 +200,43 @@ nav.menu a:hover {
 
     margin-bottom: 6px;
 
-    color: #2e8fde;
-    font-size: 24px;
+    /* Cor mais escura para o título */
+    color: #1a6fb5 !important;
+    font-size: 24px !important;
+}
+
+/* Ícone do relógio pulsante */
+.horario-agenda-header h2 i {
+    color: #38a5ff !important;
+    animation: pulse-azul 2s ease-in-out infinite;
+}
+
+@keyframes pulse-azul {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 .horario-agenda-header p {
-    color: #64748b;
+    color: #4a6a8a !important;
+    font-weight: 500 !important;
     font-size: 14px;
     line-height: 1.6;
 }
 
 /* Container com rolagem da tabela */
-
 .horario-table-wrapper {
     width: 100%;
     overflow-x: auto;
 
-    border: 1px solid #d9e0e8;
-    border-radius: 10px;
+    /* Borda azul destacada */
+    border: 2px solid #38a5ff !important;
+    border-radius: 12px !important;
+    
+    /* Sombra interna sutil */
+    box-shadow: inset 0 0 30px rgba(56, 165, 255, 0.05) !important;
 }
 
 /* Tabela específica do horário */
-
 #scheduleTable {
     width: 100%;
     min-width: 850px;
@@ -243,45 +263,73 @@ nav.menu a:hover {
     word-break: break-word;
 }
 
+/* Cabeçalho da tabela */
 #scheduleTable th {
-    background: #38a5ff;
-    color: #ffffff;
-    font-weight: 600;
+    background:linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    letter-spacing: 0.5px !important;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1) !important;
 }
 
+/* Células da tabela */
 #scheduleTable td {
     min-width: 125px;
 
-    background-color: #f8fafc;
-    color: #232323;
+    background-color: #fafcff !important;
+    color: #1a2a3a !important;
+    font-weight: 500 !important;
 
     cursor: text;
     outline: none;
+
+    transition: all 0.2s ease !important;
 }
 
 #scheduleTable tbody tr:nth-child(even) td {
-    background-color: #f1f5f9;
+    background-color: #eef4fa !important;
 }
 
 /* Primeira coluna do horário */
-
 #scheduleTable td:first-child {
     min-width: 100px;
 
-    background-color: #38a5ff;
-    color: #ffffff;
-
-    font-weight: 600;
+    /* Gradiente azul para a primeira coluna */
+    background: linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
+    font-size: 15px !important;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2) !important;
 }
 
-/* Campo sendo editado */
+/* ========================================
+   BARRAS AZUIS NAS CÉLULAS EM FOCO
+   ======================================== */
 
 #scheduleTable td[contenteditable="true"]:focus {
-    background-color: #ffffff;
-    box-shadow: inset 0 0 0 2px #38a5ff;
+    background-color: #ffffff !important;
+    
+    /* Barra azul embaixo + borda sutil */
+    box-shadow: 
+        inset 0 -4px 0 #38a5ff,
+        inset 0 0 0 2px rgba(56, 165, 255, 0.2) !important;
+    
+    transform: scale(1.02);
+    z-index: 10;
+    position: relative;
+    border-radius: 4px;
 }
 
-/* Botões do horário */
+/* Efeito hover nas células */
+#scheduleTable td[contenteditable="true"]:hover {
+    background-color: #e3eef9 !important;
+    cursor: text;
+}
+
+/* ========================================
+   BOTÕES DO HORÁRIO
+   ======================================== */
 
 .horario-buttons {
     margin-top: 20px;
@@ -299,28 +347,41 @@ nav.menu a:hover {
     margin: 0;
     padding: 10px 16px;
 
-    background-color: #38a5ff;
-    color: #ffffff;
+    /* Gradiente azul para os botões */
+    background: linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    color: #ffffff !important;
+    font-weight: 700 !important;
 
-    border: none;
+    border: none !important;
     border-radius: 8px;
 
     font-size: 14px;
-    font-weight: 600;
 
     cursor: pointer;
 
-    transition:
-        background-color 0.2s ease,
-        transform 0.2s ease,
-        box-shadow 0.2s ease;
+    /* Sombra com tom azul */
+    box-shadow: 0 4px 15px rgba(56, 165, 255, 0.3) !important;
+
+    transition: all 0.3s ease !important;
 }
 
 .horario-buttons button:hover {
-    background-color: #2691c8;
-    transform: translateY(-1px);
+    transform: translateY(-3px) scale(1.02) !important;
+    box-shadow: 0 6px 25px rgba(56, 165, 255, 0.4) !important;
+}
 
-    box-shadow: 0 5px 14px rgba(56, 165, 255, 0.25);
+.horario-buttons button:active {
+    transform: translateY(0px) scale(0.98) !important;
+}
+
+/* Botão Salvar com destaque (verde) */
+.horario-buttons button:first-child {
+    background: linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    box-shadow: 0 4px 15px rgba(0, 83, 200, 0.296) !important;
+}
+
+.horario-buttons button:first-child:hover {
+    box-shadow: 0 6px 25px rgba(0, 57, 200, 0.345) !important;
 }
 
 /* =====================================================
@@ -1050,6 +1111,69 @@ button:hover {
     border: none;
 }
 
+/* =====================================================
+   MODO ESCURO - HORÁRIO DIFERENCIADO
+===================================================== */
+
+body.dark-mode .horario-agenda-card {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%) !important;
+    border-color: #669ada !important;
+    border-left-color: #669ada !important;
+    box-shadow: 0 8px 30px rgba(102, 154, 218, 0.15) !important;
+}
+
+body.dark-mode .horario-agenda-header h2 {
+    color: #7aa9df !important;
+}
+
+body.dark-mode .horario-agenda-header p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .horario-table-wrapper {
+    border-color: #669ada !important;
+}
+
+body.dark-mode #scheduleTable th {
+    background: #669ada !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #scheduleTable td {
+    background-color: #1a2a3a !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode #scheduleTable tbody tr:nth-child(even) td {
+    background-color: #0f1a2a !important;
+}
+
+body.dark-mode #scheduleTable td:first-child {
+    background: linear-gradient(135deg, #669ada 0%, #4a7ab8 100%) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #scheduleTable td[contenteditable="true"]:focus {
+    background-color: #1a2a3a !important;
+    box-shadow: 
+        inset 0 -4px 0 #669ada,
+        inset 0 0 0 2px rgba(102, 154, 218, 0.3) !important;
+}
+
+body.dark-mode #scheduleTable td[contenteditable="true"]:hover {
+    background-color: #1f344a !important;
+}
+
+body.dark-mode .horario-buttons button {
+    background: linear-gradient(135deg, #669ada 0%, #4a7ab8 100%) !important;
+    box-shadow: 0 4px 15px rgba(102, 154, 218, 0.3) !important;
+}
+
+body.dark-mode .horario-buttons button:first-child {
+    background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%) !important;
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3) !important;
+}
+
 /* =========================
    RODAPÉ
 ========================= */
@@ -1118,7 +1242,11 @@ footer {
         gap: 20px;
     }
 
-    .horario-agenda-card,
+    .horario-agenda-card {
+        padding: 18px;
+        border-left-width: 4px !important;
+    }
+
     #notas,
     #tarefas {
         padding: 18px;
@@ -1130,6 +1258,10 @@ footer {
 
     .horario-buttons button {
         width: 100%;
+    }
+
+    #scheduleTable td[contenteditable="true"]:focus {
+        transform: scale(1.01) !important;
     }
 
     .nota-acoes {

@@ -152,9 +152,10 @@ try {
                 <a href="../notas/notas.php">
                     <i class="fa-solid fa-check-double"></i> Boletim
                 </a>
-                <a href="../horario/horario.php">
-                    <i class="fa-solid fa-clock"></i> Horário
-                </a>
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
+            </a>
+
             </nav>
         </div>
         <div class="header-icons">

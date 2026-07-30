@@ -556,15 +556,10 @@ if (!isset($horarioData['html'])) {
 
                 <i class="fa-solid fa-check-double"></i>
                 Boletim
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
             </a>
 
-            <a
-                href="../horario/horario.php"
-                class="<?= $current === 'horario.php' ? 'active' : '' ?>">
-
-                <i class="fa-solid fa-clock"></i>
-                Horário
-            </a>
         </nav>
 
         <!-- ======================================

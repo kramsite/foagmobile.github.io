@@ -1,0 +1,1046 @@
+/* =====================================================
+   LOJA DE ESTRELAS — FOAG
+===================================================== */
+
+/* =========================
+   RESET E BASE
+========================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7fb;
+    color: #232323;
+}
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+header.cabecalho {
+    width: 100%;
+    padding: 15px;
+    position: relative;
+    z-index: 100;
+
+    background-color: #38a5ff;
+    color: #ffffff;
+
+    font-family: 'Snap ITC', cursive, sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: left;
+
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.header-icons {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    color: #ffffff;
+    font-size: 22px;
+
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-icons i {
+    color: #ffffff;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.header-icons i:hover {
+    color: #006cc5;
+    transform: translateY(-13%) scale(1.1);
+}
+
+/* =========================
+   ESTRUTURA PRINCIPAL
+========================= */
+
+.container {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    min-height: 0;
+}
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+nav.menu {
+    width: 260px;
+    min-width: 260px;
+    flex-shrink: 0;
+
+    padding: 18px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+
+    background: #38a5ff;
+
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+nav.menu a {
+    width: 100%;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    color: #ffffff;
+    background: transparent;
+
+    font-size: 16px;
+    text-decoration: none;
+
+    border-radius: 8px;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+nav.menu a i {
+    width: 22px;
+    text-align: center;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+    background: rgba(255, 255, 255, 0.18);
+}
+
+nav.menu a:hover {
+    transform: translateX(2px);
+}
+
+/* =========================
+   CONTEÚDO PRINCIPAL
+========================= */
+
+.main-content {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+
+    padding: 30px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 25px;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* =====================================================
+   HEADER DA LOJA
+===================================================== */
+
+.loja-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+
+    padding: 25px 30px;
+
+    background: linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%);
+    border-radius: 16px;
+
+    color: #ffffff;
+
+    box-shadow: 0 8px 30px rgba(56, 165, 255, 0.3);
+}
+
+.loja-titulo h1 {
+    font-size: 28px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.loja-titulo p {
+    opacity: 0.9;
+    font-size: 14px;
+    margin-top: 4px;
+}
+
+.loja-saldo {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+}
+
+.saldo-estrelas,
+.tempo-estudo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    background: rgba(255, 255, 255, 0.15);
+    padding: 10px 18px;
+    border-radius: 12px;
+
+    font-size: 20px;
+    font-weight: 700;
+
+    backdrop-filter: blur(10px);
+}
+
+.saldo-estrelas i {
+    color: #ffd700;
+}
+
+.tempo-estudo i {
+    color: #a8d8ff;
+}
+
+.saldo-estrelas .label,
+.tempo-estudo .label {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-left: 4px;
+}
+
+/* =====================================================
+   FILTROS
+===================================================== */
+
+.loja-filtros {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    padding: 15px 0;
+}
+
+.filtro-btn {
+    padding: 8px 18px;
+
+    background: #ffffff;
+    color: #4a6a8a;
+
+    border: 2px solid #e3e8ef;
+    border-radius: 25px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.filtro-btn:hover {
+    border-color: #38a5ff;
+    color: #38a5ff;
+    transform: translateY(-2px);
+}
+
+.filtro-btn.active {
+    background: #38a5ff;
+    color: #ffffff;
+    border-color: #38a5ff;
+    box-shadow: 0 4px 15px rgba(56, 165, 255, 0.3);
+}
+
+.filtro-btn i {
+    margin-right: 6px;
+}
+
+/* =====================================================
+   GRID DE ITENS
+===================================================== */
+
+.loja-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+
+    padding: 5px 0;
+}
+
+/* =====================================================
+   CARD DO ITEM
+===================================================== */
+
+.item-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 20px;
+
+    border: 2px solid #e3e8ef;
+
+    transition: all 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    position: relative;
+
+    cursor: pointer;
+}
+
+.item-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    border-color: #38a5ff;
+}
+
+.item-card .icone {
+    font-size: 40px;
+    color: #38a5ff;
+    margin-bottom: 12px;
+
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef4fa;
+    border-radius: 50%;
+}
+
+.item-card .nome {
+    font-weight: 600;
+    font-size: 16px;
+    color: #1a2a3a;
+    margin-bottom: 4px;
+}
+
+.item-card .descricao {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+
+    flex: 1;
+}
+
+.item-card .preco {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    font-weight: 700;
+    font-size: 16px;
+    color: #ffd700;
+
+    padding: 6px 14px;
+    background: #fff8e1;
+    border-radius: 20px;
+
+    margin-bottom: 12px;
+}
+
+.item-card .preco i {
+    font-size: 14px;
+}
+
+.item-card .status {
+    font-size: 12px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 12px;
+}
+
+.item-card .status.comprado {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.item-card .status.disponivel {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.item-card .status.insuficiente {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.item-card .badge-ativo {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+
+    background: #4caf50;
+    color: #ffffff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 10px;
+    border-radius: 12px;
+    text-transform: uppercase;
+}
+
+/* =====================================================
+   MODAL DE COMPRA
+===================================================== */
+
+.modal-compra {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+
+    z-index: 9999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-compra .modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px 40px;
+
+    max-width: 420px;
+    width: 90%;
+
+    text-align: center;
+
+    animation: aparecer 0.3s ease;
+}
+
+.modal-compra .modal-icon {
+    font-size: 50px;
+    color: #38a5ff;
+    margin-bottom: 15px;
+}
+
+.modal-compra h3 {
+    font-size: 22px;
+    color: #1a2a3a;
+    margin-bottom: 8px;
+}
+
+.modal-compra p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.modal-compra .modal-preco {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    font-size: 24px;
+    font-weight: 700;
+    color: #ffd700;
+
+    padding: 8px 24px;
+    background: #fff8e1;
+    border-radius: 30px;
+
+    margin-bottom: 25px;
+}
+
+.modal-compra .modal-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+}
+
+.modal-compra .btn-comprar {
+    padding: 12px 30px;
+
+    background: linear-gradient(135deg, #38a5ff, #2a7fc9);
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.modal-compra .btn-comprar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(56, 165, 255, 0.4);
+}
+
+.modal-compra .btn-cancelar {
+    padding: 12px 30px;
+
+    background: #f1f3f5;
+    color: #4a6a8a;
+
+    border: none;
+    border-radius: 12px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.modal-compra .btn-cancelar:hover {
+    background: #e3e8ef;
+}
+
+/* =====================================================
+   MODAL DE SUCESSO
+===================================================== */
+
+.modal-sucesso {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+
+    z-index: 99999;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-sucesso .modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px 40px;
+
+    max-width: 400px;
+    width: 90%;
+
+    text-align: center;
+
+    animation: aparecer 0.3s ease;
+}
+
+.modal-sucesso .sucesso-icon {
+    font-size: 60px;
+    color: #4caf50;
+    margin-bottom: 15px;
+}
+
+.modal-sucesso h3 {
+    font-size: 22px;
+    color: #1a2a3a;
+    margin-bottom: 8px;
+}
+
+.modal-sucesso p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.modal-sucesso .btn-modal {
+    padding: 12px 40px;
+
+    background: #4caf50;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.modal-sucesso .btn-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(76, 175, 80, 0.4);
+}
+
+/* =====================================================
+   MODAL DE PERFIL
+===================================================== */
+
+.modal-perfil {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+
+    z-index: 9998;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-perfil .perfil-content {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 30px;
+
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+
+    overflow-y: auto;
+
+    animation: aparecer 0.3s ease;
+}
+
+.perfil-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 25px;
+}
+
+.perfil-header h2 {
+    font-size: 22px;
+    color: #1a2a3a;
+}
+
+.perfil-header .btn-fechar {
+    width: 36px;
+    height: 36px;
+
+    background: #f1f3f5;
+    border: none;
+    border-radius: 50%;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+.perfil-header .btn-fechar:hover {
+    background: #e3e8ef;
+    transform: rotate(90deg);
+}
+
+.perfil-preview {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+
+    padding: 20px;
+
+    background: #f8fafc;
+    border-radius: 16px;
+
+    margin-bottom: 25px;
+}
+
+.avatar-container {
+    position: relative;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+
+    background: #38a5ff;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 35px;
+    color: #ffffff;
+
+    box-shadow: 0 4px 15px rgba(56, 165, 255, 0.3);
+}
+
+.avatar-badges {
+    position: absolute;
+    bottom: -5px;
+    right: -10px;
+
+    display: flex;
+    gap: 2px;
+}
+
+.avatar-badges i {
+    font-size: 18px;
+    color: #ffd700;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.perfil-info h3 {
+    font-size: 20px;
+    color: #1a2a3a;
+    margin-bottom: 6px;
+}
+
+.perfil-emojis {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.perfil-stats {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+.perfil-stats i {
+    margin-right: 4px;
+}
+
+.perfil-itens h4 {
+    font-size: 16px;
+    color: #1a2a3a;
+    margin-bottom: 12px;
+}
+
+.itens-ativos {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.item-ativo {
+    padding: 6px 14px;
+
+    background: #eef4fa;
+    border-radius: 20px;
+
+    font-size: 13px;
+    color: #1a2a3a;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.item-ativo i {
+    color: #38a5ff;
+}
+
+#fechar-perfil-btn {
+    width: 100%;
+    margin-top: 20px;
+    padding: 12px;
+
+    background: #38a5ff;
+    color: #ffffff;
+
+    border: none;
+    border-radius: 12px;
+
+    font-weight: 600;
+    font-size: 15px;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
+}
+
+#fechar-perfil-btn:hover {
+    background: #2a7fc9;
+}
+
+/* =====================================================
+   MODAL DE LOGOUT
+===================================================== */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+
+    padding: 20px;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    z-index: 3000;
+
+    justify-content: center;
+    align-items: center;
+}
+
+.modal .modal-content {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 26px;
+
+    background: #ffffff;
+    color: #333333;
+
+    border-radius: 12px;
+
+    text-align: center;
+
+    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+
+    animation: aparecer 0.3s ease;
+}
+
+.modal .modal-content h3 {
+    margin-bottom: 10px;
+}
+
+.modal .modal-content h4 {
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.modal-buttons button {
+    width: auto;
+    margin: 0;
+
+    padding: 9px 17px;
+
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#confirm-logout {
+    background-color: #38a5ff;
+    color: #ffffff;
+}
+
+#confirm-logout:hover {
+    background-color: #006cc5;
+}
+
+#cancel-logout {
+    background-color: #e0e0e0;
+    color: #333333;
+}
+
+#cancel-logout:hover {
+    background-color: #bdbdbd;
+}
+
+/* =========================
+   ANIMAÇÕES
+========================= */
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+    width: 100%;
+    padding: 10px;
+
+    background-color: #232323;
+    color: #ffffff;
+
+    text-align: center;
+    font-size: 14px;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 768px) {
+    header.cabecalho {
+        padding: 12px 15px;
+        font-size: 21px;
+    }
+
+    .header-icons {
+        right: 15px;
+        gap: 11px;
+        font-size: 19px;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    nav.menu {
+        width: 100%;
+        min-width: 100%;
+
+        padding: 14px;
+
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+
+        gap: 8px;
+    }
+
+    nav.menu a {
+        width: auto;
+    }
+
+    .main-content {
+        padding: 18px 12px;
+        gap: 20px;
+    }
+
+    .loja-header {
+        flex-direction: column;
+        text-align: center;
+        padding: 20px;
+    }
+
+    .loja-titulo h1 {
+        font-size: 22px;
+        justify-content: center;
+    }
+
+    .loja-saldo {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .saldo-estrelas,
+    .tempo-estudo {
+        font-size: 16px;
+        padding: 8px 14px;
+    }
+
+    .loja-filtros {
+        justify-content: center;
+    }
+
+    .filtro-btn {
+        font-size: 12px;
+        padding: 6px 14px;
+    }
+
+    .loja-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 15px;
+    }
+
+    .item-card {
+        padding: 15px;
+    }
+
+    .item-card .icone {
+        font-size: 30px;
+        width: 55px;
+        height: 55px;
+    }
+
+    .modal-compra .modal-content {
+        padding: 25px 20px;
+    }
+
+    .modal-perfil .perfil-content {
+        padding: 20px;
+    }
+
+    .perfil-preview {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .perfil-stats {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    header.cabecalho {
+        padding: 11px 10px;
+        font-size: 19px;
+    }
+
+    .header-icons {
+        right: 10px;
+        gap: 9px;
+        font-size: 17px;
+    }
+
+    .main-content {
+        padding: 12px 8px;
+    }
+
+    .loja-header {
+        padding: 15px;
+    }
+
+    .loja-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+    }
+
+    .item-card .nome {
+        font-size: 14px;
+    }
+
+    .item-card .descricao {
+        font-size: 12px;
+    }
+
+    .item-card .preco {
+        font-size: 14px;
+    }
+}

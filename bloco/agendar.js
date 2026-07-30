@@ -652,12 +652,86 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    // =================================================
+    // FUNÇÃO EDITAR NOTA (MODIFICADA)
+    // =================================================
+
+    function editarNota(id) {
+        const nota =
+            agendaData.notas.find(function (item) {
+                return item.id === id;
+            });
+
+        if (!nota) {
+            return;
+        }
+
+        notaEmEdicaoId = nota.id;
+        notaPendente = nota.texto;
+
+        if (textareaNotas) {
+            textareaNotas.value = nota.texto;
+        }
+
+        // Remove a linha que abre o modal para renomear
+        // abrirModalNomearNota(nota.titulo);  ← COMENTADO
+
+        // Adiciona um feedback visual
+        if (textareaNotas) {
+            textareaNotas.focus();
+            
+            // Remove aviso anterior se existir
+            const avisoExistente = document.getElementById('editando-nota-aviso');
+            if (avisoExistente) {
+                avisoExistente.remove();
+            }
+
+            // Cria aviso
+            const mensagem = document.createElement('div');
+            mensagem.id = 'editando-nota-aviso';
+            mensagem.style.cssText = `
+                color: #38a5ff;
+                font-size: 13px;
+                margin-top: 5px;
+                padding: 8px 12px;
+                background: #eef8ff;
+                border-radius: 6px;
+                border-left: 3px solid #38a5ff;
+            `;
+            mensagem.textContent = `✏️ Editando: "${nota.titulo}"`;
+
+            // Insere após o textarea
+            textareaNotas.parentNode.insertBefore(mensagem, textareaNotas.nextSibling);
+        }
+
+        // Modifica o botão de salvar para indicar que está editando
+        if (salvarNotaButton) {
+            salvarNotaButton.textContent = '✏️ Atualizar Nota';
+            salvarNotaButton.style.backgroundColor = '#0088ff';
+            salvarNotaButton.dataset.editando = 'true';
+        }
+    }
+
+    // =================================================
+    // FUNÇÃO SALVAR NOTA (MODIFICADA)
+    // =================================================
+
     function salvarNotaComTitulo(texto, titulo) {
         const textoTratado =
             String(texto || '').trim();
 
-        const tituloTratado =
-            String(titulo || '').trim();
+        // Se estiver editando, usa o título da nota existente
+        let tituloTratado = String(titulo || '').trim();
+        
+        // Se for edição e o título estiver vazio, busca o título da nota original
+        if (notaEmEdicaoId && !tituloTratado) {
+            const notaOriginal = agendaData.notas.find(function(nota) {
+                return nota.id === notaEmEdicaoId;
+            });
+            if (notaOriginal) {
+                tituloTratado = notaOriginal.titulo;
+            }
+        }
 
         if (!textoTratado) {
             alert('Escreva o conteúdo da nota.');
@@ -669,6 +743,7 @@ document.addEventListener('DOMContentLoaded', function () {
             return false;
         }
 
+        // Verifica se há conflito de título (apenas se não for a mesma nota)
         const notaComMesmoTitulo =
             agendaData.notas.find(function (nota) {
                 return (
@@ -688,7 +763,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     notaEmEdicaoId: notaEmEdicaoId
                 }
             );
-
             return false;
         }
 
@@ -719,6 +793,18 @@ document.addEventListener('DOMContentLoaded', function () {
         if (textareaNotas) {
             textareaNotas.value = '';
         }
+
+        // Reset do botão salvar
+        if (salvarNotaButton) {
+            salvarNotaButton.textContent = 'Salvar Nota';
+            salvarNotaButton.style.backgroundColor = '';
+            salvarNotaButton.dataset.editando = '';
+            notaEmEdicaoId = null;
+        }
+
+        // Remove aviso de edição
+        const aviso = document.getElementById('editando-nota-aviso');
+        if (aviso) aviso.remove();
 
         return true;
     }
@@ -753,6 +839,13 @@ document.addEventListener('DOMContentLoaded', function () {
             textareaNotas.value = '';
         }
 
+        // Reset do botão salvar
+        if (salvarNotaButton) {
+            salvarNotaButton.textContent = 'Salvar Nota';
+            salvarNotaButton.style.backgroundColor = '';
+            salvarNotaButton.dataset.editando = '';
+        }
+
         fecharModalNomearNota();
     }
 
@@ -764,26 +857,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         salvarAgendaNoServidor();
         carregarNotas();
-    }
-
-    function editarNota(id) {
-        const nota =
-            agendaData.notas.find(function (item) {
-                return item.id === id;
-            });
-
-        if (!nota) {
-            return;
-        }
-
-        notaEmEdicaoId = nota.id;
-        notaPendente = nota.texto;
-
-        if (textareaNotas) {
-            textareaNotas.value = nota.texto;
-        }
-
-        abrirModalNomearNota(nota.titulo);
     }
 
     function executarExclusao() {
@@ -848,6 +921,22 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Escreva algo na nota antes de salvar.'
                 );
 
+                return;
+            }
+
+            // Se estiver editando, salva direto sem abrir modal
+            if (notaEmEdicaoId) {
+                // Busca o título da nota existente
+                const notaOriginal = agendaData.notas.find(function(nota) {
+                    return nota.id === notaEmEdicaoId;
+                });
+                
+                if (notaOriginal) {
+                    salvarNotaComTitulo(texto, notaOriginal.titulo);
+                } else {
+                    notaPendente = texto;
+                    abrirModalNomearNota();
+                }
                 return;
             }
 
