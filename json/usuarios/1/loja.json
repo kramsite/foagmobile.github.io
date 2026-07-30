@@ -1,0 +1,95 @@
+{
+    "estrelas": 0,
+    "total_estudado": 0,
+    "itens_comprados": [],
+    "itens": [
+        {
+            "id": "tema_azul",
+            "nome": "Tema Azul",
+            "descricao": "Mude o tema do perfil para azul",
+            "preco": 50,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas"
+        },
+        {
+            "id": "tema_roxo",
+            "nome": "Tema Roxo",
+            "descricao": "Mude o tema do perfil para roxo",
+            "preco": 50,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas"
+        },
+        {
+            "id": "tema_verde",
+            "nome": "Tema Verde",
+            "descricao": "Mude o tema do perfil para verde",
+            "preco": 50,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas"
+        },
+        {
+            "id": "badge_estudioso",
+            "nome": "Insígnia Estudioso",
+            "descricao": "Mostre que você é um estudante dedicado",
+            "preco": 30,
+            "icone": "fa-solid fa-graduation-cap",
+            "categoria": "insignias"
+        },
+        {
+            "id": "badge_mestre",
+            "nome": "Insígnia Mestre",
+            "descricao": "Para os mestres do estudo",
+            "preco": 80,
+            "icone": "fa-solid fa-crown",
+            "categoria": "insignias"
+        },
+        {
+            "id": "badge_maratonista",
+            "nome": "Insígnia Maratonista",
+            "descricao": "Para quem estuda por longas horas",
+            "preco": 60,
+            "icone": "fa-solid fa-running",
+            "categoria": "insignias"
+        },
+        {
+            "id": "emoji_foguete",
+            "nome": "Emoji Foguete",
+            "descricao": "🚀 Mostre sua determinação",
+            "preco": 20,
+            "icone": "fa-solid fa-rocket",
+            "categoria": "emojis"
+        },
+        {
+            "id": "emoji_livro",
+            "nome": "Emoji Livro",
+            "descricao": "📚 Para os amantes da leitura",
+            "preco": 15,
+            "icone": "fa-solid fa-book",
+            "categoria": "emojis"
+        },
+        {
+            "id": "emoji_lampada",
+            "nome": "Emoji Lâmpada",
+            "descricao": "💡 Ideias brilhantes",
+            "preco": 25,
+            "icone": "fa-solid fa-lightbulb",
+            "categoria": "emojis"
+        },
+        {
+            "id": "fundo_neon",
+            "nome": "Fundo Neon",
+            "descricao": "Um fundo neon para seu perfil",
+            "preco": 100,
+            "icone": "fa-solid fa-star",
+            "categoria": "fundos"
+        },
+        {
+            "id": "fundo_galaxia",
+            "nome": "Fundo Galáxia",
+            "descricao": "Viaje pelas estrelas",
+            "preco": 120,
+            "icone": "fa-solid fa-galaxy",
+            "categoria": "fundos"
+        }
+    ]
+}
