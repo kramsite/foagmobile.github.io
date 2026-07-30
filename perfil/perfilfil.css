@@ -13,7 +13,7 @@
     --branco: #ffffff;
     --texto: #263442;
     --texto-suave: #768493;
-    --borda: #e5ebf0;
+    --borda: #e4ebf1;
 }
 
 body {
@@ -28,14 +28,13 @@ header.cabecalho {
     width: 100%;
     padding: 15px 20px;
     position: relative;
+    z-index: 10;
     background: var(--azul-foag);
-    color: var(--branco);
+    color: #ffffff;
     font-family: "Snap ITC", sans-serif;
     font-size: 24px;
     font-weight: bold;
-    text-align: left;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
-    z-index: 10;
 }
 
 .header-icons {
@@ -46,20 +45,19 @@ header.cabecalho {
     display: flex;
     align-items: center;
     gap: 15px;
-    color: var(--branco);
+    color: #ffffff;
     font-size: 1.3rem;
-    user-select: none;
 }
 
 .header-icons i {
-    color: var(--branco);
+    color: #ffffff;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .header-icons i:hover {
     color: #e5e5e5;
-    transform: translateY(-13%) scale(1.1);
+    transform: translateY(-2px) scale(1.08);
 }
 
 .container {
@@ -85,10 +83,10 @@ nav.menu a {
     align-items: center;
     gap: 8px;
     border-radius: 8px;
-    color: var(--branco);
+    color: #ffffff;
     font-size: 16px;
     text-decoration: none;
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: 0.2s ease;
 }
 
 nav.menu a:hover,
@@ -102,17 +100,17 @@ nav.menu a:hover {
 
 .conteudo {
     flex: 1;
-    padding: 32px;
+    padding: 30px;
+    overflow-y: auto;
 }
 
 .perfil-conteudo {
     display: block;
-    overflow-y: auto;
 }
 
 .perfil-wrapper {
     width: 100%;
-    max-width: 1120px;
+    max-width: 1100px;
     margin: 0 auto;
 }
 
@@ -129,7 +127,6 @@ nav.menu a:hover {
     margin-bottom: 2px;
     color: var(--texto-suave);
     font-size: 12px;
-    font-weight: 500;
 }
 
 .titulo-pagina h1 {
@@ -147,12 +144,12 @@ nav.menu a:hover {
     gap: 9px;
     border-radius: 10px;
     background: var(--azul-foag);
-    color: var(--branco);
+    color: #ffffff;
     font-size: 13px;
     font-weight: 600;
     text-decoration: none;
     box-shadow: 0 8px 18px rgba(56, 165, 255, 0.25);
-    transition: background 0.2s ease, transform 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .btn-editar-topo:hover {
@@ -280,7 +277,7 @@ nav.menu a:hover {
     justify-content: center;
     border-radius: 30px;
     background: linear-gradient(145deg, #38a5ff, #0878d6);
-    color: var(--branco);
+    color: #ffffff;
     font-size: 45px;
     box-shadow: 0 18px 35px rgba(56, 165, 255, 0.32);
     transform: rotate(-5deg);
@@ -373,7 +370,7 @@ nav.menu a:hover {
     border: 1px solid var(--borda);
     border-radius: 14px;
     background: #fbfcfd;
-    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    transition: 0.2s ease;
 }
 
 .dado-item:hover {
@@ -433,16 +430,9 @@ nav.menu a:hover {
     width: 300px;
     padding: 25px;
     border-radius: 10px;
-    background: var(--branco);
+    background: #ffffff;
     color: #333333;
     text-align: center;
-    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-    animation: aparecer 0.3s ease;
-}
-
-.modal-content h4 {
-    margin-top: 5px;
-    font-weight: 400;
 }
 
 .modal-buttons {
@@ -457,13 +447,11 @@ nav.menu a:hover {
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
 }
 
 #confirm-logout {
     background: var(--azul-foag);
-    color: var(--branco);
+    color: #ffffff;
 }
 
 #cancel-logout {
@@ -490,7 +478,7 @@ nav.menu a:hover {
     display: flex;
     flex-direction: column;
     border-radius: 12px;
-    background: var(--branco);
+    background: #ffffff;
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
 }
 
@@ -500,7 +488,7 @@ nav.menu a:hover {
     align-items: center;
     justify-content: space-between;
     background: var(--azul-foag);
-    color: var(--branco);
+    color: #ffffff;
     font-size: 0.95rem;
     font-weight: 600;
 }
@@ -509,10 +497,9 @@ nav.menu a:hover {
     padding: 4px 10px;
     border: none;
     border-radius: 6px;
-    background: var(--branco);
+    background: #ffffff;
     color: #333333;
     cursor: pointer;
-    font-size: 0.85rem;
 }
 
 #fogi-iframe {
@@ -526,26 +513,14 @@ footer {
     width: 100%;
     padding: 5px;
     background: #232323;
-    color: var(--branco);
+    color: #ffffff;
     text-align: center;
     font-size: 1em;
 }
 
-@keyframes aparecer {
-    from {
-        opacity: 0;
-        transform: scale(0.8);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-@media (max-width: 900px) {
+@media (max-width: 800px) {
     .perfil-ilustracao {
-        width: 190px;
+        display: none;
     }
 
     .perfil-destaque {
@@ -562,7 +537,6 @@ footer {
         width: 100%;
         flex-direction: row;
         overflow-x: auto;
-        padding: 14px;
     }
 
     nav.menu a {
@@ -573,26 +547,12 @@ footer {
         padding: 22px;
     }
 
-    .perfil-ilustracao {
-        display: none;
-    }
-
     .dados-grid {
         grid-template-columns: 1fr;
     }
 }
 
-@media (max-width: 540px) {
-    header.cabecalho {
-        font-size: 20px;
-    }
-
-    .header-icons {
-        right: 12px;
-        gap: 11px;
-        font-size: 1.05rem;
-    }
-
+@media (max-width: 550px) {
     .titulo-pagina {
         align-items: flex-start;
         flex-direction: column;
@@ -603,7 +563,7 @@ footer {
     }
 
     .perfil-destaque {
-        padding: 26px 20px;
+        padding: 25px 20px;
     }
 
     .perfil-identidade {

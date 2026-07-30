@@ -1,173 +1,507 @@
 <?php
-// Caminhos
-$caminho_json  = "../json/usuarios.json";
-$pasta_fotos   = "../img/perfil/";              // garanta permissão de escrita
-$foto_padrao   = "foto_padrao.png";
+$caminho_json = __DIR__ . "/../json/usuarios.json";
+$pasta_fotos = __DIR__ . "/../img/perfil/";
+$pasta_fotos_url = "../img/perfil/";
+$foto_padrao = "foto_padrao.png";
 
-$escolas_json  = "../json/escolas.json";
-$series_json   = "../json/series.json";
+$escolas_json = __DIR__ . "/../json/escolas.json";
+$series_json = __DIR__ . "/../json/series.json";
 
-// Carrega listas de escolas/séries (vazias se não existir)
-$opcoes_escolas = file_exists($escolas_json) ? json_decode(file_get_contents($escolas_json), true) : [];
-$opcoes_series  = file_exists($series_json)  ? json_decode(file_get_contents($series_json),  true) : [];
+function escapar($valor) {
+    return htmlspecialchars($valor ?? "", ENT_QUOTES, "UTF-8");
+}
 
-// Carrega usuários
+function carregarLista($caminho) {
+    if (!file_exists($caminho)) {
+        return [];
+    }
+
+    $lista = json_decode(file_get_contents($caminho), true);
+
+    return is_array($lista) ? $lista : [];
+}
+
+$opcoes_escolas = carregarLista($escolas_json);
+$opcoes_series = carregarLista($series_json);
+
 if (!file_exists($caminho_json)) {
-  exit("Arquivo de usuários não encontrado!");
-}
-$usuarios = json_decode(file_get_contents($caminho_json), true);
-if (!is_array($usuarios) || empty($usuarios)) {
-  exit("Nenhum usuário cadastrado!");
+    exit("Arquivo de usuários não encontrado!");
 }
 
-// Seleciona o ÚLTIMO usuário do array
+$usuarios = json_decode(file_get_contents($caminho_json), true);
+
+if (!is_array($usuarios) || empty($usuarios)) {
+    exit("Nenhum usuário cadastrado!");
+}
+
 $usuario_index = array_key_last($usuarios);
 $usuario = $usuarios[$usuario_index];
 
-// Atualização (POST)
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  // Sanitização básica
-  $usuarios[$usuario_index]["nome"]        = trim($_POST["nome"] ?? $usuario["nome"]);
-  $usuarios[$usuario_index]["nascimento"]  = trim($_POST["nascimento"] ?? $usuario["nascimento"]);
-  $usuarios[$usuario_index]["telefone"]    = trim($_POST["telefone"] ?? $usuario["telefone"]);
-  $usuarios[$usuario_index]["serie"]       = trim($_POST["serie"] ?? $usuario["serie"]);
-  $usuarios[$usuario_index]["escola"]      = trim($_POST["escola"] ?? $usuario["escola"]);
+$mensagem_erro = "";
 
-  // Upload de foto (opcional)
-  if (isset($_FILES["foto"]) && is_uploaded_file($_FILES["foto"]["tmp_name"]) && $_FILES["foto"]["error"] === 0) {
-    // Garante pasta
-    if (!is_dir($pasta_fotos)) {
-      @mkdir($pasta_fotos, 0775, true);
-    }
-
-    $ext_permitidas = ['jpg','jpeg','png','webp','gif'];
-    $ext = strtolower(pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION));
-    if (in_array($ext, $ext_permitidas, true)) {
-      $nome_foto = uniqid('pf_', true) . "." . $ext;
-
-      // Remove foto antiga (se existir e não for a padrão)
-      if (!empty($usuarios[$usuario_index]["foto"])) {
-        $antiga = $pasta_fotos . $usuarios[$usuario_index]["foto"];
-        if (is_file($antiga) && basename($antiga) !== $foto_padrao) {
-          @unlink($antiga);
-        }
-      }
-
-      if (move_uploaded_file($_FILES["foto"]["tmp_name"], $pasta_fotos . $nome_foto)) {
-        $usuarios[$usuario_index]["foto"] = $nome_foto;
-      }
-    }
-  }
-
-  // Salva JSON
-  file_put_contents($caminho_json, json_encode($usuarios, JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
-
-  header("Location: perfil.php");
-  exit;
+if (!empty($usuario["serie"]) && !in_array($usuario["serie"], $opcoes_series, true)) {
+    array_unshift($opcoes_series, $usuario["serie"]);
 }
 
-// Define foto para exibição
-$foto_perfil = (!empty($usuario["foto"]) && is_file($pasta_fotos . $usuario["foto"]))
-  ? $usuario["foto"]
-  : $foto_padrao;
-?>
+if (!empty($usuario["escola"]) && !in_array($usuario["escola"], $opcoes_escolas, true)) {
+    array_unshift($opcoes_escolas, $usuario["escola"]);
+}
 
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $nome = trim($_POST["nome"] ?? "");
+    $nascimento = trim($_POST["nascimento"] ?? "");
+    $telefone = trim($_POST["telefone"] ?? "");
+    $serie = trim($_POST["serie"] ?? "");
+    $escola = trim($_POST["escola"] ?? "");
+
+    if ($nome === "") {
+        $mensagem_erro = "Informe o nome.";
+    } elseif ($nascimento === "") {
+        $mensagem_erro = "Informe a data de nascimento.";
+    } elseif ($serie === "") {
+        $mensagem_erro = "Selecione a série ou curso.";
+    } elseif ($escola === "") {
+        $mensagem_erro = "Selecione a escola ou faculdade.";
+    }
+
+    $foto_salva = $usuario["foto"] ?? $foto_padrao;
+
+    if (
+        $mensagem_erro === "" &&
+        isset($_FILES["foto"]) &&
+        $_FILES["foto"]["error"] !== UPLOAD_ERR_NO_FILE
+    ) {
+        if ($_FILES["foto"]["error"] !== UPLOAD_ERR_OK) {
+            $mensagem_erro = "Ocorreu um erro ao enviar a foto.";
+        } elseif ($_FILES["foto"]["size"] > 5 * 1024 * 1024) {
+            $mensagem_erro = "A foto deve ter no máximo 5 MB.";
+        } else {
+            $extensao = strtolower(pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION));
+            $extensoes_permitidas = ["jpg", "jpeg", "png", "webp", "gif"];
+
+            if (!in_array($extensao, $extensoes_permitidas, true)) {
+                $mensagem_erro = "Escolha uma imagem JPG, PNG, WEBP ou GIF.";
+            } elseif (getimagesize($_FILES["foto"]["tmp_name"]) === false) {
+                $mensagem_erro = "O arquivo escolhido não é uma imagem válida.";
+            } else {
+                if (!is_dir($pasta_fotos)) {
+                    mkdir($pasta_fotos, 0775, true);
+                }
+
+                $novo_nome = uniqid("pf_", true) . "." . $extensao;
+                $destino = $pasta_fotos . $novo_nome;
+
+                if (move_uploaded_file($_FILES["foto"]["tmp_name"], $destino)) {
+                    $foto_antiga = basename($foto_salva);
+                    $caminho_antigo = $pasta_fotos . $foto_antiga;
+
+                    if (
+                        $foto_antiga !== $foto_padrao &&
+                        is_file($caminho_antigo)
+                    ) {
+                        unlink($caminho_antigo);
+                    }
+
+                    $foto_salva = $novo_nome;
+                } else {
+                    $mensagem_erro = "Não foi possível salvar a nova foto.";
+                }
+            }
+        }
+    }
+
+    if ($mensagem_erro === "") {
+        $usuarios[$usuario_index]["nome"] = $nome;
+        $usuarios[$usuario_index]["nascimento"] = $nascimento;
+        $usuarios[$usuario_index]["telefone"] = $telefone;
+        $usuarios[$usuario_index]["serie"] = $serie;
+        $usuarios[$usuario_index]["escola"] = $escola;
+        $usuarios[$usuario_index]["foto"] = $foto_salva;
+
+        $json = json_encode(
+            $usuarios,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        );
+
+        if (file_put_contents($caminho_json, $json, LOCK_EX) === false) {
+            $mensagem_erro = "Não foi possível salvar as alterações.";
+        } else {
+            header("Location: perfil.php");
+            exit;
+        }
+    }
+
+    $usuario["nome"] = $nome;
+    $usuario["nascimento"] = $nascimento;
+    $usuario["telefone"] = $telefone;
+    $usuario["serie"] = $serie;
+    $usuario["escola"] = $escola;
+}
+
+$foto_perfil = $foto_padrao;
+
+if (!empty($usuario["foto"])) {
+    $arquivo_foto = basename($usuario["foto"]);
+
+    if (is_file($pasta_fotos . $arquivo_foto)) {
+        $foto_perfil = $arquivo_foto;
+    }
+}
+
+$caminho_foto = $pasta_fotos_url . $foto_perfil;
+?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <title>Editar Perfil</title>
-  <link rel="stylesheet" href="editar.css">
- <link rel="stylesheet" href="dark-per.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
-  <script src="../m.escuro/dark-mode.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOAG - Editar Perfil</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
+    <link rel="stylesheet" href="../m.escuro/dark_basee.css">
+    <link rel="stylesheet" href="editar.css">
+    <script src="../m.escuro/dark-mode.js"></script>
 </head>
+
 <body>
-  <form class="container" method="post" enctype="multipart/form-data">
-    <div class="left-panel">
-      <img src="<?= $pasta_fotos . $foto_perfil ?>" class="avatar" alt="Foto de perfil">
-      <h2>Editar Perfil</h2>
-      <p>Altere suas informações abaixo.</p>
+    <header class="cabecalho">
+        FOAG
 
-      <label for="foto" class="label-upload">Trocar Foto</label>
-      <input type="file" id="foto" name="foto" accept="image/*" class="input-upload">
+        <div class="header-icons">
+            <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
+            <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
+            <i id="icon-fogi" class="fa-solid fa-robot" title="Assistente FOGi"></i>
+            <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
+        </div>
+    </header>
+
+    <div class="container">
+        <nav class="menu">
+            <a href="../inicioo/inicio.php">
+                <i class="fa-solid fa-house"></i>
+                Início
+            </a>
+
+            <a href="../calend/calendario.php">
+                <i class="fa-solid fa-calendar-days"></i>
+                Calendário
+            </a>
+
+            <a href="../bloco/agenda.php">
+                <i class="fa-solid fa-book"></i>
+                Agenda
+            </a>
+
+            <a href="../pomodoro/pomodoro.php">
+                <i class="fa-solid fa-stopwatch"></i>
+                Pomodoro
+            </a>
+
+            <a href="../notas/notas.php">
+                <i class="fa-solid fa-check-double"></i>
+                Boletim
+            </a>
+
+            <a href="../loja/loja.php">
+                <i class="fa-solid fa-store"></i>
+                Loja
+            </a>
+
+            <a href="../rank/rank.php">
+                <i class="fa-solid fa-trophy"></i>
+                Ranking
+            </a>
+        </nav>
+
+        <main class="conteudo">
+            <div class="editar-wrapper">
+                <div class="titulo-pagina">
+                    <div>
+                        <span>Configurações da conta</span>
+                        <h1>Editar perfil</h1>
+                    </div>
+
+                    <a href="perfil.php" class="btn-voltar">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Voltar
+                    </a>
+                </div>
+
+                <?php if ($mensagem_erro !== ""): ?>
+                    <div class="mensagem-erro">
+                        <i class="fa-solid fa-circle-exclamation"></i>
+                        <?= escapar($mensagem_erro) ?>
+                    </div>
+                <?php endif; ?>
+
+                <form method="post" enctype="multipart/form-data">
+                    <section class="foto-card">
+                        <div class="foto-area">
+                            <img id="previewFoto" src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil">
+
+                            <label for="foto" class="btn-camera">
+                                <i class="fa-solid fa-camera"></i>
+                            </label>
+                        </div>
+
+                        <div class="foto-informacoes">
+                            <span>Foto de perfil</span>
+                            <h2><?= escapar($usuario["nome"] ?? "Usuário FOAG") ?></h2>
+                            <p>Escolha uma imagem de até 5 MB.</p>
+
+                            <label for="foto" class="btn-escolher">
+                                <i class="fa-regular fa-image"></i>
+                                Escolher foto
+                            </label>
+
+                            <input type="file" id="foto" name="foto" accept="image/jpeg,image/png,image/webp,image/gif">
+                        </div>
+
+                        <div class="decoracao">
+                            <div class="circulo-decoracao"></div>
+
+                            <div class="icone-decoracao">
+                                <i class="fa-solid fa-user-pen"></i>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="formulario-card">
+                        <div class="formulario-titulo">
+                            <div class="formulario-icone">
+                                <i class="fa-regular fa-address-card"></i>
+                            </div>
+
+                            <div>
+                                <h3>Informações do perfil</h3>
+                                <p>Atualize os dados cadastrados.</p>
+                            </div>
+                        </div>
+
+                        <div class="campos-grid">
+                            <div class="campo campo-nome">
+                                <label for="nome">Nome completo</label>
+
+                                <div class="input-area">
+                                    <i class="fa-regular fa-user"></i>
+                                    <input type="text" id="nome" name="nome" value="<?= escapar($usuario["nome"] ?? "") ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="campo">
+                                <label for="nascimento">Data de nascimento</label>
+
+                                <div class="input-area">
+                                    <i class="fa-regular fa-calendar"></i>
+                                    <input type="date" id="nascimento" name="nascimento" value="<?= escapar($usuario["nascimento"] ?? "") ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="campo">
+                                <label for="telefone">Telefone</label>
+
+                                <div class="input-area">
+                                    <i class="fa-solid fa-phone"></i>
+                                    <input type="text" id="telefone" name="telefone" value="<?= escapar($usuario["telefone"] ?? "") ?>" placeholder="(00) 00000-0000" maxlength="15">
+                                </div>
+                            </div>
+
+                            <div class="campo">
+                                <label for="serie">Série ou curso</label>
+
+                                <select id="serie" name="serie" required>
+                                    <option value="">Selecione</option>
+
+                                    <?php foreach ($opcoes_series as $opcao_serie): ?>
+                                        <option value="<?= escapar($opcao_serie) ?>" <?= $opcao_serie === ($usuario["serie"] ?? "") ? "selected" : "" ?>>
+                                            <?= escapar($opcao_serie) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+
+                            <div class="campo">
+                                <label for="escola">Escola ou faculdade</label>
+
+                                <select id="escola" name="escola" required>
+                                    <option value="">Selecione</option>
+
+                                    <?php foreach ($opcoes_escolas as $opcao_escola): ?>
+                                        <option value="<?= escapar($opcao_escola) ?>" <?= $opcao_escola === ($usuario["escola"] ?? "") ? "selected" : "" ?>>
+                                            <?= escapar($opcao_escola) ?>
+                                        </option>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="botoes">
+                            <a href="perfil.php" class="btn-cancelar">
+                                Cancelar
+                            </a>
+
+                            <button type="submit" class="btn-salvar">
+                                <i class="fa-solid fa-check"></i>
+                                Salvar alterações
+                            </button>
+                        </div>
+                    </section>
+                </form>
+            </div>
+        </main>
     </div>
 
-    <div class="right-panel">
-      <div class="campo-info">
-        <label for="nome">Nome</label>
-        <input type="text" id="nome" name="nome" value="<?= htmlspecialchars($usuario["nome"]) ?>" required>
-      </div>
+    <div id="logout-modal" class="modal">
+        <div class="modal-content">
+            <h3>Ah... já vai?</h3>
+            <p>Tem certeza que deseja sair?</p>
 
-      <div class="campo-info">
-        <label for="nascimento">Data de Nascimento</label>
-        <input type="date" id="nascimento" name="nascimento" value="<?= htmlspecialchars($usuario["nascimento"]) ?>" required>
-      </div>
-
-      <div class="campo-info">
-        <label for="telefone">Telefone</label>
-        <input type="text" id="telefone" name="telefone" value="<?= htmlspecialchars($usuario["telefone"]) ?>">
-      </div>
-
-      <div class="campo-info">
-  <label for="serie">Série/Curso</label>
-  <select id="serie" name="serie" required>
-    <option value="">Selecione a série</option>
-    <?php foreach ($opcoes_series as $serie): ?>
-      <option value="<?= $serie ?>" <?= ($serie === $usuario["serie"]) ? "selected" : "" ?>>
-        <?= $serie ?>
-      </option>
-    <?php endforeach; ?>
-  </select>
-</div>
-
-<div class="campo-info">
-  <label for="escola">Escola/Faculdade</label>
-  <select id="escola" name="escola" required>
-    <option value="">Selecione a escola</option>
-    <?php foreach ($opcoes_escolas as $escola): ?>
-      <option value="<?= $escola ?>" <?= ($escola === $usuario["escola"]) ? "selected" : "" ?>>
-        <?= $escola ?>
-      </option>
-    <?php endforeach; ?>
-  </select>
-</div>
-
-
-      <div class="botoes">
-        <button type="submit" class="salvar">Salvar</button>
-        <button type="button" class="cancelar" onclick="location.href='perfil.php'">Cancelar</button>
-      </div>
+            <div class="modal-buttons">
+                <button id="confirm-logout">Sim</button>
+                <button id="cancel-logout">Cancelar</button>
+            </div>
+        </div>
     </div>
-  </form>
-  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
-<script>
-  // Pega os selects
-  const escolaEl = document.getElementById('escola');
-  const serieEl  = document.getElementById('serie');
 
-  // Inicializa Choices com busca ativada
-  const escolaChoice = new Choices(escolaEl, {
-    searchEnabled: true,
-    itemSelectText: '',
-    shouldSort: false,
-    placeholderValue: 'Digite para buscar...'
-  });
+    <div id="fogi-modal">
+        <div class="fogi-container">
+            <div class="fogi-header">
+                <span>FOGi — Assistente de Estudos</span>
+                <button id="fogi-close">Fechar</button>
+            </div>
 
-  const serieChoice = new Choices(serieEl, {
-    searchEnabled: true,
-    itemSelectText: '',
-    shouldSort: false,
-    placeholderValue: 'Digite para buscar...'
-  });
+            <iframe id="fogi-iframe" src="about:blank"></iframe>
+        </div>
+    </div>
 
-  // Se por algum motivo o "selected" do PHP não for respeitado, força a seleção:
-  // escolaChoice.setChoiceByValue('<?= addslashes($usuario["escola"]) ?>');
-  // serieChoice.setChoiceByValue('<?= addslashes($usuario["serie"]) ?>');
-</script>
+    <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
 
+    <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const fotoInput = document.getElementById("foto");
+            const previewFoto = document.getElementById("previewFoto");
+            const telefoneInput = document.getElementById("telefone");
+            const serieSelect = document.getElementById("serie");
+            const escolaSelect = document.getElementById("escola");
+
+            if (serieSelect) {
+                new Choices(serieSelect, {
+                    searchEnabled: true,
+                    shouldSort: false,
+                    itemSelectText: "",
+                    noResultsText: "Nenhum resultado encontrado",
+                    noChoicesText: "Nenhuma opção disponível",
+                    searchPlaceholderValue: "Buscar série ou curso"
+                });
+            }
+
+            if (escolaSelect) {
+                new Choices(escolaSelect, {
+                    searchEnabled: true,
+                    shouldSort: false,
+                    itemSelectText: "",
+                    noResultsText: "Nenhum resultado encontrado",
+                    noChoicesText: "Nenhuma opção disponível",
+                    searchPlaceholderValue: "Buscar escola ou faculdade"
+                });
+            }
+
+            if (fotoInput && previewFoto) {
+                fotoInput.addEventListener("change", () => {
+                    const arquivo = fotoInput.files[0];
+
+                    if (!arquivo) {
+                        return;
+                    }
+
+                    if (arquivo.size > 5 * 1024 * 1024) {
+                        alert("A imagem deve ter no máximo 5 MB.");
+                        fotoInput.value = "";
+                        return;
+                    }
+
+                    const leitor = new FileReader();
+
+                    leitor.onload = evento => {
+                        previewFoto.src = evento.target.result;
+                    };
+
+                    leitor.readAsDataURL(arquivo);
+                });
+            }
+
+            if (telefoneInput) {
+                telefoneInput.addEventListener("input", () => {
+                    let valor = telefoneInput.value.replace(/\D/g, "").slice(0, 11);
+
+                    if (valor.length > 10) {
+                        valor = valor.replace(/^(\d{2})(\d{5})(\d{4})$/, "($1) $2-$3");
+                    } else if (valor.length > 6) {
+                        valor = valor.replace(/^(\d{2})(\d{4})(\d{0,4})$/, "($1) $2-$3");
+                    } else if (valor.length > 2) {
+                        valor = valor.replace(/^(\d{2})(\d+)/, "($1) $2");
+                    } else if (valor.length > 0) {
+                        valor = valor.replace(/^(\d*)/, "($1");
+                    }
+
+                    telefoneInput.value = valor;
+                });
+            }
+
+            const perfilBtn = document.getElementById("icon-perfil");
+
+            if (perfilBtn) {
+                perfilBtn.addEventListener("click", () => {
+                    window.location.href = "perfil.php";
+                });
+            }
+
+            const fogiBtn = document.getElementById("icon-fogi");
+            const fogiModal = document.getElementById("fogi-modal");
+            const fogiFrame = document.getElementById("fogi-iframe");
+            const fogiClose = document.getElementById("fogi-close");
+
+            if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
+                fogiBtn.addEventListener("click", () => {
+                    fogiFrame.src = "http://127.0.0.1:5000";
+                    fogiModal.style.display = "flex";
+                    document.body.style.overflow = "hidden";
+                });
+
+                fogiClose.addEventListener("click", () => {
+                    fogiModal.style.display = "none";
+                    fogiFrame.src = "about:blank";
+                    document.body.style.overflow = "";
+                });
+            }
+
+            const sairBtn = document.getElementById("icon-sair");
+            const logoutModal = document.getElementById("logout-modal");
+            const confirmarLogout = document.getElementById("confirm-logout");
+            const cancelarLogout = document.getElementById("cancel-logout");
+
+            if (sairBtn && logoutModal) {
+                sairBtn.addEventListener("click", () => {
+                    logoutModal.style.display = "flex";
+                });
+            }
+
+            if (cancelarLogout && logoutModal) {
+                cancelarLogout.addEventListener("click", () => {
+                    logoutModal.style.display = "none";
+                });
+            }
+
+            if (confirmarLogout) {
+                confirmarLogout.addEventListener("click", () => {
+                    window.location.href = "../login/logout.php";
+                });
+            }
+        });
+    </script>
 </body>
 </html>

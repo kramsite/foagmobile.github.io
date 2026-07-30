@@ -84,22 +84,13 @@ $usuarioAtual = 'Ana Silva'; // Placeholder - depois pegar do banco
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ranking — FOAG</title>
-
-    <!-- CSS do Ranking -->
     <link rel="stylesheet" href="rank.css">
-
-    <!-- Modo escuro -->
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
     <link rel="stylesheet" href="dark_rank.css">
 
-    <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <!-- Ícones -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Modo escuro -->
     <script src="../m.escuro/dark-mode.js"></script>
 
     <style>
@@ -189,9 +180,6 @@ $usuarioAtual = 'Ana Silva'; // Placeholder - depois pegar do banco
             </a>
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-check-double"></i> Boletim
-            </a>
-            <a href="../horario/horario.php" class="<?= $current === 'horario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-clock"></i> Horário
             </a>
             <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja
