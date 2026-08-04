@@ -137,7 +137,7 @@ try {
         <div class="header-left">
             <div class="logo">FOAG</div>
             <nav class="top-menu">
-                <a href="../inicio/inicio.php" class="active">
+                <a href="../inicioo/inicio.php" class="active">
                     <i class="fa-solid fa-house"></i> Início
                 </a>
                 <a href="../calend/calendario.php">
@@ -152,9 +152,13 @@ try {
                 <a href="../notas/notas.php">
                     <i class="fa-solid fa-check-double"></i> Boletim
                 </a>
-                <a href="../horario/horario.php">
-                    <i class="fa-solid fa-clock"></i> Horário
-                </a>
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
+            </a>
+                        <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
+            </a>
+
             </nav>
         </div>
         <div class="header-icons">

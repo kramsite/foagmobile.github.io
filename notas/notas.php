@@ -384,7 +384,7 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FOAG — Notas e Médias</title>
   <link rel="stylesheet" href="boletim.css">
-  <link rel="stylesheet" href="../m.escuro/dark_base.css">
+  <link rel="stylesheet" href="../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_notas.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -487,11 +487,13 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
           <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
             <i class="fa-solid fa-check-double"></i> Boletim
           </a>
-
-          <a href="../horario/horario.php" class="<?= $current === 'horario.php' ? 'active' : '' ?>">
-            <i class="fa-solid fa-clock"></i> Horário
-          </a>
-
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
+            </a>
+            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
+            </a>
+            
         </nav>
 
         <main class="main-content">

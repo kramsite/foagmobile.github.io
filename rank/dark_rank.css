@@ -1,0 +1,161 @@
+/* =====================================================
+   MODO ESCURO — RANKING
+===================================================== */
+
+body.dark-mode .ranking-header {
+    background: linear-gradient(135deg, #0d1445 0%, #1a237e 100%) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .ranking-header .stat-item {
+    background: rgba(255, 255, 255, 0.06) !important;
+}
+
+body.dark-mode .rank-card {
+    background: #1a2a3a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .rank-card:hover {
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .rank-header {
+    background: #0f1a2a !important;
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .rank-title h2 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .rank-count {
+    background: #1f344a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .rank-item:hover {
+    background: #0f1a2a !important;
+}
+
+body.dark-mode .rank-item.usuario-destaque {
+    background: #0a1a3a !important;
+    border-color: #669ada !important;
+}
+
+body.dark-mode .rank-nome {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .rank-number {
+    background: #1f344a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .rank-valor {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .nivel-badge {
+    background: #1f344a !important;
+}
+
+body.dark-mode .rank-footer {
+    background: #0f1a2a !important;
+    border-top-color: #334155 !important;
+}
+
+body.dark-mode .btn-ver-todos {
+    color: #669ada !important;
+    border-color: #669ada !important;
+}
+
+body.dark-mode .btn-ver-todos:hover {
+    background: #669ada !important;
+    color: #ffffff !important;
+}
+
+/* ========================================
+   MODAL DE CATEGORIA NO MODO ESCURO
+======================================== */
+
+body.dark-mode .modal-categoria .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .modal-header {
+    border-bottom-color: #334155 !important;
+}
+
+body.dark-mode .modal-header h2 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal-header .btn-fechar {
+    background: #2a3a4a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .modal-header .btn-fechar:hover {
+    background: #3a4a5a !important;
+}
+
+body.dark-mode .categoria-stats {
+    background: #0f1a2a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .categoria-item:hover {
+    background: #0f1a2a !important;
+}
+
+body.dark-mode .categoria-item.usuario-destaque {
+    background: #0a1a3a !important;
+    border-color: #669ada !important;
+}
+
+body.dark-mode .categoria-nome {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .categoria-pos {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .categoria-nivel {
+    background: #1f344a !important;
+    color: #94a3b8 !important;
+}
+
+/* ========================================
+   MODAL DE LOGOUT NO MODO ESCURO
+======================================== */
+
+body.dark-mode .modal .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal .modal-content h3,
+body.dark-mode .modal .modal-content h4 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode #confirm-logout {
+    background: #669ada !important;
+}
+
+body.dark-mode #confirm-logout:hover {
+    background: #7aa9df !important;
+}
+
+body.dark-mode #cancel-logout {
+    background: #2a3a4a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+    background: #3a4a5a !important;
+}

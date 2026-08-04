@@ -1,0 +1,215 @@
+/* =====================================================
+   MODO ESCURO — LOJA
+===================================================== */
+
+body.dark-mode .loja-header {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%) !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .loja-header .saldo-estrelas,
+body.dark-mode .loja-header .tempo-estudo {
+    background: rgba(255, 255, 255, 0.08) !important;
+}
+
+body.dark-mode .filtro-btn {
+    background: #1a2a3a !important;
+    color: #94a3b8 !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .filtro-btn:hover {
+    border-color: #669ada !important;
+    color: #7aa9df !important;
+}
+
+body.dark-mode .filtro-btn.active {
+    background: #669ada !important;
+    color: #ffffff !important;
+    border-color: #669ada !important;
+}
+
+body.dark-mode .item-card {
+    background: #1a2a3a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .item-card:hover {
+    border-color: #669ada !important;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .item-card .nome {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .item-card .descricao {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .item-card .icone {
+    background: #0f1a2a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .item-card .preco {
+    background: #1f344a !important;
+    color: #ffd700 !important;
+}
+
+body.dark-mode .item-card .status.comprado {
+    background: #1b3a2a !important;
+    color: #66bb6a !important;
+}
+
+body.dark-mode .item-card .status.disponivel {
+    background: #1a2a4a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .item-card .status.insuficiente {
+    background: #3a1a1a !important;
+    color: #ef5350 !important;
+}
+
+body.dark-mode .item-card .badge-ativo {
+    background: #2e7d32 !important;
+}
+
+body.dark-mode .sem-itens {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .sem-itens i {
+    color: #669ada !important;
+}
+
+/* ========================================
+   MODAIS NO MODO ESCURO
+======================================== */
+
+body.dark-mode .modal-compra .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .modal-compra h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal-compra p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .modal-compra .modal-preco {
+    background: #1f344a !important;
+}
+
+body.dark-mode .modal-compra .btn-cancelar {
+    background: #2a3a4a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .modal-compra .btn-cancelar:hover {
+    background: #3a4a5a !important;
+}
+
+body.dark-mode .modal-sucesso .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .modal-sucesso h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal-sucesso p {
+    color: #94a3b8 !important;
+}
+
+/* ========================================
+   MODAL PERFIL NO MODO ESCURO
+======================================== */
+
+body.dark-mode .modal-perfil .perfil-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .perfil-header h2 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .perfil-header .btn-fechar {
+    background: #2a3a4a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .perfil-header .btn-fechar:hover {
+    background: #3a4a5a !important;
+}
+
+body.dark-mode .perfil-preview {
+    background: #0f1a2a !important;
+}
+
+body.dark-mode .perfil-info h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .perfil-stats {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .perfil-itens h4 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .item-ativo {
+    background: #0f1a2a !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .item-ativo i {
+    color: #669ada !important;
+}
+
+body.dark-mode #fechar-perfil-btn {
+    background: #669ada !important;
+}
+
+body.dark-mode #fechar-perfil-btn:hover {
+    background: #7aa9df !important;
+}
+
+/* ========================================
+   MODAL DE LOGOUT NO MODO ESCURO
+======================================== */
+
+body.dark-mode .modal .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal .modal-content h3,
+body.dark-mode .modal .modal-content h4 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode #confirm-logout {
+    background: #669ada !important;
+}
+
+body.dark-mode #confirm-logout:hover {
+    background: #7aa9df !important;
+}
+
+body.dark-mode #cancel-logout {
+    background: #2a3a4a !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+    background: #3a4a5a !important;
+}

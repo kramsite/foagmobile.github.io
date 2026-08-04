@@ -1,22 +1,49 @@
-/* pomodoro_dark.css — modo escuro específico do POMODORO */
-/* Header, menu, body básico, etc. ficam no dark_base.css */
+/* =====================================================
+   pomodoro_dark.css
+   Modo escuro harmonizado com o Calendário
+===================================================== */
+
+/* O cabeçalho, menu lateral e estrutura básica
+   continuam sendo controlados pelo dark_base.css */
+
+:root {
+  --dark-bg: #0f172a;
+  --dark-surface: #1e293b;
+  --dark-primary: #38a5ff;
+  --dark-primary-hover: #60b5ff;
+  --dark-text: #e2e8f0;
+  --dark-text-soft: #94a3b8;
+  --dark-border: #334155;
+  --dark-hover: #334155;
+}
 
 /* =========================
-   MAIN / LAYOUT
+   CONTEÚDO PRINCIPAL
 ========================= */
-body.dark-mode main.conteudo {
-  background: radial-gradient(circle at top, #020617 0, #000000 55%) !important;
+
+body.dark-mode {
+  background-color: var(--dark-bg) !important;
   color: var(--dark-text) !important;
+}
+
+body.dark-mode main.conteudo,
+body.dark-mode .conteudo {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 /* =========================
    CARDS
 ========================= */
+
 body.dark-mode .card {
-  background: var(--dark-surface, #020617) !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
-  color: var(--dark-text, #f9fafb) !important;
-  box-shadow: 0 14px 35px rgba(0,0,0,.9) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.dark-mode .card h1,
@@ -25,177 +52,573 @@ body.dark-mode .card h3,
 body.dark-mode .card h4,
 body.dark-mode .card h5,
 body.dark-mode .card h6 {
-  color: var(--dark-text, #f9fafb) !important;
+  color: var(--dark-text) !important;
 }
 
+body.dark-mode .card .sub,
 body.dark-mode .sub {
-  color: var(--dark-text, #e5e7eb) !important;
+  color: var(--dark-text-soft) !important;
 }
 
 /* =========================
-   TEXTO GERAL
+   TEXTOS
 ========================= */
-body.dark-mode,
-body.dark-mode p,
-body.dark-mode span,
-body.dark-mode label,
-body.dark-mode small,
-body.dark-mode strong,
-body.dark-mode b,
-body.dark-mode .lbl {
-  color: var(--dark-text, #f9fafb) !important;
-}
 
-/* texto dentro do conteúdo do pomodoro */
 body.dark-mode main.conteudo p,
-body.dark-mode main.conteudo span,
 body.dark-mode main.conteudo label,
 body.dark-mode main.conteudo small,
-body.dark-mode main.conteudo .lbl {
-  color: var(--dark-text, #f9fafb) !important;
+body.dark-mode main.conteudo strong,
+body.dark-mode main.conteudo b,
+body.dark-mode main.conteudo .lbl,
+body.dark-mode .conteudo p,
+body.dark-mode .conteudo label,
+body.dark-mode .conteudo small,
+body.dark-mode .conteudo strong,
+body.dark-mode .conteudo b,
+body.dark-mode .conteudo .lbl {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode main.conteudo .sub,
+body.dark-mode main.conteudo .texto-suave,
+body.dark-mode main.conteudo .descricao,
+body.dark-mode .conteudo .sub,
+body.dark-mode .conteudo .texto-suave,
+body.dark-mode .conteudo .descricao {
+  color: var(--dark-text-soft) !important;
 }
 
 /* =========================
-   INPUTS / SELECT / TEXTAREA
+   INPUTS, SELECTS E TEXTAREA
 ========================= */
+
 body.dark-mode .input,
 body.dark-mode .select,
-body.dark-mode textarea {
-  background-color: #020617 !important;
-  color: var(--dark-text, #f9fafb) !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
+body.dark-mode textarea,
+body.dark-mode input[type="text"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="time"],
+body.dark-mode select {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
 }
 
 body.dark-mode .input:focus,
 body.dark-mode .select:focus,
-body.dark-mode textarea:focus {
-  border-color: var(--dark-primary, #38a5ff) !important;
-  background-color: #020617 !important;
+body.dark-mode textarea:focus,
+body.dark-mode input[type="text"]:focus,
+body.dark-mode input[type="number"]:focus,
+body.dark-mode input[type="time"]:focus,
+body.dark-mode select:focus {
+  background-color: var(--dark-bg) !important;
+  border-color: var(--dark-primary) !important;
+  box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.18) !important;
+  outline: none !important;
 }
 
 body.dark-mode .input::placeholder,
-body.dark-mode .select::placeholder,
-body.dark-mode textarea::placeholder {
-  color: #cbd5f5 !important;
+body.dark-mode textarea::placeholder,
+body.dark-mode input::placeholder {
+  color: var(--dark-text-soft) !important;
+}
+
+body.dark-mode select option {
+  background-color: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+}
+
+/* Corrige os controles numéricos no modo escuro */
+body.dark-mode input::-webkit-inner-spin-button,
+body.dark-mode input::-webkit-outer-spin-button {
+  opacity: 0.8;
 }
 
 /* =========================
    BOTÕES
 ========================= */
+
 body.dark-mode .btn {
-  background: linear-gradient(135deg, #3b82f6, #38bdf8) !important;
-  color: #020617 !important; /* texto escuro em botão claro */
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
   border: none !important;
-  box-shadow: 0 12px 30px rgba(56,165,255,.45) !important;
+  box-shadow: 0 5px 14px rgba(56, 165, 255, 0.25) !important;
 }
 
 body.dark-mode .btn:hover {
-  filter: brightness(1.08) !important;
-  transform: translateY(-1px) !important;
+  background: var(--dark-primary-hover) !important;
+  color: #ffffff !important;
+  filter: none !important;
+  transform: translateY(-1px);
 }
 
 body.dark-mode .btn.secondary {
-  background: #020617 !important;
-  color: var(--dark-text, #f9fafb) !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
   box-shadow: none !important;
+}
+
+body.dark-mode .btn.secondary:hover {
+  background: #4b5563 !important;
 }
 
 body.dark-mode .btn.ghost {
   background: transparent !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
-  color: var(--dark-text, #f9fafb) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: none !important;
+}
+
+body.dark-mode .btn.ghost:hover {
+  background: var(--dark-hover) !important;
 }
 
 /* =========================
-   TIMER / PILL / PROGRESS
+   TIMER
 ========================= */
+
 body.dark-mode .timer {
-  color: #f9fafb !important;
+  color: var(--dark-text) !important;
 }
+
+/* =========================
+   PÍLULAS
+========================= */
 
 body.dark-mode .pill {
-  background: rgba(59,130,246,.22) !important;
-  color: #e5efff !important;
+  background: rgba(56, 165, 255, 0.22) !important;
+  color: #cce4ff !important;
+  border: 1px solid rgba(56, 165, 255, 0.35) !important;
 }
 
+body.dark-mode .pill i {
+  color: #cce4ff !important;
+}
+
+/* =========================
+   BARRA DE PROGRESSO
+========================= */
+
 body.dark-mode .progress {
-  background: #020617 !important;
+  background: var(--dark-bg) !important;
+  border: 1px solid var(--dark-border) !important;
 }
 
 body.dark-mode .progress > span {
-  background: linear-gradient(90deg, #3b82f6, #22d3ee) !important;
+  background: var(--dark-primary) !important;
 }
 
 /* =========================
-   TABS
+   ABAS
 ========================= */
+
 body.dark-mode .tab-btn {
-  background: #020617 !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
-  color: var(--dark-text, #f9fafb) !important;
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .tab-btn:hover {
+  background: var(--dark-hover) !important;
+  color: var(--dark-text) !important;
+  border-color: var(--dark-primary) !important;
 }
 
 body.dark-mode .tab-btn.active {
-  background: var(--dark-primary, #38a5ff) !important;
-  border-color: var(--dark-primary, #38a5ff) !important;
-  color: #020617 !important;
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--dark-primary) !important;
 }
 
 /* =========================
-   LISTA / TAREFAS / TAGS
+   TAREFAS E LISTAS
 ========================= */
-body.dark-mode .task {
-  background: #020617 !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
-  color: var(--dark-text, #f9fafb) !important;
+
+body.dark-mode .task,
+body.dark-mode .goal-item,
+body.dark-mode .history-item {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
 }
 
-body.dark-mode .task small {
-  color: #e5e7eb !important;
+body.dark-mode .task strong,
+body.dark-mode .goal-item strong,
+body.dark-mode .history-item strong {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .task small,
+body.dark-mode .goal-item small,
+body.dark-mode .history-item small {
+  color: var(--dark-text-soft) !important;
 }
 
 body.dark-mode .tag {
-  background: rgba(59,130,246,.16) !important;
-  border: 1px solid rgba(59,130,246,.6) !important;
-  color: #e5efff !important;
+  background: rgba(56, 165, 255, 0.2) !important;
+  color: #cce4ff !important;
+  border: 1px solid rgba(56, 165, 255, 0.35) !important;
+}
+
+/* =========================
+   METAS SEMANAIS
+========================= */
+
+body.dark-mode #goalsList > div {
+  background: transparent !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #goalsList .row {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #goalsList .row span {
+  color: var(--dark-text-soft) !important;
+}
+
+body.dark-mode #goalsList .progress {
+  background: var(--dark-bg) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #goalsList .progress span {
+  background: var(--dark-primary) !important;
+}
+
+/* =========================
+   VOLTAS DO CRONÔMETRO
+========================= */
+
+body.dark-mode #lapsList .task {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #lapsList .task small {
+  color: var(--dark-text-soft) !important;
 }
 
 /* =========================
    TABELA / HISTÓRICO
 ========================= */
+
+body.dark-mode .table-wrapper {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .table {
+  background: transparent !important;
+  color: var(--dark-text) !important;
+}
+
 body.dark-mode .table th,
 body.dark-mode .table td {
-  border-bottom: 1px solid var(--dark-border, #1f2933) !important;
-  color: var(--dark-text, #f9fafb) !important;
+  color: var(--dark-text) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
 }
 
 body.dark-mode .table th {
-  background: #020617 !important;
+  background: var(--dark-bg) !important;
+}
+
+body.dark-mode .table tbody tr {
+  background: var(--dark-surface) !important;
+}
+
+body.dark-mode .table tbody tr:hover {
+  background: var(--dark-hover) !important;
 }
 
 /* =========================
    MODAL
 ========================= */
+
+body.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
 body.dark-mode .modal-content {
-  background: var(--dark-surface, #020617) !important;
-  color: var(--dark-text, #f9fafb) !important;
-  border: 1px solid var(--dark-border, #1f2933) !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,.95) !important;
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65) !important;
+}
+
+body.dark-mode .modal-content h3,
+body.dark-mode .modal-content h4,
+body.dark-mode .modal-content p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #confirm-logout {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode #confirm-logout:hover {
+  background: var(--dark-primary-hover) !important;
+}
+
+body.dark-mode #cancel-logout {
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+  background: #4b5563 !important;
 }
 
 /* =========================
-   FOOTER
+   MODAL DA FOGi
 ========================= */
-body.dark-mode footer,
-body.dark-mode footer p,
-body.dark-mode footer span {
-  color: var(--dark-text, #f9fafb) !important;
+
+body.dark-mode #fogi-modal {
+  background: rgba(0, 0, 0, 0.55) !important;
+}
+
+body.dark-mode #fogi-modal .fogi-container {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #fogi-modal .fogi-header {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode #fogi-close {
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #fogi-close:hover {
+  background: #4b5563 !important;
 }
 
 /* =========================
    GRÁFICOS
 ========================= */
+
+body.dark-mode .chart-container,
 body.dark-mode canvas {
   background: transparent !important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+body.dark-mode footer {
+  background: #111827 !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode footer p,
+body.dark-mode footer span {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode nav.menu {
+  background-color: var(--dark-primary) !important;
+  box-shadow: 4px 0 15px rgba(0,0,0,.6) !important;
+}
+
+body.dark-mode nav.menu a {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background-color: rgba(255,255,255,0.15) !important;
+  color: white !important;
+}
+
+body.dark-mode .modal-content {
+  background-color: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  box-shadow: 0 18px 45px rgba(0,0,0,.9) !important;
+}
+
+/* =========================
+   BARRA DE ROLAGEM
+========================= */
+
+body.dark-mode ::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--dark-border);
+  border-radius: 10px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* =====================================================
+   CABEÇALHO E MENU DO POMODORO
+   IGUAIS AO MODO ESCURO DO CALENDÁRIO
+===================================================== */
+
+/* Cabeçalho */
+body.dark-mode header.cabecalho {
+
+  background-color: #669ada !important;
+  color: #ffffff !important;
+
+  font-family: 'Snap ITC', sans-serif !important;
+  font-size: 24px !important;
+  font-weight: bold !important;
+
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+
+  position: relative !important;
+  z-index: 100 !important;
+
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Logo FOAG */
+body.dark-mode header.cabecalho .logo {
+  font-family: 'Snap ITC', sans-serif !important;
+  color: #ffffff !important;
+  letter-spacing: normal !important;
+}
+
+/* Ícones do cabeçalho */
+body.dark-mode .header-icons {
+  position: absolute !important;
+  top: 50% !important;
+  right: 20px !important;
+  transform: translateY(-50%) !important;
+
+  display: flex !important;
+  align-items: center !important;
+  gap: 15px !important;
+
+  font-size: 1.3rem !important;
+  color: #ffffff !important;
+  user-select: none !important;
+}
+
+body.dark-mode .header-icons i {
+  padding: 0 !important;
+  margin: 0 !important;
+
+  background: transparent !important;
+  color: #ffffff !important;
+
+  cursor: pointer !important;
+
+  transition:
+    color 0.2s ease,
+    transform 0.2s ease !important;
+}
+
+body.dark-mode .header-icons i:hover {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+  transform: translateY(-13%) scale(1.1) !important;
+}
+
+/* Evita que a FOGi fique com uma cor diferente */
+body.dark-mode #icon-fogi {
+  color: #ffffff !important;
+}
+
+body.dark-mode #icon-fogi:hover {
+  color: #e2e8f0 !important;
+  transform: scale(1.1) !important;
+}
+
+/* Layout abaixo do cabeçalho */
+body.dark-mode .container {
+  width: 100% !important;
+  min-height: 0 !important;
+
+  display: flex !important;
+  flex: 1 !important;
+}
+
+/* Menu lateral */
+body.dark-mode nav.menu {
+  width: 260px !important;
+  min-width: 260px !important;
+  flex: 0 0 260px !important;
+
+  padding: 18px !important;
+  gap: 14px !important;
+
+  background-color: #669ada !important;
+
+  display: flex !important;
+  flex-direction: column !important;
+
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Links do menu */
+body.dark-mode nav.menu a {
+  width: 100% !important;
+  min-height: auto !important;
+
+  padding: 10px 12px !important;
+  gap: 8px !important;
+
+  background: transparent !important;
+  color: #ffffff !important;
+
+  border-radius: 8px !important;
+
+  font-size: 16px !important;
+  text-decoration: none !important;
+
+  display: flex !important;
+  align-items: center !important;
+
+  transform: none !important;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease !important;
+}
+
+body.dark-mode nav.menu a i {
+  width: auto !important;
+  min-width: 22px !important;
+
+  color: #ffffff !important;
+  text-align: center !important;
+}
+
+/* Item ativo e hover */
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background: rgba(255, 255, 255, 0.18) !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+body.dark-mode nav.menu a:hover i,
+body.dark-mode nav.menu a.active i {
+  color: #ffffff !important;
+}
+
+/* Fundo do conteúdo */
+body.dark-mode main.conteudo,
+body.dark-mode .conteudo {
+  background-color: #0f172a !important;
 }

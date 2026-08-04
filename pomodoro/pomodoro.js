@@ -1,121 +1,285 @@
 // ===== Persistência (via servidor / pomodoro.json do usuário) =====
-const SAVE_URL = window.POMODORO_SAVE_URL || 'salvar_pomodoro.php';
+const SAVE_URL =
+  window.POMODORO_SAVE_URL || 'salvar_pomodoro.php';
 
-const state = (window.POMODORO_DATA && typeof window.POMODORO_DATA === 'object')
-  ? window.POMODORO_DATA
-  : {};
+const state =
+  window.POMODORO_DATA &&
+  typeof window.POMODORO_DATA === 'object'
+    ? window.POMODORO_DATA
+    : {};
 
-if (!Array.isArray(state.disciplines)) state.disciplines = ['Geral'];
-if (!Array.isArray(state.sessions)) state.sessions = [];
-if (!state.goals || typeof state.goals !== 'object') state.goals = {};
+if (!Array.isArray(state.disciplines)) {
+  state.disciplines = ['Geral'];
+}
+
+if (!Array.isArray(state.sessions)) {
+  state.sessions = [];
+}
+
+if (!state.goals || typeof state.goals !== 'object') {
+  state.goals = {};
+}
 
 function save() {
   try {
     fetch(SAVE_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(state)
     }).catch(() => {});
-  } catch (e) {}
+  } catch (e) {
+    console.error('Erro ao salvar dados:', e);
+  }
 }
 
 
 // ===== Header actions =====
-const logoutModal = document.getElementById('logout-modal');
-const confirmLogout = document.getElementById('confirm-logout');
-const cancelLogout = document.getElementById('cancel-logout');
-const iconPerfil = document.getElementById('icon-perfil');
-const iconSair = document.getElementById('icon-sair');
+const logoutModal =
+  document.getElementById('logout-modal');
 
-iconPerfil &&
-  iconPerfil.addEventListener(
-    'click',
-    () => (location.href = '../perfil/perfil.php')
-  );
+const confirmLogout =
+  document.getElementById('confirm-logout');
 
-iconSair &&
+const cancelLogout =
+  document.getElementById('cancel-logout');
+
+const iconPerfil =
+  document.getElementById('icon-perfil');
+
+const iconSair =
+  document.getElementById('icon-sair');
+
+if (iconPerfil) {
+  iconPerfil.addEventListener('click', () => {
+    window.location.href = '../perfil/perfil.php';
+  });
+}
+
+if (iconSair) {
   iconSair.addEventListener('click', () => {
-    if (logoutModal) logoutModal.style.display = 'flex';
+    if (logoutModal) {
+      logoutModal.style.display = 'flex';
+    }
   });
+}
 
-confirmLogout &&
-  confirmLogout.addEventListener(
-    'click',
-    () => (location.href = '../login/index.php')
-  );
+if (confirmLogout) {
+  confirmLogout.addEventListener('click', () => {
+    window.location.href = '../login/index.php';
+  });
+}
 
-cancelLogout &&
+if (cancelLogout) {
   cancelLogout.addEventListener('click', () => {
-    if (logoutModal) logoutModal.style.display = 'none';
+    if (logoutModal) {
+      logoutModal.style.display = 'none';
+    }
   });
+}
 
-logoutModal &&
+if (logoutModal) {
   logoutModal.addEventListener('click', (e) => {
-    if (e.target === logoutModal) logoutModal.style.display = 'none';
+    if (e.target === logoutModal) {
+      logoutModal.style.display = 'none';
+    }
   });
+}
+
 
 // ===== Tabs (Timer/Cronômetro) =====
 document.querySelectorAll('.tab-btn').forEach((btn) => {
   btn.addEventListener('click', () => {
     document
       .querySelectorAll('.tab-btn')
-      .forEach((b) => b.classList.remove('active'));
+      .forEach((button) => {
+        button.classList.remove('active');
+      });
+
     document
       .querySelectorAll('.tab-panel')
-      .forEach((p) => p.classList.remove('active'));
+      .forEach((panel) => {
+        panel.classList.remove('active');
+      });
 
     btn.classList.add('active');
+
     const tab = btn.getAttribute('data-tab');
     const panel = document.getElementById('tab-' + tab);
-    panel && panel.classList.add('active');
+
+    if (panel) {
+      panel.classList.add('active');
+    }
   });
 });
 
+
 // ===== Disciplinas =====
-const disciplineSel = document.getElementById('discipline');
-const newDiscipline = document.getElementById('newDiscipline');
-const addDisciplineBtn = document.getElementById('addDiscipline');
-const goalDiscipline = document.getElementById('goalDiscipline');
-const stopwatchDiscipline = document.getElementById('stopwatchDiscipline');
+const disciplineSel =
+  document.getElementById('discipline');
+
+const newDiscipline =
+  document.getElementById('newDiscipline');
+
+const addDisciplineBtn =
+  document.getElementById('addDiscipline');
+
+const goalDiscipline =
+  document.getElementById('goalDiscipline');
+
+const stopwatchDiscipline =
+  document.getElementById('stopwatchDiscipline');
 
 function fillSelect(selectEl, values) {
-  if (!selectEl) return;
-  while (selectEl.options.length) selectEl.remove(0);
-  values.forEach((v) => selectEl.add(new Option(v, v)));
+  if (!selectEl) {
+    return;
+  }
+
+  while (selectEl.options.length) {
+    selectEl.remove(0);
+  }
+
+  values.forEach((value) => {
+    selectEl.add(new Option(value, value));
+  });
 }
 
 function refreshDisciplines() {
-  if (!state.disciplines.includes('Geral')) state.disciplines.unshift('Geral');
-  const ordered = ['Geral', ...state.disciplines.filter((d) => d !== 'Geral')];
+  if (!state.disciplines.includes('Geral')) {
+    state.disciplines.unshift('Geral');
+  }
+
+  const ordered = [
+    'Geral',
+    ...state.disciplines.filter(
+      (discipline) => discipline !== 'Geral'
+    )
+  ];
+
   fillSelect(disciplineSel, ordered);
   fillSelect(goalDiscipline, ordered);
   fillSelect(stopwatchDiscipline, ordered);
 }
+
 refreshDisciplines();
 
-addDisciplineBtn &&
+
+// ===== Mensagem rápida =====
+function mostrarMensagemDisciplina() {
+  const mensagemAnterior =
+    document.getElementById('mensagem-disciplina');
+
+  if (mensagemAnterior) {
+    mensagemAnterior.remove();
+  }
+
+  const mensagem = document.createElement('div');
+
+  mensagem.id = 'mensagem-disciplina';
+  mensagem.textContent = 'Nova disciplina adicionada!';
+
+  mensagem.style.cssText = `
+    position: fixed;
+    top: 25px;
+    right: 25px;
+    background-color: #38a5ff;
+    color: #ffffff;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Poppins', sans-serif;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+    z-index: 99999;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.3s ease;
+  `;
+
+  document.body.appendChild(mensagem);
+
+  setTimeout(() => {
+    mensagem.style.opacity = '1';
+    mensagem.style.transform = 'translateY(0)';
+  }, 10);
+
+  setTimeout(() => {
+    mensagem.style.opacity = '0';
+    mensagem.style.transform = 'translateY(-10px)';
+
+    setTimeout(() => {
+      mensagem.remove();
+    }, 300);
+  }, 2000);
+}
+
+
+// ===== Adicionar nova disciplina =====
+if (addDisciplineBtn) {
   addDisciplineBtn.addEventListener('click', () => {
-    const val = ((newDiscipline && newDiscipline.value) || '').trim();
-    if (!val) return;
-    if (!state.disciplines.includes(val)) {
-      state.disciplines.push(val);
-      save();
-      refreshDisciplines();
-      if (newDiscipline) newDiscipline.value = '';
+    const val =
+      ((newDiscipline && newDiscipline.value) || '')
+        .trim();
+
+    if (!val) {
+      return;
+    }
+
+    if (state.disciplines.includes(val)) {
+      alert('Essa disciplina já foi adicionada.');
+      return;
+    }
+
+    state.disciplines.push(val);
+
+    save();
+    refreshDisciplines();
+
+    if (newDiscipline) {
+      newDiscipline.value = '';
+    }
+
+    mostrarMensagemDisciplina();
+  });
+}
+
+
+// Permitir adicionar disciplina com Enter
+if (newDiscipline) {
+  newDiscipline.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+
+      if (addDisciplineBtn) {
+        addDisciplineBtn.click();
+      }
     }
   });
+}
+
 
 // ===== Polyfill UUID =====
 if (!(window.crypto && crypto.randomUUID)) {
   window.crypto = window.crypto || {};
+
   crypto.randomUUID = function () {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      const r = (Math.random() * 16) | 0,
-        v = c === 'x' ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+      .replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+
+        const v =
+          c === 'x'
+            ? r
+            : (r & 0x3) | 0x8;
+
+        return v.toString(16);
+      });
   };
 }
+
 
 // ===== Pomodoro =====
 let mode = 'focus';
@@ -125,77 +289,145 @@ let endAt = null;
 let totalMs = 0;
 let remainingMs = 0;
 
-const focusM = document.getElementById('focusM');
-const shortM = document.getElementById('shortM');
-const longM = document.getElementById('longM');
-const everyCycles = document.getElementById('everyCycles');
-const timerEl = document.getElementById('timer');
-const modePill = document.getElementById('modePill');
-const cyclePill = document.getElementById('cyclePill');
-const progressBar = document.getElementById('timerProgress');
-const ding = document.getElementById('ding');
+const focusM =
+  document.getElementById('focusM');
 
-function setMode(m) {
-  mode = m;
+const shortM =
+  document.getElementById('shortM');
+
+const longM =
+  document.getElementById('longM');
+
+const everyCycles =
+  document.getElementById('everyCycles');
+
+const timerEl =
+  document.getElementById('timer');
+
+const modePill =
+  document.getElementById('modePill');
+
+const cyclePill =
+  document.getElementById('cyclePill');
+
+const progressBar =
+  document.getElementById('timerProgress');
+
+const ding =
+  document.getElementById('ding');
+
+function setMode(newMode) {
+  mode = newMode;
+
   const mins =
-    m === 'focus'
+    newMode === 'focus'
       ? +(focusM?.value || 25)
-      : m === 'short'
-      ? +(shortM?.value || 5)
-      : +(longM?.value || 15);
+      : newMode === 'short'
+        ? +(shortM?.value || 5)
+        : +(longM?.value || 15);
+
   totalMs = mins * 60 * 1000;
   remainingMs = totalMs;
   endAt = null;
+
   renderTimer();
-  if (modePill)
-    modePill.innerHTML = `<i class="fa-solid fa-hourglass-half"></i> ${
-      m === 'focus' ? 'Foco' : m === 'short' ? 'Pausa curta' : 'Pausa longa'
-    }`;
+
+  if (modePill) {
+    modePill.innerHTML = `
+      <i class="fa-solid fa-hourglass-half"></i>
+      ${
+        newMode === 'focus'
+          ? 'Foco'
+          : newMode === 'short'
+            ? 'Pausa curta'
+            : 'Pausa longa'
+      }
+    `;
+  }
 }
 
 function renderTimer() {
-  if (!timerEl || !progressBar || !cyclePill) return;
-  const mm = Math.floor(remainingMs / 60000)
-    .toString()
-    .padStart(2, '0');
-  const ss = Math.floor((remainingMs % 60000) / 1000)
-    .toString()
-    .padStart(2, '0');
+  if (!timerEl || !progressBar || !cyclePill) {
+    return;
+  }
+
+  const mm =
+    Math.floor(remainingMs / 60000)
+      .toString()
+      .padStart(2, '0');
+
+  const ss =
+    Math.floor((remainingMs % 60000) / 1000)
+      .toString()
+      .padStart(2, '0');
+
   timerEl.textContent = `${mm}:${ss}`;
-  const pct = totalMs ? Math.max(0, 100 - Math.floor((remainingMs / totalMs) * 100)) : 0;
+
+  const pct = totalMs
+    ? Math.max(
+        0,
+        100 -
+          Math.floor(
+            (remainingMs / totalMs) * 100
+          )
+      )
+    : 0;
+
   progressBar.style.width = pct + '%';
   cyclePill.textContent = `Ciclo ${cycle}`;
+
   document.title = `${mm}:${ss} – FOAG`;
 }
 
 function tick() {
   const now = Date.now();
+
   remainingMs = Math.max(0, endAt - now);
+
   renderTimer();
+
   if (remainingMs <= 0) {
     clearInterval(timer);
+
     timer = null;
+
     completeCycle();
+
     try {
-      ding && ding.play && ding.play();
-    } catch (e) {}
+      if (ding && ding.play) {
+        ding.play();
+      }
+    } catch (e) {
+      console.error('Erro ao reproduzir som:', e);
+    }
   }
 }
 
 function start() {
-  if (timer) return;
+  if (timer) {
+    return;
+  }
+
   if (!endAt) {
     endAt = Date.now() + remainingMs;
   }
+
   timer = setInterval(tick, 200);
 }
 
 function pause() {
   if (timer) {
     clearInterval(timer);
+
     timer = null;
-    remainingMs = Math.max(0, endAt - Date.now());
+
+    remainingMs = Math.max(
+      0,
+      endAt - Date.now()
+    );
+
     endAt = null;
+
     renderTimer();
   }
 }
@@ -206,17 +438,32 @@ function reset() {
 }
 
 function completeCycle() {
-  const mins = Math.round(totalMs / 60000);
-  const discipline = disciplineSel ? disciplineSel.value : 'Geral';
-  state.sessions.push({ ts: Date.now(), minutes: mins, mode, discipline });
+  const mins =
+    Math.round(totalMs / 60000);
+
+  const discipline =
+    disciplineSel
+      ? disciplineSel.value
+      : 'Geral';
+
+  state.sessions.push({
+    ts: Date.now(),
+    minutes: mins,
+    mode: mode,
+    discipline: discipline
+  });
+
   save();
   updateHistory();
   updateCharts();
   updateGoalsView();
 
   if (mode === 'focus') {
-    const ec = +(everyCycles?.value || 4);
+    const ec =
+      +(everyCycles?.value || 4);
+
     cycle++;
+
     if ((cycle - 1) % ec === 0) {
       setMode('long');
     } else {
@@ -227,347 +474,739 @@ function completeCycle() {
   }
 }
 
-const startBtn = document.getElementById('startBtn');
-const pauseBtn = document.getElementById('pauseBtn');
-const resetBtn = document.getElementById('resetBtn');
+const startBtn =
+  document.getElementById('startBtn');
 
-startBtn && (startBtn.onclick = start);
-pauseBtn && (pauseBtn.onclick = pause);
-resetBtn && (resetBtn.onclick = reset);
+const pauseBtn =
+  document.getElementById('pauseBtn');
+
+const resetBtn =
+  document.getElementById('resetBtn');
+
+if (startBtn) {
+  startBtn.onclick = start;
+}
+
+if (pauseBtn) {
+  pauseBtn.onclick = pause;
+}
+
+if (resetBtn) {
+  resetBtn.onclick = reset;
+}
 
 setMode('focus');
 
-// ===== Cronômetro =====
-const swDisplay = document.getElementById('stopwatchDisplay');
-const swStartBtn = document.getElementById('swStart');
-const swPauseBtn = document.getElementById('swPause');
-const swResetBtn = document.getElementById('swReset');
-const swLapBtn = document.getElementById('swLap');
-const swSaveBtn = document.getElementById('swSaveSession');
-const lapsList = document.getElementById('lapsList');
 
-let swRunning = false,
-  swStartAt = null,
-  swElapsed = 0,
-  swTimer = null;
+// ===== Cronômetro =====
+const swDisplay =
+  document.getElementById('stopwatchDisplay');
+
+const swStartBtn =
+  document.getElementById('swStart');
+
+const swPauseBtn =
+  document.getElementById('swPause');
+
+const swResetBtn =
+  document.getElementById('swReset');
+
+const swLapBtn =
+  document.getElementById('swLap');
+
+const swSaveBtn =
+  document.getElementById('swSaveSession');
+
+const lapsList =
+  document.getElementById('lapsList');
+
+let swRunning = false;
+let swStartAt = null;
+let swElapsed = 0;
+let swTimer = null;
+
 const swLaps = [];
 
 function renderStopwatch() {
-  if (!swDisplay) return;
+  if (!swDisplay) {
+    return;
+  }
+
   const total = swElapsed;
-  const h = Math.floor(total / 3600000)
-    .toString()
-    .padStart(2, '0');
-  const m = Math.floor((total % 3600000) / 60000)
-    .toString()
-    .padStart(2, '0');
-  const s = Math.floor((total % 60000) / 1000)
-    .toString()
-    .padStart(2, '0');
+
+  const h =
+    Math.floor(total / 3600000)
+      .toString()
+      .padStart(2, '0');
+
+  const m =
+    Math.floor(
+      (total % 3600000) / 60000
+    )
+      .toString()
+      .padStart(2, '0');
+
+  const s =
+    Math.floor(
+      (total % 60000) / 1000
+    )
+      .toString()
+      .padStart(2, '0');
+
   swDisplay.textContent = `${h}:${m}:${s}`;
 }
 
 function renderLaps() {
-  if (!lapsList) return;
+  if (!lapsList) {
+    return;
+  }
+
   lapsList.innerHTML = '';
+
   swLaps.forEach((ms, idx) => {
-    const prev = idx === 0 ? 0 : swLaps[idx - 1];
+    const prev =
+      idx === 0
+        ? 0
+        : swLaps[idx - 1];
+
     const lapDur = ms - prev;
-    const fmt = (t) => {
-      const hh = Math.floor(t / 3600000)
-        .toString()
-        .padStart(2, '0');
-      const mm = Math.floor((t % 3600000) / 60000)
-        .toString()
-        .padStart(2, '0');
-      const ss = Math.floor((t % 60000) / 1000)
-        .toString()
-        .padStart(2, '0');
+
+    const formatarTempo = (tempo) => {
+      const hh =
+        Math.floor(tempo / 3600000)
+          .toString()
+          .padStart(2, '0');
+
+      const mm =
+        Math.floor(
+          (tempo % 3600000) / 60000
+        )
+          .toString()
+          .padStart(2, '0');
+
+      const ss =
+        Math.floor(
+          (tempo % 60000) / 1000
+        )
+          .toString()
+          .padStart(2, '0');
+
       return `${hh}:${mm}:${ss}`;
     };
-    const div = document.createElement('div');
+
+    const div =
+      document.createElement('div');
+
     div.className = 'task';
-    div.innerHTML = `<strong>Volta ${
-      idx + 1
-    }</strong><small style="color:#666">Tempo total: ${fmt(
-      ms
-    )} | Parcial: ${fmt(lapDur)}</small>`;
+
+    div.innerHTML = `
+      <strong>Volta ${idx + 1}</strong>
+
+      <small style="color:#666">
+        Tempo total: ${formatarTempo(ms)}
+        |
+        Parcial: ${formatarTempo(lapDur)}
+      </small>
+    `;
+
     lapsList.appendChild(div);
   });
 }
 
 function swTick() {
-  swElapsed = Date.now() - swStartAt;
+  swElapsed =
+    Date.now() - swStartAt;
+
   renderStopwatch();
 }
 
-swStartBtn &&
+if (swStartBtn) {
   swStartBtn.addEventListener('click', () => {
-    if (swRunning) return;
-    swRunning = true;
-    swStartAt = Date.now() - swElapsed;
-    swTimer = setInterval(swTick, 200);
-  });
+    if (swRunning) {
+      return;
+    }
 
-swPauseBtn &&
+    swRunning = true;
+
+    swStartAt =
+      Date.now() - swElapsed;
+
+    swTimer =
+      setInterval(swTick, 200);
+  });
+}
+
+if (swPauseBtn) {
   swPauseBtn.addEventListener('click', () => {
-    if (!swRunning) return;
+    if (!swRunning) {
+      return;
+    }
+
     swRunning = false;
+
     clearInterval(swTimer);
+
     swTimer = null;
+
     swTick();
   });
+}
 
-swResetBtn &&
+if (swResetBtn) {
   swResetBtn.addEventListener('click', () => {
     swRunning = false;
+
     clearInterval(swTimer);
+
     swTimer = null;
     swElapsed = 0;
+
     swLaps.length = 0;
+
     renderStopwatch();
     renderLaps();
   });
+}
 
-swLapBtn &&
+if (swLapBtn) {
   swLapBtn.addEventListener('click', () => {
     if (swRunning) {
       swLaps.push(swElapsed);
       renderLaps();
     }
   });
+}
 
-swSaveBtn &&
+if (swSaveBtn) {
   swSaveBtn.addEventListener('click', () => {
-    const minutes = Math.round(swElapsed / 60000);
+    const minutes =
+      Math.round(swElapsed / 60000);
+
     if (minutes <= 0) {
       alert(
         'Cronômetro zerado. Inicie e registre algum tempo antes de salvar.'
       );
+
       return;
     }
+
     const discipline =
-      (stopwatchDiscipline && stopwatchDiscipline.value) || 'Geral';
+      stopwatchDiscipline
+        ? stopwatchDiscipline.value
+        : 'Geral';
+
     state.sessions.push({
       ts: Date.now(),
-      minutes,
+      minutes: minutes,
       mode: 'focus',
-      discipline,
+      discipline: discipline
     });
+
     save();
     updateHistory();
     updateCharts();
     updateGoalsView();
+
     alert('Sessão salva no histórico!');
   });
+}
 
 renderStopwatch();
 
+
 // ===== Metas Semanais =====
-const saveGoalBtn = document.getElementById('saveGoal');
-const goalHours = document.getElementById('goalHours');
-const goalsList = document.getElementById('goalsList');
+const saveGoalBtn =
+  document.getElementById('saveGoal');
+
+const goalHours =
+  document.getElementById('goalHours');
+
+const goalsList =
+  document.getElementById('goalsList');
 
 function getWeekRange(d = new Date()) {
   const dt = new Date(d);
-  const day = (dt.getDay() + 6) % 7; // seg=0
+
+  const day =
+    (dt.getDay() + 6) % 7;
+
   const monday = new Date(dt);
-  monday.setDate(dt.getDate() - day);
+
+  monday.setDate(
+    dt.getDate() - day
+  );
+
   monday.setHours(0, 0, 0, 0);
+
   const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
-  return { monday, sunday };
+
+  sunday.setDate(
+    monday.getDate() + 6
+  );
+
+  sunday.setHours(
+    23,
+    59,
+    59,
+    999
+  );
+
+  return {
+    monday,
+    sunday
+  };
 }
 
 function minutesInWeekByDiscipline() {
-  const { monday, sunday } = getWeekRange();
+  const {
+    monday,
+    sunday
+  } = getWeekRange();
+
   const acc = {};
-  for (const s of state.sessions) {
-    if (s.mode !== 'focus') continue;
-    const t = s.ts;
-    if (t >= monday.getTime() && t <= sunday.getTime()) {
-      acc[s.discipline] = (acc[s.discipline] || 0) + s.minutes;
+
+  for (const session of state.sessions) {
+    if (session.mode !== 'focus') {
+      continue;
+    }
+
+    const time = session.ts;
+
+    if (
+      time >= monday.getTime() &&
+      time <= sunday.getTime()
+    ) {
+      acc[session.discipline] =
+        (acc[session.discipline] || 0) +
+        session.minutes;
     }
   }
+
   return acc;
 }
 
 function updateGoalsView() {
-  if (!goalsList) return;
+  if (!goalsList) {
+    return;
+  }
+
   goalsList.innerHTML = '';
-  const minsMap = minutesInWeekByDiscipline();
-  for (const d of state.disciplines) {
-    const goalH = state.goals[d] || 0;
-    if (!goalH) continue;
-    const doneMin = minsMap[d] || 0;
-    const goalMin = goalH * 60;
-    const pct = Math.min(100, Math.floor((doneMin / goalMin) * 100));
-    const wrap = document.createElement('div');
+
+  const minsMap =
+    minutesInWeekByDiscipline();
+
+  for (const discipline of state.disciplines) {
+    const goalH =
+      state.goals[discipline] || 0;
+
+    if (!goalH) {
+      continue;
+    }
+
+    const doneMin =
+      minsMap[discipline] || 0;
+
+    const goalMin =
+      goalH * 60;
+
+    const pct =
+      Math.min(
+        100,
+        Math.floor(
+          (doneMin / goalMin) * 100
+        )
+      );
+
+    const wrap =
+      document.createElement('div');
+
     wrap.innerHTML = `
       <div class="row between">
-        <strong>${d}</strong>
-        <span style="color:#666">${Math.round(
-          doneMin / 60
-        )}h / ${goalH}h</span>
+        <strong>${discipline}</strong>
+
+        <span style="color:#666">
+          ${Math.round(doneMin / 60)}h /
+          ${goalH}h
+        </span>
       </div>
-      <div class="progress mt"><span style="width:${pct}%"></span></div>
+
+      <div class="progress mt">
+        <span style="width:${pct}%"></span>
+      </div>
     `;
+
     goalsList.appendChild(wrap);
   }
 }
 
-saveGoalBtn &&
+if (saveGoalBtn) {
   saveGoalBtn.addEventListener('click', () => {
-    const d = goalDiscipline && goalDiscipline.value;
-    const h = +(goalHours && goalHours.value);
-    if (!d || !h) return;
-    state.goals[d] = h;
+    const discipline =
+      goalDiscipline &&
+      goalDiscipline.value;
+
+    const hours =
+      +(goalHours && goalHours.value);
+
+    if (!discipline || !hours) {
+      return;
+    }
+
+    state.goals[discipline] = hours;
+
     save();
-    if (goalHours) goalHours.value = '';
+
+    if (goalHours) {
+      goalHours.value = '';
+    }
+
     updateGoalsView();
   });
+}
+
 
 // ===== Histórico + Export =====
-const historyTableBody = document.querySelector('#historyTable tbody');
+const historyTableBody =
+  document.querySelector(
+    '#historyTable tbody'
+  );
 
 function updateHistory() {
-  if (!historyTableBody) return;
+  if (!historyTableBody) {
+    return;
+  }
+
   historyTableBody.innerHTML = '';
-  const rows = [...state.sessions].sort((a, b) => b.ts - a.ts);
-  for (const s of rows) {
-    const tr = document.createElement('tr');
-    const d = new Date(s.ts);
-    tr.innerHTML = `<td>${d.toLocaleString(
-      'pt-BR'
-    )}</td><td>${s.discipline}</td><td>${
-      s.mode === 'focus' ? 'Foco' : 'Pausa'
-    }</td><td>${s.minutes}</td>`;
+
+  const rows =
+    [...state.sessions]
+      .sort((a, b) => b.ts - a.ts);
+
+  for (const session of rows) {
+    const tr =
+      document.createElement('tr');
+
+    const date =
+      new Date(session.ts);
+
+    tr.innerHTML = `
+      <td>
+        ${date.toLocaleString('pt-BR')}
+      </td>
+
+      <td>
+        ${session.discipline}
+      </td>
+
+      <td>
+        ${
+          session.mode === 'focus'
+            ? 'Foco'
+            : 'Pausa'
+        }
+      </td>
+
+      <td>
+        ${session.minutes}
+      </td>
+    `;
+
     historyTableBody.appendChild(tr);
   }
 }
 
-const clearHistoryBtn = document.getElementById('clearHistory');
-const exportCsvBtn = document.getElementById('exportCsv');
+const clearHistoryBtn =
+  document.getElementById('clearHistory');
 
-clearHistoryBtn &&
-  clearHistoryBtn.addEventListener('click', () => {
-    if (!confirm('Tem certeza que deseja limpar o histórico?')) return;
-    state.sessions = [];
-    save();
-    updateHistory();
-    updateCharts();
-    updateGoalsView();
-  });
+const exportCsvBtn =
+  document.getElementById('exportCsv');
 
-exportCsvBtn &&
-  exportCsvBtn.addEventListener('click', () => {
-    const header = ['data', 'disciplina', 'modo', 'minutos'];
-    const lines = [header.join(',') + '\n'];
-    for (const s of state.sessions) {
-      const d = new Date(s.ts).toISOString();
-      lines.push(
-        [d, s.discipline, s.mode, s.minutes]
-          .map((v) => `"${String(v).replace(/"/g, '""')}"`)
-          .join(',') + '\n'
-      );
+if (clearHistoryBtn) {
+  clearHistoryBtn.addEventListener(
+    'click',
+    () => {
+      if (
+        !confirm(
+          'Tem certeza que deseja limpar o histórico?'
+        )
+      ) {
+        return;
+      }
+
+      state.sessions = [];
+
+      save();
+      updateHistory();
+      updateCharts();
+      updateGoalsView();
     }
-    const blob = new Blob([lines.join('')], {
-      type: 'text/csv;charset=utf-8;',
-    });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'foag_estudos.csv';
-    a.click();
-  });
+  );
+}
+
+if (exportCsvBtn) {
+  exportCsvBtn.addEventListener(
+    'click',
+    () => {
+      const header = [
+        'data',
+        'disciplina',
+        'modo',
+        'minutos'
+      ];
+
+      const lines = [
+        header.join(',') + '\n'
+      ];
+
+      for (const session of state.sessions) {
+        const date =
+          new Date(
+            session.ts
+          ).toISOString();
+
+        lines.push(
+          [
+            date,
+            session.discipline,
+            session.mode,
+            session.minutes
+          ]
+            .map((value) => {
+              return `"${String(value)
+                .replace(/"/g, '""')}"`;
+            })
+            .join(',') + '\n'
+        );
+      }
+
+      const blob = new Blob(
+        [lines.join('')],
+        {
+          type:
+            'text/csv;charset=utf-8;'
+        }
+      );
+
+      const link =
+        document.createElement('a');
+
+      link.href =
+        URL.createObjectURL(blob);
+
+      link.download =
+        'foag_estudos.csv';
+
+      link.click();
+
+      URL.revokeObjectURL(link.href);
+    }
+  );
+}
+
 
 // ===== Gráficos =====
-const lineCtx = document.getElementById('lineChart');
-const pieCtx = document.getElementById('pieChart');
-let lineChart, pieChart;
+const lineCtx =
+  document.getElementById('lineChart');
+
+const pieCtx =
+  document.getElementById('pieChart');
+
+let lineChart;
+let pieChart;
 
 function hoursLastNDays(n = 14) {
   const today = new Date();
+
   today.setHours(0, 0, 0, 0);
+
   const labels = [];
   const mins = [];
+
   for (let i = n - 1; i >= 0; i--) {
-    const day = new Date(today);
-    day.setDate(today.getDate() - i);
-    const start = day.getTime();
-    const end = start + 86400000 - 1;
-    const m = state.sessions
-      .filter(
-        (s) => s.mode === 'focus' && s.ts >= start && s.ts <= end
-      )
-      .reduce((a, b) => a + b.minutes, 0);
-    labels.push(
-      day.toLocaleDateString('pt-BR', {
-        day: '2-digit',
-        month: '2-digit',
-      })
+    const day =
+      new Date(today);
+
+    day.setDate(
+      today.getDate() - i
     );
-    mins.push(Math.round((m / 60) * 100) / 100);
+
+    const start =
+      day.getTime();
+
+    const end =
+      start + 86400000 - 1;
+
+    const minutes =
+      state.sessions
+        .filter((session) => {
+          return (
+            session.mode === 'focus' &&
+            session.ts >= start &&
+            session.ts <= end
+          );
+        })
+        .reduce(
+          (total, session) => {
+            return (
+              total +
+              session.minutes
+            );
+          },
+          0
+        );
+
+    labels.push(
+      day.toLocaleDateString(
+        'pt-BR',
+        {
+          day: '2-digit',
+          month: '2-digit'
+        }
+      )
+    );
+
+    mins.push(
+      Math.round(
+        (minutes / 60) * 100
+      ) / 100
+    );
   }
-  return { labels, hours: mins };
+
+  return {
+    labels,
+    hours: mins
+  };
 }
 
 function distributionByDiscipline() {
   const by = {};
-  for (const s of state.sessions) {
-    if (s.mode === 'focus')
-      by[s.discipline] = (by[s.discipline] || 0) + s.minutes;
+
+  for (const session of state.sessions) {
+    if (session.mode === 'focus') {
+      by[session.discipline] =
+        (by[session.discipline] || 0) +
+        session.minutes;
+    }
   }
-  const labels = Object.keys(by);
-  const hours = labels.map((k) => Math.round((by[k] / 60) * 100) / 100);
-  return { labels, hours };
+
+  const labels =
+    Object.keys(by);
+
+  const hours =
+    labels.map((key) => {
+      return (
+        Math.round(
+          (by[key] / 60) * 100
+        ) / 100
+      );
+    });
+
+  return {
+    labels,
+    hours
+  };
 }
 
 function updateCharts() {
-  if (typeof Chart === 'undefined' || !lineCtx || !pieCtx) return;
-  const hl = hoursLastNDays(14);
-  const dist = distributionByDiscipline();
-  try {
-    lineChart && lineChart.destroy();
-    pieChart && pieChart.destroy();
-  } catch (e) {}
-  try {
-    lineChart = new Chart(lineCtx, {
-      type: 'line',
-      data: {
-        labels: hl.labels,
-        datasets: [
-          {
-            label: 'Horas por dia',
-            data: hl.hours,
-            tension: 0.3,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: { y: { beginAtZero: true } },
-      },
-    });
+  if (
+    typeof Chart === 'undefined' ||
+    !lineCtx ||
+    !pieCtx
+  ) {
+    return;
+  }
 
-    pieChart = new Chart(pieCtx, {
-      type: 'doughnut',
-      data: {
-        labels: dist.labels,
-        datasets: [{ data: dist.hours }],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom' } },
-      },
-    });
-  } catch (e) {}
+  const hl =
+    hoursLastNDays(14);
+
+  const dist =
+    distributionByDiscipline();
+
+  try {
+    if (lineChart) {
+      lineChart.destroy();
+    }
+
+    if (pieChart) {
+      pieChart.destroy();
+    }
+  } catch (e) {
+    console.error(
+      'Erro ao destruir gráficos:',
+      e
+    );
+  }
+
+  try {
+    lineChart =
+      new Chart(lineCtx, {
+        type: 'line',
+
+        data: {
+          labels: hl.labels,
+
+          datasets: [
+            {
+              label: 'Horas por dia',
+              data: hl.hours,
+              tension: 0.3
+            }
+          ]
+        },
+
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+
+          plugins: {
+            legend: {
+              display: false
+            }
+          },
+
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+
+    pieChart =
+      new Chart(pieCtx, {
+        type: 'doughnut',
+
+        data: {
+          labels: dist.labels,
+
+          datasets: [
+            {
+              data: dist.hours
+            }
+          ]
+        },
+
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+
+          plugins: {
+            legend: {
+              position: 'bottom'
+            }
+          }
+        }
+      });
+  } catch (e) {
+    console.error(
+      'Erro ao criar gráficos:',
+      e
+    );
+  }
 }
 
-// ===== Init =====
+
+// ===== Inicialização =====
 updateHistory();
 updateCharts();
 updateGoalsView();

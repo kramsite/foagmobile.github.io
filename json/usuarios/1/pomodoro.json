@@ -1,0 +1,49 @@
+{
+    "disciplines": [
+        "Geral",
+        "Matematica",
+        "aa",
+        "eu",
+        "Historia",
+        "Quimica"
+    ],
+    "sessions": [
+        {
+            "ts": 1785846102865,
+            "minutes": 7,
+            "mode": "focus",
+            "discipline": "Matematica"
+        },
+        {
+            "ts": 1785846798141,
+            "minutes": 3,
+            "mode": "focus",
+            "discipline": "Historia"
+        },
+        {
+            "ts": 1785847142637,
+            "minutes": 9,
+            "mode": "focus",
+            "discipline": "Geral"
+        },
+        {
+            "ts": 1785847506167,
+            "minutes": 5,
+            "mode": "focus",
+            "discipline": "Quimica"
+        },
+        {
+            "ts": 1785847586715,
+            "minutes": 1,
+            "mode": "short",
+            "discipline": "Quimica"
+        },
+        {
+            "ts": 1785847900313,
+            "minutes": 5,
+            "mode": "focus",
+            "discipline": "Quimica"
+        }
+    ],
+    "goals": []
+}
