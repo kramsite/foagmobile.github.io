@@ -5,6 +5,13 @@
         "aa",
         "eu"
     ],
-    "sessions": [],
+    "sessions": [
+        {
+            "ts": 1785846102865,
+            "minutes": 7,
+            "mode": "focus",
+            "discipline": "Matematica"
+        }
+    ],
     "goals": []
 }
