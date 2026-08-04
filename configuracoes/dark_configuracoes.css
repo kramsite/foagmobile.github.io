@@ -1,0 +1,98 @@
+.dark-mode .configuracoes-conteudo {
+  background: var(--dark-bg) !important;
+}
+
+.dark-mode .configuracoes-topo h1,
+.dark-mode .card-cabecalho h2,
+.dark-mode .configuracao-texto label,
+.dark-mode .configuracao-texto strong,
+.dark-mode .titulo-opcao,
+.dark-mode .sobre-foag h3 {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .configuracoes-topo p,
+.dark-mode .card-cabecalho p,
+.dark-mode .configuracao-texto span,
+.dark-mode .configuracao-texto small,
+.dark-mode .sobre-foag p,
+.dark-mode .sobre-texto,
+.dark-mode .barra-salvar p {
+  color: var(--dark-text-muted, #94a3b8) !important;
+}
+
+.dark-mode .configuracao-card,
+.dark-mode .barra-salvar {
+  background: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+}
+
+.dark-mode .card-cabecalho,
+.dark-mode .configuracao-item,
+.dark-mode .sobre-foag,
+.dark-mode .sobre-texto {
+  border-color: var(--dark-border) !important;
+}
+
+.dark-mode .card-icone {
+  background: rgba(56, 165, 255, 0.16) !important;
+  color: var(--dark-primary) !important;
+}
+
+.dark-mode .configuracao-item select {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+}
+
+.dark-mode .btn-secundario {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+.dark-mode .btn-secundario:hover {
+  background: #475569 !important;
+}
+
+.dark-mode .zona-perigo {
+  background: rgba(220, 53, 69, 0.08) !important;
+  border-color: rgba(220, 53, 69, 0.4) !important;
+}
+
+.dark-mode .zona-perigo h3 {
+  color: #f87171 !important;
+}
+
+.dark-mode .zona-perigo p {
+  color: #fca5a5 !important;
+}
+
+.dark-mode .sobre-links a {
+  background: rgba(56, 165, 255, 0.12) !important;
+  border-color: rgba(56, 165, 255, 0.3) !important;
+  color: #7cc4ff !important;
+}
+
+.dark-mode .logo-foag {
+  background: var(--dark-primary) !important;
+}
+
+.dark-mode .modal-content {
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .modal-content h3 {
+  color: var(--dark-text) !important;
+}
+
+.dark-mode .modal-content h4,
+.dark-mode .modal-content p {
+  color: #94a3b8 !important;
+}
+
+.dark-mode #cancel-logout,
+.dark-mode #cancelar-acao {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}

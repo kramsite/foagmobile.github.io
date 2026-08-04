@@ -654,66 +654,53 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
 
-  // ========== ÍCONES HEADER (PERFIL / LOGOUT) ==========
-  const perfilIcon    = document.getElementById('icon-perfil');
-  const logoutModal   = document.getElementById('logout-modal');
-  const iconSair      = document.getElementById('icon-sair');
-  const confirmLogout = document.getElementById('confirm-logout');
-  const cancelLogout  = document.getElementById('cancel-logout');
+  // ========== ÍCONES HEADER (CONFIGURAÇÕES / PERFIL / LOGOUT) ==========
+const configuracoesIcon = document.getElementById('icon-configuracoes');
+const perfilIcon        = document.getElementById('icon-perfil');
+const logoutModal       = document.getElementById('logout-modal');
+const iconSair          = document.getElementById('icon-sair');
+const confirmLogout     = document.getElementById('confirm-logout');
+const cancelLogout      = document.getElementById('cancel-logout');
 
-  if (perfilIcon) {
-    perfilIcon.addEventListener('click', () => {
-      window.location.href = '../perfil/perfil.php';
-    });
-  }
+// Configurações
+if (configuracoesIcon) {
+  configuracoesIcon.addEventListener('click', () => {
+    window.location.href = '../configuracoes/configuracoes.php';
+  });
+}
 
-  if (iconSair && logoutModal) {
-    iconSair.addEventListener('click', () => {
-      logoutModal.style.display = 'flex';
-    });
-  }
+// Perfil
+if (perfilIcon) {
+  perfilIcon.addEventListener('click', () => {
+    window.location.href = '../perfil/perfil.php';
+  });
+}
 
-  if (confirmLogout) {
-    confirmLogout.addEventListener('click', () => {
-      window.location.href = '../login/index.php';
-    });
-  }
+// Abrir modal de logout
+if (iconSair && logoutModal) {
+  iconSair.addEventListener('click', () => {
+    logoutModal.style.display = 'flex';
+  });
+}
 
-  if (cancelLogout && logoutModal) {
-    cancelLogout.addEventListener('click', () => {
+// Confirmar logout
+if (confirmLogout) {
+  confirmLogout.addEventListener('click', () => {
+    window.location.href = '../login/index.php';
+  });
+}
+
+// Cancelar logout
+if (cancelLogout && logoutModal) {
+  cancelLogout.addEventListener('click', () => {
+    logoutModal.style.display = 'none';
+  });
+
+  logoutModal.addEventListener('click', e => {
+    if (e.target === logoutModal) {
       logoutModal.style.display = 'none';
-    });
+    }
+  });
+}
 
-    logoutModal.addEventListener('click', e => {
-      if (e.target === logoutModal) logoutModal.style.display = 'none';
-    });
-  }
-
-  // ========== MODAL FOGi ==========
-  const fogiBtn   = document.getElementById('icon-fogi');
-  const fogiModal = document.getElementById('fogi-modal');
-  const fogiFrame = document.getElementById('fogi-iframe');
-  const fogiClose = document.getElementById('fogi-close');
-
-  if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
-    fogiBtn.addEventListener('click', () => {
-      fogiFrame.src = 'http://127.0.0.1:5000'; // Flask/Ollama
-      fogiModal.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-    });
-
-    fogiClose.addEventListener('click', () => {
-      fogiModal.style.display = 'none';
-      fogiFrame.src = 'about:blank';
-      document.body.style.overflow = '';
-    });
-
-    window.addEventListener('message', ev => {
-      if (ev.data && ev.data.type === 'FOGI_CLOSE') {
-        fogiModal.style.display = 'none';
-        fogiFrame.src = 'about:blank';
-        document.body.style.overflow = '';
-      }
-    });
-  }
 });
