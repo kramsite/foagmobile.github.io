@@ -161,7 +161,7 @@ $caminho_foto = $pasta_fotos_url . $foto_perfil;
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-    <link rel="stylesheet" href="editar.css">
+    <link rel="stylesheet" href="editr.css">
     <script src="../m.escuro/dark-mode.js"></script>
 </head>
 
