@@ -1,15 +1,14 @@
 [
     {
         "id": 1,
-        "nome": "Rafaella",
-        "email": "rafaellagomes1314@gmail.com",
-        "senha": "$2y$10$FomQFR.ig7Z1TUW1fj1nVuaMfagFCEmpJW1wMKRdtBNmgb6aiiJEG",
-        "nascimento": "2008-09-22",
-        "telefone": "(65) 98122-6920",
-        "serie": "3º ano do Ensino Médio",
-        "escola": "Escola Estadual Militar Dom Pedro II",
+        "nome": "kezia",
+        "email": "keziaazevedo2009@gmail.com",
+        "senha": "$2y$10$W8X5lqoW1JAFegRqBwUEw.lK\/XWSVzMUTnVFtDY2EP3zvFvQkZicm",
+        "nascimento": "2009-04-21",
+        "telefone": "",
+        "serie": "",
+        "escola": "",
         "termos_aceitos": true,
-        "cadastrado_em": "2026-07-23 16:47:05",
-        "foto": "pf_6a622b2711c891.79615228.webp"
+        "cadastrado_em": "2026-08-04 15:04:18"
     }
 ]
