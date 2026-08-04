@@ -416,6 +416,166 @@ nav.menu a:hover {
     white-space: nowrap;
 }
 
+/* ===========================================
+   ITENS DA LOJA NO PERFIL
+============================================ */
+
+.loja-itens-card {
+    margin-top: 24px;
+    padding: 28px;
+    border: 1px solid var(--borda);
+    border-radius: 20px;
+    background: var(--branco);
+    box-shadow: 0 8px 24px rgba(43, 77, 105, 0.08);
+}
+
+.loja-itens-cabecalho {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+.loja-itens-icone {
+    width: 46px;
+    height: 46px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 13px;
+    background: var(--azul-claro);
+    color: var(--azul-foag);
+    font-size: 18px;
+}
+
+.loja-itens-cabecalho h3 {
+    margin-bottom: 2px;
+    color: var(--texto);
+    font-size: 17px;
+}
+
+.loja-itens-cabecalho p {
+    color: var(--texto-suave);
+    font-size: 12px;
+}
+
+.btn-ir-loja {
+    margin-left: auto;
+    min-height: 38px;
+    padding: 0 16px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 10px;
+    background: var(--azul-foag);
+    color: #ffffff;
+    font-size: 13px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.btn-ir-loja:hover {
+    background: var(--azul-escuro);
+    transform: translateY(-2px);
+}
+
+.loja-itens-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 12px;
+    min-height: 60px;
+}
+
+.item-loja-perfil {
+    padding: 12px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    background: #fbfcfd;
+    transition: 0.2s ease;
+}
+
+.item-loja-perfil:hover {
+    border-color: var(--azul-foag);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.item-loja-perfil .icone-item {
+    font-size: 28px;
+    color: var(--azul-foag);
+}
+
+.item-loja-perfil .nome-item {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--texto);
+    line-height: 1.2;
+}
+
+.item-loja-perfil .categoria-item {
+    font-size: 9px;
+    text-transform: uppercase;
+    color: var(--texto-suave);
+    background: var(--azul-claro);
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.item-loja-perfil.ativo {
+    border-color: #ffd700;
+    background: #fffde7;
+}
+
+.item-loja-perfil.ativo .icone-item {
+    color: #ffd700;
+}
+
+.sem-itens-loja {
+    grid-column: 1 / -1;
+    padding: 30px;
+    text-align: center;
+    color: var(--texto-suave);
+}
+
+.sem-itens-loja i {
+    font-size: 30px;
+    display: block;
+    margin-bottom: 10px;
+    color: var(--azul-foag);
+}
+
+.carregando-itens {
+    grid-column: 1 / -1;
+    text-align: center;
+    color: var(--texto-suave);
+    padding: 20px;
+}
+
+.carregando-itens i {
+    margin-right: 8px;
+}
+
+.total-estrelas {
+    border-color: #ffd700 !important;
+    background: #fffde7 !important;
+}
+
+.total-estrelas .icone-item i {
+    color: #ffd700 !important;
+}
+
+/* ===========================================
+   MODAIS
+============================================ */
+
 .modal {
     display: none;
     position: fixed;
@@ -518,6 +678,120 @@ footer {
     font-size: 1em;
 }
 
+/* ===========================================
+   MODO ESCURO
+============================================ */
+
+body.dark-mode .loja-itens-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .loja-itens-icone {
+    background: #0f172a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .loja-itens-cabecalho h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .loja-itens-cabecalho p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .item-loja-perfil {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .item-loja-perfil:hover {
+    border-color: #669ada !important;
+}
+
+body.dark-mode .item-loja-perfil .nome-item {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .item-loja-perfil .categoria-item {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo {
+    border-color: #ffd700;
+    background: #1a2a1a !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo .icone-item {
+    color: #ffd700;
+}
+
+body.dark-mode .sem-itens-loja {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .btn-ir-loja {
+    background: #669ada !important;
+}
+
+body.dark-mode .btn-ir-loja:hover {
+    background: #3b82f6 !important;
+}
+
+body.dark-mode .dados-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .dados-icone {
+    background: #0f172a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .dados-cabecalho h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .dados-cabecalho p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .dado-item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .dado-item:hover {
+    border-color: #669ada !important;
+}
+
+body.dark-mode .dado-item span {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .dado-item strong {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .dado-item-icone {
+    background: #1e293b !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .total-estrelas {
+    border-color: #ffd700 !important;
+    background: #1a2a1a !important;
+}
+
+body.dark-mode .total-estrelas .icone-item i {
+    color: #ffd700 !important;
+}
+
+/* ===========================================
+   RESPONSIVIDADE
+============================================ */
+
 @media (max-width: 800px) {
     .perfil-ilustracao {
         display: none;
@@ -586,5 +860,20 @@ footer {
 
     .dados-card {
         padding: 22px 17px;
+    }
+    
+    .loja-itens-cabecalho {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .btn-ir-loja {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .loja-itens-grid {
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
     }
 }

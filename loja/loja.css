@@ -869,6 +869,150 @@ nav.menu a:hover {
     background-color: #bdbdbd;
 }
 
+/* =====================================================
+   BOTÃO SECRETO (TESTE) — CORRIGIDO!
+===================================================== */
+
+.botao-secreto-container {
+    position: fixed;
+    bottom: 80px;
+    right: 20px;
+    z-index: 999;
+}
+
+.botao-secreto {
+    width: 50px;
+    height: 50px;
+    
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    
+    border: 2px solid rgba(56, 165, 255, 0.3) !important;
+    border-radius: 50% !important;
+    background: rgba(56, 165, 255, 0.1) !important;
+    color: rgba(56, 165, 255, 0.5) !important;
+    
+    font-size: 20px !important;
+    
+    cursor: pointer !important;
+    
+    transition: all 0.3s ease !important;
+    
+    opacity: 0.4 !important;
+}
+
+.botao-secreto:hover {
+    opacity: 0.8 !important;
+    background: rgba(56, 165, 255, 0.2) !important;
+    transform: scale(1.05) !important;
+    border-color: rgba(56, 165, 255, 0.6) !important;
+}
+
+.botao-secreto.ativo {
+    opacity: 1 !important;
+    background: rgba(255, 215, 0, 0.2) !important;
+    color: #ffd700 !important;
+    border-color: #ffd700 !important;
+    animation: pulsar-estrela 0.8s ease 3 !important;
+}
+
+.botao-secreto .texto-secreto {
+    display: none !important;
+}
+
+.botao-secreto.ativo .texto-secreto {
+    display: inline !important;
+    font-size: 12px !important;
+    margin-left: 4px !important;
+}
+
+@keyframes pulsar-estrela {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+    }
+    50% {
+        transform: scale(1.2);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    }
+}
+
+/* =====================================================
+   MODAL DE ESTRELAS
+===================================================== */
+
+.modal-estrelas {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+    
+    background: rgba(0, 0, 0, 0.6) !important;
+    backdrop-filter: blur(4px) !important;
+    
+    z-index: 99999 !important;
+    
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.modal-estrelas.mostrar {
+    display: flex !important;
+}
+
+.modal-estrelas .modal-content {
+    background: #ffffff;
+    border-radius: 20px;
+    padding: 35px 40px;
+    
+    max-width: 400px;
+    width: 90%;
+    
+    text-align: center;
+    
+    animation: aparecer 0.3s ease;
+}
+
+.modal-estrelas .estrelas-icon {
+    font-size: 60px;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+
+.modal-estrelas h3 {
+    font-size: 22px;
+    color: #1a2a3a;
+    margin-bottom: 8px;
+}
+
+.modal-estrelas p {
+    color: #64748b;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.modal-estrelas .btn-modal {
+    padding: 12px 40px;
+    
+    background: linear-gradient(135deg, #ffd700, #f9a825);
+    color: #1a2a3a;
+    
+    border: none;
+    border-radius: 12px;
+    
+    font-weight: 700;
+    font-size: 15px;
+    
+    cursor: pointer;
+    
+    transition: all 0.3s ease;
+}
+
+.modal-estrelas .btn-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(255, 215, 0, 0.4);
+}
+
 /* =========================
    ANIMAÇÕES
 ========================= */

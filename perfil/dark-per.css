@@ -126,3 +126,101 @@ body.dark-mode .campo-info select option {
   background-color: var(--dark-bg);
   color: var(--dark-text);
 }
+
+/* ==================== ITENS DA LOJA NO PERFIL ==================== */
+body.dark-mode .loja-itens-card {
+  background: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .loja-itens-icone {
+  background: var(--dark-bg) !important;
+  color: var(--dark-primary) !important;
+}
+
+body.dark-mode .loja-itens-cabecalho h3 {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .loja-itens-cabecalho p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .item-loja-perfil {
+  background: var(--dark-bg) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .item-loja-perfil:hover {
+  border-color: var(--dark-primary) !important;
+}
+
+body.dark-mode .item-loja-perfil .nome-item {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .item-loja-perfil .categoria-item {
+  background: var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo {
+  border-color: #ffd700;
+  background: #1a2a1a !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo .icone-item {
+  color: #ffd700;
+}
+
+body.dark-mode .sem-itens-loja {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .btn-ir-loja {
+  background: var(--dark-primary) !important;
+}
+
+body.dark-mode .btn-ir-loja:hover {
+  background: var(--dark-secondary) !important;
+}
+
+body.dark-mode .dados-card {
+  background: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .dados-icone {
+  background: var(--dark-bg) !important;
+  color: var(--dark-primary) !important;
+}
+
+body.dark-mode .dados-cabecalho h3 {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .dados-cabecalho p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .dado-item {
+  background: var(--dark-bg) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .dado-item:hover {
+  border-color: var(--dark-primary) !important;
+}
+
+body.dark-mode .dado-item span {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .dado-item strong {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .dado-item-icone {
+  background: var(--dark-surface) !important;
+  color: var(--dark-primary) !important;
+}

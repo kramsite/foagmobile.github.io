@@ -205,6 +205,34 @@ $caminho_foto = $pasta_fotos_url . $foto_perfil;
                         </div>
                     </div>
 
+                    <!-- ===========================================
+     ITENS DA LOJA (PERSONALIZAÇÕES)
+============================================ -->
+
+<section class="loja-itens-card">
+    <div class="loja-itens-cabecalho">
+        <div class="loja-itens-icone">
+            <i class="fa-solid fa-store"></i>
+        </div>
+        <div>
+            <h3>Minhas Personalizações</h3>
+            <p>Itens comprados na Loja de Estrelas</p>
+        </div>
+        <a href="../loja/loja.php" class="btn-ir-loja">
+            <i class="fa-solid fa-cart-shopping"></i>
+            Ir à Loja
+        </a>
+    </div>
+
+    <div class="loja-itens-grid" id="itensLojaPerfil">
+        <!-- Carregado via JavaScript -->
+        <div class="carregando-itens">
+            <i class="fa-solid fa-spinner fa-spin"></i>
+            Carregando itens...
+        </div>
+    </div>
+</section>
+
                     <div class="dados-grid">
                         <div class="dado-item">
                             <div class="dado-item-icone">
@@ -302,60 +330,240 @@ $caminho_foto = $pasta_fotos_url . $foto_perfil;
 
     <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const fogiBtn = document.getElementById("icon-fogi");
-            const fogiModal = document.getElementById("fogi-modal");
-            const fogiFrame = document.getElementById("fogi-iframe");
-            const fogiClose = document.getElementById("fogi-close");
+   <script>
+document.addEventListener("DOMContentLoaded", () => {
+    // ===========================================
+    // FOGI
+    // ===========================================
+    const fogiBtn = document.getElementById("icon-fogi");
+    const fogiModal = document.getElementById("fogi-modal");
+    const fogiFrame = document.getElementById("fogi-iframe");
+    const fogiClose = document.getElementById("fogi-close");
 
-            const sairBtn = document.getElementById("icon-sair");
-            const logoutModal = document.getElementById("logout-modal");
-            const confirmarLogout = document.getElementById("confirm-logout");
-            const cancelarLogout = document.getElementById("cancel-logout");
+    if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
+        fogiBtn.addEventListener("click", () => {
+            fogiFrame.src = "http://127.0.0.1:5000";
+            fogiModal.style.display = "flex";
+            document.body.style.overflow = "hidden";
+        });
 
-            if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
-                fogiBtn.addEventListener("click", () => {
-                    fogiFrame.src = "http://127.0.0.1:5000";
-                    fogiModal.style.display = "flex";
-                    document.body.style.overflow = "hidden";
-                });
+        fogiClose.addEventListener("click", () => {
+            fogiModal.style.display = "none";
+            fogiFrame.src = "about:blank";
+            document.body.style.overflow = "";
+        });
 
-                fogiClose.addEventListener("click", () => {
-                    fogiModal.style.display = "none";
-                    fogiFrame.src = "about:blank";
-                    document.body.style.overflow = "";
-                });
-
-                window.addEventListener("message", (evento) => {
-                    if (evento.data && evento.data.type === "FOGI_CLOSE") {
-                        fogiModal.style.display = "none";
-                        fogiFrame.src = "about:blank";
-                        document.body.style.overflow = "";
-                    }
-                });
-            }
-
-            if (sairBtn && logoutModal && confirmarLogout && cancelarLogout) {
-                sairBtn.addEventListener("click", () => {
-                    logoutModal.style.display = "flex";
-                });
-
-                cancelarLogout.addEventListener("click", () => {
-                    logoutModal.style.display = "none";
-                });
-
-                confirmarLogout.addEventListener("click", () => {
-                    window.location.href = "../login/logout.php";
-                });
-
-                logoutModal.addEventListener("click", (evento) => {
-                    if (evento.target === logoutModal) {
-                        logoutModal.style.display = "none";
-                    }
-                });
+        window.addEventListener("message", (evento) => {
+            if (evento.data && evento.data.type === "FOGI_CLOSE") {
+                fogiModal.style.display = "none";
+                fogiFrame.src = "about:blank";
+                document.body.style.overflow = "";
             }
         });
-    </script>
+    }
+
+    // ===========================================
+    // LOGOUT
+    // ===========================================
+    const sairBtn = document.getElementById("icon-sair");
+    const logoutModal = document.getElementById("logout-modal");
+    const confirmarLogout = document.getElementById("confirm-logout");
+    const cancelarLogout = document.getElementById("cancel-logout");
+
+    if (sairBtn && logoutModal && confirmarLogout && cancelarLogout) {
+        sairBtn.addEventListener("click", () => {
+            logoutModal.style.display = "flex";
+        });
+
+        cancelarLogout.addEventListener("click", () => {
+            logoutModal.style.display = "none";
+        });
+
+        confirmarLogout.addEventListener("click", () => {
+            window.location.href = "../login/logout.php";
+        });
+
+        logoutModal.addEventListener("click", (evento) => {
+            if (evento.target === logoutModal) {
+                logoutModal.style.display = "none";
+            }
+        });
+    }
+
+    // ===========================================
+    // CARREGAR ITENS DA LOJA NO PERFIL
+    // ===========================================
+
+    function carregarItensLojaPerfil() {
+        const container = document.getElementById('itensLojaPerfil');
+        if (!container) return;
+
+        // Mostrar loading
+        container.innerHTML = `
+            <div class="carregando-itens">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Carregando itens...
+            </div>
+        `;
+
+        // Buscar dados direto do servidor
+        fetch('../loja/loja_data.php')
+            .then(resposta => {
+                if (!resposta.ok) {
+                    throw new Error('Erro ao buscar dados');
+                }
+                return resposta.json();
+            })
+            .then(dados => {
+                console.log('Dados da loja no perfil:', dados);
+                
+                if (dados && dados.estrelas !== undefined) {
+                    atualizarEstrelasPerfil(dados.estrelas);
+                }
+                
+                if (dados && dados.itens_comprados && dados.itens) {
+                    const itensComprados = dados.itens_comprados || [];
+                    const todosItens = dados.itens || [];
+                    const itensAtivos = todosItens.filter(item => itensComprados.includes(item.id));
+                    
+                    // Salvar no sessionStorage para cache
+                    try {
+                        sessionStorage.setItem('itens_loja', JSON.stringify(itensAtivos));
+                        sessionStorage.setItem('estrelas_total', dados.estrelas || 0);
+                    } catch (e) {}
+                    
+                    renderizarItensPerfil(container, itensAtivos, dados.estrelas || 0);
+                } else {
+                    container.innerHTML = `
+                        <div class="sem-itens-loja">
+                            <i class="fa-solid fa-store"></i>
+                            <p>Você ainda não comprou nada na loja</p>
+                            <small>⭐ ${dados?.estrelas || 0} estrelas disponíveis</small>
+                        </div>
+                    `;
+                }
+            })
+            .catch(erro => {
+                console.error('Erro ao buscar itens da loja:', erro);
+                // Tentar carregar do sessionStorage como fallback
+                carregarDoSessionStorage(container);
+            });
+    }
+
+    function carregarDoSessionStorage(container) {
+        try {
+            const itensSalvos = sessionStorage.getItem('itens_loja');
+            const estrelasSalvas = sessionStorage.getItem('estrelas_total');
+            
+            if (itensSalvos) {
+                const itens = JSON.parse(itensSalvos);
+                const estrelas = parseInt(estrelasSalvas) || 0;
+                renderizarItensPerfil(container, itens, estrelas);
+                return;
+            }
+        } catch (e) {}
+        
+        // Se nada funcionar, mostrar mensagem
+        container.innerHTML = `
+            <div class="sem-itens-loja">
+                <i class="fa-solid fa-store"></i>
+                <p>Erro ao carregar itens</p>
+                <small>Tente recarregar a página</small>
+            </div>
+        `;
+    }
+
+    function atualizarEstrelasPerfil(estrelas) {
+        // Atualizar o contador de estrelas na seção de itens
+        const semItens = document.querySelector('.sem-itens-loja small');
+        if (semItens) {
+            semItens.textContent = `⭐ ${estrelas} estrelas disponíveis`;
+        }
+    }
+
+    function renderizarItensPerfil(container, itens, estrelas) {
+        if (!itens || itens.length === 0) {
+            container.innerHTML = `
+                <div class="sem-itens-loja">
+                    <i class="fa-solid fa-store"></i>
+                    <p>Você ainda não comprou nada na loja</p>
+                    <small>⭐ ${estrelas || 0} estrelas disponíveis</small>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        // Tradução de categorias
+        const categoriasTraduzidas = {
+            'temas': 'Tema',
+            'insignias': 'Insígnia',
+            'emojis': 'Emoji',
+            'fundos': 'Fundo',
+            'molduras': 'Moldura',
+            'efeitos': 'Efeito'
+        };
+        
+        itens.forEach(item => {
+            const categoria = item.categoria || 'geral';
+            const icone = item.icone || 'fa-solid fa-gift';
+            const categoriaTraduzida = categoriasTraduzidas[categoria] || categoria;
+            
+            html += `
+                <div class="item-loja-perfil">
+                    <div class="icone-item">
+                        <i class="${icone}"></i>
+                    </div>
+                    <div class="nome-item">${item.nome || 'Item'}</div>
+                    <div class="categoria-item">${categoriaTraduzida}</div>
+                </div>
+            `;
+        });
+        
+        // Adicionar contador de estrelas no final
+        html += `
+            <div class="item-loja-perfil total-estrelas" style="border-color: #ffd700; background: #fffde7;">
+                <div class="icone-item">
+                    <i class="fa-solid fa-star" style="color: #ffd700;"></i>
+                </div>
+                <div class="nome-item">${estrelas || 0}</div>
+                <div class="categoria-item">Estrelas</div>
+            </div>
+        `;
+        
+        container.innerHTML = html;
+    }
+
+    // ===========================================
+    // INICIALIZAR
+    // ===========================================
+
+    // Carregar itens da loja
+    setTimeout(carregarItensLojaPerfil, 500);
+
+    // Recarregar quando a página ganhar foco (ao voltar da loja)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            setTimeout(carregarItensLojaPerfil, 300);
+        }
+    });
+
+    // Recarregar quando receber mensagem da loja via BroadcastChannel
+    try {
+        const channel = new BroadcastChannel('foag_loja');
+        channel.onmessage = function(evento) {
+            if (evento.data && evento.data.type === 'LOJA_ATUALIZADA') {
+                console.log('Loja atualizada! Recarregando...');
+                setTimeout(carregarItensLojaPerfil, 300);
+            }
+        };
+    } catch (e) {
+        console.log('BroadcastChannel não suportado');
+    }
+
+    console.log('Perfil carregado ✅');
+});
+</script>
 </body>
 </html>
