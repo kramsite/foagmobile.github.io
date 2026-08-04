@@ -985,10 +985,7 @@ $niveisDisponiveis = ['nacional', 'estadual', 'municipal', 'regional'];
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-check-double"></i> Boletim
             </a>
-            <a href="../horario/horario.php" class="<?= $current === 'horario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-clock"></i> Horário
-            </a>
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                        <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja
             </a>
             <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
