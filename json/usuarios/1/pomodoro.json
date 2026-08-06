@@ -43,6 +43,12 @@
             "minutes": 5,
             "mode": "focus",
             "discipline": "Quimica"
+        },
+        {
+            "ts": 1786018823539,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "Historia"
         }
     ],
     "goals": []
