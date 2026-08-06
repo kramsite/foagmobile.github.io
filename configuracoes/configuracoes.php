@@ -495,7 +495,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                             <div class="sobre-links">
                                 <a href="termos2.php"><i class="fa-solid fa-file-contract"></i> Termos de uso</a>
                                 <a href="politica_privacidade.php"><i class="fa-solid fa-lock"></i> Política de privacidade</a>
-                                <a href="#"><i class="fa-solid fa-circle-question"></i> Central de ajuda</a>
+                                <a href="central_ajuda.php"><i class="fa-solid fa-circle-question"></i> Central de ajuda</a>
                             </div>
                         </div>
                     </section>

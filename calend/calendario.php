@@ -238,7 +238,6 @@ function gerarCalendario() {
     <a href="../configuracoes/configuracoes.php" class="link-configuracoes" title="Configurações">
       <i class="fa-solid fa-gear"></i>
     </a>
-
     <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
     <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
   </div>
