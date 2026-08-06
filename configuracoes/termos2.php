@@ -638,8 +638,8 @@
         </header>
 
         <div class="acoes">
-            <a class="botao botao-principal" href="cadastro.php">
-                ← Voltar ao cadastro
+            <a class="botao botao-principal" href="configuracoes.php">
+                ← Voltar às configurações
             </a>
 
             <button class="botao botao-secundario" type="button" onclick="window.print()">

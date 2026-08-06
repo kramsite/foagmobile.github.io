@@ -1411,67 +1411,54 @@ document.addEventListener('DOMContentLoaded', function () {
         );
     };
 
-    // =================================================
-    // PERFIL E LOGOUT
-    // =================================================
+    // ========== ÍCONES HEADER (CONFIGURAÇÕES / PERFIL / LOGOUT) ==========
+const configuracoesIcon = document.getElementById('icon-configuracoes');
+const perfilIcon        = document.getElementById('icon-perfil');
+const logoutModal       = document.getElementById('logout-modal');
+const iconSair          = document.getElementById('icon-sair');
+const confirmLogout     = document.getElementById('confirm-logout');
+const cancelLogout      = document.getElementById('cancel-logout');
 
-    const perfilIcon =
-        document.getElementById('icon-perfil');
+// Configurações
+if (configuracoesIcon) {
+  configuracoesIcon.addEventListener('click', () => {
+    window.location.href = '../configuracoes/configuracoes.php';
+  });
+}
 
-    const logoutModal =
-        document.getElementById('logout-modal');
+// Perfil
+if (perfilIcon) {
+  perfilIcon.addEventListener('click', () => {
+    window.location.href = '../perfil/perfil.php';
+  });
+}
 
-    const iconSair =
-        document.getElementById('icon-sair');
+// Abrir modal de logout
+if (iconSair && logoutModal) {
+  iconSair.addEventListener('click', () => {
+    logoutModal.style.display = 'flex';
+  });
+}
 
-    const confirmarLogout =
-        document.getElementById('confirm-logout');
+// Confirmar logout
+if (confirmLogout) {
+  confirmLogout.addEventListener('click', () => {
+    window.location.href = '../login/index.php';
+  });
+}
 
-    const cancelarLogout =
-        document.getElementById('cancel-logout');
+// Cancelar logout
+if (cancelLogout && logoutModal) {
+  cancelLogout.addEventListener('click', () => {
+    logoutModal.style.display = 'none';
+  });
 
-    perfilIcon?.addEventListener(
-        'click',
-        function () {
-            window.location.href =
-                '../perfil/perfil.php';
-        }
-    );
-
-    iconSair?.addEventListener(
-        'click',
-        function () {
-            if (logoutModal) {
-                logoutModal.style.display = 'flex';
-            }
-        }
-    );
-
-    confirmarLogout?.addEventListener(
-        'click',
-        function () {
-            window.location.href =
-                '../login/index.php';
-        }
-    );
-
-    cancelarLogout?.addEventListener(
-        'click',
-        function () {
-            if (logoutModal) {
-                logoutModal.style.display = 'none';
-            }
-        }
-    );
-
-    logoutModal?.addEventListener(
-        'click',
-        function (evento) {
-            if (evento.target === logoutModal) {
-                logoutModal.style.display = 'none';
-            }
-        }
-    );
+  logoutModal.addEventListener('click', e => {
+    if (e.target === logoutModal) {
+      logoutModal.style.display = 'none';
+    }
+  });
+}
 
     // =================================================
     // TECLA ESC
