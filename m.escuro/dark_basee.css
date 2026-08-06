@@ -1,76 +1,201 @@
 /* ================================
-   dark_base.css — Modo escuro global
-   Somente: variáveis + body + header + menu + footer
+   dark_basee.css — Modo escuro global unificado
 ================================ */
 
-/* Paleta global do dark mode */
+/* ============================================
+   VARIÁVEIS GLOBAIS DO MODO ESCURO
+   ============================================ */
 :root {
-  --dark-bg: #0f172a;        /* fundo geral */
-  --dark-surface: #1e293b;   /* superfícies */
-  --dark-primary: #669ada;   /* azul vibrante menus/header */
-  --dark-text: #e2e8f0;      /* texto claro */
-  --dark-text-soft: #94a3b8; /* texto suave */
-  --dark-border: #334155;    /* borda */
+  --dark-bg: #0f172a;           /* fundo geral */
+  --dark-surface: #1e293b;      /* superfícies (cards, modals) */
+  --dark-surface2: #2d3a4f;     /* superfície secundária */
+  --dark-primary: #3b82f6;      /* azul principal */
+  --dark-primary-light: #60a5fa; /* azul claro para hover */
+  --dark-text: #f1f5f9;         /* texto principal */
+  --dark-text-muted: #94a3b8;   /* texto secundário */
+  --dark-border: #334155;       /* bordas */
+  --dark-danger: #f87171;       /* vermelho para perigo */
+  --dark-danger-bg: rgba(220, 53, 69, 0.15); /* fundo de perigo */
+  --dark-success: #34d399;      /* verde para sucesso */
 }
 
-/* =============================
-      BODY
-============================= */
+/* ============================================
+   BODY
+   ============================================ */
 body.dark-mode {
   background-color: var(--dark-bg) !important;
   color: var(--dark-text) !important;
-  transition: background-color .2s ease, color .2s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* =============================
-      CABEÇALHO
-============================= */
+/* ============================================
+   CABEÇALHO
+   ============================================ */
 body.dark-mode header.cabecalho {
-  background-color: var(--dark-primary) !important;
+  background-color: #0b1a2e !important;
   color: var(--dark-text) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,.6) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
 }
 
-/* ícones do cabeçalho */
 body.dark-mode .header-icons i {
-  color: var(--dark-text) !important;
+  color: var(--dark-text-muted) !important;
+  transition: color 0.2s ease;
 }
 
 body.dark-mode .header-icons i:hover {
-  color: #bcdcff !important;
+  color: var(--dark-text) !important;
+  transform: translateY(-13%) scale(1.1);
 }
 
-/* =============================
-      MENU LATERAL
-============================= */
+/* ============================================
+   MENU LATERAL
+   ============================================ */
 body.dark-mode nav.menu {
-  background-color: var(--dark-primary) !important;
-  box-shadow: 4px 0 15px rgba(0,0,0,.6) !important;
+  background-color: #0b1a2e !important;
+  border-right: 1px solid var(--dark-border) !important;
+  box-shadow: 4px 0 15px rgba(0, 0, 0, 0.6) !important;
 }
 
 body.dark-mode nav.menu a {
-  color: var(--dark-text) !important;
+  color: var(--dark-text-muted) !important;
+  transition: color 0.2s ease, background 0.2s ease;
 }
 
 body.dark-mode nav.menu a:hover,
 body.dark-mode nav.menu a.active {
-  background-color: rgba(255,255,255,0.15) !important;
-  color: white !important;
+  background-color: rgba(96, 165, 250, 0.15) !important;
+  color: var(--dark-primary-light) !important;
 }
 
+/* ============================================
+   FOOTER
+   ============================================ */
+body.dark-mode footer {
+  background-color: #020617 !important;
+  color: var(--dark-text-muted) !important;
+  border-top: 1px solid var(--dark-border) !important;
+}
+
+/* ============================================
+   MODAL
+   ============================================ */
 body.dark-mode .modal-content {
   background-color: var(--dark-surface) !important;
   color: var(--dark-text) !important;
   border: 1px solid var(--dark-border) !important;
-  box-shadow: 0 18px 45px rgba(0,0,0,.9) !important;
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.9) !important;
 }
 
+body.dark-mode .modal-content h3 {
+  color: var(--dark-text) !important;
+}
 
-/* =============================
-      FOOTER
-============================= */
-body.dark-mode footer {
-  background-color: #020617 !important;
-  color: var(--dark-text-soft) !important;
-  border-top: 1px solid var(--dark-border) !important;
+body.dark-mode .modal-content h4,
+body.dark-mode .modal-content p {
+  color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode #cancel-logout,
+body.dark-mode #cancelar-acao {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode #confirm-logout,
+body.dark-mode #confirmar-acao {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+}
+
+/* ============================================
+   TOAST
+   ============================================ */
+body.dark-mode #toast-configuracoes {
+  background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+/* ============================================
+   SCROLLBAR
+   ============================================ */
+body.dark-mode ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+  background: var(--dark-bg);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+  background: var(--dark-border);
+  border-radius: 4px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-text-muted);
+}
+
+/* ============================================
+   SELECIONAR TEXTO
+   ============================================ */
+body.dark-mode ::selection {
+  background: var(--dark-primary);
+  color: #ffffff;
+}
+
+/* ============================================
+   LINKS
+   ============================================ */
+body.dark-mode a {
+  color: var(--dark-primary-light);
+}
+
+body.dark-mode a:hover {
+  color: var(--dark-primary);
+}
+
+/* ============================================
+   CAMPOS DE FORMULÁRIO
+   ============================================ */
+body.dark-mode input[type="text"],
+body.dark-mode input[type="email"],
+body.dark-mode input[type="password"],
+body.dark-mode input[type="number"],
+body.dark-mode input[type="date"],
+body.dark-mode textarea {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode input:focus,
+body.dark-mode textarea:focus {
+  border-color: var(--dark-primary) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+}
+
+/* ============================================
+   FOGI MODAL
+   ============================================ */
+body.dark-mode #fogi-modal .fogi-container {
+  background: var(--dark-surface) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #fogi-modal .fogi-header {
+  background: #0b1a2e !important;
+  border-bottom: 1px solid var(--dark-border) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #fogi-close {
+  background: var(--dark-surface2) !important;
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode #fogi-close:hover {
+  background: var(--dark-border) !important;
 }

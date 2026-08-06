@@ -221,7 +221,7 @@ file_put_contents(
         FOAG
 
         <div class="header-icons">
-            <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
+            <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
             <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
             <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
         </div>
@@ -249,15 +249,13 @@ file_put_contents(
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-check-double"></i> Boletim
             </a>
-            <a href="../horario/horario.php" class="<?= $current === 'horario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-clock"></i> Horário
+            <a href="loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
             </a>
             <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-trophy"></i> Ranking
             </a>
-            <a href="loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja
-            </a>
+
         </nav>
 
         <!-- ======================================

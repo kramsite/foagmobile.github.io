@@ -11,6 +11,7 @@ body {
   min-height: 100vh;
   background-color: #ffffff;
   color: #1f2937;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 header.cabecalho {
@@ -22,6 +23,7 @@ header.cabecalho {
   padding: 15px;
   font-size: 24px;
   font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
 .cabecalho {
@@ -69,6 +71,7 @@ nav.menu {
   flex-direction: column;
   gap: 14px;
   box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease;
 }
 
 nav.menu a {
@@ -77,7 +80,7 @@ nav.menu a {
   font-size: 16px;
   padding: 10px 12px;
   border-radius: 8px;
-  transition: background 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease;
   display: flex;
   align-items: center;
   gap: 8px;
@@ -92,11 +95,13 @@ nav.menu a.active {
   flex: 1;
   min-width: 0;
   padding: 25px;
+  transition: background-color 0.3s ease;
 }
 
 .configuracoes-conteudo {
   background: #f6f8fb;
   overflow-y: auto;
+  transition: background-color 0.3s ease;
 }
 
 .configuracoes-pagina {
@@ -117,28 +122,51 @@ nav.menu a.active {
   color: #1f2937;
   font-size: 1.8rem;
   margin-bottom: 4px;
+  transition: color 0.3s ease;
 }
 
 .configuracoes-topo p {
   color: #6b7280;
   font-size: 0.94rem;
+  transition: color 0.3s ease;
 }
 
+/* ===== ACORDEON ===== */
 .configuracao-card {
   background: #ffffff;
   border: 1px solid #e5eaf0;
   border-radius: 14px;
-  padding: 22px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .card-cabecalho {
   display: flex;
   align-items: center;
   gap: 13px;
-  padding-bottom: 18px;
-  border-bottom: 1px solid #edf0f4;
+  padding: 18px 22px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  border-bottom: 1px solid transparent;
+}
+
+.card-cabecalho:hover {
+  background: rgba(56, 165, 255, 0.05);
+}
+
+.card-cabecalho .card-toggle {
+  margin-left: auto;
+  font-size: 0.9rem;
+  color: #94a3b8;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.card-cabecalho .card-toggle.ativo {
+  transform: rotate(180deg);
 }
 
 .card-icone {
@@ -152,20 +180,35 @@ nav.menu a.active {
   color: #168ce8;
   font-size: 1.1rem;
   flex-shrink: 0;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .card-cabecalho h2 {
   color: #1f2937;
   font-size: 1.15rem;
   margin-bottom: 2px;
+  transition: color 0.3s ease;
 }
 
 .card-cabecalho p {
   color: #6b7280;
   font-size: 0.86rem;
+  transition: color 0.3s ease;
 }
 
-.configuracao-item {
+.card-conteudo {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-in-out, padding 0.3s ease-in-out;
+  padding: 0 22px;
+}
+
+.card-conteudo.aberto {
+  max-height: 3000px;
+  padding: 8px 22px 8px 22px;
+}
+
+.card-conteudo .configuracao-item {
   min-height: 76px;
   padding: 15px 4px;
   border-bottom: 1px solid #edf0f4;
@@ -173,9 +216,10 @@ nav.menu a.active {
   align-items: center;
   justify-content: space-between;
   gap: 25px;
+  transition: border-color 0.3s ease;
 }
 
-.configuracao-item:last-child {
+.card-conteudo .configuracao-item:last-child {
   border-bottom: none;
 }
 
@@ -191,6 +235,7 @@ nav.menu a.active {
   color: #273142;
   font-size: 0.94rem;
   font-weight: 600;
+  transition: color 0.3s ease;
 }
 
 .configuracao-texto span,
@@ -198,6 +243,7 @@ nav.menu a.active {
   color: #6b7280;
   font-size: 0.82rem;
   font-weight: 400;
+  transition: color 0.3s ease;
 }
 
 .configuracao-item select {
@@ -209,6 +255,7 @@ nav.menu a.active {
   color: #374151;
   outline: none;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .configuracao-item select:focus {
@@ -293,21 +340,10 @@ nav.menu a.active {
   box-shadow: 0 0 0 3px #273142;
 }
 
-.cor-azul span {
-  background: #38a5ff;
-}
-
-.cor-roxa span {
-  background: #8b5cf6;
-}
-
-.cor-verde span {
-  background: #22c55e;
-}
-
-.cor-rosa span {
-  background: #ec4899;
-}
+.cor-azul span { background: #38a5ff; }
+.cor-roxa span { background: #8b5cf6; }
+.cor-verde span { background: #22c55e; }
+.cor-rosa span { background: #ec4899; }
 
 .btn-principal,
 .btn-salvar-topo,
@@ -341,6 +377,7 @@ nav.menu a.active {
 .btn-secundario {
   background: #eef2f6;
   color: #374151;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 .btn-secundario:hover {
@@ -383,17 +420,20 @@ nav.menu a.active {
   align-items: center;
   justify-content: space-between;
   gap: 20px;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .zona-perigo h3 {
   color: #b91c1c;
   font-size: 0.95rem;
   margin-bottom: 3px;
+  transition: color 0.3s ease;
 }
 
 .zona-perigo p {
   color: #7f1d1d;
   font-size: 0.8rem;
+  transition: color 0.3s ease;
 }
 
 .sobre-foag {
@@ -402,6 +442,7 @@ nav.menu a.active {
   gap: 15px;
   padding: 22px 4px;
   border-bottom: 1px solid #edf0f4;
+  transition: border-color 0.3s ease;
 }
 
 .logo-foag {
@@ -415,21 +456,25 @@ nav.menu a.active {
   justify-content: center;
   font-family: 'Snap ITC', sans-serif;
   font-size: 1.7rem;
+  transition: background-color 0.3s ease;
 }
 
 .sobre-foag h3 {
   color: #1f2937;
   font-size: 1.2rem;
+  transition: color 0.3s ease;
 }
 
 .sobre-foag p {
   color: #4b5563;
   font-size: 0.87rem;
+  transition: color 0.3s ease;
 }
 
 .sobre-foag span {
   color: #9ca3af;
   font-size: 0.76rem;
+  transition: color 0.3s ease;
 }
 
 .sobre-texto {
@@ -438,6 +483,7 @@ nav.menu a.active {
   font-size: 0.87rem;
   line-height: 1.65;
   border-bottom: 1px solid #edf0f4;
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 .sobre-links {
@@ -458,6 +504,7 @@ nav.menu a.active {
   display: flex;
   align-items: center;
   gap: 7px;
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }
 
 .sobre-links a:hover {
@@ -477,11 +524,13 @@ nav.menu a.active {
   align-items: center;
   gap: 15px;
   z-index: 5;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 .barra-salvar p {
   color: #6b7280;
   font-size: 0.82rem;
+  transition: color 0.3s ease;
 }
 
 .barra-salvar > div {
@@ -489,6 +538,7 @@ nav.menu a.active {
   gap: 10px;
 }
 
+/* MODAIS */
 .modal {
   display: none;
   position: fixed;
@@ -555,17 +605,11 @@ nav.menu a.active {
 }
 
 @keyframes aparecer {
-  from {
-    transform: scale(0.8);
-    opacity: 0;
-  }
-
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
 }
 
+/* FOGI MODAL */
 #fogi-modal {
   display: none;
   position: fixed;
@@ -587,6 +631,7 @@ nav.menu a.active {
   display: flex;
   flex-direction: column;
   box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
 }
 
 #fogi-modal .fogi-header {
@@ -598,6 +643,7 @@ nav.menu a.active {
   padding: 8px 14px;
   font-weight: 600;
   font-size: 0.95rem;
+  transition: background-color 0.3s ease;
 }
 
 #fogi-close {
@@ -607,6 +653,7 @@ nav.menu a.active {
   padding: 4px 10px;
   border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #fogi-iframe {
@@ -629,6 +676,7 @@ nav.menu a.active {
   gap: 8px;
   z-index: 5000;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 footer {
@@ -638,80 +686,37 @@ footer {
   padding: 5px;
   width: 100%;
   font-size: 1em;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
+/* RESPONSIVIDADE */
 @media (max-width: 768px) {
-  .container {
-    flex-direction: column;
-  }
-
-  nav.menu {
-    width: 100%;
-  }
-
-  .conteudo {
-    padding: 15px;
-  }
-
-  .configuracoes-topo {
-    align-items: flex-start;
-  }
-
+  .container { flex-direction: column; }
+  nav.menu { width: 100%; }
+  .conteudo { padding: 15px; }
+  .configuracoes-topo { align-items: flex-start; }
+  
   .configuracao-item {
     align-items: flex-start;
     flex-direction: column;
     gap: 12px;
   }
-
-  .configuracao-item select {
-    width: 100%;
-  }
-
-  .configuracao-switch {
-    flex-direction: row;
-    align-items: center;
-  }
-
-  .zona-perigo {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .barra-salvar {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .barra-salvar > div {
-    width: 100%;
-  }
-
-  .barra-salvar button {
-    flex: 1;
-  }
+  .configuracao-item select { width: 100%; }
+  .configuracao-switch { flex-direction: row; align-items: center; }
+  .zona-perigo { align-items: flex-start; flex-direction: column; }
+  .barra-salvar { align-items: flex-start; flex-direction: column; }
+  .barra-salvar > div { width: 100%; }
+  .barra-salvar button { flex: 1; }
+  .card-cabecalho { padding: 14px 16px; }
+  .card-conteudo { padding: 0 16px; }
+  .card-conteudo.aberto { padding: 8px 16px 8px 16px; }
 }
 
 @media (max-width: 480px) {
-  header.cabecalho {
-    font-size: 20px;
-    padding: 12px;
-  }
-
-  .header-icons {
-    right: 12px;
-    gap: 11px;
-    font-size: 1.05rem;
-  }
-
-  .configuracoes-topo h1 {
-    font-size: 1.45rem;
-  }
-
-  .btn-salvar-topo {
-    display: none;
-  }
-
-  .configuracao-card {
-    padding: 16px;
-  }
+  header.cabecalho { font-size: 20px; padding: 12px; }
+  .header-icons { right: 12px; gap: 11px; font-size: 1.05rem; }
+  .configuracoes-topo h1 { font-size: 1.45rem; }
+  .btn-salvar-topo { display: none; }
+  .card-cabecalho { padding: 12px 14px; }
+  .card-cabecalho h2 { font-size: 1rem; }
 }
