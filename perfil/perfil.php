@@ -93,9 +93,8 @@ $caminho_foto = $pasta_fotos_url . $foto_perfil;
         FOAG
 
         <div class="header-icons">
-            <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
+            <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
             <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
-            <i id="icon-fogi" class="fa-solid fa-robot" title="Assistente FOAG — FOGi"></i>
             <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
         </div>
     </header>
@@ -330,8 +329,10 @@ $caminho_foto = $pasta_fotos_url . $foto_perfil;
 
     <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
 
-   <script>
-document.addEventListener("DOMContentLoaded", () => {
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    console.log('Perfil carregado ✅');
+
     // ===========================================
     // FOGI
     // ===========================================
@@ -341,19 +342,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const fogiClose = document.getElementById("fogi-close");
 
     if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
-        fogiBtn.addEventListener("click", () => {
+        fogiBtn.addEventListener("click", function() {
             fogiFrame.src = "http://127.0.0.1:5000";
             fogiModal.style.display = "flex";
             document.body.style.overflow = "hidden";
         });
 
-        fogiClose.addEventListener("click", () => {
+        fogiClose.addEventListener("click", function() {
             fogiModal.style.display = "none";
             fogiFrame.src = "about:blank";
             document.body.style.overflow = "";
         });
 
-        window.addEventListener("message", (evento) => {
+        window.addEventListener("message", function(evento) {
             if (evento.data && evento.data.type === "FOGI_CLOSE") {
                 fogiModal.style.display = "none";
                 fogiFrame.src = "about:blank";
@@ -371,19 +372,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const cancelarLogout = document.getElementById("cancel-logout");
 
     if (sairBtn && logoutModal && confirmarLogout && cancelarLogout) {
-        sairBtn.addEventListener("click", () => {
+        sairBtn.addEventListener("click", function() {
             logoutModal.style.display = "flex";
         });
 
-        cancelarLogout.addEventListener("click", () => {
+        cancelarLogout.addEventListener("click", function() {
             logoutModal.style.display = "none";
         });
 
-        confirmarLogout.addEventListener("click", () => {
+        confirmarLogout.addEventListener("click", function() {
             window.location.href = "../login/logout.php";
         });
 
-        logoutModal.addEventListener("click", (evento) => {
+        logoutModal.addEventListener("click", function(evento) {
             if (evento.target === logoutModal) {
                 logoutModal.style.display = "none";
             }
@@ -396,7 +397,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function carregarItensLojaPerfil() {
         const container = document.getElementById('itensLojaPerfil');
-        if (!container) return;
+        if (!container) {
+            console.log('❌ Container itensLojaPerfil não encontrado');
+            return;
+        }
+
+        console.log('🔄 Carregando itens da loja...');
 
         // Mostrar loading
         container.innerHTML = `
@@ -408,14 +414,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
         // Buscar dados direto do servidor
         fetch('../loja/loja_data.php')
-            .then(resposta => {
+            .then(function(resposta) {
                 if (!resposta.ok) {
                     throw new Error('Erro ao buscar dados');
                 }
                 return resposta.json();
             })
-            .then(dados => {
-                console.log('Dados da loja no perfil:', dados);
+            .then(function(dados) {
+                console.log('📦 Dados da loja:', dados);
                 
                 if (dados && dados.estrelas !== undefined) {
                     atualizarEstrelasPerfil(dados.estrelas);
@@ -424,7 +430,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (dados && dados.itens_comprados && dados.itens) {
                     const itensComprados = dados.itens_comprados || [];
                     const todosItens = dados.itens || [];
-                    const itensAtivos = todosItens.filter(item => itensComprados.includes(item.id));
+                    const itensAtivos = todosItens.filter(function(item) {
+                        return itensComprados.includes(item.id);
+                    });
                     
                     // Salvar no sessionStorage para cache
                     try {
@@ -443,8 +451,8 @@ document.addEventListener("DOMContentLoaded", () => {
                     `;
                 }
             })
-            .catch(erro => {
-                console.error('Erro ao buscar itens da loja:', erro);
+            .catch(function(erro) {
+                console.error('❌ Erro ao buscar itens da loja:', erro);
                 // Tentar carregar do sessionStorage como fallback
                 carregarDoSessionStorage(container);
             });
@@ -458,6 +466,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (itensSalvos) {
                 const itens = JSON.parse(itensSalvos);
                 const estrelas = parseInt(estrelasSalvas) || 0;
+                console.log('📦 Carregando do sessionStorage:', itens.length, 'itens');
                 renderizarItensPerfil(container, itens, estrelas);
                 return;
             }
@@ -505,7 +514,7 @@ document.addEventListener("DOMContentLoaded", () => {
             'efeitos': 'Efeito'
         };
         
-        itens.forEach(item => {
+        itens.forEach(function(item) {
             const categoria = item.categoria || 'geral';
             const icone = item.icone || 'fa-solid fa-gift';
             const categoriaTraduzida = categoriasTraduzidas[categoria] || categoria;
@@ -523,7 +532,7 @@ document.addEventListener("DOMContentLoaded", () => {
         
         // Adicionar contador de estrelas no final
         html += `
-            <div class="item-loja-perfil total-estrelas" style="border-color: #ffd700; background: #fffde7;">
+            <div class="item-loja-perfil total-estrelas">
                 <div class="icone-item">
                     <i class="fa-solid fa-star" style="color: #ffd700;"></i>
                 </div>
@@ -533,6 +542,7 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
         
         container.innerHTML = html;
+        console.log('✅ Itens renderizados:', itens.length, 'itens + estrelas');
     }
 
     // ===========================================
@@ -545,6 +555,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Recarregar quando a página ganhar foco (ao voltar da loja)
     document.addEventListener('visibilitychange', function() {
         if (!document.hidden) {
+            console.log('👁️ Página visível novamente, recarregando...');
             setTimeout(carregarItensLojaPerfil, 300);
         }
     });
@@ -554,15 +565,24 @@ document.addEventListener("DOMContentLoaded", () => {
         const channel = new BroadcastChannel('foag_loja');
         channel.onmessage = function(evento) {
             if (evento.data && evento.data.type === 'LOJA_ATUALIZADA') {
-                console.log('Loja atualizada! Recarregando...');
+                console.log('📢 Loja atualizada! Recarregando perfil...');
                 setTimeout(carregarItensLojaPerfil, 300);
             }
         };
+        console.log('📡 BroadcastChannel configurado');
     } catch (e) {
-        console.log('BroadcastChannel não suportado');
+        console.log('⚠️ BroadcastChannel não suportado');
     }
 
-    console.log('Perfil carregado ✅');
+    // Recarregar quando o sessionStorage mudar
+    window.addEventListener('storage', function(evento) {
+        if (evento.key === 'itens_loja' || evento.key === 'estrelas_total' || evento.key === 'loja_atualizada') {
+            console.log('📦 Storage atualizado:', evento.key);
+            setTimeout(carregarItensLojaPerfil, 300);
+        }
+    });
+
+    console.log('✅ Perfil pronto!');
 });
 </script>
 </body>
