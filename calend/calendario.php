@@ -232,14 +232,14 @@ function gerarCalendario() {
   <div id="cal-backdrop" aria-hidden="true"></div>
 
   <header class="cabecalho">
-    FOAG
-    <div class="header-icons">
-      <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
-      <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
-      <i id="icon-fogi" class="fa-solid fa-robot" title="Assistente FOAG — FOGi"></i>
-      <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
-    </div>
-  </header>
+  FOAG
+
+  <div class="header-icons">
+    <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
+    <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
+    <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
+  </div>
+</header>
 
   <div class="container">
     <nav class="menu">

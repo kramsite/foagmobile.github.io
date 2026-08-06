@@ -213,3 +213,29 @@ body.dark-mode #cancel-logout {
 body.dark-mode #cancel-logout:hover {
     background: #3a4a5a !important;
 }
+
+/* ========================================
+   BOTÃO SECRETO NO MODO ESCURO
+======================================== */
+
+body.dark-mode .botao-secreto {
+    background: rgba(255, 215, 0, 0.05);
+    color: rgba(255, 215, 0, 0.2);
+}
+
+body.dark-mode .botao-secreto:hover {
+    background: rgba(255, 215, 0, 0.1);
+}
+
+body.dark-mode .modal-estrelas .modal-content {
+    background: #1a2a3a !important;
+    border: 1px solid #334155 !important;
+}
+
+body.dark-mode .modal-estrelas h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .modal-estrelas p {
+    color: #94a3b8 !important;
+}
