@@ -185,7 +185,7 @@ if (
         </div>
 
         <div class="methods-grid">
-          <a class="method-card" href="#" data-coming-soon="Flashcards">
+          <a class="method-card" href="flashcards/flashcards.php" data-coming-soon="Flashcards">
             <div class="method-icon"><i class="fa-solid fa-layer-group"></i></div>
             <div class="method-info">
               <h3>Flashcards</h3>
