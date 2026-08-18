@@ -16,7 +16,7 @@ $codigoUsuario = $_SESSION['codigo_usuario'];
 // CAMINHO DA PASTA DO USUÁRIO
 // ======================================
 
-$baseJsonDir = __DIR__ . '/../json/usuarios';
+$baseJsonDir = __DIR__ . '..//../json/usuarios';
 
 $pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 
@@ -107,7 +107,7 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
         <i class="fa-solid fa-book"></i> Agenda
       </a>
 
-      <a href="../pomodoro/pomodoro.php" class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
+      <a href="../estudos/pomodoro/pomodoro.php" class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
         <i class="fa-solid fa-stopwatch"></i> Pomodoro
       </a>
 
