@@ -45,3 +45,4 @@ echo json_encode([
     'ok'   => true,
     'html' => $html
 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+?>
