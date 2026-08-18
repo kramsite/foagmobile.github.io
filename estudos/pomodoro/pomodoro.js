@@ -1,6 +1,10 @@
-// ===== Persistência (via servidor / pomodoro.json do usuário) =====
+// ==========================================
+// PERSISTÊNCIA DO POMODORO
+// ==========================================
+
 const SAVE_URL =
-  window.POMODORO_SAVE_URL || 'salvar_pomodoro.php';
+  window.POMODORO_SAVE_URL ||
+  'salvar_pomodoro.php';
 
 const state =
   window.POMODORO_DATA &&
@@ -8,34 +12,126 @@ const state =
     ? window.POMODORO_DATA
     : {};
 
-if (!Array.isArray(state.disciplines)) {
-  state.disciplines = ['Geral'];
-}
+
+// ==========================================
+// NORMALIZAR DADOS
+// ==========================================
 
 if (!Array.isArray(state.sessions)) {
   state.sessions = [];
 }
 
-if (!state.goals || typeof state.goals !== 'object') {
+// IMPORTANTE:
+// array [] não funciona corretamente para
+// propriedades como goals["Matemática"].
+if (
+  !state.goals ||
+  typeof state.goals !== 'object' ||
+  Array.isArray(state.goals)
+) {
   state.goals = {};
 }
 
+
+// ==========================================
+// MATÉRIAS VINDAS DE materias.json
+// ==========================================
+
+const materiasData =
+  window.MATERIAS_DATA &&
+  typeof window.MATERIAS_DATA === 'object'
+    ? window.MATERIAS_DATA
+    : {
+        materias: []
+      };
+
+const materias =
+  Array.isArray(materiasData.materias)
+    ? materiasData.materias
+    : [];
+
+
+// ==========================================
+// LISTA DE MATÉRIAS
+// ==========================================
+
+const nomesMaterias = materias
+  .map((materia) => {
+    return String(materia.nome || '').trim();
+  })
+  .filter((nome) => {
+    return nome !== '';
+  });
+
+
+// Remove matérias duplicadas
+const materiasUnicas = [
+  ...new Set(nomesMaterias)
+];
+
+
+// Geral continua disponível
+state.disciplines = [
+  'Geral',
+  ...materiasUnicas.filter(
+    (materia) => materia !== 'Geral'
+  )
+];
+
+
+// ==========================================
+// SALVAR POMODORO
+// ==========================================
+
 function save() {
+
   try {
+
     fetch(SAVE_URL, {
       method: 'POST',
+
+      credentials: 'same-origin',
+
       headers: {
         'Content-Type': 'application/json'
       },
+
       body: JSON.stringify(state)
-    }).catch(() => {});
-  } catch (e) {
-    console.error('Erro ao salvar dados:', e);
+    })
+      .then((response) => {
+
+        if (!response.ok) {
+          throw new Error(
+            'Erro ao salvar dados do Pomodoro.'
+          );
+        }
+
+        return response;
+      })
+      .catch((error) => {
+
+        console.error(
+          'Erro ao salvar Pomodoro:',
+          error
+        );
+
+      });
+
+  } catch (error) {
+
+    console.error(
+      'Erro ao salvar dados:',
+      error
+    );
+
   }
 }
 
 
-// ===== Header actions =====
+// ==========================================
+// CABEÇALHO
+// ==========================================
+
 const logoutModal =
   document.getElementById('logout-modal');
 
@@ -51,215 +147,241 @@ const iconPerfil =
 const iconSair =
   document.getElementById('icon-sair');
 
+const iconConfiguracoes =
+  document.getElementById('icon-configuracoes');
+
+
+// PERFIL
 if (iconPerfil) {
-  iconPerfil.addEventListener('click', () => {
-    window.location.href = '../perfil/perfil.php';
-  });
+
+  iconPerfil.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../perfil/perfil.php';
+
+    }
+  );
+
 }
 
+
+// CONFIGURAÇÕES
+if (iconConfiguracoes) {
+
+  iconConfiguracoes.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../configuracoes/configuracoes.php';
+
+    }
+  );
+
+}
+
+
+// ABRIR LOGOUT
 if (iconSair) {
-  iconSair.addEventListener('click', () => {
-    if (logoutModal) {
-      logoutModal.style.display = 'flex';
+
+  iconSair.addEventListener(
+    'click',
+    () => {
+
+      if (logoutModal) {
+        logoutModal.style.display = 'flex';
+      }
+
     }
-  });
+  );
+
 }
 
+
+// CONFIRMAR LOGOUT
 if (confirmLogout) {
-  confirmLogout.addEventListener('click', () => {
-    window.location.href = '../login/index.php';
-  });
+
+  confirmLogout.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../login/logout.php';
+
+    }
+  );
+
 }
 
+
+// CANCELAR LOGOUT
 if (cancelLogout) {
-  cancelLogout.addEventListener('click', () => {
-    if (logoutModal) {
-      logoutModal.style.display = 'none';
+
+  cancelLogout.addEventListener(
+    'click',
+    () => {
+
+      if (logoutModal) {
+        logoutModal.style.display = 'none';
+      }
+
     }
-  });
+  );
+
 }
 
+
+// FECHAR CLICANDO FORA
 if (logoutModal) {
-  logoutModal.addEventListener('click', (e) => {
-    if (e.target === logoutModal) {
-      logoutModal.style.display = 'none';
+
+  logoutModal.addEventListener(
+    'click',
+    (event) => {
+
+      if (event.target === logoutModal) {
+        logoutModal.style.display = 'none';
+      }
+
     }
-  });
+  );
+
 }
 
 
-// ===== Tabs (Timer/Cronômetro) =====
-document.querySelectorAll('.tab-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document
-      .querySelectorAll('.tab-btn')
-      .forEach((button) => {
-        button.classList.remove('active');
-      });
+// ==========================================
+// ABAS TIMER / CRONÔMETRO
+// ==========================================
 
-    document
-      .querySelectorAll('.tab-panel')
-      .forEach((panel) => {
-        panel.classList.remove('active');
-      });
+document
+  .querySelectorAll('.tab-btn')
+  .forEach((btn) => {
 
-    btn.classList.add('active');
+    btn.addEventListener(
+      'click',
+      () => {
 
-    const tab = btn.getAttribute('data-tab');
-    const panel = document.getElementById('tab-' + tab);
+        document
+          .querySelectorAll('.tab-btn')
+          .forEach((button) => {
 
-    if (panel) {
-      panel.classList.add('active');
-    }
+            button.classList.remove(
+              'active'
+            );
+
+          });
+
+
+        document
+          .querySelectorAll('.tab-panel')
+          .forEach((panel) => {
+
+            panel.classList.remove(
+              'active'
+            );
+
+          });
+
+
+        btn.classList.add('active');
+
+
+        const tab =
+          btn.getAttribute(
+            'data-tab'
+          );
+
+
+        const panel =
+          document.getElementById(
+            'tab-' + tab
+          );
+
+
+        if (panel) {
+          panel.classList.add('active');
+        }
+
+      }
+    );
+
   });
-});
 
 
-// ===== Disciplinas =====
+// ==========================================
+// SELECTS DE MATÉRIA
+// ==========================================
+
 const disciplineSel =
   document.getElementById('discipline');
-
-const newDiscipline =
-  document.getElementById('newDiscipline');
-
-const addDisciplineBtn =
-  document.getElementById('addDiscipline');
 
 const goalDiscipline =
   document.getElementById('goalDiscipline');
 
 const stopwatchDiscipline =
-  document.getElementById('stopwatchDiscipline');
+  document.getElementById(
+    'stopwatchDiscipline'
+  );
 
-function fillSelect(selectEl, values) {
+
+// ==========================================
+// PREENCHER SELECT
+// ==========================================
+
+function fillSelect(
+  selectEl,
+  values
+) {
+
   if (!selectEl) {
     return;
   }
 
-  while (selectEl.options.length) {
-    selectEl.remove(0);
-  }
+
+  selectEl.innerHTML = '';
+
 
   values.forEach((value) => {
-    selectEl.add(new Option(value, value));
+
+    const option =
+      document.createElement('option');
+
+    option.value = value;
+    option.textContent = value;
+
+    selectEl.appendChild(option);
+
   });
+
 }
+
+
+// ==========================================
+// CARREGAR MATÉRIAS NOS SELECTS
+// ==========================================
 
 function refreshDisciplines() {
-  if (!state.disciplines.includes('Geral')) {
-    state.disciplines.unshift('Geral');
-  }
 
-  const ordered = [
-    'Geral',
-    ...state.disciplines.filter(
-      (discipline) => discipline !== 'Geral'
-    )
-  ];
+  fillSelect(
+    disciplineSel,
+    state.disciplines
+  );
 
-  fillSelect(disciplineSel, ordered);
-  fillSelect(goalDiscipline, ordered);
-  fillSelect(stopwatchDiscipline, ordered);
+  fillSelect(
+    goalDiscipline,
+    state.disciplines
+  );
+
+  fillSelect(
+    stopwatchDiscipline,
+    state.disciplines
+  );
+
 }
+
 
 refreshDisciplines();
-
-
-// ===== Mensagem rápida =====
-function mostrarMensagemDisciplina() {
-  const mensagemAnterior =
-    document.getElementById('mensagem-disciplina');
-
-  if (mensagemAnterior) {
-    mensagemAnterior.remove();
-  }
-
-  const mensagem = document.createElement('div');
-
-  mensagem.id = 'mensagem-disciplina';
-  mensagem.textContent = 'Nova disciplina adicionada!';
-
-  mensagem.style.cssText = `
-    position: fixed;
-    top: 25px;
-    right: 25px;
-    background-color: #38a5ff;
-    color: #ffffff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'Poppins', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    z-index: 99999;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
-  `;
-
-  document.body.appendChild(mensagem);
-
-  setTimeout(() => {
-    mensagem.style.opacity = '1';
-    mensagem.style.transform = 'translateY(0)';
-  }, 10);
-
-  setTimeout(() => {
-    mensagem.style.opacity = '0';
-    mensagem.style.transform = 'translateY(-10px)';
-
-    setTimeout(() => {
-      mensagem.remove();
-    }, 300);
-  }, 2000);
-}
-
-
-// ===== Adicionar nova disciplina =====
-if (addDisciplineBtn) {
-  addDisciplineBtn.addEventListener('click', () => {
-    const val =
-      ((newDiscipline && newDiscipline.value) || '')
-        .trim();
-
-    if (!val) {
-      return;
-    }
-
-    if (state.disciplines.includes(val)) {
-      alert('Essa disciplina já foi adicionada.');
-      return;
-    }
-
-    state.disciplines.push(val);
-
-    save();
-    refreshDisciplines();
-
-    if (newDiscipline) {
-      newDiscipline.value = '';
-    }
-
-    mostrarMensagemDisciplina();
-  });
-}
-
-
-// Permitir adicionar disciplina com Enter
-if (newDiscipline) {
-  newDiscipline.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-
-      if (addDisciplineBtn) {
-        addDisciplineBtn.click();
-      }
-    }
-  });
-}
-
 
 // ===== Polyfill UUID =====
 if (!(window.crypto && crypto.randomUUID)) {
@@ -713,6 +835,239 @@ if (swSaveBtn) {
 
 renderStopwatch();
 
+// ==========================================
+// MATÉRIAS ESTUDADAS RECENTEMENTE
+// ==========================================
+
+const recentStudiesList =
+  document.getElementById('recentStudiesList');
+
+
+function formatRecentDate(timestamp) {
+  const date = new Date(timestamp);
+  const now = new Date();
+
+  const todayStart = new Date(
+    now.getFullYear(),
+    now.getMonth(),
+    now.getDate()
+  );
+
+  const studyStart = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate()
+  );
+
+  const diffDays =
+    Math.round(
+      (todayStart - studyStart) / 86400000
+    );
+
+
+  const time = date.toLocaleTimeString(
+    'pt-BR',
+    {
+      hour: '2-digit',
+      minute: '2-digit'
+    }
+  );
+
+
+  if (diffDays === 0) {
+    return `Hoje às ${time}`;
+  }
+
+
+  if (diffDays === 1) {
+    return `Ontem às ${time}`;
+  }
+
+
+  return `${date.toLocaleDateString(
+    'pt-BR',
+    {
+      day: '2-digit',
+      month: '2-digit'
+    }
+  )} às ${time}`;
+}
+
+
+function getRecentStudies() {
+
+  const orderedSessions = [...state.sessions]
+    .filter((session) => {
+      return (
+        session.mode === 'focus' &&
+        session.discipline &&
+        session.discipline !== 'Geral'
+      );
+    })
+    .sort((a, b) => {
+      return b.ts - a.ts;
+    });
+
+
+  const recentes = [];
+  const materiasUsadas = new Set();
+
+
+  for (const session of orderedSessions) {
+
+    const materia =
+      String(session.discipline).trim();
+
+
+    if (
+      !materia ||
+      materiasUsadas.has(materia)
+    ) {
+      continue;
+    }
+
+
+    materiasUsadas.add(materia);
+
+    recentes.push(session);
+
+
+    if (recentes.length >= 5) {
+      break;
+    }
+  }
+
+
+  return recentes;
+}
+
+
+function updateRecentStudies() {
+
+  if (!recentStudiesList) {
+    return;
+  }
+
+
+  recentStudiesList.innerHTML = '';
+
+
+  const recentes =
+    getRecentStudies();
+
+
+  // Nenhuma matéria estudada ainda
+  if (recentes.length === 0) {
+
+    const empty =
+      document.createElement('div');
+
+    empty.className =
+      'recent-empty';
+
+
+    const icon =
+      document.createElement('i');
+
+    icon.className =
+      'fa-regular fa-clock';
+
+
+    const text =
+      document.createElement('span');
+
+    text.textContent =
+      'Suas matérias estudadas recentemente aparecerão aqui.';
+
+
+    empty.appendChild(icon);
+    empty.appendChild(text);
+
+    recentStudiesList.appendChild(empty);
+
+    return;
+  }
+
+
+  recentes.forEach((session) => {
+
+    const item =
+      document.createElement('div');
+
+    item.className =
+      'recent-study-item';
+
+
+    // ÍCONE
+    const iconBox =
+      document.createElement('div');
+
+    iconBox.className =
+      'recent-study-icon';
+
+
+    const icon =
+      document.createElement('i');
+
+    icon.className =
+      'fa-solid fa-book-open';
+
+
+    iconBox.appendChild(icon);
+
+
+    // INFORMAÇÕES
+    const info =
+      document.createElement('div');
+
+    info.className =
+      'recent-study-info';
+
+
+    const name =
+      document.createElement('span');
+
+    name.className =
+      'recent-study-name';
+
+    name.textContent =
+      session.discipline;
+
+
+    const meta =
+      document.createElement('span');
+
+    meta.className =
+      'recent-study-meta';
+
+    meta.textContent =
+      formatRecentDate(session.ts);
+
+
+    info.appendChild(name);
+    info.appendChild(meta);
+
+
+    // DURAÇÃO
+    const duration =
+      document.createElement('span');
+
+    duration.className =
+      'recent-study-duration';
+
+    duration.textContent =
+      `${session.minutes} min`;
+
+
+    item.appendChild(iconBox);
+    item.appendChild(info);
+    item.appendChild(duration);
+
+
+    recentStudiesList.appendChild(item);
+
+  });
+}
 
 // ===== Metas Semanais =====
 const saveGoalBtn =

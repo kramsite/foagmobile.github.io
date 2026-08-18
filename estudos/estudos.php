@@ -8,6 +8,61 @@ if (empty($_SESSION['codigo_usuario'])) {
 
 $codigoUsuario = $_SESSION['codigo_usuario'];
 $current = basename($_SERVER['PHP_SELF']);
+
+// ==============================
+// PASTA DO USUÁRIO
+// ==============================
+
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
+if (!is_dir($pastaUsuario)) {
+    exit('Pasta do usuário não encontrada.');
+}
+
+// ==============================
+// ARQUIVO DE MATÉRIAS
+// ==============================
+
+$arquivoMaterias = $pastaUsuario . '/materias.json';
+
+// Cria o arquivo caso ainda não exista
+if (!file_exists($arquivoMaterias)) {
+    $estadoInicial = [
+        'materias' => []
+    ];
+
+    file_put_contents(
+        $arquivoMaterias,
+        json_encode(
+            $estadoInicial,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        ),
+        LOCK_EX
+    );
+}
+
+// ==============================
+// CARREGAR MATÉRIAS
+// ==============================
+
+$materiasData = json_decode(
+    file_get_contents($arquivoMaterias),
+    true
+);
+
+if (!is_array($materiasData)) {
+    $materiasData = [
+        'materias' => []
+    ];
+}
+
+if (
+    !isset($materiasData['materias']) ||
+    !is_array($materiasData['materias'])
+) {
+    $materiasData['materias'] = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -20,6 +75,15 @@ $current = basename($_SERVER['PHP_SELF']);
   <link rel="stylesheet" href="estudos.css">
   <link rel="stylesheet" href="../m.escuro/dark_basee.css">
   <script src="../m.escuro/dark-mode.js"></script>
+
+  <script>
+  window.MATERIAS_DATA = <?= json_encode(
+      $materiasData,
+      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+  ); ?>;
+
+  window.MATERIAS_SAVE_URL = 'salvar_materia.php';
+</script>
 </head>
 <body>
   <header class="cabecalho">

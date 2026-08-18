@@ -782,6 +782,830 @@ footer {
   }
 }
 
+/* =========================
+   VOLTAR PARA ESTUDOS
+========================= */
+
+.pomodoro-nav {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.back-studies {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  background: #ffffff;
+  color: #38a5ff;
+
+  border: 1px solid #38a5ff;
+  border-radius: 10px;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.back-studies:hover {
+  background: #38a5ff;
+  color: #ffffff;
+  transform: translateX(-2px);
+}
+
+/* =====================================================
+   POMODORO — ORGANIZAÇÃO VISUAL
+   Adicionar no FINAL do pomodoro.css
+===================================================== */
+
+/* =========================
+   ÁREA PRINCIPAL
+========================= */
+
+.estudos-wrapper {
+  width: 100%;
+  max-width: 1450px;
+  margin: 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 0.65fr);
+  gap: 24px;
+  align-items: start;
+}
+
+/* Timer ocupa mais espaço */
+.estudos-wrapper .card.half {
+  margin: 0;
+}
+
+/* Estatísticas e histórico ocupam a linha toda */
+.estudos-wrapper .card.full {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+/* =========================
+   VOLTAR PARA ESTUDOS
+========================= */
+
+.pomodoro-nav {
+  grid-column: 1 / -1;
+  width: 100%;
+  margin: 0 0 -5px;
+}
+
+.back-studies {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+
+  min-height: 42px;
+  padding: 10px 16px;
+
+  background: var(--branco);
+  color: var(--azul-escuro);
+
+  border: 1px solid var(--borda);
+  border-radius: 11px;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.back-studies:hover {
+  color: var(--azul-escuro);
+  border-color: var(--azul);
+  background: #f4faff;
+
+  transform: translateX(-2px);
+
+  box-shadow: 0 5px 14px rgba(56, 165, 255, 0.12);
+}
+
+/* =========================
+   CARDS
+========================= */
+
+.estudos-wrapper .card {
+  border-radius: 18px;
+  border: 1px solid #e4eaf2;
+
+  padding: 28px;
+
+  box-shadow:
+    0 5px 18px rgba(20, 40, 70, 0.04),
+    0 1px 3px rgba(20, 40, 70, 0.03);
+}
+
+.estudos-wrapper .card h2 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin-bottom: 7px;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.estudos-wrapper .sub {
+  max-width: 750px;
+  margin-top: 0;
+  margin-bottom: 22px;
+
+  color: var(--texto-suave);
+}
+
+/* =========================
+   ABAS
+========================= */
+
+.tabs {
+  width: fit-content;
+
+  display: flex;
+  gap: 4px;
+
+  padding: 5px;
+  margin-bottom: 25px;
+
+  background: #f1f5fa;
+  border: 1px solid #e7edf5;
+  border-radius: 13px;
+}
+
+.tab-btn {
+  min-height: 40px;
+
+  padding: 9px 17px;
+
+  background: transparent;
+  color: var(--texto-suave);
+
+  border: none;
+  border-radius: 9px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  box-shadow: none;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tab-btn:hover {
+  color: var(--azul-escuro);
+  border-color: transparent;
+}
+
+.tab-btn.active {
+  background: var(--branco);
+  color: var(--azul-escuro);
+
+  border: none;
+
+  box-shadow:
+    0 2px 7px rgba(0, 0, 0, 0.07);
+}
+
+/* =========================
+   CONFIGURAÇÕES DO TIMER
+========================= */
+
+#tab-pomodoro .grid-2 {
+  gap: 14px 18px;
+}
+
+#tab-pomodoro .grid-2 .row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+
+  gap: 5px;
+
+  padding: 13px 15px;
+
+  background: #f8fafc;
+  border: 1px solid #e6ebf2;
+  border-radius: 12px;
+}
+
+#tab-pomodoro .grid-2 .lbl {
+  margin: 0;
+
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+}
+
+#tab-pomodoro .grid-2 .input {
+  min-height: 38px;
+
+  padding: 7px 10px;
+
+  background: var(--branco);
+
+  font-weight: 600;
+}
+
+/* =========================
+   ESCOLHA DA MATÉRIA
+========================= */
+
+#tab-pomodoro > .field-group {
+  margin-top: 20px;
+}
+
+#discipline,
+#stopwatchDiscipline,
+#goalDiscipline {
+  cursor: pointer;
+}
+
+#discipline {
+  max-width: 100%;
+}
+
+/* =========================
+   RELÓGIO PRINCIPAL
+========================= */
+
+.timer {
+  width: fit-content;
+  min-width: 280px;
+
+  margin: 36px auto 28px;
+  padding: 20px 34px;
+
+  background: #f7fbff;
+
+  border: 1px solid #dcecff;
+  border-radius: 20px;
+
+  color: #176cc0;
+
+  font-size: 64px;
+  font-weight: 600;
+  letter-spacing: 3px;
+
+  text-align: center;
+
+  box-shadow: inset 0 0 0 1px rgba(56, 165, 255, 0.03);
+}
+
+/* Cronômetro */
+#stopwatchDisplay {
+  color: #176cc0;
+}
+
+/* =========================
+   BOTÕES DO TIMER
+========================= */
+
+.row.center {
+  justify-content: center;
+}
+
+.row.gap {
+  gap: 10px;
+}
+
+#startBtn,
+#swStart {
+  min-width: 115px;
+}
+
+#pauseBtn,
+#swPause {
+  min-width: 115px;
+}
+
+#resetBtn,
+#swReset {
+  min-width: 105px;
+}
+
+.btn {
+  border-radius: 10px;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease,
+    background 0.18s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn.secondary {
+  background: #eef2f7;
+  color: #344054;
+}
+
+.btn.secondary:hover {
+  background: #e4e9f0;
+  box-shadow: none;
+}
+
+.btn.ghost {
+  background: var(--branco);
+  color: #536071;
+  border: 1px solid #dce3ec;
+}
+
+.btn.ghost:hover {
+  color: var(--azul-escuro);
+  border-color: #b8d9f4;
+  box-shadow: none;
+}
+
+/* =========================
+   MODO / CICLO
+========================= */
+
+.pill {
+  padding: 7px 14px;
+
+  background: #edf7ff;
+  color: #176cc0;
+
+  border: 1px solid #d7ecff;
+  border-radius: 999px;
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   PROGRESSO
+========================= */
+
+.progress {
+  height: 8px;
+
+  margin-top: 20px;
+
+  background: #edf1f5;
+  border-radius: 999px;
+}
+
+.progress > span {
+  border-radius: 999px;
+}
+
+/* =========================
+   METAS SEMANAIS
+========================= */
+
+#goalsList {
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+
+  margin-top: 20px;
+}
+
+#goalsList > div {
+  padding: 15px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5eaf1;
+  border-radius: 12px;
+}
+
+#goalsList strong {
+  color: var(--texto);
+  font-size: 14px;
+}
+
+#goalDiscipline {
+  flex: 1 1 180px;
+}
+
+#goalHours {
+  flex: 0 1 150px;
+}
+
+#saveGoal {
+  white-space: nowrap;
+}
+
+/* =========================
+   CRONÔMETRO
+========================= */
+
+#tab-stopwatch > .row:first-child {
+  padding: 14px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e6ebf2;
+  border-radius: 12px;
+}
+
+#stopwatchDiscipline {
+  flex: 1;
+}
+
+#lapsList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+#lapsList .task {
+  margin-top: 0;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5eaf1;
+}
+
+/* =========================
+   ESTATÍSTICAS
+========================= */
+
+.estudos-wrapper .card.full .grid-2 {
+  gap: 20px;
+}
+
+.estudos-wrapper .card.full .grid-2 > div {
+  width: 100%;
+  min-height: 320px;
+
+  padding: 18px;
+
+  background: #fafbfd;
+
+  border: 1px solid #e7ebf1;
+  border-radius: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#lineChart,
+#pieChart {
+  width: 100% !important;
+  height: 280px !important;
+  max-height: 280px;
+}
+
+/* =========================
+   HISTÓRICO
+========================= */
+
+#historyTable {
+  margin-top: 18px;
+
+  border: 1px solid #e4e9f0;
+  border-radius: 12px;
+
+  overflow: hidden;
+
+  background: var(--branco);
+}
+
+#historyTable th {
+  padding: 13px 16px;
+
+  background: #f6f8fb;
+
+  color: #536071;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+#historyTable td {
+  padding: 14px 16px;
+
+  color: #3e4855;
+
+  font-size: 14px;
+}
+
+#historyTable tbody tr {
+  transition: background 0.15s ease;
+}
+
+#historyTable tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+.estudos-wrapper .input,
+.estudos-wrapper .select {
+  background: var(--branco);
+
+  border-color: #dce3ec;
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.estudos-wrapper .input:hover,
+.estudos-wrapper .select:hover {
+  border-color: #c6d2df;
+}
+
+.estudos-wrapper .input:focus,
+.estudos-wrapper .select:focus {
+  border-color: var(--azul);
+
+  box-shadow:
+    0 0 0 3px rgba(56, 165, 255, 0.11);
+}
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1100px) {
+
+  .estudos-wrapper {
+    grid-template-columns: 1fr;
+  }
+
+  .estudos-wrapper .card.full {
+    grid-column: auto;
+  }
+
+  .pomodoro-nav {
+    grid-column: auto;
+  }
+
+}
+
+@media (max-width: 700px) {
+
+  .estudos-wrapper {
+    gap: 18px;
+  }
+
+  .estudos-wrapper .card {
+    padding: 20px;
+  }
+
+  .timer {
+    min-width: 0;
+    width: 100%;
+
+    margin: 28px auto 22px;
+    padding: 18px 10px;
+
+    font-size: 48px;
+  }
+
+  .tabs {
+    width: 100%;
+  }
+
+  .tab-btn {
+    flex: 1;
+  }
+
+  .estudos-wrapper .card.full .grid-2 > div {
+    min-height: 270px;
+    padding: 12px;
+  }
+
+  #lineChart,
+  #pieChart {
+    height: 240px !important;
+    max-height: 240px;
+  }
+
+  #goalDiscipline,
+  #goalHours,
+  #saveGoal {
+    width: 100%;
+    flex: auto;
+  }
+
+}
+
+/* =========================
+   ESTUDADAS RECENTEMENTE
+========================= */
+
+.recent-studies {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e5eaf1;
+}
+
+.recent-studies-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.recent-studies-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 0 0 4px;
+
+  color: #1f2937;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.recent-studies-header h3 i {
+  color: var(--azul);
+  font-size: 14px;
+}
+
+.recent-studies-header p {
+  margin: 0;
+
+  color: #7b8794;
+  font-size: 12px;
+}
+
+.recent-studies-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ITEM */
+
+.recent-study-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  padding: 12px 13px;
+
+  background: #f8fafc;
+  border: 1px solid #e8edf3;
+  border-radius: 12px;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.recent-study-item:hover {
+  background: #f4f9ff;
+  border-color: #cfe5fa;
+  transform: translateX(2px);
+}
+
+.recent-study-icon {
+  width: 38px;
+  height: 38px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e8f4ff;
+  color: var(--azul-escuro);
+
+  border-radius: 10px;
+
+  font-size: 14px;
+}
+
+.recent-study-info {
+  min-width: 0;
+  flex: 1;
+}
+
+.recent-study-name {
+  display: block;
+
+  color: #242b35;
+
+  font-size: 13px;
+  font-weight: 600;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.recent-study-meta {
+  display: block;
+
+  margin-top: 2px;
+
+  color: #8491a1;
+
+  font-size: 11px;
+}
+
+.recent-study-duration {
+  flex-shrink: 0;
+
+  padding: 5px 8px;
+
+  background: #eaf5ff;
+  color: #1874c9;
+
+  border-radius: 999px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* ESTADO VAZIO */
+
+.recent-empty {
+  min-height: 105px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  padding: 18px;
+
+  background: #fafbfd;
+
+  border: 1px dashed #dce4ed;
+  border-radius: 12px;
+
+  text-align: center;
+
+  color: #8995a3;
+}
+
+.recent-empty i {
+  color: #b4bfca;
+  font-size: 22px;
+}
+
+.recent-empty span {
+  max-width: 240px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+@media (max-width: 450px) {
+
+  .timer {
+    font-size: 40px;
+    letter-spacing: 1px;
+  }
+
+  .back-studies {
+    width: 100%;
+  }
+
+  #startBtn,
+  #pauseBtn,
+  #resetBtn,
+  #swStart,
+  #swPause,
+  #swReset,
+  #swLap {
+    width: 100%;
+  }
+
+}
+
 @media (max-width: 420px) {
   header.cabecalho {
     padding: 10px;

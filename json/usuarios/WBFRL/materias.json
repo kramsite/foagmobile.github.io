@@ -1,0 +1,11 @@
+{
+    "materias": [
+        {
+            "id": "MAT_ADEFFDD5",
+            "nome": "matematica",
+            "cor": "#38ffbd",
+            "icone": "fa-language",
+            "criado_em": "2026-08-18 16:36:05"
+        }
+    ]
+}

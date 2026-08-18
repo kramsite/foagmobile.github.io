@@ -6,80 +6,130 @@ session_start();
 // ======================================
 
 if (empty($_SESSION['codigo_usuario'])) {
-    header("Location: ../login/index.php");
+    header("Location: ../../login/index.php");
     exit;
 }
 
 $codigoUsuario = $_SESSION['codigo_usuario'];
 
 // ======================================
-// CAMINHO DA PASTA DO USUÁRIO
+// PASTA DO USUÁRIO
 // ======================================
 
-$baseJsonDir = __DIR__ . '..//../json/usuarios';
-
+$baseJsonDir = __DIR__ . '/../../json/usuarios';
 $pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 
-$arquivoPomodoro = $pastaUsuario . '/pomodoro.json';
-
-// A pasta deve ter sido criada no cadastro
 if (!is_dir($pastaUsuario)) {
     exit("Pasta do usuário não encontrada.");
 }
 
-// 3) Se não existir pomodoro.json, cria com estrutura básica
+// ======================================
+// ARQUIVO DO POMODORO
+// ======================================
+
+$arquivoPomodoro = $pastaUsuario . '/pomodoro.json';
+
 if (!file_exists($arquivoPomodoro)) {
-  $estadoInicial = [
-    'disciplines' => ['Geral'],
-    'sessions'    => [],
-    'goals'       => []
-  ];
+    $estadoInicial = [
+        'disciplines' => ['Geral'],
+        'sessions' => [],
+        'goals' => new stdClass()
+    ];
 
-  file_put_contents(
-    $arquivoPomodoro,
-    json_encode($estadoInicial, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-  );
+    file_put_contents(
+        $arquivoPomodoro,
+        json_encode(
+            $estadoInicial,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        ),
+        LOCK_EX
+    );
 }
 
-// 4) Carrega os dados do pomodoro
-$pomodoroData = json_decode(file_get_contents($arquivoPomodoro), true);
+// ======================================
+// CARREGAR POMODORO
+// ======================================
 
-// Normaliza estrutura
+$pomodoroData = json_decode(
+    file_get_contents($arquivoPomodoro),
+    true
+);
+
 if (!is_array($pomodoroData)) {
-  $pomodoroData = [];
-}
-if (!isset($pomodoroData['disciplines']) || !is_array($pomodoroData['disciplines'])) {
-  $pomodoroData['disciplines'] = ['Geral'];
-}
-if (!isset($pomodoroData['sessions']) || !is_array($pomodoroData['sessions'])) {
-  $pomodoroData['sessions'] = [];
-}
-if (!isset($pomodoroData['goals']) || !is_array($pomodoroData['goals'])) {
-  $pomodoroData['goals'] = [];
+    $pomodoroData = [];
 }
 
-$current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
+if (
+    !isset($pomodoroData['sessions']) ||
+    !is_array($pomodoroData['sessions'])
+) {
+    $pomodoroData['sessions'] = [];
+}
+
+if (
+    !isset($pomodoroData['goals']) ||
+    !is_array($pomodoroData['goals'])
+) {
+    $pomodoroData['goals'] = [];
+}
+
+// ======================================
+// CARREGAR MATÉRIAS DO USUÁRIO
+// ======================================
+
+$arquivoMaterias = $pastaUsuario . '/materias.json';
+
+$materiasData = [
+    'materias' => []
+];
+
+if (file_exists($arquivoMaterias)) {
+
+    $conteudoMaterias = json_decode(
+        file_get_contents($arquivoMaterias),
+        true
+    );
+
+    if (
+        is_array($conteudoMaterias) &&
+        isset($conteudoMaterias['materias']) &&
+        is_array($conteudoMaterias['materias'])
+    ) {
+        $materiasData = $conteudoMaterias;
+    }
+}
+
+$current = basename($_SERVER['PHP_SELF']);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>FOAG – Relógio</title>
+  <title>FOAG – Pomodoro</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="pomodoro.css">
-  <link rel="stylesheet" href="../m.escuro/dark_basee.css">
+  <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_pomo.css">
+
+  <script src="../../m.escuro/dark-mode.js"></script>
   <!-- Chart.js para os gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <script src="../m.escuro/dark-mode.js"></script>
-
   <!-- Passa o estado inicial do Pomodoro para o JS -->
   <script>
-    window.POMODORO_DATA = <?= json_encode($pomodoroData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-    window.POMODORO_SAVE_URL = "salvar_pomodoro.php";
-  </script>
+  window.POMODORO_DATA = <?= json_encode(
+      $pomodoroData,
+      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+  ); ?>;
+
+  window.MATERIAS_DATA = <?= json_encode(
+      $materiasData,
+      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+  ); ?>;
+
+  window.POMODORO_SAVE_URL = "salvar_pomodoro.php";
+</script>
 </head>
 <body>
   <!-- Cabeçalho -->
@@ -95,37 +145,53 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
   <div class="container">
     <!-- Menu lateral -->
     <nav class="menu">
-      <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-house"></i> Início
-      </a>
 
-      <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-calendar-days"></i> Calendário
-      </a>
+    <a href="../../inicioo/inicio.php">
+      <i class="fa-solid fa-house"></i>
+      Início
+    </a>
 
-      <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-book"></i> Agenda
-      </a>
+    <a href="../../calend/calendario.php">
+      <i class="fa-solid fa-calendar-days"></i>
+      Calendário
+    </a>
 
-      <a href="../estudos/pomodoro/pomodoro.php" class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-stopwatch"></i> Pomodoro
-      </a>
+    <a href="../../bloco/agenda.php">
+      <i class="fa-solid fa-book"></i>
+      Agenda
+    </a>
 
-      <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-check-double"></i> Boletim
-      </a>
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja
-            </a>
-                   <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-trophy"></i> Ranking
-            </a>     
+    <a href="../estudos.php" class="active">
+      <i class="fa-solid fa-graduation-cap"></i>
+      Estudos
+    </a>
 
-    </nav>
+    <a href="../../notas/notas.php">
+      <i class="fa-solid fa-check-double"></i>
+      Boletim
+    </a>
+
+    <a href="../../loja/loja.php">
+      <i class="fa-solid fa-store"></i>
+      Loja
+    </a>
+
+    <a href="../../rank/rank.php">
+      <i class="fa-solid fa-trophy"></i>
+      Ranking
+    </a>
+
+  </nav>
 
     <!-- Conteúdo -->
     <main class="conteudo">
       <section class="estudos-wrapper">
+        <div class="pomodoro-nav">
+        <a href="../estudos.php" class="back-studies">
+          <i class="fa-solid fa-arrow-left"></i>
+          Voltar para Estudos
+        </a>
+      </div>
         <!-- TIMER + CRONÔMETRO (Abas) -->
         <section class="card half">
           <h2>⏱️ Tempo de Estudo</h2>
@@ -153,12 +219,14 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
               </label>
             </div>
 
-            <div class="row mt">
+            <div class="field-group mt">
+              <label class="lbl" for="discipline">
+                Matéria
+              </label>
+
               <select id="discipline" class="select">
                 <option value="Geral">Geral</option>
               </select>
-              <input id="newDiscipline" class="input" placeholder="Nova disciplina" />
-              <button class="btn" id="addDiscipline">Adicionar</button>
             </div>
 
             <div class="timer" id="timer">25:00</div>
@@ -196,20 +264,42 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
 
         <!-- METAS SEMANAIS -->
         <section class="card half">
-          <h2>🎯 Metas Semanais</h2>
-          <p class="sub">Defina horas por disciplina e acompanhe o progresso (seg a dom).</p>
+          <h2>🎯 Metas Semanais</h2> 
+            <p class="sub">Defina horas por matéria e acompanhe o progresso semanal. </p>          
           <div class="row">
             <select id="goalDiscipline" class="select"></select>
             <input id="goalHours" class="input" type="number" min="1" max="60" placeholder="Horas/semana" />
             <button class="btn" id="saveGoal">Salvar meta</button>
           </div>
           <div id="goalsList" class="list mt"></div>
+          <div class="recent-studies">
+          <div class="recent-studies-header">
+            <div>
+              <h3>
+                <i class="fa-solid fa-clock-rotate-left"></i>
+                Estudadas recentemente
+              </h3>
+
+              <p>Suas últimas matérias estudadas.</p>
+            </div>
+          </div>
+
+          <div id="recentStudiesList" class="recent-studies-list">
+            <div class="recent-empty">
+              <i class="fa-regular fa-clock"></i>
+
+              <span>
+                Suas matérias estudadas recentemente aparecerão aqui.
+              </span>
+            </div>
+          </div>
+        </div>
         </section>
 
         <!-- ESTATÍSTICAS -->
         <section class="card full">
           <h2>📊 Estatísticas</h2>
-          <p class="sub">Horas estudadas (últimos 14 dias) e distribuição por disciplina.</p>
+          <p class="sub"> Horas estudadas nos últimos 14 dias e distribuição por matéria. </p>
           <div class="grid-2">
             <div><canvas id="lineChart"></canvas></div>
             <div><canvas id="pieChart"></canvas></div>
@@ -227,7 +317,7 @@ $current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
           </div>
           <table class="table" id="historyTable">
             <thead>
-              <tr><th>Data</th><th>Disciplina</th><th>Modo</th><th>Duração (min)</th></tr>
+              <tr><th>Data</th><th>Matéria</th><th>Modo</th><th>Duração (min)</th></tr>
             </thead>
             <tbody></tbody>
           </table>
