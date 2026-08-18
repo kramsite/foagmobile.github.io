@@ -1,11 +1,12 @@
 {
     "codigo_usuario": "84V69",
-    "nome": "Higor Lourenço",
+    "nome": "Higor Lourenço da Silva",
     "email": "higor@gmail.com",
     "nascimento": "2004-09-22",
     "telefone": "",
-    "serie": "",
-    "escola": "",
+    "serie": "Astronomia",
+    "escola": "Centro Educacional CEMA (Maria Auxiliadora)",
     "termos_aceitos": true,
-    "cadastrado_em": "2026-08-18 13:58:18"
+    "cadastrado_em": "2026-08-18 13:58:18",
+    "foto": "foto_padrao.png"
 }

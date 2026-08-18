@@ -1,154 +1,704 @@
 <?php
-$caminho_json = __DIR__ . "/../json/usuarios.json";
-$pasta_fotos = __DIR__ . "/../img/perfil/";
-$pasta_fotos_url = "../img/perfil/";
-$foto_padrao = "foto_padrao.png";
+session_start();
 
-$escolas_json = __DIR__ . "/../json/escolas.json";
-$series_json = __DIR__ . "/../json/series.json";
+/*
+|--------------------------------------------------------------------------
+| Verificar login
+|--------------------------------------------------------------------------
+*/
 
-function escapar($valor) {
-    return htmlspecialchars($valor ?? "", ENT_QUOTES, "UTF-8");
+if (empty($_SESSION['codigo_usuario'])) {
+    header('Location: ../login/index.php');
+    exit;
 }
 
-function carregarLista($caminho) {
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
+/*
+|--------------------------------------------------------------------------
+| Caminhos
+|--------------------------------------------------------------------------
+*/
+
+$pastaUsuario = __DIR__
+    . '/../json/usuarios/'
+    . $codigoUsuario;
+
+$caminhoPerfil = $pastaUsuario . '/perfil.json';
+
+$pastaLogin = __DIR__ . '/../json/usuario_login';
+
+$pasta_fotos = __DIR__ . '/../img/perfil/';
+$pasta_fotos_url = '../img/perfil/';
+$foto_padrao = 'foto_padrao.png';
+
+$escolas_json = __DIR__ . '/../json/escolas.json';
+$series_json = __DIR__ . '/../json/series.json';
+
+/*
+|--------------------------------------------------------------------------
+| Funções
+|--------------------------------------------------------------------------
+*/
+
+function escapar($valor)
+{
+    return htmlspecialchars(
+        $valor ?? '',
+        ENT_QUOTES,
+        'UTF-8'
+    );
+}
+
+function carregarLista($caminho)
+{
     if (!file_exists($caminho)) {
         return [];
     }
 
-    $lista = json_decode(file_get_contents($caminho), true);
+    $conteudo = file_get_contents($caminho);
 
-    return is_array($lista) ? $lista : [];
-}
-
-$opcoes_escolas = carregarLista($escolas_json);
-$opcoes_series = carregarLista($series_json);
-
-if (!file_exists($caminho_json)) {
-    exit("Arquivo de usuários não encontrado!");
-}
-
-$usuarios = json_decode(file_get_contents($caminho_json), true);
-
-if (!is_array($usuarios) || empty($usuarios)) {
-    exit("Nenhum usuário cadastrado!");
-}
-
-$usuario_index = array_key_last($usuarios);
-$usuario = $usuarios[$usuario_index];
-
-$mensagem_erro = "";
-
-if (!empty($usuario["serie"]) && !in_array($usuario["serie"], $opcoes_series, true)) {
-    array_unshift($opcoes_series, $usuario["serie"]);
-}
-
-if (!empty($usuario["escola"]) && !in_array($usuario["escola"], $opcoes_escolas, true)) {
-    array_unshift($opcoes_escolas, $usuario["escola"]);
-}
-
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-    $nome = trim($_POST["nome"] ?? "");
-    $nascimento = trim($_POST["nascimento"] ?? "");
-    $telefone = trim($_POST["telefone"] ?? "");
-    $serie = trim($_POST["serie"] ?? "");
-    $escola = trim($_POST["escola"] ?? "");
-
-    if ($nome === "") {
-        $mensagem_erro = "Informe o nome.";
-    } elseif ($nascimento === "") {
-        $mensagem_erro = "Informe a data de nascimento.";
-    } elseif ($serie === "") {
-        $mensagem_erro = "Selecione a série ou curso.";
-    } elseif ($escola === "") {
-        $mensagem_erro = "Selecione a escola ou faculdade.";
+    if ($conteudo === false) {
+        return [];
     }
 
-    $foto_salva = $usuario["foto"] ?? $foto_padrao;
+    $lista = json_decode($conteudo, true);
+
+    return is_array($lista)
+        ? $lista
+        : [];
+}
+
+function salvarJson($caminho, $dados)
+{
+    $json = json_encode(
+        $dados,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+    );
+
+    if ($json === false) {
+        return false;
+    }
+
+    return file_put_contents(
+        $caminho,
+        $json,
+        LOCK_EX
+    ) !== false;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Transformar nome em nome de arquivo
+|--------------------------------------------------------------------------
+*/
+
+function criarNomeArquivoUsuario($nome)
+{
+    $nome = trim($nome);
+
+    $nome = preg_replace(
+        '/\s+/u',
+        ' ',
+        $nome
+    );
+
+    if (function_exists('mb_strtolower')) {
+        $nome = mb_strtolower(
+            $nome,
+            'UTF-8'
+        );
+    } else {
+        $nome = strtolower($nome);
+    }
+
+    $acentos = [
+        'á' => 'a',
+        'à' => 'a',
+        'ã' => 'a',
+        'â' => 'a',
+        'ä' => 'a',
+
+        'é' => 'e',
+        'è' => 'e',
+        'ê' => 'e',
+        'ë' => 'e',
+
+        'í' => 'i',
+        'ì' => 'i',
+        'î' => 'i',
+        'ï' => 'i',
+
+        'ó' => 'o',
+        'ò' => 'o',
+        'õ' => 'o',
+        'ô' => 'o',
+        'ö' => 'o',
+
+        'ú' => 'u',
+        'ù' => 'u',
+        'û' => 'u',
+        'ü' => 'u',
+
+        'ç' => 'c',
+        'ñ' => 'n'
+    ];
+
+    $nome = strtr(
+        $nome,
+        $acentos
+    );
+
+    $nome = preg_replace(
+        '/[^a-z0-9]+/',
+        '_',
+        $nome
+    );
+
+    $nome = trim(
+        $nome,
+        '_'
+    );
+
+    if ($nome === '') {
+        return 'Usuario';
+    }
+
+    return ucfirst($nome);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Atualizar nome no arquivo de login
+|--------------------------------------------------------------------------
+*/
+
+function atualizarArquivoLogin(
+    $pastaLogin,
+    $codigoUsuario,
+    $novoNome
+) {
+    if (!is_dir($pastaLogin)) {
+        return;
+    }
+
+    $arquivos = glob(
+        $pastaLogin . '/*.json'
+    ) ?: [];
+
+    foreach ($arquivos as $arquivoLogin) {
+
+        $conteudo = file_get_contents(
+            $arquivoLogin
+        );
+
+        if ($conteudo === false) {
+            continue;
+        }
+
+        $dadosLogin = json_decode(
+            $conteudo,
+            true
+        );
+
+        if (!is_array($dadosLogin)) {
+            continue;
+        }
+
+        if (
+            ($dadosLogin['codigo_usuario'] ?? '')
+            !== $codigoUsuario
+        ) {
+            continue;
+        }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Atualizar nome dentro do JSON
+        |--------------------------------------------------------------------------
+        */
+
+        $dadosLogin['nome'] = $novoNome;
+
+        salvarJson(
+            $arquivoLogin,
+            $dadosLogin
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Renomear arquivo para acompanhar o novo nome
+        |--------------------------------------------------------------------------
+        */
+
+        $novoNomeArquivo =
+            criarNomeArquivoUsuario($novoNome);
+
+        $novoCaminho = $pastaLogin
+            . '/'
+            . $novoNomeArquivo
+            . '.json';
+
+        /*
+         * Se já existir alguém com esse nome,
+         * acrescenta o código do usuário.
+         */
+
+        if (
+            file_exists($novoCaminho)
+            &&
+            realpath($novoCaminho)
+            !== realpath($arquivoLogin)
+        ) {
+            $novoCaminho = $pastaLogin
+                . '/'
+                . $novoNomeArquivo
+                . '_'
+                . $codigoUsuario
+                . '.json';
+        }
+
+        if (
+            realpath($arquivoLogin)
+            !== realpath($novoCaminho)
+        ) {
+            rename(
+                $arquivoLogin,
+                $novoCaminho
+            );
+        }
+
+        break;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Carregar escolas e séries
+|--------------------------------------------------------------------------
+*/
+
+$opcoes_escolas = carregarLista(
+    $escolas_json
+);
+
+$opcoes_series = carregarLista(
+    $series_json
+);
+
+/*
+|--------------------------------------------------------------------------
+| Verificar perfil
+|--------------------------------------------------------------------------
+*/
+
+if (!is_dir($pastaUsuario)) {
+    exit(
+        'Pasta do usuário não encontrada.'
+    );
+}
+
+if (!file_exists($caminhoPerfil)) {
+    exit(
+        'Perfil do usuário não encontrado.'
+    );
+}
+
+$conteudoPerfil = file_get_contents(
+    $caminhoPerfil
+);
+
+if ($conteudoPerfil === false) {
+    exit(
+        'Não foi possível carregar o perfil.'
+    );
+}
+
+$usuario = json_decode(
+    $conteudoPerfil,
+    true
+);
+
+if (!is_array($usuario)) {
+    exit(
+        'Os dados do perfil estão inválidos.'
+    );
+}
+
+/*
+|--------------------------------------------------------------------------
+| Garantir que opções atuais apareçam nas listas
+|--------------------------------------------------------------------------
+*/
+
+if (
+    !empty($usuario['serie'])
+    &&
+    !in_array(
+        $usuario['serie'],
+        $opcoes_series,
+        true
+    )
+) {
+    array_unshift(
+        $opcoes_series,
+        $usuario['serie']
+    );
+}
+
+if (
+    !empty($usuario['escola'])
+    &&
+    !in_array(
+        $usuario['escola'],
+        $opcoes_escolas,
+        true
+    )
+) {
+    array_unshift(
+        $opcoes_escolas,
+        $usuario['escola']
+    );
+}
+
+$mensagem_erro = '';
+
+/*
+|--------------------------------------------------------------------------
+| Salvar alterações
+|--------------------------------------------------------------------------
+*/
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    $nome = trim(
+        $_POST['nome'] ?? ''
+    );
+
+    $nascimento = trim(
+        $_POST['nascimento'] ?? ''
+    );
+
+    $telefone = trim(
+        $_POST['telefone'] ?? ''
+    );
+
+    $serie = trim(
+        $_POST['serie'] ?? ''
+    );
+
+    $escola = trim(
+        $_POST['escola'] ?? ''
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Validação
+    |--------------------------------------------------------------------------
+    */
+
+    if ($nome === '') {
+
+        $mensagem_erro =
+            'Informe o nome.';
+
+    } elseif ($nascimento === '') {
+
+        $mensagem_erro =
+            'Informe a data de nascimento.';
+
+    } elseif ($serie === '') {
+
+        $mensagem_erro =
+            'Selecione a série ou curso.';
+
+    } elseif ($escola === '') {
+
+        $mensagem_erro =
+            'Selecione a escola ou faculdade.';
+    }
+
+    /*
+    |--------------------------------------------------------------------------
+    | Foto atual
+    |--------------------------------------------------------------------------
+    */
+
+    $foto_salva =
+        $usuario['foto']
+        ?? $foto_padrao;
+
+    /*
+    |--------------------------------------------------------------------------
+    | Upload de foto
+    |--------------------------------------------------------------------------
+    */
 
     if (
-        $mensagem_erro === "" &&
-        isset($_FILES["foto"]) &&
-        $_FILES["foto"]["error"] !== UPLOAD_ERR_NO_FILE
+        $mensagem_erro === ''
+        &&
+        isset($_FILES['foto'])
+        &&
+        $_FILES['foto']['error']
+            !== UPLOAD_ERR_NO_FILE
     ) {
-        if ($_FILES["foto"]["error"] !== UPLOAD_ERR_OK) {
-            $mensagem_erro = "Ocorreu um erro ao enviar a foto.";
-        } elseif ($_FILES["foto"]["size"] > 5 * 1024 * 1024) {
-            $mensagem_erro = "A foto deve ter no máximo 5 MB.";
-        } else {
-            $extensao = strtolower(pathinfo($_FILES["foto"]["name"], PATHINFO_EXTENSION));
-            $extensoes_permitidas = ["jpg", "jpeg", "png", "webp", "gif"];
 
-            if (!in_array($extensao, $extensoes_permitidas, true)) {
-                $mensagem_erro = "Escolha uma imagem JPG, PNG, WEBP ou GIF.";
-            } elseif (getimagesize($_FILES["foto"]["tmp_name"]) === false) {
-                $mensagem_erro = "O arquivo escolhido não é uma imagem válida.";
+        if (
+            $_FILES['foto']['error']
+            !== UPLOAD_ERR_OK
+        ) {
+
+            $mensagem_erro =
+                'Ocorreu um erro ao enviar a foto.';
+
+        } elseif (
+            $_FILES['foto']['size']
+            > 5 * 1024 * 1024
+        ) {
+
+            $mensagem_erro =
+                'A foto deve ter no máximo 5 MB.';
+
+        } else {
+
+            $extensao = strtolower(
+                pathinfo(
+                    $_FILES['foto']['name'],
+                    PATHINFO_EXTENSION
+                )
+            );
+
+            $extensoesPermitidas = [
+                'jpg',
+                'jpeg',
+                'png',
+                'webp',
+                'gif'
+            ];
+
+            if (
+                !in_array(
+                    $extensao,
+                    $extensoesPermitidas,
+                    true
+                )
+            ) {
+
+                $mensagem_erro =
+                    'Escolha uma imagem JPG, PNG, WEBP ou GIF.';
+
+            } elseif (
+                getimagesize(
+                    $_FILES['foto']['tmp_name']
+                ) === false
+            ) {
+
+                $mensagem_erro =
+                    'O arquivo escolhido não é uma imagem válida.';
+
             } else {
+
                 if (!is_dir($pasta_fotos)) {
-                    mkdir($pasta_fotos, 0775, true);
+                    mkdir(
+                        $pasta_fotos,
+                        0775,
+                        true
+                    );
                 }
 
-                $novo_nome = uniqid("pf_", true) . "." . $extensao;
-                $destino = $pasta_fotos . $novo_nome;
+                /*
+                 * Colocamos o código do usuário no nome da foto.
+                 */
 
-                if (move_uploaded_file($_FILES["foto"]["tmp_name"], $destino)) {
-                    $foto_antiga = basename($foto_salva);
-                    $caminho_antigo = $pasta_fotos . $foto_antiga;
+                $novo_nome =
+                    'perfil_'
+                    . $codigoUsuario
+                    . '_'
+                    . bin2hex(
+                        random_bytes(4)
+                    )
+                    . '.'
+                    . $extensao;
+
+                $destino =
+                    $pasta_fotos
+                    . $novo_nome;
+
+                if (
+                    move_uploaded_file(
+                        $_FILES['foto']['tmp_name'],
+                        $destino
+                    )
+                ) {
+
+                    /*
+                    |--------------------------------------------------------------------------
+                    | Apagar foto antiga
+                    |--------------------------------------------------------------------------
+                    */
+
+                    $foto_antiga =
+                        basename(
+                            $foto_salva
+                        );
+
+                    $caminho_antigo =
+                        $pasta_fotos
+                        . $foto_antiga;
 
                     if (
-                        $foto_antiga !== $foto_padrao &&
-                        is_file($caminho_antigo)
+                        $foto_antiga
+                            !== $foto_padrao
+                        &&
+                        is_file(
+                            $caminho_antigo
+                        )
                     ) {
-                        unlink($caminho_antigo);
+                        unlink(
+                            $caminho_antigo
+                        );
                     }
 
-                    $foto_salva = $novo_nome;
+                    $foto_salva =
+                        $novo_nome;
+
                 } else {
-                    $mensagem_erro = "Não foi possível salvar a nova foto.";
+
+                    $mensagem_erro =
+                        'Não foi possível salvar a nova foto.';
                 }
             }
         }
     }
 
-    if ($mensagem_erro === "") {
-        $usuarios[$usuario_index]["nome"] = $nome;
-        $usuarios[$usuario_index]["nascimento"] = $nascimento;
-        $usuarios[$usuario_index]["telefone"] = $telefone;
-        $usuarios[$usuario_index]["serie"] = $serie;
-        $usuarios[$usuario_index]["escola"] = $escola;
-        $usuarios[$usuario_index]["foto"] = $foto_salva;
+    /*
+    |--------------------------------------------------------------------------
+    | Atualizar perfil.json
+    |--------------------------------------------------------------------------
+    */
 
-        $json = json_encode(
-            $usuarios,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        );
+    if ($mensagem_erro === '') {
 
-        if (file_put_contents($caminho_json, $json, LOCK_EX) === false) {
-            $mensagem_erro = "Não foi possível salvar as alterações.";
+        $usuario['nome'] =
+            $nome;
+
+        $usuario['nascimento'] =
+            $nascimento;
+
+        $usuario['telefone'] =
+            $telefone;
+
+        $usuario['serie'] =
+            $serie;
+
+        $usuario['escola'] =
+            $escola;
+
+        $usuario['foto'] =
+            $foto_salva;
+
+        /*
+         * Garante que o código continue salvo.
+         */
+
+        $usuario['codigo_usuario'] =
+            $codigoUsuario;
+
+        if (
+            !salvarJson(
+                $caminhoPerfil,
+                $usuario
+            )
+        ) {
+
+            $mensagem_erro =
+                'Não foi possível salvar as alterações.';
+
         } else {
-            header("Location: perfil.php");
+
+            /*
+            |--------------------------------------------------------------------------
+            | Atualizar sessão
+            |--------------------------------------------------------------------------
+            */
+
+            $_SESSION['user_nome'] =
+                $nome;
+
+            $_SESSION['usuario'] =
+                $nome;
+
+            /*
+            |--------------------------------------------------------------------------
+            | Atualizar nome do arquivo de login
+            |--------------------------------------------------------------------------
+            */
+
+            atualizarArquivoLogin(
+                $pastaLogin,
+                $codigoUsuario,
+                $nome
+            );
+
+            header(
+                'Location: perfil.php'
+            );
+
             exit;
         }
     }
 
-    $usuario["nome"] = $nome;
-    $usuario["nascimento"] = $nascimento;
-    $usuario["telefone"] = $telefone;
-    $usuario["serie"] = $serie;
-    $usuario["escola"] = $escola;
+    /*
+    |--------------------------------------------------------------------------
+    | Manter valores digitados em caso de erro
+    |--------------------------------------------------------------------------
+    */
+
+    $usuario['nome'] =
+        $nome;
+
+    $usuario['nascimento'] =
+        $nascimento;
+
+    $usuario['telefone'] =
+        $telefone;
+
+    $usuario['serie'] =
+        $serie;
+
+    $usuario['escola'] =
+        $escola;
 }
+
+/*
+|--------------------------------------------------------------------------
+| Foto exibida
+|--------------------------------------------------------------------------
+*/
 
 $foto_perfil = $foto_padrao;
 
-if (!empty($usuario["foto"])) {
-    $arquivo_foto = basename($usuario["foto"]);
+if (!empty($usuario['foto'])) {
 
-    if (is_file($pasta_fotos . $arquivo_foto)) {
-        $foto_perfil = $arquivo_foto;
+    $arquivo_foto =
+        basename(
+            $usuario['foto']
+        );
+
+    if (
+        is_file(
+            $pasta_fotos
+            . $arquivo_foto
+        )
+    ) {
+        $foto_perfil =
+            $arquivo_foto;
     }
 }
 
-$caminho_foto = $pasta_fotos_url . $foto_perfil;
+$caminho_foto =
+    $pasta_fotos_url
+    . $foto_perfil;
 ?>
 
 <!DOCTYPE html>
