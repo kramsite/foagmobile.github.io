@@ -33,7 +33,10 @@ $config_padrao = [
     'lembrete_metas' => 0,
     'notificacao_pomodoro' => 1,
     'som_pomodoro' => 1,
-    'antecedencia_lembrete' => 15
+    'antecedencia_lembrete' => 15,
+    // ===== ACESSIBILIDADE SIMPLIFICADA =====
+    'libras' => 0,
+    'leitura_voz' => 0
 ];
 
 function carregarConfiguracoes() {
@@ -58,7 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
         unset($dados['acao']);
         $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao', 'modo_compacto', 
                        'reduzir_animacoes', 'notificacoes_navegador', 'lembrete_atividades',
-                       'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro'];
+                       'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro',
+                       // ===== ACESSIBILIDADE SIMPLIFICADA =====
+                       'libras', 'leitura_voz'];
         foreach ($checkboxes as $campo) {
             $dados[$campo] = isset($dados[$campo]) ? 1 : 0;
         }
@@ -461,6 +466,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                                     <p>Essas ações não poderão ser desfeitas.</p>
                                 </div>
                                 <button type="button" class="btn-perigo" data-acao="apagar-dados">Apagar todos os dados</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- ============================================ -->
+                    <!-- ACESSIBILIDADE - SIMPLIFICADA                 -->
+                    <!-- ============================================ -->
+                    <section class="configuracao-card" id="acessibilidade">
+                        <div class="card-cabecalho">
+                            <div class="card-icone"><i class="fa-solid fa-universal-access"></i></div>
+                            <div>
+                                <h2>Acessibilidade</h2>
+                                <p>Opções para tornar o FOAG mais inclusivo.</p>
+                            </div>
+                            <span class="card-toggle"><i class="fa-solid fa-chevron-down"></i></span>
+                        </div>
+                        <div class="card-conteudo">
+                            <!-- LIBRAS -->
+                            <label class="configuracao-item configuracao-switch">
+                                <span class="configuracao-texto">
+                                    <strong>Libras</strong>
+                                    <small>Ativa o ícone de Libras para acessar o tradutor.</small>
+                                </span>
+                                <span class="switch">
+                                    <input type="checkbox" name="libras" <?= ($config['libras'] ?? 0) ? 'checked' : '' ?>>
+                                    <span class="slider"></span>
+                                </span>
+                            </label>
+
+                            <!-- LEITURA EM VOZ ALTA -->
+                            <label class="configuracao-item configuracao-switch">
+                                <span class="configuracao-texto">
+                                    <strong>Leitura em voz alta</strong>
+                                    <small>Ativa a leitura do texto ao clicar sobre ele.</small>
+                                </span>
+                                <span class="switch">
+                                    <input type="checkbox" name="leitura_voz" <?= ($config['leitura_voz'] ?? 0) ? 'checked' : '' ?>>
+                                    <span class="slider"></span>
+                                </span>
+                            </label>
+
+                            <div class="linha-botao" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--cor-borda);">
+                                <button type="button" class="btn-secundario" id="btn-testar-voz">
+                                    <i class="fa-solid fa-volume-high"></i> Testar leitura
+                                </button>
                             </div>
                         </div>
                     </section>
@@ -910,6 +960,142 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             }
         });
 
+        // ============================================
+        // 13. LEITURA EM VOZ ALTA (TEXT-TO-SPEECH)
+        // ============================================
+        function lerTexto(texto) {
+            if (!window.speechSynthesis) {
+                mostrarToast('❌ Seu navegador não suporta leitura em voz alta.', 'erro');
+                return;
+            }
+            
+            window.speechSynthesis.cancel();
+            
+            const utterance = new SpeechSynthesisUtterance(texto);
+            utterance.lang = 'pt-BR';
+            utterance.rate = 1;
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            
+            const vozes = window.speechSynthesis.getVoices();
+            const vozPT = vozes.find(v => v.lang.startsWith('pt'));
+            if (vozPT) utterance.voice = vozPT;
+            
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Ativar leitura ao clicar no texto
+        document.addEventListener('click', function(e) {
+            const leituraVoz = document.querySelector('[name="leitura_voz"]')?.checked || false;
+            if (!leituraVoz) return;
+            
+            const elemento = e.target.closest('p, span, label, h1, h2, h3, h4, a, .configuracao-texto');
+            if (!elemento) return;
+            if (e.target.closest('input, select, textarea, button')) return;
+            
+            let texto = '';
+            if (elemento.tagName === 'LABEL') {
+                const strong = elemento.querySelector('strong');
+                const small = elemento.querySelector('small');
+                texto = (strong ? strong.textContent : '') + ' ' + (small ? small.textContent : '');
+            } else {
+                texto = elemento.textContent?.trim() || '';
+            }
+            
+            if (texto.length < 3) return;
+            lerTexto(texto);
+        });
+
+        // Carregar vozes
+        if (window.speechSynthesis) {
+            window.speechSynthesis.getVoices();
+            window.speechSynthesis.onvoiceschanged = () => {
+                window.speechSynthesis.getVoices();
+            };
+        }
+
+        // Botão testar leitura
+        document.getElementById('btn-testar-voz')?.addEventListener('click', function() {
+            lerTexto('Olá! Esta é a leitura em voz alta do FOAG. Clique em qualquer texto para ouvi-lo.');
+            mostrarToast('🔊 Testando leitura em voz alta...', 'sucesso');
+        });
+
+        // ============================================
+        // 14. LIBRAS - Ícone flutuante
+        // ============================================
+        function criarIconeLibras() {
+            const icone = document.createElement('div');
+            icone.id = 'icone-libras';
+            icone.innerHTML = '🤟';
+            icone.title = 'Tradutor de Libras';
+            icone.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 60px;
+                height: 60px;
+                background: #3b82f6;
+                color: white;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 30px;
+                cursor: pointer;
+                z-index: 9999;
+                box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+                transition: all 0.3s ease;
+                border: none;
+            `;
+            
+            icone.addEventListener('mouseenter', () => { icone.style.transform = 'scale(1.1)'; });
+            icone.addEventListener('mouseleave', () => { icone.style.transform = 'scale(1)'; });
+            
+            icone.addEventListener('click', function() {
+                const vlibras = document.querySelector('div[vw]');
+                if (vlibras) {
+                    vlibras.style.display = vlibras.style.display === 'none' ? 'block' : 'none';
+                    if (vlibras.style.display === 'block') {
+                        mostrarToast('🤟 Tradutor de Libras ativado!', 'sucesso');
+                        this.style.background = '#22c55e';
+                    } else {
+                        mostrarToast('🤟 Tradutor de Libras desativado', 'info');
+                        this.style.background = '#3b82f6';
+                    }
+                } else {
+                    const script = document.createElement('script');
+                    script.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+                    script.onload = function() {
+                        new window.VLibras.Widget({ rootPath: 'https://vlibras.gov.br/app/' });
+                        mostrarToast('🤟 Tradutor de Libras carregado!', 'sucesso');
+                    };
+                    document.head.appendChild(script);
+                    this.style.background = '#22c55e';
+                }
+            });
+            
+            document.body.appendChild(icone);
+        }
+
+        // Verificar se Libras está ativo
+        if (document.querySelector('[name="libras"]')?.checked) {
+            criarIconeLibras();
+        }
+
+        // Observar mudanças no checkbox de Libras
+        document.querySelector('[name="libras"]')?.addEventListener('change', function() {
+            const icone = document.getElementById('icone-libras');
+            if (this.checked) {
+                if (!icone) criarIconeLibras();
+                mostrarToast('🤟 Ícone de Libras ativado!', 'sucesso');
+            } else {
+                if (icone) icone.remove();
+                const vlibras = document.querySelector('div[vw]');
+                if (vlibras) vlibras.remove();
+                mostrarToast('🤟 Libras desativado', 'info');
+            }
+        });
+
         console.log('⚙️ Configurações FOAG carregadas!');
     });
     </script>
@@ -977,6 +1163,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         body.dark-mode .configuracoes-topo p { color: #94a3b8 !important; }
         body.dark-mode #cancel-logout { background: #334155 !important; color: #e2e8f0 !important; }
         body.dark-mode .card-cabecalho:hover { background: rgba(96,165,250,0.06) !important; }
+
+        /* ============================================
+           ACESSIBILIDADE SIMPLIFICADA
+           ============================================ */
+
+        /* Ícone de Libras - estilos já estão no JS */
+
+        /* Leitura em voz alta - destaque visual */
+        body .texto-lendo {
+            background: rgba(59, 130, 246, 0.15) !important;
+            transition: background 0.3s ease;
+        }
     </style>
 </body>
 </html>
