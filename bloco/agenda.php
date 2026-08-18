@@ -113,59 +113,17 @@ if (!isset($horarioData['html'])) {
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agenda e Horário — FOAG</title>
-
-    <!-- CSS da Agenda -->
     <link rel="stylesheet" href="bloco.css">
-
-    <!-- Modo escuro -->
-    <link
-        rel="stylesheet"
-        href="../m.escuro/dark_basee.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="dark_agend.css"
-    >
-
-    <!-- Fontes -->
-    <link
-        rel="preconnect"
-        href="https://fonts.googleapis.com"
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-        rel="stylesheet"
-    >
-
-    <!-- Ícones -->
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
-
-    <!-- Modo escuro -->
+    <link rel="stylesheet" href="../m.escuro/dark_basee.css">
+    <link rel="stylesheet" href="dark_agend.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../m.escuro/dark-mode.js"></script>
-
-    <!-- Biblioteca PDF -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js">
-    </script>
-
-    <!-- Biblioteca de tabela no PDF -->
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js">
-    </script>
-
-    <!-- Dados da Agenda e do Horário -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
     <script>
         window.AGENDA_DATA = <?= json_encode(
             $agendaData,
@@ -485,22 +443,13 @@ if (!isset($horarioData['html'])) {
         FOAG
 
         <div class="header-icons">
-            <i
-                id="themeToggle"
-                class="fa-solid fa-moon"
-                title="Modo Escuro">
-            </i>
+
+  <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
 
             <i
                 id="icon-perfil"
                 class="fa-regular fa-user"
                 title="Perfil">
-            </i>
-
-            <i
-                id="icon-fogi"
-                class="fa-solid fa-robot"
-                title="Assistente FOAG — FOGi">
             </i>
 
             <i

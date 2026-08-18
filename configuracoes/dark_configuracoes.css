@@ -1,98 +1,162 @@
-.dark-mode .configuracoes-conteudo {
+/* dark_configuracoes.css - Estilos específicos para configurações no modo escuro */
+
+body.dark-mode .configuracoes-conteudo {
   background: var(--dark-bg) !important;
 }
 
-.dark-mode .configuracoes-topo h1,
-.dark-mode .card-cabecalho h2,
-.dark-mode .configuracao-texto label,
-.dark-mode .configuracao-texto strong,
-.dark-mode .titulo-opcao,
-.dark-mode .sobre-foag h3 {
+body.dark-mode .configuracoes-topo h1,
+body.dark-mode .card-cabecalho h2,
+body.dark-mode .configuracao-texto label,
+body.dark-mode .configuracao-texto strong,
+body.dark-mode .titulo-opcao,
+body.dark-mode .sobre-foag h3 {
   color: var(--dark-text) !important;
 }
 
-.dark-mode .configuracoes-topo p,
-.dark-mode .card-cabecalho p,
-.dark-mode .configuracao-texto span,
-.dark-mode .configuracao-texto small,
-.dark-mode .sobre-foag p,
-.dark-mode .sobre-texto,
-.dark-mode .barra-salvar p {
-  color: var(--dark-text-muted, #94a3b8) !important;
+body.dark-mode .configuracoes-topo p,
+body.dark-mode .card-cabecalho p,
+body.dark-mode .configuracao-texto span,
+body.dark-mode .configuracao-texto small,
+body.dark-mode .sobre-foag p,
+body.dark-mode .sobre-texto,
+body.dark-mode .barra-salvar p {
+  color: var(--dark-text-muted) !important;
 }
 
-.dark-mode .configuracao-card,
-.dark-mode .barra-salvar {
+body.dark-mode .configuracao-card,
+body.dark-mode .barra-salvar {
   background: var(--dark-surface) !important;
   border-color: var(--dark-border) !important;
 }
 
-.dark-mode .card-cabecalho,
-.dark-mode .configuracao-item,
-.dark-mode .sobre-foag,
-.dark-mode .sobre-texto {
+body.dark-mode .card-cabecalho {
+  border-bottom-color: var(--dark-border) !important;
+}
+
+body.dark-mode .card-cabecalho:hover {
+  background: rgba(96, 165, 250, 0.06) !important;
+}
+
+body.dark-mode .card-cabecalho .card-toggle {
+  color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .card-conteudo .configuracao-item {
   border-color: var(--dark-border) !important;
 }
 
-.dark-mode .card-icone {
-  background: rgba(56, 165, 255, 0.16) !important;
-  color: var(--dark-primary) !important;
+body.dark-mode .card-icone {
+  background: rgba(59, 130, 246, 0.16) !important;
+  color: var(--dark-primary-light) !important;
 }
 
-.dark-mode .configuracao-item select {
+/* Selects */
+body.dark-mode .configuracao-item select {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
   border-color: var(--dark-border) !important;
 }
 
-.dark-mode .btn-secundario {
+body.dark-mode .configuracao-item select:focus {
+  border-color: var(--dark-primary-light) !important;
+  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+}
+
+/* Botões secundários */
+body.dark-mode .btn-secundario {
   background: #334155 !important;
   color: #e2e8f0 !important;
 }
 
-.dark-mode .btn-secundario:hover {
+body.dark-mode .btn-secundario:hover {
   background: #475569 !important;
 }
 
-.dark-mode .zona-perigo {
-  background: rgba(220, 53, 69, 0.08) !important;
+body.dark-mode .btn-principal,
+body.dark-mode .btn-salvar-topo {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-principal:hover,
+body.dark-mode .btn-salvar-topo:hover {
+  background: #2563eb !important;
+}
+
+/* Zona de perigo */
+body.dark-mode .zona-perigo {
+  background: var(--dark-danger-bg) !important;
   border-color: rgba(220, 53, 69, 0.4) !important;
 }
 
-.dark-mode .zona-perigo h3 {
-  color: #f87171 !important;
+body.dark-mode .zona-perigo h3 {
+  color: var(--dark-danger) !important;
 }
 
-.dark-mode .zona-perigo p {
+body.dark-mode .zona-perigo p {
   color: #fca5a5 !important;
 }
 
-.dark-mode .sobre-links a {
-  background: rgba(56, 165, 255, 0.12) !important;
-  border-color: rgba(56, 165, 255, 0.3) !important;
-  color: #7cc4ff !important;
+/* Links sobre */
+body.dark-mode .sobre-links a {
+  background: rgba(59, 130, 246, 0.12) !important;
+  border-color: rgba(59, 130, 246, 0.25) !important;
+  color: var(--dark-primary-light) !important;
 }
 
-.dark-mode .logo-foag {
+body.dark-mode .sobre-links a:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+
+/* Logo */
+body.dark-mode .logo-foag {
   background: var(--dark-primary) !important;
 }
 
-.dark-mode .modal-content {
-  background: var(--dark-surface) !important;
-  color: var(--dark-text) !important;
+/* Switch */
+body.dark-mode .slider {
+  background: #475569 !important;
 }
 
-.dark-mode .modal-content h3 {
-  color: var(--dark-text) !important;
+body.dark-mode .switch input:checked + .slider {
+  background: var(--dark-primary) !important;
 }
 
-.dark-mode .modal-content h4,
-.dark-mode .modal-content p {
-  color: #94a3b8 !important;
+/* Cores */
+body.dark-mode .cor input:checked + span {
+  border-color: var(--dark-bg) !important;
+  box-shadow: 0 0 0 3px var(--dark-primary-light) !important;
 }
 
-.dark-mode #cancel-logout,
-.dark-mode #cancelar-acao {
-  background: #334155 !important;
-  color: #e2e8f0 !important;
+body.dark-mode .cor span {
+  box-shadow: 0 0 0 1px var(--dark-border) !important;
+}
+
+/* Botões de perigo outline */
+body.dark-mode .btn-perigo-outline {
+  color: var(--dark-danger) !important;
+  border-color: var(--dark-danger) !important;
+}
+
+body.dark-mode .btn-perigo-outline:hover {
+  background: var(--dark-danger) !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn-perigo {
+  background: #dc3545 !important;
+}
+
+body.dark-mode .btn-perigo:hover {
+  background: #bd2130 !important;
+}
+
+/* Seções específicas */
+body.dark-mode .sobre-foag,
+body.dark-mode .sobre-texto {
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .sobre-texto {
+  color: var(--dark-text-muted) !important;
 }

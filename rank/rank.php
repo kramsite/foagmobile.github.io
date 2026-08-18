@@ -957,7 +957,7 @@ $niveisDisponiveis = ['nacional', 'estadual', 'municipal', 'regional'];
         FOAG
 
         <div class="header-icons">
-            <i id="themeToggle" class="fa-solid fa-moon" title="Modo Escuro"></i>
+            <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
             <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
             <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
         </div>

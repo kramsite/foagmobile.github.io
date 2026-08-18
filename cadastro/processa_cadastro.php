@@ -1,153 +1,454 @@
 <?php
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Coletar dados do formulário
-    $nome = trim($_POST['nome'] ?? '');
-    $email = trim($_POST['email'] ?? '');
-    $senha = $_POST['senha'] ?? '';
-    $data_nascimento = trim($_POST['data_nascimento'] ?? '');
-    $telefone = trim($_POST['telefone'] ?? '');
-    $serie = trim($_POST['serie'] ?? '');
-    $escola = trim($_POST['escola'] ?? '');
-    $termos = isset($_POST['termos']) ? true : false;
-    $data_cadastro = date("Y-m-d H:i:s");
 
-    // Validações básicas
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL) || empty($nome) || empty($senha) || empty($data_nascimento)) {
-        exit("Por favor, preencha todos os campos corretamente.");
-    }
-
-    // Sanitizar nome (remove tags HTML)
-    $nome = strip_tags($nome);
-
-    // Validar senha (back-end também protege contra requisições diretas)
-    $regexSenha = '/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/';
-    if (!preg_match($regexSenha, $senha)) {
-        exit("Senha inválida. Deve ter ao menos 8 caracteres, 1 letra maiúscula, 1 número e 1 símbolo.");
-    }
-
-    $arquivo = __DIR__ . '/../json/usuarios.json';
-
-    // Carregar dados existentes
-    $usuarios = [];
-    if (file_exists($arquivo)) {
-        $conteudo = file_get_contents($arquivo);
-        $usuarios = json_decode($conteudo, true) ?? [];
-    }
-
-    // --- GERAR ID NOVO ---
-    $ultimoId = 0;
-    if (!empty($usuarios)) {
-        $ids = array_column($usuarios, 'id');
-        $ultimoId = max($ids);
-    }
-    $novoId = $ultimoId + 1;
-
-    // Verificar se o e-mail já existe
-    foreach ($usuarios as $usuario) {
-        if ($usuario['email'] === $email) {
-            exibirMensagem("Ops... este e-mail já está cadastrado!", "cadastro.php");
-            exit;
-        }
-    }
-
-    // Criar hash seguro da senha
-    $senha_hash = password_hash($senha, PASSWORD_DEFAULT);
-
-    // Adicionar usuário (AGORA COM ID)
-    $usuarios[] = [
-        'id' => $novoId,
-        'nome' => $nome,
-        'email' => $email,
-        'senha' => $senha_hash,
-        'nascimento' => $data_nascimento,
-        'telefone' => $telefone,
-        'serie' => $serie,
-        'escola' => $escola,
-        'termos_aceitos' => $termos,
-        'cadastrado_em' => $data_cadastro
-    ];
-
-    // Salvar no JSON
-    file_put_contents($arquivo, json_encode($usuarios, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-
-    // --- CRIAR PASTA INDIVIDUAL DO USUÁRIO ---
-    $pastaUsuario = __DIR__ . '/../json/usuarios/' . $novoId;
-
-    if (!is_dir($pastaUsuario)) {
-        mkdir($pastaUsuario, 0755, true);
-    }
-
-    // --- CRIAR ARQUIVOS JSON PADRÃO ---
-    $arquivosIniciais = [
-        'agenda.json',
-        'calendario.json',
-        'horario.json',
-        'pomodoro.json',
-        'notas.json'
-    ];
-
-    foreach ($arquivosIniciais as $arquivoBase) {
-        $caminho = $pastaUsuario . '/' . $arquivoBase;
-        if (!file_exists($caminho)) {
-            file_put_contents($caminho, json_encode([], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-        }
-    }
-
-    // Mensagem + redirecionamento
-    exibirMensagem("Cadastro realizado com sucesso :)", "../login/index.php");
-    exit;
-
-} else {
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit("Acesso inválido.");
 }
 
-// Exibe mensagens e redireciona
-function exibirMensagem($mensagem, $redirect) {
+$nome = trim($_POST['nome'] ?? '');
+$email = strtolower(trim($_POST['email'] ?? ''));
+$senha = $_POST['senha'] ?? '';
+$confirmarSenha = $_POST['confirmar_senha'] ?? '';
+$dataNascimento = trim($_POST['data_nascimento'] ?? '');
+$telefone = trim($_POST['telefone'] ?? '');
+$serie = trim($_POST['serie'] ?? '');
+$escola = trim($_POST['escola'] ?? '');
+$termos = isset($_POST['termos']);
+$dataCadastro = date('Y-m-d H:i:s');
+
+if (
+    empty($nome) ||
+    empty($email) ||
+    empty($senha) ||
+    empty($dataNascimento) ||
+    !filter_var($email, FILTER_VALIDATE_EMAIL)
+) {
+    exit("Por favor, preencha todos os campos corretamente.");
+}
+
+if (!$termos) {
+    exit("Você precisa aceitar os termos de uso.");
+}
+
+$nome = strip_tags($nome);
+
+$regexSenha = '/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/';
+
+if (!preg_match($regexSenha, $senha)) {
+    exit("A senha deve ter pelo menos 8 caracteres, uma letra maiúscula, um número e um símbolo.");
+}
+
+if ($senha !== $confirmarSenha) {
+    exit("As senhas não coincidem.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Pastas utilizadas
+|--------------------------------------------------------------------------
+*/
+
+$pastaLogin = __DIR__ . '/../json/usuario_login';
+$pastaUsuarios = __DIR__ . '/../json/usuarios';
+
+if (!is_dir($pastaLogin)) {
+    if (!mkdir($pastaLogin, 0755, true)) {
+        exit("Não foi possível criar a pasta usuario_login.");
+    }
+}
+
+if (!is_dir($pastaUsuarios)) {
+    if (!mkdir($pastaUsuarios, 0755, true)) {
+        exit("Não foi possível criar a pasta usuarios.");
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Bloquear cadastros simultâneos
+|--------------------------------------------------------------------------
+*/
+
+$arquivoLock = fopen($pastaLogin . '/.cadastro.lock', 'c');
+
+if (!$arquivoLock || !flock($arquivoLock, LOCK_EX)) {
+    exit("Não foi possível iniciar o cadastro.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verificar se o e-mail já existe
+|--------------------------------------------------------------------------
+*/
+
+$arquivosLogin = glob($pastaLogin . '/*.json') ?: [];
+
+foreach ($arquivosLogin as $arquivoLogin) {
+    $conteudo = file_get_contents($arquivoLogin);
+    $dadosExistentes = json_decode($conteudo, true);
+
+    if (
+        is_array($dadosExistentes) &&
+        isset($dadosExistentes['email']) &&
+        strtolower($dadosExistentes['email']) === $email
+    ) {
+        flock($arquivoLock, LOCK_UN);
+        fclose($arquivoLock);
+
+        exibirMensagem(
+            "Ops... este e-mail já está cadastrado!",
+            "cadastro.php"
+        );
+
+        exit;
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Criar código aleatório de 5 caracteres
+|--------------------------------------------------------------------------
+*/
+
+$codigoUsuario = gerarCodigoUsuario($pastaUsuarios);
+
+/*
+|--------------------------------------------------------------------------
+| Criar nome do arquivo de login
+|--------------------------------------------------------------------------
+*/
+
+$nomeArquivo = criarNomeArquivoUsuario($nome);
+
+$caminhoArquivoLogin = $pastaLogin . '/' . $nomeArquivo . '.json';
+
+// Impede que duas pessoas com o mesmo nome apaguem uma à outra
+if (file_exists($caminhoArquivoLogin)) {
+    $caminhoArquivoLogin = $pastaLogin . '/'
+        . $nomeArquivo
+        . '_'
+        . $codigoUsuario
+        . '.json';
+}
+
+/*
+|--------------------------------------------------------------------------
+| Criar senha protegida
+|--------------------------------------------------------------------------
+*/
+
+$senhaHash = password_hash($senha, PASSWORD_DEFAULT);
+
+if ($senhaHash === false) {
+    flock($arquivoLock, LOCK_UN);
+    fclose($arquivoLock);
+
+    exit("Não foi possível proteger a senha.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Criar pasta individual do usuário
+|--------------------------------------------------------------------------
+*/
+
+$pastaUsuario = $pastaUsuarios . '/' . $codigoUsuario;
+
+if (!mkdir($pastaUsuario, 0755, true)) {
+    flock($arquivoLock, LOCK_UN);
+    fclose($arquivoLock);
+
+    exit("Não foi possível criar a pasta individual do usuário.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Salvar os dados pessoais dentro da pasta do usuário
+|--------------------------------------------------------------------------
+*/
+
+$dadosPerfil = [
+    'codigo_usuario' => $codigoUsuario,
+    'nome' => $nome,
+    'email' => $email,
+    'nascimento' => $dataNascimento,
+    'telefone' => $telefone,
+    'serie' => $serie,
+    'escola' => $escola,
+    'termos_aceitos' => true,
+    'cadastrado_em' => $dataCadastro
+];
+
+if (!salvarJson($pastaUsuario . '/perfil.json', $dadosPerfil)) {
+    removerDiretorio($pastaUsuario);
+
+    flock($arquivoLock, LOCK_UN);
+    fclose($arquivoLock);
+
+    exit("Não foi possível salvar os dados do perfil.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Criar arquivos individuais
+|--------------------------------------------------------------------------
+*/
+
+$arquivosIniciais = [
+    'agenda.json',
+    'calendario.json',
+    'horario.json',
+    'pomodoro.json',
+    'notas.json'
+];
+
+foreach ($arquivosIniciais as $arquivoInicial) {
+    $caminhoArquivo = $pastaUsuario . '/' . $arquivoInicial;
+
+    if (!salvarJson($caminhoArquivo, [])) {
+        removerDiretorio($pastaUsuario);
+
+        flock($arquivoLock, LOCK_UN);
+        fclose($arquivoLock);
+
+        exit("Não foi possível criar o arquivo {$arquivoInicial}.");
+    }
+}
+
+/*
+|--------------------------------------------------------------------------
+| Criar arquivo individual de login
+|--------------------------------------------------------------------------
+*/
+
+$dadosLogin = [
+    'nome' => $nome,
+    'email' => $email,
+    'senha' => $senhaHash,
+    'codigo_usuario' => $codigoUsuario
+];
+
+if (!salvarJson($caminhoArquivoLogin, $dadosLogin)) {
+    removerDiretorio($pastaUsuario);
+
+    flock($arquivoLock, LOCK_UN);
+    fclose($arquivoLock);
+
+    exit("Não foi possível criar o arquivo de login.");
+}
+
+flock($arquivoLock, LOCK_UN);
+fclose($arquivoLock);
+
+exibirMensagem(
+    "Cadastro realizado com sucesso :)",
+    "../login/index.php"
+);
+
+exit;
+
+/*
+|--------------------------------------------------------------------------
+| Gerar código exclusivo
+|--------------------------------------------------------------------------
+*/
+
+function gerarCodigoUsuario(string $pastaUsuarios): string
+{
+    $caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $quantidade = strlen($caracteres);
+
+    do {
+        $codigo = '';
+
+        for ($i = 0; $i < 5; $i++) {
+            $codigo .= $caracteres[
+                random_int(0, $quantidade - 1)
+            ];
+        }
+
+        $pastaExiste = is_dir(
+            $pastaUsuarios . '/' . $codigo
+        );
+
+    } while ($pastaExiste);
+
+    return $codigo;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Transformar nome em nome de arquivo
+|--------------------------------------------------------------------------
+*/
+
+function criarNomeArquivoUsuario(string $nome): string
+{
+    $nome = trim($nome);
+    $nome = preg_replace('/\s+/u', ' ', $nome);
+
+    if (function_exists('mb_strtolower')) {
+        $nome = mb_strtolower($nome, 'UTF-8');
+    } else {
+        $nome = strtolower($nome);
+    }
+
+    $acentos = [
+        'á' => 'a',
+        'à' => 'a',
+        'ã' => 'a',
+        'â' => 'a',
+        'ä' => 'a',
+        'é' => 'e',
+        'è' => 'e',
+        'ê' => 'e',
+        'ë' => 'e',
+        'í' => 'i',
+        'ì' => 'i',
+        'î' => 'i',
+        'ï' => 'i',
+        'ó' => 'o',
+        'ò' => 'o',
+        'õ' => 'o',
+        'ô' => 'o',
+        'ö' => 'o',
+        'ú' => 'u',
+        'ù' => 'u',
+        'û' => 'u',
+        'ü' => 'u',
+        'ç' => 'c',
+        'ñ' => 'n'
+    ];
+
+    $nome = strtr($nome, $acentos);
+    $nome = preg_replace('/[^a-z0-9]+/', '_', $nome);
+    $nome = trim($nome, '_');
+
+    if ($nome === '') {
+        return 'Usuario';
+    }
+
+    return ucfirst($nome);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Salvar arquivo JSON
+|--------------------------------------------------------------------------
+*/
+
+function salvarJson(string $caminho, array $dados): bool
+{
+    $json = json_encode(
+        $dados,
+        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+    );
+
+    if ($json === false) {
+        return false;
+    }
+
+    return file_put_contents(
+        $caminho,
+        $json,
+        LOCK_EX
+    ) !== false;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Remover pasta incompleta em caso de erro
+|--------------------------------------------------------------------------
+*/
+
+function removerDiretorio(string $diretorio): void
+{
+    if (!is_dir($diretorio)) {
+        return;
+    }
+
+    $arquivos = array_diff(
+        scandir($diretorio),
+        ['.', '..']
+    );
+
+    foreach ($arquivos as $arquivo) {
+        $caminho = $diretorio . '/' . $arquivo;
+
+        if (is_dir($caminho)) {
+            removerDiretorio($caminho);
+        } else {
+            unlink($caminho);
+        }
+    }
+
+    rmdir($diretorio);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Mensagem e redirecionamento
+|--------------------------------------------------------------------------
+*/
+
+function exibirMensagem(string $mensagem, string $redirect): void
+{
+    $mensagemSegura = htmlspecialchars(
+        $mensagem,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
+    $redirectSeguro = htmlspecialchars(
+        $redirect,
+        ENT_QUOTES,
+        'UTF-8'
+    );
+
     echo <<<HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="refresh" content="3;url={$redirectSeguro}">
     <title>Mensagem</title>
-    <meta http-equiv="refresh" content="3;url={$redirect}">
     <style>
         body {
-            font-family:'Poppins', sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
             background: linear-gradient(to right, #38a5ff, rgb(46, 154, 241));
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
-            margin: 0;
+            color: white;
         }
+
         h1 {
+            margin: 0 0 10px;
             font-size: 5em;
-            font-family: 'Snap ITC', sans-serif;
-            color: white;
-            margin-bottom: 10px;
         }
+
         h2 {
-            font-size: 2.5em;
-            color: white;
             margin-bottom: 10px;
             text-align: center;
         }
+
         p, small {
-            color: white;
             text-align: center;
         }
+
         a {
             color: yellow;
-            text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <h1>FOAG</h1>
-    <h2>{$mensagem}</h2>
+    <h2>{$mensagemSegura}</h2>
     <p>Você será redirecionado em alguns segundos...</p>
-    <small>Se não for redirecionado, <a href="{$redirect}">clique aqui</a>.</small>
+    <small>Se não for redirecionado, <a href="{$redirectSeguro}">clique aqui</a>.</small>
 </body>
 </html>
 HTML;
