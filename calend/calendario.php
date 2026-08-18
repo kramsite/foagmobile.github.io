@@ -1,28 +1,133 @@
 <?php
 session_start();
 
-// qual página está ativa
-$current = basename($_SERVER['PHP_SELF']); // ex: pomodoro.php, calendario.php
+// ======================================
+// VERIFICAR LOGIN
+// ======================================
 
-// Carrega os feriados do JSON
-$feriados = json_decode(file_get_contents(__DIR__ . '/../json/feriados.json'), true);
-
-// ====== CARREGAR AGENDA DO USUÁRIO (MESMO FORMATO DA AGENDA) ======
-$userId = $_SESSION['user_id'] ?? null;
-
-// se quiser obrigar login aqui, descomenta:
-/*
-if (!$userId) {
-  header("Location: ../login/index.php");
-  exit;
+if (empty($_SESSION['codigo_usuario'])) {
+    header("Location: ../login/index.php");
+    exit;
 }
-*/
 
-$baseJsonDir  = __DIR__ . '/../json/usuarios';
-$pastaUsuario = $baseJsonDir . '/' . $userId;
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
+// ======================================
+// PÁGINA ATUAL
+// ======================================
+
+$current = basename($_SERVER['PHP_SELF']);
+
+// ======================================
+// FERIADOS
+// ======================================
+
+$arquivoFeriados = __DIR__ . '/../json/feriados.json';
+
+$feriados = [];
+
+if (file_exists($arquivoFeriados)) {
+
+    $conteudoFeriados = file_get_contents(
+        $arquivoFeriados
+    );
+
+    if ($conteudoFeriados !== false) {
+
+        $dadosFeriados = json_decode(
+            $conteudoFeriados,
+            true
+        );
+
+        if (is_array($dadosFeriados)) {
+            $feriados = $dadosFeriados;
+        }
+    }
+}
+
+// ======================================
+// PASTA DO USUÁRIO
+// ======================================
+
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 
 if (!is_dir($pastaUsuario)) {
-  mkdir($pastaUsuario, 0755, true);
+    exit("Pasta do usuário não encontrada.");
+}
+
+// ======================================
+// AGENDA DO USUÁRIO
+// ======================================
+
+$arquivoAgenda = $pastaUsuario . '/agenda.json';
+
+$estruturaInicialAgenda = [
+    'notas' => [],
+    'tarefas' => [],
+    'nao_esquecer' => []
+];
+
+if (!file_exists($arquivoAgenda)) {
+
+    file_put_contents(
+        $arquivoAgenda,
+        json_encode(
+            $estruturaInicialAgenda,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        ),
+        LOCK_EX
+    );
+}
+
+$conteudoAgenda = file_get_contents(
+    $arquivoAgenda
+);
+
+$agendaData = json_decode(
+    $conteudoAgenda ?: '',
+    true
+);
+
+if (!is_array($agendaData)) {
+    $agendaData = $estruturaInicialAgenda;
+}
+
+// ======================================
+// CALENDÁRIO DO USUÁRIO
+// ======================================
+
+$arquivoCalend = $pastaUsuario . '/calendario.json';
+
+$calendarioInicial = [
+    'dias' => [],
+    'metas' => []
+];
+
+if (!file_exists($arquivoCalend)) {
+
+    file_put_contents(
+        $arquivoCalend,
+        json_encode(
+            $calendarioInicial,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        ),
+        LOCK_EX
+    );
+}
+
+$conteudoCalendario = file_get_contents(
+    $arquivoCalend
+);
+
+$calendData = json_decode(
+    $conteudoCalendario ?: '',
+    true
+);
+
+if (!is_array($calendData)) {
+    $calendData = $calendarioInicial;
 }
 
 $arquivoAgenda = $pastaUsuario . '/agenda.json';

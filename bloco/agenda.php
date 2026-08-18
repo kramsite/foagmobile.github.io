@@ -5,12 +5,13 @@ session_start();
 // VERIFICAR LOGIN
 // ======================================
 
-if (!isset($_SESSION['user_id'])) {
+if (empty($_SESSION['codigo_usuario'])) {
     header("Location: ../login/index.php");
     exit;
 }
 
-$userId = $_SESSION['user_id'];
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
 $current = basename($_SERVER['PHP_SELF']);
 
 // ======================================
@@ -18,10 +19,13 @@ $current = basename($_SERVER['PHP_SELF']);
 // ======================================
 
 $baseJsonDir = __DIR__ . '/../json/usuarios';
-$pastaUsuario = $baseJsonDir . '/' . $userId;
 
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
+// A pasta já deve ter sido criada no cadastro.
+// Se não existir, alguma coisa está errada.
 if (!is_dir($pastaUsuario)) {
-    mkdir($pastaUsuario, 0755, true);
+    exit("Pasta do usuário não encontrada.");
 }
 
 // ======================================
