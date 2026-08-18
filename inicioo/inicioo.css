@@ -799,3 +799,31 @@ footer {
         padding: 20px;
     }
 }
+
+/* ============= CORREÇÃO DOS ÍCONES DO HEADER ============= */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-size: 20px;
+    color: #ffffff;
+    cursor: pointer;
+    user-select: none;
+}
+
+.header-icons a {
+    display: flex;
+    align-items: center;
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.header-icons a i {
+    color: inherit !important;
+}
+
+.header-icons a:hover i,
+.header-icons i:hover {
+    color: #e3f2fd !important;
+    transform: scale(1.1);
+}

@@ -738,11 +738,9 @@ salvarJson(
 
     <div class="header-icons">
 
-        <i
-            id="icon-configuracoes"
-            class="fa-solid fa-gear"
-            title="Configurações">
-        </i>
+    <a href="../configuracoes/configuracoes.php" class="link-configuracoes" title="Configurações">
+      <i class="fa-solid fa-gear"></i>
+          </a>
 
         <i
             id="icon-perfil"
