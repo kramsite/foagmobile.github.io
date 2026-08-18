@@ -1,22 +1,30 @@
 <?php
 session_start();
 
-// 1) Garantir que o usuário está logado
-if (!isset($_SESSION['user_id'])) {
-  header("Location: ../login/index.php");
-  exit;
+// ======================================
+// VERIFICAR LOGIN
+// ======================================
+
+if (empty($_SESSION['codigo_usuario'])) {
+    header("Location: ../login/index.php");
+    exit;
 }
 
-$userId = $_SESSION['user_id'];
+$codigoUsuario = $_SESSION['codigo_usuario'];
 
-// 2) Caminho da pasta e arquivo de pomodoro desse usuário
-$baseJsonDir    = __DIR__ . '/../json/usuarios';
-$pastaUsuario   = $baseJsonDir . '/' . $userId;
+// ======================================
+// CAMINHO DA PASTA DO USUÁRIO
+// ======================================
+
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
 $arquivoPomodoro = $pastaUsuario . '/pomodoro.json';
 
-// Garante que a pasta exista
+// A pasta deve ter sido criada no cadastro
 if (!is_dir($pastaUsuario)) {
-  mkdir($pastaUsuario, 0755, true);
+    exit("Pasta do usuário não encontrada.");
 }
 
 // 3) Se não existir pomodoro.json, cria com estrutura básica

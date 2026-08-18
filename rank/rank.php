@@ -5,202 +5,888 @@ session_start();
 // VERIFICAR LOGIN
 // ======================================
 
-if (!isset($_SESSION['user_id'])) {
+if (empty($_SESSION['codigo_usuario'])) {
     header("Location: ../login/index.php");
     exit;
 }
 
-$userId = $_SESSION['user_id'];
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
 $current = basename($_SERVER['PHP_SELF']);
 
 // ======================================
-// DADOS DO RANKING (COM ABAS)
+// LOCALIZAR PASTA DO USUÁRIO
 // ======================================
 
-// Estrutura com diferentes níveis
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
+$arquivoPerfil = $pastaUsuario . '/perfil.json';
+
+// A pasta do usuário deve existir
+if (!is_dir($pastaUsuario)) {
+    exit("Pasta do usuário não encontrada.");
+}
+
+// ======================================
+// CARREGAR NOME DO USUÁRIO
+// ======================================
+
+$usuarioAtual = $_SESSION['user_nome']
+    ?? $_SESSION['usuario']
+    ?? 'Usuário FOAG';
+
+if (file_exists($arquivoPerfil)) {
+
+    $conteudoPerfil = file_get_contents($arquivoPerfil);
+
+    if ($conteudoPerfil !== false) {
+
+        $dadosPerfil = json_decode(
+            $conteudoPerfil,
+            true
+        );
+
+        if (
+            is_array($dadosPerfil)
+            &&
+            !empty($dadosPerfil['nome'])
+        ) {
+            $usuarioAtual = $dadosPerfil['nome'];
+        }
+    }
+}
+
+// Atualiza a sessão
+$_SESSION['user_nome'] = $usuarioAtual;
+$_SESSION['usuario'] = $usuarioAtual;
+
+// ======================================
+// PONTOS DO USUÁRIO
+// ======================================
+
+// Por enquanto, usuário novo começa com 0 estrelas
+$estrelasUsuario = 0;
+
+// ======================================
+// DADOS DO RANKING
+// ======================================
+
 $rankings = [
+
+    // ==================================
+    // ESTRELAS
+    // ==================================
+
     'estrelas' => [
+
         'titulo' => '⭐ Mais Estrelas',
+
         'icone' => '',
+
         'cor' => '#ffd700',
-        'descricao' => 'Quem tem mais estrelas acumuladas',
+
+        'descricao' =>
+            'Quem tem mais estrelas acumuladas',
+
         'niveis' => [
+
+            // --------------------------
+            // NACIONAL
+            // --------------------------
+
             'nacional' => [
+
                 'nome' => '🌍 Nacional',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => 245, 'avatar' => '👩‍🎓', 'nivel' => 1, 'estado' => 'SP'],
-                    ['nome' => 'Carlos Mendes', 'valor' => 198, 'avatar' => '👨‍🎓', 'nivel' => 2, 'estado' => 'RJ'],
-                    ['nome' => 'Mariana Santos', 'valor' => 167, 'avatar' => '👩‍💻', 'nivel' => 3, 'estado' => 'MG'],
-                    ['nome' => 'João Pereira', 'valor' => 143, 'avatar' => '👨‍💻', 'nivel' => 4, 'estado' => 'SP'],
-                    ['nome' => 'Juliana Costa', 'valor' => 128, 'avatar' => '👩‍🔬', 'nivel' => 5, 'estado' => 'BA'],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => 245,
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1,
+                        'estado' => 'SP'
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => 198,
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 2,
+                        'estado' => 'RJ'
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => 167,
+                        'avatar' => '👩‍💻',
+                        'nivel' => 3,
+                        'estado' => 'MG'
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => 143,
+                        'avatar' => '👨‍💻',
+                        'nivel' => 4,
+                        'estado' => 'SP'
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => 128,
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5,
+                        'estado' => 'BA'
+                    ]
+
                 ]
             ],
+
+            // --------------------------
+            // ESTADUAL
+            // --------------------------
+
             'estadual' => [
+
                 'nome' => '🏛️ Estadual (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => 245, 'avatar' => '👩‍🎓', 'nivel' => 1, 'cidade' => 'São Paulo'],
-                    ['nome' => 'João Pereira', 'valor' => 143, 'avatar' => '👨‍💻', 'nivel' => 2, 'cidade' => 'Campinas'],
-                    ['nome' => 'Roberto Alves', 'valor' => 112, 'avatar' => '👨‍🔬', 'nivel' => 3, 'cidade' => 'Santos'],
-                    ['nome' => 'Camila Rocha', 'valor' => 95, 'avatar' => '👩‍🏫', 'nivel' => 4, 'cidade' => 'São José'],
-                    ['nome' => 'Fernando Lima', 'valor' => 78, 'avatar' => '👨‍🏫', 'nivel' => 5, 'cidade' => 'Ribeirão'],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => 245,
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1,
+                        'cidade' => 'São Paulo'
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => 143,
+                        'avatar' => '👨‍💻',
+                        'nivel' => 2,
+                        'cidade' => 'Campinas'
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => 112,
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 3,
+                        'cidade' => 'Santos'
+                    ],
+
+                    [
+                        'nome' => 'Camila Rocha',
+                        'valor' => 95,
+                        'avatar' => '👩‍🏫',
+                        'nivel' => 4,
+                        'cidade' => 'São José'
+                    ],
+
+                    [
+                        'nome' => 'Fernando Lima',
+                        'valor' => 78,
+                        'avatar' => '👨‍🏫',
+                        'nivel' => 5,
+                        'cidade' => 'Ribeirão'
+                    ]
+
                 ]
             ],
+
+            // --------------------------
+            // MUNICIPAL
+            // --------------------------
+
             'municipal' => [
+
                 'nome' => '🏘️ Municipal (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => 245, 'avatar' => '👩‍🎓', 'nivel' => 1, 'bairro' => 'Centro'],
-                    ['nome' => 'Camila Rocha', 'valor' => 95, 'avatar' => '👩‍🏫', 'nivel' => 2, 'bairro' => 'Vila Mariana'],
-                    ['nome' => 'Fernando Lima', 'valor' => 78, 'avatar' => '👨‍🏫', 'nivel' => 3, 'bairro' => 'Moema'],
-                    ['nome' => 'Roberto Alves', 'valor' => 112, 'avatar' => '👨‍🔬', 'nivel' => 4, 'bairro' => 'Pinheiros'],
-                    ['nome' => 'João Pereira', 'valor' => 143, 'avatar' => '👨‍💻', 'nivel' => 5, 'bairro' => 'Itaim'],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => 245,
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1,
+                        'bairro' => 'Centro'
+                    ],
+
+                    [
+                        'nome' => 'Camila Rocha',
+                        'valor' => 95,
+                        'avatar' => '👩‍🏫',
+                        'nivel' => 2,
+                        'bairro' => 'Vila Mariana'
+                    ],
+
+                    [
+                        'nome' => 'Fernando Lima',
+                        'valor' => 78,
+                        'avatar' => '👨‍🏫',
+                        'nivel' => 3,
+                        'bairro' => 'Moema'
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => 112,
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 4,
+                        'bairro' => 'Pinheiros'
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => 143,
+                        'avatar' => '👨‍💻',
+                        'nivel' => 5,
+                        'bairro' => 'Itaim'
+                    ]
+
                 ]
             ],
+
+            // --------------------------
+            // REGIONAL
+            // --------------------------
+
             'regional' => [
+
                 'nome' => '📌 Regional (Sudeste)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => 245, 'avatar' => '👩‍🎓', 'nivel' => 1, 'regiao' => 'Sudeste'],
-                    ['nome' => 'Carlos Mendes', 'valor' => 198, 'avatar' => '👨‍🎓', 'nivel' => 2, 'regiao' => 'Sudeste'],
-                    ['nome' => 'Mariana Santos', 'valor' => 167, 'avatar' => '👩‍💻', 'nivel' => 3, 'regiao' => 'Sudeste'],
-                    ['nome' => 'João Pereira', 'valor' => 143, 'avatar' => '👨‍💻', 'nivel' => 4, 'regiao' => 'Sudeste'],
-                    ['nome' => 'Juliana Costa', 'valor' => 128, 'avatar' => '👩‍🔬', 'nivel' => 5, 'regiao' => 'Sudeste'],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => 245,
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1,
+                        'regiao' => 'Sudeste'
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => 198,
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 2,
+                        'regiao' => 'Sudeste'
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => 167,
+                        'avatar' => '👩‍💻',
+                        'nivel' => 3,
+                        'regiao' => 'Sudeste'
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => 143,
+                        'avatar' => '👨‍💻',
+                        'nivel' => 4,
+                        'regiao' => 'Sudeste'
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => 128,
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5,
+                        'regiao' => 'Sudeste'
+                    ]
+
                 ]
             ]
         ]
     ],
+
+    // ==================================
+    // POMODORO
+    // ==================================
+
     'pomodoro' => [
+
         'titulo' => '⏱️ Mais Tempo no Pomodoro',
+
         'icone' => '',
+
         'cor' => '#4caf50',
-        'descricao' => 'Quem estudou mais tempo com Pomodoro',
+
+        'descricao' =>
+            'Quem estudou mais tempo com Pomodoro',
+
         'niveis' => [
+
             'nacional' => [
+
                 'nome' => '🌍 Nacional',
+
                 'jogadores' => [
-                    ['nome' => 'Mariana Santos', 'valor' => '42h 30min', 'avatar' => '👩‍💻', 'nivel' => 1],
-                    ['nome' => 'Ana Silva', 'valor' => '38h 15min', 'avatar' => '👩‍🎓', 'nivel' => 2],
-                    ['nome' => 'Carlos Mendes', 'valor' => '35h 45min', 'avatar' => '👨‍🎓', 'nivel' => 3],
-                    ['nome' => 'João Pereira', 'valor' => '29h 20min', 'avatar' => '👨‍💻', 'nivel' => 4],
-                    ['nome' => 'Juliana Costa', 'valor' => '25h 50min', 'avatar' => '👩‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '42h 30min',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '38h 15min',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '35h 45min',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '29h 20min',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '25h 50min',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ],
+
             'estadual' => [
+
                 'nome' => '🏛️ Estadual (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Mariana Santos', 'valor' => '42h 30min', 'avatar' => '👩‍💻', 'nivel' => 1],
-                    ['nome' => 'Ana Silva', 'valor' => '38h 15min', 'avatar' => '👩‍🎓', 'nivel' => 2],
-                    ['nome' => 'Carlos Mendes', 'valor' => '35h 45min', 'avatar' => '👨‍🎓', 'nivel' => 3],
-                    ['nome' => 'João Pereira', 'valor' => '29h 20min', 'avatar' => '👨‍💻', 'nivel' => 4],
-                    ['nome' => 'Juliana Costa', 'valor' => '25h 50min', 'avatar' => '👩‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '42h 30min',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '38h 15min',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '35h 45min',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '29h 20min',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '25h 50min',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ],
+
             'municipal' => [
+
                 'nome' => '🏘️ Municipal (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => '38h 15min', 'avatar' => '👩‍🎓', 'nivel' => 1],
-                    ['nome' => 'Carlos Mendes', 'valor' => '35h 45min', 'avatar' => '👨‍🎓', 'nivel' => 2],
-                    ['nome' => 'João Pereira', 'valor' => '29h 20min', 'avatar' => '👨‍💻', 'nivel' => 3],
-                    ['nome' => 'Juliana Costa', 'valor' => '25h 50min', 'avatar' => '👩‍🔬', 'nivel' => 4],
-                    ['nome' => 'Roberto Alves', 'valor' => '22h 10min', 'avatar' => '👨‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '38h 15min',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '35h 45min',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '29h 20min',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '25h 50min',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => '22h 10min',
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ]
         ]
     ],
+
+    // ==================================
+    // FALTAS
+    // ==================================
+
     'faltas' => [
+
         'titulo' => '📊 Menos Faltas',
+
         'icone' => '',
+
         'cor' => '#2196f3',
-        'descricao' => 'Quem teve menos faltas',
+
+        'descricao' =>
+            'Quem teve menos faltas',
+
         'niveis' => [
+
             'nacional' => [
+
                 'nome' => '🌍 Nacional',
+
                 'jogadores' => [
-                    ['nome' => 'João Pereira', 'valor' => '0 faltas', 'avatar' => '👨‍💻', 'nivel' => 1],
-                    ['nome' => 'Ana Silva', 'valor' => '1 falta', 'avatar' => '👩‍🎓', 'nivel' => 2],
-                    ['nome' => 'Carlos Mendes', 'valor' => '2 faltas', 'avatar' => '👨‍🎓', 'nivel' => 3],
-                    ['nome' => 'Mariana Santos', 'valor' => '3 faltas', 'avatar' => '👩‍💻', 'nivel' => 4],
-                    ['nome' => 'Juliana Costa', 'valor' => '4 faltas', 'avatar' => '👩‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '0 faltas',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '1 falta',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '2 faltas',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '3 faltas',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '4 faltas',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ],
+
             'estadual' => [
+
                 'nome' => '🏛️ Estadual (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'João Pereira', 'valor' => '0 faltas', 'avatar' => '👨‍💻', 'nivel' => 1],
-                    ['nome' => 'Ana Silva', 'valor' => '1 falta', 'avatar' => '👩‍🎓', 'nivel' => 2],
-                    ['nome' => 'Carlos Mendes', 'valor' => '2 faltas', 'avatar' => '👨‍🎓', 'nivel' => 3],
-                    ['nome' => 'Mariana Santos', 'valor' => '3 faltas', 'avatar' => '👩‍💻', 'nivel' => 4],
-                    ['nome' => 'Roberto Alves', 'valor' => '5 faltas', 'avatar' => '👨‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '0 faltas',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '1 falta',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '2 faltas',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '3 faltas',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => '5 faltas',
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ]
         ]
     ],
+
+    // ==================================
+    // NOTAS
+    // ==================================
+
     'notas' => [
+
         'titulo' => '📚 Melhores Notas',
+
         'icone' => '',
+
         'cor' => '#9c27b0',
-        'descricao' => 'Quem tem as melhores médias',
+
+        'descricao' =>
+            'Quem tem as melhores médias',
+
         'niveis' => [
+
             'nacional' => [
+
                 'nome' => '🌍 Nacional',
+
                 'jogadores' => [
-                    ['nome' => 'Juliana Costa', 'valor' => '9.8', 'avatar' => '👩‍🔬', 'nivel' => 1],
-                    ['nome' => 'Mariana Santos', 'valor' => '9.5', 'avatar' => '👩‍💻', 'nivel' => 2],
-                    ['nome' => 'Ana Silva', 'valor' => '9.2', 'avatar' => '👩‍🎓', 'nivel' => 3],
-                    ['nome' => 'Carlos Mendes', 'valor' => '8.9', 'avatar' => '👨‍🎓', 'nivel' => 4],
-                    ['nome' => 'João Pereira', 'valor' => '8.5', 'avatar' => '👨‍💻', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '9.8',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '9.5',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '9.2',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '8.9',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '8.5',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 5
+                    ]
+
                 ]
             ],
+
             'estadual' => [
+
                 'nome' => '🏛️ Estadual (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => '9.2', 'avatar' => '👩‍🎓', 'nivel' => 1],
-                    ['nome' => 'Carlos Mendes', 'valor' => '8.9', 'avatar' => '👨‍🎓', 'nivel' => 2],
-                    ['nome' => 'João Pereira', 'valor' => '8.5', 'avatar' => '👨‍💻', 'nivel' => 3],
-                    ['nome' => 'Roberto Alves', 'valor' => '8.1', 'avatar' => '👨‍🔬', 'nivel' => 4],
-                    ['nome' => 'Fernando Lima', 'valor' => '7.8', 'avatar' => '👨‍🏫', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '9.2',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '8.9',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '8.5',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => '8.1',
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Fernando Lima',
+                        'valor' => '7.8',
+                        'avatar' => '👨‍🏫',
+                        'nivel' => 5
+                    ]
+
                 ]
             ]
         ]
     ],
+
+    // ==================================
+    // PRESENÇA
+    // ==================================
+
     'presenca' => [
+
         'titulo' => '🎯 Maior Presença',
+
         'icone' => '',
+
         'cor' => '#ff9800',
-        'descricao' => 'Quem tem a maior frequência',
+
+        'descricao' =>
+            'Quem tem a maior frequência',
+
         'niveis' => [
+
             'nacional' => [
+
                 'nome' => '🌍 Nacional',
+
                 'jogadores' => [
-                    ['nome' => 'Carlos Mendes', 'valor' => '98%', 'avatar' => '👨‍🎓', 'nivel' => 1],
-                    ['nome' => 'Ana Silva', 'valor' => '96%', 'avatar' => '👩‍🎓', 'nivel' => 2],
-                    ['nome' => 'João Pereira', 'valor' => '95%', 'avatar' => '👨‍💻', 'nivel' => 3],
-                    ['nome' => 'Mariana Santos', 'valor' => '93%', 'avatar' => '👩‍💻', 'nivel' => 4],
-                    ['nome' => 'Juliana Costa', 'valor' => '91%', 'avatar' => '👩‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '98%',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '96%',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '95%',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '93%',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Juliana Costa',
+                        'valor' => '91%',
+                        'avatar' => '👩‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ],
+
             'estadual' => [
+
                 'nome' => '🏛️ Estadual (SP)',
+
                 'jogadores' => [
-                    ['nome' => 'Ana Silva', 'valor' => '96%', 'avatar' => '👩‍🎓', 'nivel' => 1],
-                    ['nome' => 'João Pereira', 'valor' => '95%', 'avatar' => '👨‍💻', 'nivel' => 2],
-                    ['nome' => 'Carlos Mendes', 'valor' => '98%', 'avatar' => '👨‍🎓', 'nivel' => 3],
-                    ['nome' => 'Mariana Santos', 'valor' => '93%', 'avatar' => '👩‍💻', 'nivel' => 4],
-                    ['nome' => 'Roberto Alves', 'valor' => '89%', 'avatar' => '👨‍🔬', 'nivel' => 5],
+
+                    [
+                        'nome' => 'Ana Silva',
+                        'valor' => '96%',
+                        'avatar' => '👩‍🎓',
+                        'nivel' => 1
+                    ],
+
+                    [
+                        'nome' => 'João Pereira',
+                        'valor' => '95%',
+                        'avatar' => '👨‍💻',
+                        'nivel' => 2
+                    ],
+
+                    [
+                        'nome' => 'Carlos Mendes',
+                        'valor' => '98%',
+                        'avatar' => '👨‍🎓',
+                        'nivel' => 3
+                    ],
+
+                    [
+                        'nome' => 'Mariana Santos',
+                        'valor' => '93%',
+                        'avatar' => '👩‍💻',
+                        'nivel' => 4
+                    ],
+
+                    [
+                        'nome' => 'Roberto Alves',
+                        'valor' => '89%',
+                        'avatar' => '👨‍🔬',
+                        'nivel' => 5
+                    ]
+
                 ]
             ]
         ]
     ]
 ];
 
-$usuarioAtual = 'Ana Silva';
+// ======================================
+// ADICIONAR USUÁRIO LOGADO NAS ESTRELAS
+// ======================================
+
+foreach (
+    $rankings['estrelas']['niveis']
+    as $nivelKey => &$nivelRanking
+) {
+
+    if (
+        !isset($nivelRanking['jogadores'])
+        ||
+        !is_array($nivelRanking['jogadores'])
+    ) {
+        continue;
+    }
+
+    $usuarioJaExiste = false;
+
+    foreach (
+        $nivelRanking['jogadores']
+        as $jogador
+    ) {
+
+        if (
+            isset($jogador['nome'])
+            &&
+            $jogador['nome'] === $usuarioAtual
+        ) {
+            $usuarioJaExiste = true;
+            break;
+        }
+    }
+
+    if (!$usuarioJaExiste) {
+
+        $nivelRanking['jogadores'][] = [
+
+            'nome' => $usuarioAtual,
+
+            'valor' => $estrelasUsuario,
+
+            'avatar' => '👤',
+
+            'nivel' =>
+                count(
+                    $nivelRanking['jogadores']
+                ) + 1
+        ];
+    }
+
+    // ==================================
+    // ORDENAR POR ESTRELAS
+    // ==================================
+
+    usort(
+        $nivelRanking['jogadores'],
+        function ($a, $b) {
+
+            $valorA = (int) (
+                $a['valor'] ?? 0
+            );
+
+            $valorB = (int) (
+                $b['valor'] ?? 0
+            );
+
+            return $valorB <=> $valorA;
+        }
+    );
+
+    // ==================================
+    // ATUALIZAR NÍVEL/POSIÇÃO
+    // ==================================
+
+    foreach (
+        $nivelRanking['jogadores']
+        as $indice => &$jogador
+    ) {
+        $jogador['nivel'] =
+            $indice + 1;
+    }
+
+    unset($jogador);
+}
+
+unset($nivelRanking);
 
 // ======================================
 // ORDEM DAS CATEGORIAS
 // ======================================
 
-$categoriasOrdenadas = ['estrelas', 'pomodoro', 'faltas', 'notas', 'presenca'];
-$niveisDisponiveis = ['nacional', 'estadual', 'municipal', 'regional'];
-?>
+$categoriasOrdenadas = [
+    'estrelas',
+    'pomodoro',
+    'faltas',
+    'notas',
+    'presenca'
+];
 
+$niveisDisponiveis = [
+    'nacional',
+    'estadual',
+    'municipal',
+    'regional'
+];
+
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 

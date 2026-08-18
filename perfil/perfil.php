@@ -3,75 +3,153 @@ session_start();
 
 $current = basename($_SERVER['PHP_SELF']);
 
-$caminho_json = "../json/usuarios.json";
+/*
+|--------------------------------------------------------------------------
+| Verificar login
+|--------------------------------------------------------------------------
+*/
+
+if (empty($_SESSION['codigo_usuario'])) {
+    header('Location: ../login/index.php');
+    exit;
+}
+
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
+/*
+|--------------------------------------------------------------------------
+| Localizar pasta e perfil do usuário
+|--------------------------------------------------------------------------
+*/
+
+$pastaUsuario = __DIR__
+    . '/../json/usuarios/'
+    . $codigoUsuario;
+
+$caminhoPerfil = $pastaUsuario . '/perfil.json';
+
 $pasta_fotos_url = "../img/perfil/";
 $pasta_fotos_arquivo = __DIR__ . "/../img/perfil/";
 $foto_padrao = "foto_padrao.png";
 
-function escapar($valor) {
-    return htmlspecialchars($valor ?? "Não informado", ENT_QUOTES, "UTF-8");
+/*
+|--------------------------------------------------------------------------
+| Funções
+|--------------------------------------------------------------------------
+*/
+
+function escapar($valor)
+{
+    return htmlspecialchars(
+        $valor ?? "Não informado",
+        ENT_QUOTES,
+        "UTF-8"
+    );
 }
 
-function formatarData($data) {
+function formatarData($data)
+{
     if (empty($data)) {
         return "Não informado";
     }
 
-    $data_formatada = DateTime::createFromFormat("Y-m-d", $data);
+    $dataFormatada = DateTime::createFromFormat(
+        "Y-m-d",
+        $data
+    );
 
-    return $data_formatada ? $data_formatada->format("d/m/Y") : $data;
+    return $dataFormatada
+        ? $dataFormatada->format("d/m/Y")
+        : $data;
 }
 
-if (!file_exists($caminho_json)) {
-    die("Arquivo de usuários não encontrado!");
+/*
+|--------------------------------------------------------------------------
+| Verificar pasta individual
+|--------------------------------------------------------------------------
+*/
+
+if (!is_dir($pastaUsuario)) {
+    exit("Pasta do usuário não encontrada.");
 }
 
-$usuarios = json_decode(file_get_contents($caminho_json), true);
-
-if (!is_array($usuarios) || empty($usuarios)) {
-    die("Nenhum usuário cadastrado!");
+if (!file_exists($caminhoPerfil)) {
+    exit("Perfil do usuário não encontrado.");
 }
 
-$userId = $_SESSION["user_id"] ?? null;
-$usuario_logado = null;
+/*
+|--------------------------------------------------------------------------
+| Carregar perfil.json
+|--------------------------------------------------------------------------
+*/
 
-if ($userId !== null) {
-    if (isset($usuarios[$userId]) && is_array($usuarios[$userId])) {
-        $usuario_logado = $usuarios[$userId];
-    } else {
-        foreach ($usuarios as $usuario) {
-            $id_usuario = $usuario["id"] ?? $usuario["user_id"] ?? null;
+$conteudoPerfil = file_get_contents($caminhoPerfil);
 
-            if ($id_usuario !== null && (string) $id_usuario === (string) $userId) {
-                $usuario_logado = $usuario;
-                break;
-            }
-        }
-    }
+if ($conteudoPerfil === false) {
+    exit("Não foi possível carregar o perfil.");
 }
 
-if (!$usuario_logado) {
-    $usuario_logado = end($usuarios);
+$usuario_logado = json_decode(
+    $conteudoPerfil,
+    true
+);
+
+if (!is_array($usuario_logado)) {
+    exit("Os dados do perfil estão inválidos.");
 }
 
-$nome = $usuario_logado["nome"] ?? "Usuário FOAG";
-$email = $usuario_logado["email"] ?? "Não informado";
-$nascimento = formatarData($usuario_logado["nascimento"] ?? "");
-$telefone = $usuario_logado["telefone"] ?? "Não informado";
-$serie = $usuario_logado["serie"] ?? "Não informado";
-$escola = $usuario_logado["escola"] ?? "Não informado";
+/*
+|--------------------------------------------------------------------------
+| Dados exibidos
+|--------------------------------------------------------------------------
+*/
+
+$nome = $usuario_logado["nome"]
+    ?? "Usuário FOAG";
+
+$email = $usuario_logado["email"]
+    ?? $_SESSION["user_email"]
+    ?? "Não informado";
+
+$nascimento = formatarData(
+    $usuario_logado["nascimento"] ?? ""
+);
+
+$telefone = $usuario_logado["telefone"]
+    ?? "Não informado";
+
+$serie = $usuario_logado["serie"]
+    ?? "Não informado";
+
+$escola = $usuario_logado["escola"]
+    ?? "Não informado";
+
+/*
+|--------------------------------------------------------------------------
+| Foto
+|--------------------------------------------------------------------------
+*/
 
 $foto_perfil = $foto_padrao;
 
 if (!empty($usuario_logado["foto"])) {
-    $foto_usuario = basename($usuario_logado["foto"]);
 
-    if (file_exists($pasta_fotos_arquivo . $foto_usuario)) {
+    $foto_usuario = basename(
+        $usuario_logado["foto"]
+    );
+
+    if (
+        file_exists(
+            $pasta_fotos_arquivo
+            . $foto_usuario
+        )
+    ) {
         $foto_perfil = $foto_usuario;
     }
 }
 
-$caminho_foto = $pasta_fotos_url . $foto_perfil;
+$caminho_foto =
+    $pasta_fotos_url . $foto_perfil;
 ?>
 
 <!DOCTYPE html>

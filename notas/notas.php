@@ -1,26 +1,34 @@
 <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
 session_start();
 
-/* =====================
-   LOGIN OBRIGATÓRIO
-   ===================== */
-if (!isset($_SESSION['user_id'])) {
+// ======================================
+// LOGIN OBRIGATÓRIO
+// ======================================
+
+if (empty($_SESSION['codigo_usuario'])) {
     header("Location: ../login/index.php");
     exit;
 }
-$userId = $_SESSION['user_id'];
 
-/* =====================
-   ARQUIVO JSON POR USUÁRIO
-   ===================== */
-$baseJsonDir   = __DIR__ . '/../json/usuarios';
-$pastaUsuario  = $baseJsonDir . '/' . $userId;
-$arquivoBoletim = $pastaUsuario . '/boletim.json';
+$codigoUsuario = $_SESSION['codigo_usuario'];
 
+// ======================================
+// ARQUIVO JSON DO USUÁRIO
+// ======================================
+
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
+// Usaremos notas.json, que já é criado no cadastro
+$arquivoBoletim = $pastaUsuario . '/notas.json';
+
+// A pasta já deve existir desde o cadastro
 if (!is_dir($pastaUsuario)) {
-    mkdir($pastaUsuario, 0755, true);
+    exit("Pasta do usuário não encontrada.");
 }
 
 $defaultData = [
