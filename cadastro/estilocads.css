@@ -217,3 +217,102 @@ label.termos span {
     display: block !important;
   }
 }
+/* Estilos para o campo de data - VERSÃO REDUZIDA */
+.data-wrapper {
+    position: relative;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.data-input-group {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    width: 100%;
+    max-width: 280px; /* Limita o tamanho máximo */
+}
+
+.data-parte {
+    width: 100%;
+    padding: 10px 5px;
+    font-size: 0.85rem;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+    text-align: center;
+    min-width: 0;
+}
+
+/* Tamanhos individuais */
+#data_dia {
+    flex: 0 0 50px;
+}
+
+#data_mes {
+    flex: 0 0 50px;
+}
+
+#data_ano {
+    flex: 0 0 75px;
+}
+
+.data-parte:focus {
+    border-color: #38a5ff;
+    outline: none;
+}
+
+.data-parte.invalido {
+    border-color: #dc3545 !important;
+    background-color: #fff8f8;
+}
+
+.data-parte.valido {
+    border-color: #28a745 !important;
+}
+
+.data-separador {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555;
+    padding: 0 1px;
+    flex: 0 0 auto;
+}
+
+.data-erro {
+    display: none;
+    color: #dc3545;
+    font-size: 0.75rem;
+    margin-top: 3px;
+    padding: 3px 8px;
+    background-color: #fff0f0;
+    border-radius: 4px;
+    border-left: 3px solid #dc3545;
+}
+
+.data-erro.visivel {
+    display: block !important;
+}
+
+/* Ajuste para mobile */
+@media (max-width: 768px) {
+    .data-input-group {
+        max-width: 240px;
+    }
+    
+    .data-parte {
+        padding: 8px 3px;
+        font-size: 0.8rem;
+    }
+    
+    #data_dia, #data_mes {
+        flex: 0 0 40px;
+    }
+    
+    #data_ano {
+        flex: 0 0 65px;
+    }
+    
+    .data-separador {
+        font-size: 0.9rem;
+    }
+}
