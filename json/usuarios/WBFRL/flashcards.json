@@ -1,0 +1,110 @@
+{
+    "baralhos": [
+        {
+            "id": "BAR_EC0487A9",
+            "nome": "Algebra",
+            "materia": "matematica",
+            "descricao": "",
+            "cor": "#38ffbd",
+            "icone": "fa-language",
+            "cartoes": [
+                {
+                    "id": "CARD_83B03D07",
+                    "pergunta": "1+1",
+                    "resposta": "2",
+                    "acertos": 2,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1787229150903,
+                            "resultado": "acerto"
+                        },
+                        {
+                            "ts": 1787229164076,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-08-20 14:32:01"
+                },
+                {
+                    "id": "CARD_587DFE60",
+                    "pergunta": "2+2",
+                    "resposta": "4",
+                    "acertos": 0,
+                    "erros": 1,
+                    "revisoes": [
+                        {
+                            "ts": 1787229162171,
+                            "resultado": "erro"
+                        }
+                    ],
+                    "criado_em": "2026-08-20 14:32:08"
+                },
+                {
+                    "id": "CARD_95D9608B",
+                    "pergunta": "5*5",
+                    "resposta": "25",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1787229167595,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-08-20 14:32:17"
+                },
+                {
+                    "id": "CARD_87A39E5C",
+                    "pergunta": "10-9",
+                    "resposta": "1",
+                    "acertos": 0,
+                    "erros": 1,
+                    "revisoes": [
+                        {
+                            "ts": 1787229165875,
+                            "resultado": "erro"
+                        }
+                    ],
+                    "criado_em": "2026-08-20 14:32:23"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 3,
+                "erros": 2,
+                "revisoes": 5
+            },
+            "criado_em": "2026-08-20 14:28:12"
+        },
+        {
+            "id": "BAR_599A3E8F",
+            "nome": "Literatura",
+            "materia": "portugues",
+            "descricao": "",
+            "cor": "#d02dd2",
+            "icone": "fa-language",
+            "cartoes": [],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 14:28:37"
+        },
+        {
+            "id": "BAR_38A52C26",
+            "nome": "Verbo to be",
+            "materia": "Inglês",
+            "descricao": "",
+            "cor": "#ff3860",
+            "icone": "fa-language",
+            "cartoes": [],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 14:28:56"
+        }
+    ]
+}

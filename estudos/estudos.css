@@ -503,6 +503,7 @@ main.conteudo {
   align-items: center;
   gap: 12px;
   margin-top: 8px;
+  margin-bottom: 4px;
 }
 
 .color-picker-area span {
@@ -511,10 +512,10 @@ main.conteudo {
 }
 
 .color-picker {
-  width: 48px;
-  height: 48px;
+  width: 22px;
+  height: 22px;
   padding: 0;
-  border: 3px solid #ffffff;
+  border: 1px solid #ffffff;
   border-radius: 50%;
   cursor: pointer;
   overflow: hidden;

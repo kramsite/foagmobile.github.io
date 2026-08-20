@@ -1,6 +1,10 @@
-// ===== Persistência (via servidor / pomodoro.json do usuário) =====
+// ==========================================
+// PERSISTÊNCIA DO POMODORO
+// ==========================================
+
 const SAVE_URL =
-  window.POMODORO_SAVE_URL || 'salvar_pomodoro.php';
+  window.POMODORO_SAVE_URL ||
+  'salvar_pomodoro.php';
 
 const state =
   window.POMODORO_DATA &&
@@ -8,741 +12,1927 @@ const state =
     ? window.POMODORO_DATA
     : {};
 
-if (!Array.isArray(state.disciplines)) {
-  state.disciplines = ['Geral'];
-}
+
+// ==========================================
+// NORMALIZAR DADOS
+// ==========================================
 
 if (!Array.isArray(state.sessions)) {
   state.sessions = [];
 }
 
-if (!state.goals || typeof state.goals !== 'object') {
+if (
+  !state.goals ||
+  typeof state.goals !== 'object' ||
+  Array.isArray(state.goals)
+) {
   state.goals = {};
 }
 
-function save() {
-  try {
-    fetch(SAVE_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(state)
-    }).catch(() => {});
-  } catch (e) {
-    console.error('Erro ao salvar dados:', e);
-  }
+
+// ==========================================
+// MATÉRIAS VINDAS DO materias.json
+// ==========================================
+
+const materiasData =
+  window.MATERIAS_DATA &&
+  typeof window.MATERIAS_DATA === 'object'
+    ? window.MATERIAS_DATA
+    : {
+        materias: []
+      };
+
+const materias =
+  Array.isArray(materiasData.materias)
+    ? materiasData.materias
+    : [];
+
+const nomesMaterias = materias
+  .map((materia) => {
+    return String(
+      materia.nome || ''
+    ).trim();
+  })
+  .filter((nome) => {
+    return nome !== '';
+  });
+
+const materiasUnicas = [
+  ...new Set(nomesMaterias)
+];
+
+
+// Geral sempre disponível
+state.disciplines = [
+  'Geral',
+  ...materiasUnicas.filter(
+    (materia) => materia !== 'Geral'
+  )
+];
+
+
+// ==========================================
+// BUSCAR COR E ÍCONE DA MATÉRIA
+// ==========================================
+
+function getMateriaInfo(nome) {
+
+  const materia =
+    materias.find((item) => {
+      return (
+        String(item.nome || '').trim() ===
+        String(nome || '').trim()
+      );
+    });
+
+  return {
+    cor:
+      materia?.cor ||
+      '#38a5ff',
+
+    icone:
+      materia?.icone ||
+      'fa-book-open'
+  };
 }
 
 
-// ===== Header actions =====
+// ==========================================
+// SALVAR POMODORO
+// ==========================================
+
+function save() {
+
+  return fetch(
+    SAVE_URL,
+    {
+      method: 'POST',
+
+      credentials: 'same-origin',
+
+      headers: {
+        'Content-Type':
+          'application/json'
+      },
+
+      body:
+        JSON.stringify(state)
+    }
+  )
+    .then((response) => {
+
+      if (!response.ok) {
+        throw new Error(
+          'Erro ao salvar dados do Pomodoro.'
+        );
+      }
+
+      return response;
+
+    })
+    .catch((error) => {
+
+      console.error(
+        'Erro ao salvar Pomodoro:',
+        error
+      );
+
+      throw error;
+
+    });
+}
+
+
+// ==========================================
+// CABEÇALHO
+// ==========================================
+
 const logoutModal =
-  document.getElementById('logout-modal');
+  document.getElementById(
+    'logout-modal'
+  );
 
 const confirmLogout =
-  document.getElementById('confirm-logout');
+  document.getElementById(
+    'confirm-logout'
+  );
 
 const cancelLogout =
-  document.getElementById('cancel-logout');
+  document.getElementById(
+    'cancel-logout'
+  );
 
 const iconPerfil =
-  document.getElementById('icon-perfil');
+  document.getElementById(
+    'icon-perfil'
+  );
 
 const iconSair =
-  document.getElementById('icon-sair');
+  document.getElementById(
+    'icon-sair'
+  );
+
+const iconConfiguracoes =
+  document.getElementById(
+    'icon-configuracoes'
+  );
+
+
+// PERFIL
 
 if (iconPerfil) {
-  iconPerfil.addEventListener('click', () => {
-    window.location.href = '../perfil/perfil.php';
-  });
+
+  iconPerfil.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../perfil/perfil.php';
+
+    }
+  );
+
 }
+
+
+// CONFIGURAÇÕES
+
+if (iconConfiguracoes) {
+
+  iconConfiguracoes.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../configuracoes/configuracoes.php';
+
+    }
+  );
+
+}
+
+
+// ABRIR LOGOUT
 
 if (iconSair) {
-  iconSair.addEventListener('click', () => {
-    if (logoutModal) {
-      logoutModal.style.display = 'flex';
+
+  iconSair.addEventListener(
+    'click',
+    () => {
+
+      if (logoutModal) {
+        logoutModal.style.display =
+          'flex';
+      }
+
     }
-  });
+  );
+
 }
+
+
+// CONFIRMAR LOGOUT
 
 if (confirmLogout) {
-  confirmLogout.addEventListener('click', () => {
-    window.location.href = '../login/index.php';
-  });
+
+  confirmLogout.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../../login/logout.php';
+
+    }
+  );
+
 }
+
+
+// CANCELAR LOGOUT
 
 if (cancelLogout) {
-  cancelLogout.addEventListener('click', () => {
-    if (logoutModal) {
-      logoutModal.style.display = 'none';
+
+  cancelLogout.addEventListener(
+    'click',
+    () => {
+
+      if (logoutModal) {
+        logoutModal.style.display =
+          'none';
+      }
+
     }
-  });
+  );
+
 }
+
+
+// FECHAR MODAL CLICANDO FORA
 
 if (logoutModal) {
-  logoutModal.addEventListener('click', (e) => {
-    if (e.target === logoutModal) {
-      logoutModal.style.display = 'none';
+
+  logoutModal.addEventListener(
+    'click',
+    (event) => {
+
+      if (
+        event.target ===
+        logoutModal
+      ) {
+
+        logoutModal.style.display =
+          'none';
+
+      }
+
     }
-  });
+  );
+
 }
 
 
-// ===== Tabs (Timer/Cronômetro) =====
-document.querySelectorAll('.tab-btn').forEach((btn) => {
-  btn.addEventListener('click', () => {
-    document
-      .querySelectorAll('.tab-btn')
-      .forEach((button) => {
-        button.classList.remove('active');
-      });
+// ==========================================
+// ABAS TIMER / CRONÔMETRO
+// ==========================================
 
-    document
-      .querySelectorAll('.tab-panel')
-      .forEach((panel) => {
-        panel.classList.remove('active');
-      });
+document
+  .querySelectorAll('.tab-btn')
+  .forEach((btn) => {
 
-    btn.classList.add('active');
+    btn.addEventListener(
+      'click',
+      () => {
 
-    const tab = btn.getAttribute('data-tab');
-    const panel = document.getElementById('tab-' + tab);
+        document
+          .querySelectorAll(
+            '.tab-btn'
+          )
+          .forEach((button) => {
 
-    if (panel) {
-      panel.classList.add('active');
-    }
+            button.classList.remove(
+              'active'
+            );
+
+          });
+
+        document
+          .querySelectorAll(
+            '.tab-panel'
+          )
+          .forEach((panel) => {
+
+            panel.classList.remove(
+              'active'
+            );
+
+          });
+
+        btn.classList.add(
+          'active'
+        );
+
+        const tab =
+          btn.getAttribute(
+            'data-tab'
+          );
+
+        const panel =
+          document.getElementById(
+            'tab-' + tab
+          );
+
+        if (panel) {
+
+          panel.classList.add(
+            'active'
+          );
+
+        }
+
+      }
+    );
+
   });
-});
 
 
-// ===== Disciplinas =====
+// ==========================================
+// SELECTS DE MATÉRIA
+// ==========================================
+
 const disciplineSel =
-  document.getElementById('discipline');
-
-const newDiscipline =
-  document.getElementById('newDiscipline');
-
-const addDisciplineBtn =
-  document.getElementById('addDiscipline');
+  document.getElementById(
+    'discipline'
+  );
 
 const goalDiscipline =
-  document.getElementById('goalDiscipline');
+  document.getElementById(
+    'goalDiscipline'
+  );
 
 const stopwatchDiscipline =
-  document.getElementById('stopwatchDiscipline');
+  document.getElementById(
+    'stopwatchDiscipline'
+  );
 
-function fillSelect(selectEl, values) {
+
+// ==========================================
+// PREENCHER SELECT
+// ==========================================
+
+function fillSelect(
+  selectEl,
+  values
+) {
+
   if (!selectEl) {
     return;
   }
 
-  while (selectEl.options.length) {
-    selectEl.remove(0);
-  }
+  const valorAtual =
+    selectEl.value;
+
+  selectEl.innerHTML = '';
 
   values.forEach((value) => {
-    selectEl.add(new Option(value, value));
-  });
-}
 
-function refreshDisciplines() {
-  if (!state.disciplines.includes('Geral')) {
-    state.disciplines.unshift('Geral');
+    const option =
+      document.createElement(
+        'option'
+      );
+
+    option.value = value;
+    option.textContent = value;
+
+    selectEl.appendChild(
+      option
+    );
+
+  });
+
+  if (
+    values.includes(
+      valorAtual
+    )
+  ) {
+
+    selectEl.value =
+      valorAtual;
+
   }
 
-  const ordered = [
-    'Geral',
-    ...state.disciplines.filter(
-      (discipline) => discipline !== 'Geral'
-    )
-  ];
+}
 
-  fillSelect(disciplineSel, ordered);
-  fillSelect(goalDiscipline, ordered);
-  fillSelect(stopwatchDiscipline, ordered);
+
+// ==========================================
+// CARREGAR MATÉRIAS NOS SELECTS
+// ==========================================
+
+function refreshDisciplines() {
+
+  fillSelect(
+    disciplineSel,
+    state.disciplines
+  );
+
+  fillSelect(
+    goalDiscipline,
+    state.disciplines
+  );
+
+  fillSelect(
+    stopwatchDiscipline,
+    state.disciplines
+  );
+
 }
 
 refreshDisciplines();
 
 
-// ===== Mensagem rápida =====
-function mostrarMensagemDisciplina() {
-  const mensagemAnterior =
-    document.getElementById('mensagem-disciplina');
+// ==========================================
+// POLYFILL UUID
+// ==========================================
 
-  if (mensagemAnterior) {
-    mensagemAnterior.remove();
+if (
+  !(
+    window.crypto &&
+    crypto.randomUUID
+  )
+) {
+
+  window.crypto =
+    window.crypto || {};
+
+  crypto.randomUUID =
+    function () {
+
+      return (
+        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
+      ).replace(
+        /[xy]/g,
+        (c) => {
+
+          const r =
+            (Math.random() * 16) |
+            0;
+
+          const v =
+            c === 'x'
+              ? r
+              : (r & 0x3) | 0x8;
+
+          return v.toString(16);
+
+        }
+      );
+
+    };
+
+}
+
+
+// ==========================================
+// MATÉRIAS ESTUDADAS RECENTEMENTE
+// ==========================================
+
+const recentStudiesList =
+  document.getElementById(
+    'recentStudiesList'
+  );
+
+
+// FORMATA DATA
+
+function formatRecentDate(
+  timestamp
+) {
+
+  const date =
+    new Date(timestamp);
+
+  const now =
+    new Date();
+
+  const todayStart =
+    new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+
+  const studyStart =
+    new Date(
+      date.getFullYear(),
+      date.getMonth(),
+      date.getDate()
+    );
+
+  const diffDays =
+    Math.floor(
+      (
+        todayStart.getTime() -
+        studyStart.getTime()
+      ) /
+      86400000
+    );
+
+  const time =
+    date.toLocaleTimeString(
+      'pt-BR',
+      {
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    );
+
+
+  if (diffDays === 0) {
+
+    return `Hoje às ${time}`;
+
   }
 
-  const mensagem = document.createElement('div');
 
-  mensagem.id = 'mensagem-disciplina';
-  mensagem.textContent = 'Nova disciplina adicionada!';
+  if (diffDays === 1) {
 
-  mensagem.style.cssText = `
-    position: fixed;
-    top: 25px;
-    right: 25px;
-    background-color: #38a5ff;
-    color: #ffffff;
-    padding: 12px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    font-family: 'Poppins', sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-    z-index: 99999;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition:
-      opacity 0.3s ease,
-      transform 0.3s ease;
-  `;
+    return `Ontem às ${time}`;
 
-  document.body.appendChild(mensagem);
-
-  setTimeout(() => {
-    mensagem.style.opacity = '1';
-    mensagem.style.transform = 'translateY(0)';
-  }, 10);
-
-  setTimeout(() => {
-    mensagem.style.opacity = '0';
-    mensagem.style.transform = 'translateY(-10px)';
-
-    setTimeout(() => {
-      mensagem.remove();
-    }, 300);
-  }, 2000);
-}
+  }
 
 
-// ===== Adicionar nova disciplina =====
-if (addDisciplineBtn) {
-  addDisciplineBtn.addEventListener('click', () => {
-    const val =
-      ((newDiscipline && newDiscipline.value) || '')
-        .trim();
-
-    if (!val) {
-      return;
-    }
-
-    if (state.disciplines.includes(val)) {
-      alert('Essa disciplina já foi adicionada.');
-      return;
-    }
-
-    state.disciplines.push(val);
-
-    save();
-    refreshDisciplines();
-
-    if (newDiscipline) {
-      newDiscipline.value = '';
-    }
-
-    mostrarMensagemDisciplina();
-  });
-}
-
-
-// Permitir adicionar disciplina com Enter
-if (newDiscipline) {
-  newDiscipline.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-
-      if (addDisciplineBtn) {
-        addDisciplineBtn.click();
+  return (
+    `${date.toLocaleDateString(
+      'pt-BR',
+      {
+        day: '2-digit',
+        month: '2-digit'
       }
-    }
-  });
+    )} às ${time}`
+  );
+
 }
 
 
-// ===== Polyfill UUID =====
-if (!(window.crypto && crypto.randomUUID)) {
-  window.crypto = window.crypto || {};
+// PEGA AS 5 ÚLTIMAS MATÉRIAS DIFERENTES
 
-  crypto.randomUUID = function () {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'
-      .replace(/[xy]/g, (c) => {
-        const r = (Math.random() * 16) | 0;
+function getRecentStudies() {
 
-        const v =
-          c === 'x'
-            ? r
-            : (r & 0x3) | 0x8;
+  const orderedSessions =
+    [...state.sessions]
 
-        return v.toString(16);
+      .filter((session) => {
+
+        return (
+          session.mode ===
+            'focus' &&
+
+          session.discipline &&
+
+          session.discipline !==
+            'Geral'
+        );
+
+      })
+
+      .sort((a, b) => {
+
+        return b.ts - a.ts;
+
       });
-  };
+
+
+  const recentes = [];
+
+  const materiasUsadas =
+    new Set();
+
+
+  for (
+    const session
+    of orderedSessions
+  ) {
+
+    const materia =
+      String(
+        session.discipline
+      ).trim();
+
+
+    if (
+      !materia ||
+      materiasUsadas.has(
+        materia
+      )
+    ) {
+
+      continue;
+
+    }
+
+
+    materiasUsadas.add(
+      materia
+    );
+
+    recentes.push(
+      session
+    );
+
+
+    if (
+      recentes.length >= 5
+    ) {
+
+      break;
+
+    }
+
+  }
+
+
+  return recentes;
+
 }
 
 
-// ===== Pomodoro =====
+// MOSTRAR RECENTES
+
+function updateRecentStudies() {
+
+  if (!recentStudiesList) {
+    return;
+  }
+
+
+  recentStudiesList.innerHTML =
+    '';
+
+
+  const recentes =
+    getRecentStudies();
+
+
+  // NENHUMA SESSÃO AINDA
+
+  if (
+    recentes.length === 0
+  ) {
+
+    const empty =
+      document.createElement(
+        'div'
+      );
+
+    empty.className =
+      'recent-empty';
+
+
+    const icon =
+      document.createElement(
+        'i'
+      );
+
+    icon.className =
+      'fa-regular fa-clock';
+
+
+    const text =
+      document.createElement(
+        'span'
+      );
+
+    text.textContent =
+      'Suas matérias estudadas recentemente aparecerão aqui.';
+
+
+    empty.appendChild(
+      icon
+    );
+
+    empty.appendChild(
+      text
+    );
+
+
+    recentStudiesList.appendChild(
+      empty
+    );
+
+    return;
+
+  }
+
+
+  // CRIA OS CARDS
+
+  recentes.forEach(
+    (session) => {
+
+      const item =
+        document.createElement(
+          'div'
+        );
+
+      item.className =
+        'recent-study-item';
+
+
+      const materiaInfo =
+        getMateriaInfo(
+          session.discipline
+        );
+
+
+      // =====================
+      // ÍCONE
+      // =====================
+
+      const iconBox =
+        document.createElement(
+          'div'
+        );
+
+      iconBox.className =
+        'recent-study-icon';
+
+
+      iconBox.style.background =
+        `${materiaInfo.cor}18`;
+
+      iconBox.style.color =
+        materiaInfo.cor;
+
+
+      const icon =
+        document.createElement(
+          'i'
+        );
+
+      icon.className =
+        `fa-solid ${materiaInfo.icone}`;
+
+
+      iconBox.appendChild(
+        icon
+      );
+
+
+      // =====================
+      // INFORMAÇÕES
+      // =====================
+
+      const info =
+        document.createElement(
+          'div'
+        );
+
+      info.className =
+        'recent-study-info';
+
+
+      const name =
+        document.createElement(
+          'span'
+        );
+
+      name.className =
+        'recent-study-name';
+
+      name.textContent =
+        session.discipline;
+
+
+      const meta =
+        document.createElement(
+          'span'
+        );
+
+      meta.className =
+        'recent-study-meta';
+
+      meta.textContent =
+        formatRecentDate(
+          session.ts
+        );
+
+
+      info.appendChild(
+        name
+      );
+
+      info.appendChild(
+        meta
+      );
+
+
+      // =====================
+      // DURAÇÃO
+      // =====================
+
+      const duration =
+        document.createElement(
+          'span'
+        );
+
+      duration.className =
+        'recent-study-duration';
+
+      duration.textContent =
+        `${session.minutes} min`;
+
+
+      // =====================
+      // MONTAR ITEM
+      // =====================
+
+      item.appendChild(
+        iconBox
+      );
+
+      item.appendChild(
+        info
+      );
+
+      item.appendChild(
+        duration
+      );
+
+
+      recentStudiesList.appendChild(
+        item
+      );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// POMODORO
+// ==========================================
+
 let mode = 'focus';
+
 let cycle = 1;
+
 let timer = null;
+
 let endAt = null;
+
 let totalMs = 0;
+
 let remainingMs = 0;
 
+
 const focusM =
-  document.getElementById('focusM');
+  document.getElementById(
+    'focusM'
+  );
 
 const shortM =
-  document.getElementById('shortM');
+  document.getElementById(
+    'shortM'
+  );
 
 const longM =
-  document.getElementById('longM');
+  document.getElementById(
+    'longM'
+  );
 
 const everyCycles =
-  document.getElementById('everyCycles');
+  document.getElementById(
+    'everyCycles'
+  );
 
 const timerEl =
-  document.getElementById('timer');
+  document.getElementById(
+    'timer'
+  );
 
 const modePill =
-  document.getElementById('modePill');
+  document.getElementById(
+    'modePill'
+  );
 
 const cyclePill =
-  document.getElementById('cyclePill');
+  document.getElementById(
+    'cyclePill'
+  );
 
 const progressBar =
-  document.getElementById('timerProgress');
+  document.getElementById(
+    'timerProgress'
+  );
 
 const ding =
-  document.getElementById('ding');
+  document.getElementById(
+    'ding'
+  );
 
-function setMode(newMode) {
+
+// ==========================================
+// DEFINIR MODO
+// ==========================================
+
+function setMode(
+  newMode
+) {
+
   mode = newMode;
 
+
   const mins =
+
     newMode === 'focus'
+
       ? +(focusM?.value || 25)
+
       : newMode === 'short'
+
         ? +(shortM?.value || 5)
+
         : +(longM?.value || 15);
 
-  totalMs = mins * 60 * 1000;
-  remainingMs = totalMs;
+
+  totalMs =
+    mins * 60 * 1000;
+
+
+  remainingMs =
+    totalMs;
+
+
   endAt = null;
+
 
   renderTimer();
 
+
   if (modePill) {
+
     modePill.innerHTML = `
+
       <i class="fa-solid fa-hourglass-half"></i>
+
       ${
         newMode === 'focus'
           ? 'Foco'
+
           : newMode === 'short'
             ? 'Pausa curta'
+
             : 'Pausa longa'
       }
+
     `;
+
   }
+
 }
 
+
+// ==========================================
+// RENDERIZAR TIMER
+// ==========================================
+
 function renderTimer() {
-  if (!timerEl || !progressBar || !cyclePill) {
+
+  if (!timerEl) {
     return;
   }
 
+
   const mm =
-    Math.floor(remainingMs / 60000)
+    Math.floor(
+      remainingMs /
+      60000
+    )
       .toString()
-      .padStart(2, '0');
+      .padStart(
+        2,
+        '0'
+      );
+
 
   const ss =
-    Math.floor((remainingMs % 60000) / 1000)
+    Math.floor(
+      (
+        remainingMs %
+        60000
+      ) /
+      1000
+    )
       .toString()
-      .padStart(2, '0');
+      .padStart(
+        2,
+        '0'
+      );
 
-  timerEl.textContent = `${mm}:${ss}`;
 
-  const pct = totalMs
-    ? Math.max(
-        0,
-        100 -
-          Math.floor(
-            (remainingMs / totalMs) * 100
-          )
-      )
-    : 0;
+  timerEl.textContent =
+    `${mm}:${ss}`;
 
-  progressBar.style.width = pct + '%';
-  cyclePill.textContent = `Ciclo ${cycle}`;
 
-  document.title = `${mm}:${ss} – FOAG`;
+  const pct =
+    totalMs
+
+      ? Math.max(
+          0,
+
+          100 -
+            Math.floor(
+              (
+                remainingMs /
+                totalMs
+              ) *
+              100
+            )
+        )
+
+      : 0;
+
+
+  if (progressBar) {
+
+    progressBar.style.width =
+      pct + '%';
+
+  }
+
+
+  if (cyclePill) {
+
+    cyclePill.innerHTML = `
+
+      <i class="fa-solid fa-repeat"></i>
+
+      Ciclo ${cycle}
+
+    `;
+
+  }
+
+
+  document.title =
+    `${mm}:${ss} – FOAG`;
+
 }
 
-function tick() {
-  const now = Date.now();
 
-  remainingMs = Math.max(0, endAt - now);
+// ==========================================
+// TICK TIMER
+// ==========================================
+
+function tick() {
+
+  const now =
+    Date.now();
+
+
+  remainingMs =
+    Math.max(
+      0,
+      endAt - now
+    );
+
 
   renderTimer();
 
-  if (remainingMs <= 0) {
-    clearInterval(timer);
+
+  if (
+    remainingMs <= 0
+  ) {
+
+    clearInterval(
+      timer
+    );
 
     timer = null;
 
+
     completeCycle();
 
+
     try {
-      if (ding && ding.play) {
+
+      if (
+        ding &&
+        ding.play
+      ) {
+
         ding.play();
+
       }
-    } catch (e) {
-      console.error('Erro ao reproduzir som:', e);
+
+    } catch (error) {
+
+      console.error(
+        'Erro ao reproduzir som:',
+        error
+      );
+
     }
+
   }
+
 }
 
+
+// ==========================================
+// INICIAR
+// ==========================================
+
 function start() {
+
   if (timer) {
     return;
   }
 
-  if (!endAt) {
-    endAt = Date.now() + remainingMs;
-  }
 
-  timer = setInterval(tick, 200);
-}
+  if (
+    remainingMs <= 0
+  ) {
 
-function pause() {
-  if (timer) {
-    clearInterval(timer);
-
-    timer = null;
-
-    remainingMs = Math.max(
-      0,
-      endAt - Date.now()
+    setMode(
+      mode
     );
 
-    endAt = null;
-
-    renderTimer();
   }
+
+
+  if (!endAt) {
+
+    endAt =
+      Date.now() +
+      remainingMs;
+
+  }
+
+
+  timer =
+    setInterval(
+      tick,
+      200
+    );
+
 }
+
+
+// ==========================================
+// PAUSAR
+// ==========================================
+
+function pause() {
+
+  if (!timer) {
+    return;
+  }
+
+
+  clearInterval(
+    timer
+  );
+
+
+  timer = null;
+
+
+  remainingMs =
+    Math.max(
+
+      0,
+
+      endAt -
+      Date.now()
+
+    );
+
+
+  endAt = null;
+
+
+  renderTimer();
+
+}
+
+
+// ==========================================
+// RESETAR
+// ==========================================
 
 function reset() {
+
   pause();
-  setMode(mode);
+
+  setMode(
+    mode
+  );
+
 }
 
+
+// ==========================================
+// COMPLETAR CICLO
+// ==========================================
+
 function completeCycle() {
+
   const mins =
-    Math.round(totalMs / 60000);
+    Math.round(
+      totalMs /
+      60000
+    );
+
 
   const discipline =
+
     disciplineSel
+
       ? disciplineSel.value
+
       : 'Geral';
 
+
   state.sessions.push({
-    ts: Date.now(),
-    minutes: mins,
-    mode: mode,
-    discipline: discipline
+
+    ts:
+      Date.now(),
+
+    minutes:
+      mins,
+
+    mode:
+      mode,
+
+    discipline:
+      discipline
+
   });
 
-  save();
+
+  save()
+    .catch(() => {});
+
+
   updateHistory();
+
   updateCharts();
+
   updateGoalsView();
 
-  if (mode === 'focus') {
+  updateRecentStudies();
+
+
+  if (
+    mode === 'focus'
+  ) {
+
     const ec =
-      +(everyCycles?.value || 4);
+      +(
+        everyCycles?.value ||
+        4
+      );
+
 
     cycle++;
 
-    if ((cycle - 1) % ec === 0) {
-      setMode('long');
+
+    if (
+      (cycle - 1) %
+        ec ===
+      0
+    ) {
+
+      setMode(
+        'long'
+      );
+
     } else {
-      setMode('short');
+
+      setMode(
+        'short'
+      );
+
     }
+
   } else {
-    setMode('focus');
+
+    setMode(
+      'focus'
+    );
+
   }
+
 }
+
+
+// ==========================================
+// BOTÕES POMODORO
+// ==========================================
 
 const startBtn =
-  document.getElementById('startBtn');
+  document.getElementById(
+    'startBtn'
+  );
 
 const pauseBtn =
-  document.getElementById('pauseBtn');
+  document.getElementById(
+    'pauseBtn'
+  );
 
 const resetBtn =
-  document.getElementById('resetBtn');
+  document.getElementById(
+    'resetBtn'
+  );
+
 
 if (startBtn) {
-  startBtn.onclick = start;
+
+  startBtn.addEventListener(
+    'click',
+    start
+  );
+
 }
+
 
 if (pauseBtn) {
-  pauseBtn.onclick = pause;
+
+  pauseBtn.addEventListener(
+    'click',
+    pause
+  );
+
 }
+
 
 if (resetBtn) {
-  resetBtn.onclick = reset;
+
+  resetBtn.addEventListener(
+    'click',
+    reset
+  );
+
 }
 
-setMode('focus');
+
+setMode(
+  'focus'
+);
 
 
-// ===== Cronômetro =====
+// ==========================================
+// CRONÔMETRO
+// ==========================================
+
 const swDisplay =
-  document.getElementById('stopwatchDisplay');
+  document.getElementById(
+    'stopwatchDisplay'
+  );
 
 const swStartBtn =
-  document.getElementById('swStart');
+  document.getElementById(
+    'swStart'
+  );
 
 const swPauseBtn =
-  document.getElementById('swPause');
+  document.getElementById(
+    'swPause'
+  );
 
 const swResetBtn =
-  document.getElementById('swReset');
+  document.getElementById(
+    'swReset'
+  );
 
 const swLapBtn =
-  document.getElementById('swLap');
+  document.getElementById(
+    'swLap'
+  );
 
 const swSaveBtn =
-  document.getElementById('swSaveSession');
+  document.getElementById(
+    'swSaveSession'
+  );
 
 const lapsList =
-  document.getElementById('lapsList');
+  document.getElementById(
+    'lapsList'
+  );
 
-let swRunning = false;
-let swStartAt = null;
-let swElapsed = 0;
-let swTimer = null;
+
+let swRunning =
+  false;
+
+let swStartAt =
+  null;
+
+let swElapsed =
+  0;
+
+let swTimer =
+  null;
+
 
 const swLaps = [];
 
+
+// ==========================================
+// FORMATAR CRONÔMETRO
+// ==========================================
+
+function formatStopwatchTime(
+  total
+) {
+
+  const h =
+    Math.floor(
+      total /
+      3600000
+    )
+      .toString()
+      .padStart(
+        2,
+        '0'
+      );
+
+
+  const m =
+    Math.floor(
+      (
+        total %
+        3600000
+      ) /
+      60000
+    )
+      .toString()
+      .padStart(
+        2,
+        '0'
+      );
+
+
+  const s =
+    Math.floor(
+      (
+        total %
+        60000
+      ) /
+      1000
+    )
+      .toString()
+      .padStart(
+        2,
+        '0'
+      );
+
+
+  return (
+    `${h}:${m}:${s}`
+  );
+
+}
+
+
+// ==========================================
+// RENDERIZAR CRONÔMETRO
+// ==========================================
+
 function renderStopwatch() {
+
   if (!swDisplay) {
     return;
   }
 
-  const total = swElapsed;
 
-  const h =
-    Math.floor(total / 3600000)
-      .toString()
-      .padStart(2, '0');
+  swDisplay.textContent =
+    formatStopwatchTime(
+      swElapsed
+    );
 
-  const m =
-    Math.floor(
-      (total % 3600000) / 60000
-    )
-      .toString()
-      .padStart(2, '0');
-
-  const s =
-    Math.floor(
-      (total % 60000) / 1000
-    )
-      .toString()
-      .padStart(2, '0');
-
-  swDisplay.textContent = `${h}:${m}:${s}`;
 }
 
+
+// ==========================================
+// VOLTAS
+// ==========================================
+
 function renderLaps() {
+
   if (!lapsList) {
     return;
   }
 
-  lapsList.innerHTML = '';
 
-  swLaps.forEach((ms, idx) => {
-    const prev =
-      idx === 0
-        ? 0
-        : swLaps[idx - 1];
+  lapsList.innerHTML =
+    '';
 
-    const lapDur = ms - prev;
 
-    const formatarTempo = (tempo) => {
-      const hh =
-        Math.floor(tempo / 3600000)
-          .toString()
-          .padStart(2, '0');
+  swLaps.forEach(
+    (ms, idx) => {
 
-      const mm =
-        Math.floor(
-          (tempo % 3600000) / 60000
-        )
-          .toString()
-          .padStart(2, '0');
+      const prev =
 
-      const ss =
-        Math.floor(
-          (tempo % 60000) / 1000
-        )
-          .toString()
-          .padStart(2, '0');
+        idx === 0
 
-      return `${hh}:${mm}:${ss}`;
-    };
+          ? 0
 
-    const div =
-      document.createElement('div');
+          : swLaps[
+              idx - 1
+            ];
 
-    div.className = 'task';
 
-    div.innerHTML = `
-      <strong>Volta ${idx + 1}</strong>
+      const lapDur =
+        ms - prev;
 
-      <small style="color:#666">
-        Tempo total: ${formatarTempo(ms)}
-        |
-        Parcial: ${formatarTempo(lapDur)}
-      </small>
-    `;
 
-    lapsList.appendChild(div);
-  });
-}
+      const div =
+        document.createElement(
+          'div'
+        );
 
-function swTick() {
-  swElapsed =
-    Date.now() - swStartAt;
 
-  renderStopwatch();
-}
+      div.className =
+        'task';
 
-if (swStartBtn) {
-  swStartBtn.addEventListener('click', () => {
-    if (swRunning) {
-      return;
-    }
 
-    swRunning = true;
+      const strong =
+        document.createElement(
+          'strong'
+        );
 
-    swStartAt =
-      Date.now() - swElapsed;
 
-    swTimer =
-      setInterval(swTick, 200);
-  });
-}
+      strong.textContent =
+        `Volta ${idx + 1}`;
 
-if (swPauseBtn) {
-  swPauseBtn.addEventListener('click', () => {
-    if (!swRunning) {
-      return;
-    }
 
-    swRunning = false;
+      const small =
+        document.createElement(
+          'small'
+        );
 
-    clearInterval(swTimer);
 
-    swTimer = null;
+      small.textContent =
+        `Tempo total: ${formatStopwatchTime(ms)} | Parcial: ${formatStopwatchTime(lapDur)}`;
 
-    swTick();
-  });
-}
 
-if (swResetBtn) {
-  swResetBtn.addEventListener('click', () => {
-    swRunning = false;
-
-    clearInterval(swTimer);
-
-    swTimer = null;
-    swElapsed = 0;
-
-    swLaps.length = 0;
-
-    renderStopwatch();
-    renderLaps();
-  });
-}
-
-if (swLapBtn) {
-  swLapBtn.addEventListener('click', () => {
-    if (swRunning) {
-      swLaps.push(swElapsed);
-      renderLaps();
-    }
-  });
-}
-
-if (swSaveBtn) {
-  swSaveBtn.addEventListener('click', () => {
-    const minutes =
-      Math.round(swElapsed / 60000);
-
-    if (minutes <= 0) {
-      alert(
-        'Cronômetro zerado. Inicie e registre algum tempo antes de salvar.'
+      div.appendChild(
+        strong
       );
 
-      return;
+      div.appendChild(
+        small
+      );
+
+
+      lapsList.appendChild(
+        div
+      );
+
     }
+  );
 
-    const discipline =
-      stopwatchDiscipline
-        ? stopwatchDiscipline.value
-        : 'Geral';
-
-    state.sessions.push({
-      ts: Date.now(),
-      minutes: minutes,
-      mode: 'focus',
-      discipline: discipline
-    });
-
-    save();
-    updateHistory();
-    updateCharts();
-    updateGoalsView();
-
-    alert('Sessão salva no histórico!');
-  });
 }
+
+
+// ==========================================
+// TICK CRONÔMETRO
+// ==========================================
+
+function swTick() {
+
+  if (!swRunning) {
+    return;
+  }
+
+
+  swElapsed =
+    Date.now() -
+    swStartAt;
+
+
+  renderStopwatch();
+
+}
+
+
+// ==========================================
+// INICIAR CRONÔMETRO
+// ==========================================
+
+if (swStartBtn) {
+
+  swStartBtn.addEventListener(
+    'click',
+    () => {
+
+      if (swRunning) {
+        return;
+      }
+
+
+      swRunning =
+        true;
+
+
+      swStartAt =
+        Date.now() -
+        swElapsed;
+
+
+      swTimer =
+        setInterval(
+          swTick,
+          200
+        );
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// PAUSAR CRONÔMETRO
+// ==========================================
+
+if (swPauseBtn) {
+
+  swPauseBtn.addEventListener(
+    'click',
+    () => {
+
+      if (!swRunning) {
+        return;
+      }
+
+
+      swElapsed =
+        Date.now() -
+        swStartAt;
+
+
+      swRunning =
+        false;
+
+
+      clearInterval(
+        swTimer
+      );
+
+
+      swTimer =
+        null;
+
+
+      renderStopwatch();
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// RESET CRONÔMETRO
+// ==========================================
+
+if (swResetBtn) {
+
+  swResetBtn.addEventListener(
+    'click',
+    () => {
+
+      swRunning =
+        false;
+
+
+      clearInterval(
+        swTimer
+      );
+
+
+      swTimer =
+        null;
+
+
+      swElapsed =
+        0;
+
+
+      swStartAt =
+        null;
+
+
+      swLaps.length =
+        0;
+
+
+      renderStopwatch();
+
+      renderLaps();
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// VOLTA
+// ==========================================
+
+if (swLapBtn) {
+
+  swLapBtn.addEventListener(
+    'click',
+    () => {
+
+      if (!swRunning) {
+        return;
+      }
+
+
+      swElapsed =
+        Date.now() -
+        swStartAt;
+
+
+      swLaps.push(
+        swElapsed
+      );
+
+
+      renderLaps();
+
+    }
+  );
+
+}
+
+
+// ==========================================
+// SALVAR SESSÃO DO CRONÔMETRO
+// ==========================================
+
+if (swSaveBtn) {
+
+  swSaveBtn.addEventListener(
+    'click',
+    () => {
+
+
+      if (swRunning) {
+
+        swElapsed =
+          Date.now() -
+          swStartAt;
+
+      }
+
+
+      const minutes =
+        Math.round(
+          swElapsed /
+          60000
+        );
+
+
+      if (
+        minutes <= 0
+      ) {
+
+        alert(
+          'Cronômetro zerado. Inicie e registre algum tempo antes de salvar.'
+        );
+
+        return;
+
+      }
+
+
+      const discipline =
+
+        stopwatchDiscipline
+
+          ? stopwatchDiscipline.value
+
+          : 'Geral';
+
+
+      state.sessions.push({
+
+        ts:
+          Date.now(),
+
+        minutes:
+          minutes,
+
+        mode:
+          'focus',
+
+        discipline:
+          discipline
+
+      });
+
+
+      save()
+        .catch(() => {});
+
+
+      updateHistory();
+
+      updateCharts();
+
+      updateGoalsView();
+
+      updateRecentStudies();
+
+
+      alert(
+        'Sessão salva no histórico!'
+      );
+
+    }
+  );
+
+}
+
 
 renderStopwatch();
 
 
-// ===== Metas Semanais =====
+// ==========================================
+// METAS SEMANAIS
+// ==========================================
+
 const saveGoalBtn =
-  document.getElementById('saveGoal');
+  document.getElementById(
+    'saveGoal'
+  );
 
 const goalHours =
-  document.getElementById('goalHours');
+  document.getElementById(
+    'goalHours'
+  );
 
 const goalsList =
-  document.getElementById('goalsList');
+  document.getElementById(
+    'goalsList'
+  );
 
-function getWeekRange(d = new Date()) {
-  const dt = new Date(d);
+
+// ==========================================
+// SEMANA ATUAL
+// ==========================================
+
+function getWeekRange(
+  d = new Date()
+) {
+
+  const dt =
+    new Date(d);
+
 
   const day =
-    (dt.getDay() + 6) % 7;
+    (
+      dt.getDay() +
+      6
+    ) %
+    7;
 
-  const monday = new Date(dt);
+
+  const monday =
+    new Date(dt);
+
 
   monday.setDate(
-    dt.getDate() - day
+    dt.getDate() -
+    day
   );
 
-  monday.setHours(0, 0, 0, 0);
 
-  const sunday = new Date(monday);
+  monday.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
+
+  const sunday =
+    new Date(
+      monday
+    );
+
 
   sunday.setDate(
-    monday.getDate() + 6
+    monday.getDate() +
+    6
   );
+
 
   sunday.setHours(
     23,
@@ -751,462 +1941,1115 @@ function getWeekRange(d = new Date()) {
     999
   );
 
+
   return {
+
     monday,
+
     sunday
+
   };
+
 }
 
+
+// ==========================================
+// MINUTOS POR MATÉRIA NA SEMANA
+// ==========================================
+
 function minutesInWeekByDiscipline() {
+
   const {
     monday,
     sunday
-  } = getWeekRange();
+  } =
+    getWeekRange();
+
 
   const acc = {};
 
-  for (const session of state.sessions) {
-    if (session.mode !== 'focus') {
-      continue;
-    }
 
-    const time = session.ts;
+  for (
+    const session
+    of state.sessions
+  ) {
 
     if (
-      time >= monday.getTime() &&
-      time <= sunday.getTime()
+      session.mode !==
+      'focus'
     ) {
-      acc[session.discipline] =
-        (acc[session.discipline] || 0) +
-        session.minutes;
+
+      continue;
+
     }
+
+
+    const time =
+      Number(
+        session.ts
+      );
+
+
+    if (
+      time >=
+        monday.getTime() &&
+
+      time <=
+        sunday.getTime()
+    ) {
+
+      const discipline =
+        session.discipline ||
+        'Geral';
+
+
+      acc[discipline] =
+        (
+          acc[discipline] ||
+          0
+        ) +
+        Number(
+          session.minutes ||
+          0
+        );
+
+    }
+
   }
 
+
   return acc;
+
 }
 
+
+// ==========================================
+// ATUALIZAR METAS
+// ==========================================
+
 function updateGoalsView() {
+
   if (!goalsList) {
     return;
   }
 
-  goalsList.innerHTML = '';
+
+  goalsList.innerHTML =
+    '';
+
 
   const minsMap =
     minutesInWeekByDiscipline();
 
-  for (const discipline of state.disciplines) {
+
+  let encontrouMeta =
+    false;
+
+
+  for (
+    const discipline
+    of state.disciplines
+  ) {
+
     const goalH =
-      state.goals[discipline] || 0;
+      Number(
+        state.goals[
+          discipline
+        ] ||
+        0
+      );
+
 
     if (!goalH) {
       continue;
     }
 
+
+    encontrouMeta =
+      true;
+
+
     const doneMin =
-      minsMap[discipline] || 0;
+      Number(
+        minsMap[
+          discipline
+        ] ||
+        0
+      );
+
 
     const goalMin =
       goalH * 60;
 
+
     const pct =
       Math.min(
         100,
+
         Math.floor(
-          (doneMin / goalMin) * 100
+          (
+            doneMin /
+            goalMin
+          ) *
+          100
         )
       );
 
+
     const wrap =
-      document.createElement('div');
+      document.createElement(
+        'div'
+      );
 
-    wrap.innerHTML = `
-      <div class="row between">
-        <strong>${discipline}</strong>
 
-        <span style="color:#666">
-          ${Math.round(doneMin / 60)}h /
-          ${goalH}h
-        </span>
-      </div>
+    const top =
+      document.createElement(
+        'div'
+      );
 
-      <div class="progress mt">
-        <span style="width:${pct}%"></span>
-      </div>
-    `;
 
-    goalsList.appendChild(wrap);
+    top.className =
+      'row between';
+
+
+    const strong =
+      document.createElement(
+        'strong'
+      );
+
+
+    strong.textContent =
+      discipline;
+
+
+    const value =
+      document.createElement(
+        'span'
+      );
+
+
+    value.style.color =
+      '#666';
+
+
+    const doneHours =
+      Math.round(
+        (
+          doneMin /
+          60
+        ) *
+        10
+      ) /
+      10;
+
+
+    value.textContent =
+      `${doneHours}h / ${goalH}h`;
+
+
+    top.appendChild(
+      strong
+    );
+
+    top.appendChild(
+      value
+    );
+
+
+    const progress =
+      document.createElement(
+        'div'
+      );
+
+
+    progress.className =
+      'progress mt';
+
+
+    const progressValue =
+      document.createElement(
+        'span'
+      );
+
+
+    progressValue.style.width =
+      `${pct}%`;
+
+
+    progress.appendChild(
+      progressValue
+    );
+
+
+    wrap.appendChild(
+      top
+    );
+
+    wrap.appendChild(
+      progress
+    );
+
+
+    goalsList.appendChild(
+      wrap
+    );
+
   }
+
+
+  if (!encontrouMeta) {
+
+    const empty =
+      document.createElement(
+        'div'
+      );
+
+
+    empty.className =
+      'recent-empty';
+
+
+    const icon =
+      document.createElement(
+        'i'
+      );
+
+
+    icon.className =
+      'fa-solid fa-bullseye';
+
+
+    const text =
+      document.createElement(
+        'span'
+      );
+
+
+    text.textContent =
+      'Você ainda não definiu nenhuma meta semanal.';
+
+
+    empty.appendChild(
+      icon
+    );
+
+    empty.appendChild(
+      text
+    );
+
+
+    goalsList.appendChild(
+      empty
+    );
+
+  }
+
 }
+
+
+// ==========================================
+// SALVAR META
+// ==========================================
 
 if (saveGoalBtn) {
-  saveGoalBtn.addEventListener('click', () => {
-    const discipline =
-      goalDiscipline &&
-      goalDiscipline.value;
 
-    const hours =
-      +(goalHours && goalHours.value);
+  saveGoalBtn.addEventListener(
+    'click',
+    () => {
 
-    if (!discipline || !hours) {
-      return;
+
+      const discipline =
+        goalDiscipline?.value;
+
+
+      const hours =
+        Number(
+          goalHours?.value
+        );
+
+
+      if (!discipline) {
+        return;
+      }
+
+
+      if (
+        !Number.isFinite(
+          hours
+        ) ||
+        hours <= 0
+      ) {
+
+        alert(
+          'Informe uma quantidade válida de horas.'
+        );
+
+
+        goalHours?.focus();
+
+
+        return;
+
+      }
+
+
+      state.goals[
+        discipline
+      ] =
+        hours;
+
+
+      save()
+        .catch(() => {});
+
+
+      if (goalHours) {
+
+        goalHours.value =
+          '';
+
+      }
+
+
+      updateGoalsView();
+
     }
+  );
 
-    state.goals[discipline] = hours;
-
-    save();
-
-    if (goalHours) {
-      goalHours.value = '';
-    }
-
-    updateGoalsView();
-  });
 }
 
 
-// ===== Histórico + Export =====
+// ==========================================
+// HISTÓRICO
+// ==========================================
+
 const historyTableBody =
   document.querySelector(
     '#historyTable tbody'
   );
 
+
 function updateHistory() {
+
   if (!historyTableBody) {
     return;
   }
 
-  historyTableBody.innerHTML = '';
+
+  historyTableBody.innerHTML =
+    '';
+
 
   const rows =
     [...state.sessions]
-      .sort((a, b) => b.ts - a.ts);
+      .sort(
+        (a, b) => {
 
-  for (const session of rows) {
+          return (
+            b.ts -
+            a.ts
+          );
+
+        }
+      );
+
+
+  for (
+    const session
+    of rows
+  ) {
+
     const tr =
-      document.createElement('tr');
+      document.createElement(
+        'tr'
+      );
+
 
     const date =
-      new Date(session.ts);
+      new Date(
+        session.ts
+      );
 
-    tr.innerHTML = `
-      <td>
-        ${date.toLocaleString('pt-BR')}
-      </td>
 
-      <td>
-        ${session.discipline}
-      </td>
+    const tdDate =
+      document.createElement(
+        'td'
+      );
 
-      <td>
-        ${
-          session.mode === 'focus'
-            ? 'Foco'
-            : 'Pausa'
-        }
-      </td>
 
-      <td>
-        ${session.minutes}
-      </td>
-    `;
+    tdDate.textContent =
+      date.toLocaleString(
+        'pt-BR'
+      );
 
-    historyTableBody.appendChild(tr);
+
+    const tdDiscipline =
+      document.createElement(
+        'td'
+      );
+
+
+    tdDiscipline.textContent =
+      session.discipline ||
+      'Geral';
+
+
+    const tdMode =
+      document.createElement(
+        'td'
+      );
+
+
+    tdMode.textContent =
+
+      session.mode ===
+        'focus'
+
+        ? 'Foco'
+
+        : 'Pausa';
+
+
+    const tdMinutes =
+      document.createElement(
+        'td'
+      );
+
+
+    tdMinutes.textContent =
+      Number(
+        session.minutes ||
+        0
+      );
+
+
+    tr.appendChild(
+      tdDate
+    );
+
+    tr.appendChild(
+      tdDiscipline
+    );
+
+    tr.appendChild(
+      tdMode
+    );
+
+    tr.appendChild(
+      tdMinutes
+    );
+
+
+    historyTableBody.appendChild(
+      tr
+    );
+
   }
+
 }
 
+
+// ==========================================
+// LIMPAR HISTÓRICO
+// ==========================================
+
 const clearHistoryBtn =
-  document.getElementById('clearHistory');
+  document.getElementById(
+    'clearHistory'
+  );
 
 const exportCsvBtn =
-  document.getElementById('exportCsv');
+  document.getElementById(
+    'exportCsv'
+  );
+
 
 if (clearHistoryBtn) {
+
   clearHistoryBtn.addEventListener(
     'click',
     () => {
+
+
       if (
         !confirm(
           'Tem certeza que deseja limpar o histórico?'
         )
       ) {
+
         return;
+
       }
 
-      state.sessions = [];
 
-      save();
+      state.sessions =
+        [];
+
+
+      save()
+        .catch(() => {});
+
+
       updateHistory();
+
       updateCharts();
+
       updateGoalsView();
+
+      updateRecentStudies();
+
     }
   );
+
 }
 
+
+// ==========================================
+// EXPORTAR CSV
+// ==========================================
+
 if (exportCsvBtn) {
+
   exportCsvBtn.addEventListener(
     'click',
     () => {
+
+
       const header = [
+
         'data',
-        'disciplina',
+
+        'materia',
+
         'modo',
+
         'minutos'
+
       ];
+
 
       const lines = [
-        header.join(',') + '\n'
+
+        header.join(',') +
+        '\n'
+
       ];
 
-      for (const session of state.sessions) {
+
+      for (
+        const session
+        of state.sessions
+      ) {
+
         const date =
           new Date(
             session.ts
           ).toISOString();
 
+
         lines.push(
+
           [
+
             date,
+
             session.discipline,
+
             session.mode,
+
             session.minutes
+
           ]
-            .map((value) => {
-              return `"${String(value)
-                .replace(/"/g, '""')}"`;
-            })
-            .join(',') + '\n'
+            .map(
+              (value) => {
+
+                return (
+                  `"${String(value)
+                    .replace(
+                      /"/g,
+                      '""'
+                    )}"`
+                );
+
+              }
+            )
+            .join(',') +
+            '\n'
+
         );
+
       }
 
-      const blob = new Blob(
-        [lines.join('')],
-        {
-          type:
-            'text/csv;charset=utf-8;'
-        }
-      );
+
+      const blob =
+        new Blob(
+          [
+            lines.join('')
+          ],
+          {
+            type:
+              'text/csv;charset=utf-8;'
+          }
+        );
+
 
       const link =
-        document.createElement('a');
+        document.createElement(
+          'a'
+        );
+
+
+      const url =
+        URL.createObjectURL(
+          blob
+        );
+
 
       link.href =
-        URL.createObjectURL(blob);
+        url;
+
 
       link.download =
         'foag_estudos.csv';
 
+
+      document.body.appendChild(
+        link
+      );
+
+
       link.click();
 
-      URL.revokeObjectURL(link.href);
+
+      link.remove();
+
+
+      URL.revokeObjectURL(
+        url
+      );
+
     }
   );
+
 }
 
 
-// ===== Gráficos =====
+// ==========================================
+// GRÁFICOS
+// ==========================================
+
 const lineCtx =
-  document.getElementById('lineChart');
+  document.getElementById(
+    'lineChart'
+  );
 
 const pieCtx =
-  document.getElementById('pieChart');
+  document.getElementById(
+    'pieChart'
+  );
+
 
 let lineChart;
+
 let pieChart;
 
-function hoursLastNDays(n = 14) {
-  const today = new Date();
 
-  today.setHours(0, 0, 0, 0);
+// ==========================================
+// HORAS NOS ÚLTIMOS DIAS
+// ==========================================
+
+function hoursLastNDays(
+  n = 14
+) {
+
+  const today =
+    new Date();
+
+
+  today.setHours(
+    0,
+    0,
+    0,
+    0
+  );
+
 
   const labels = [];
-  const mins = [];
 
-  for (let i = n - 1; i >= 0; i--) {
+  const hours = [];
+
+
+  for (
+    let i = n - 1;
+    i >= 0;
+    i--
+  ) {
+
     const day =
-      new Date(today);
+      new Date(
+        today
+      );
+
 
     day.setDate(
-      today.getDate() - i
+      today.getDate() -
+      i
     );
+
 
     const start =
       day.getTime();
 
+
     const end =
-      start + 86400000 - 1;
+      start +
+      86400000 -
+      1;
+
 
     const minutes =
       state.sessions
-        .filter((session) => {
-          return (
-            session.mode === 'focus' &&
-            session.ts >= start &&
-            session.ts <= end
-          );
-        })
-        .reduce(
-          (total, session) => {
+
+        .filter(
+          (session) => {
+
             return (
-              total +
-              session.minutes
+
+              session.mode ===
+                'focus' &&
+
+              session.ts >=
+                start &&
+
+              session.ts <=
+                end
+
             );
+
+          }
+        )
+
+        .reduce(
+          (
+            total,
+            session
+          ) => {
+
+            return (
+
+              total +
+
+              Number(
+                session.minutes ||
+                0
+              )
+
+            );
+
           },
           0
         );
 
+
     labels.push(
+
       day.toLocaleDateString(
         'pt-BR',
         {
-          day: '2-digit',
-          month: '2-digit'
+          day:
+            '2-digit',
+
+          month:
+            '2-digit'
         }
       )
+
     );
 
-    mins.push(
+
+    hours.push(
+
       Math.round(
-        (minutes / 60) * 100
-      ) / 100
+        (
+          minutes /
+          60
+        ) *
+        100
+      ) /
+      100
+
     );
+
   }
+
 
   return {
+
     labels,
-    hours: mins
+
+    hours
+
   };
+
 }
 
+
+// ==========================================
+// DISTRIBUIÇÃO POR MATÉRIA
+// ==========================================
+
 function distributionByDiscipline() {
+
   const by = {};
 
-  for (const session of state.sessions) {
-    if (session.mode === 'focus') {
-      by[session.discipline] =
-        (by[session.discipline] || 0) +
-        session.minutes;
+
+  for (
+    const session
+    of state.sessions
+  ) {
+
+    if (
+      session.mode !==
+      'focus'
+    ) {
+
+      continue;
+
     }
+
+
+    const discipline =
+      session.discipline ||
+      'Geral';
+
+
+    by[
+      discipline
+    ] =
+
+      (
+        by[
+          discipline
+        ] ||
+        0
+      ) +
+
+      Number(
+        session.minutes ||
+        0
+      );
+
   }
+
 
   const labels =
     Object.keys(by);
 
+
   const hours =
-    labels.map((key) => {
-      return (
-        Math.round(
-          (by[key] / 60) * 100
-        ) / 100
-      );
-    });
+    labels.map(
+      (key) => {
+
+        return (
+
+          Math.round(
+            (
+              by[key] /
+              60
+            ) *
+            100
+          ) /
+          100
+
+        );
+
+      }
+    );
+
 
   return {
+
     labels,
+
     hours
+
   };
+
 }
 
+
+// ==========================================
+// ATUALIZAR GRÁFICOS
+// ==========================================
+
 function updateCharts() {
+
   if (
-    typeof Chart === 'undefined' ||
+    typeof Chart ===
+      'undefined' ||
+
     !lineCtx ||
+
     !pieCtx
   ) {
+
     return;
+
   }
 
+
   const hl =
-    hoursLastNDays(14);
+    hoursLastNDays(
+      14
+    );
+
 
   const dist =
     distributionByDiscipline();
 
-  try {
-    if (lineChart) {
-      lineChart.destroy();
-    }
 
-    if (pieChart) {
-      pieChart.destroy();
-    }
-  } catch (e) {
-    console.error(
-      'Erro ao destruir gráficos:',
-      e
-    );
+  if (lineChart) {
+
+    lineChart.destroy();
+
   }
 
-  try {
-    lineChart =
-      new Chart(lineCtx, {
-        type: 'line',
+
+  if (pieChart) {
+
+    pieChart.destroy();
+
+  }
+
+
+  lineChart =
+    new Chart(
+      lineCtx,
+      {
+
+        type:
+          'line',
 
         data: {
-          labels: hl.labels,
+
+          labels:
+            hl.labels,
 
           datasets: [
             {
-              label: 'Horas por dia',
-              data: hl.hours,
-              tension: 0.3
+
+              label:
+                'Horas por dia',
+
+              data:
+                hl.hours,
+
+              tension:
+                0.3,
+
+              fill:
+                false
+
             }
           ]
+
         },
 
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
 
           plugins: {
+
             legend: {
-              display: false
+
+              display:
+                false
+
             }
+
           },
 
           scales: {
-            y: {
-              beginAtZero: true
-            }
-          }
-        }
-      });
 
-    pieChart =
-      new Chart(pieCtx, {
-        type: 'doughnut',
+            y: {
+
+              beginAtZero:
+                true
+
+            }
+
+          }
+
+        }
+
+      }
+    );
+
+
+  pieChart =
+    new Chart(
+      pieCtx,
+      {
+
+        type:
+          'doughnut',
 
         data: {
-          labels: dist.labels,
+
+          labels:
+            dist.labels,
 
           datasets: [
             {
-              data: dist.hours
+
+              data:
+                dist.hours
+
             }
           ]
+
         },
 
         options: {
-          responsive: true,
-          maintainAspectRatio: false,
+
+          responsive:
+            true,
+
+          maintainAspectRatio:
+            false,
 
           plugins: {
+
             legend: {
-              position: 'bottom'
+
+              position:
+                'bottom'
+
             }
+
           }
+
         }
-      });
-  } catch (e) {
-    console.error(
-      'Erro ao criar gráficos:',
-      e
+
+      }
     );
-  }
+
 }
 
 
-// ===== Inicialização =====
+// ==========================================
+// INICIALIZAÇÃO
+// ==========================================
+
 updateHistory();
+
 updateCharts();
+
 updateGoalsView();
+
+updateRecentStudies();

@@ -1,1 +1,36 @@
-[]
+{
+    "disciplines": [
+        "Geral",
+        "matematica",
+        "portugues"
+    ],
+    "sessions": [
+        {
+            "ts": 1787066836648,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "matematica"
+        },
+        {
+            "ts": 1787066843511,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "portugues"
+        },
+        {
+            "ts": 1787066899656,
+            "minutes": 2,
+            "mode": "focus",
+            "discipline": "Geral"
+        },
+        {
+            "ts": 1787066908143,
+            "minutes": 2,
+            "mode": "focus",
+            "discipline": "matematica"
+        }
+    ],
+    "goals": {
+        "matematica": 2
+    }
+}

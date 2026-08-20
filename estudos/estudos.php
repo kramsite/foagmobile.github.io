@@ -8,6 +8,61 @@ if (empty($_SESSION['codigo_usuario'])) {
 
 $codigoUsuario = $_SESSION['codigo_usuario'];
 $current = basename($_SERVER['PHP_SELF']);
+
+// ==============================
+// PASTA DO USUÁRIO
+// ==============================
+
+$baseJsonDir = __DIR__ . '/../json/usuarios';
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+
+if (!is_dir($pastaUsuario)) {
+    exit('Pasta do usuário não encontrada.');
+}
+
+// ==============================
+// ARQUIVO DE MATÉRIAS
+// ==============================
+
+$arquivoMaterias = $pastaUsuario . '/materias.json';
+
+// Cria o arquivo caso ainda não exista
+if (!file_exists($arquivoMaterias)) {
+    $estadoInicial = [
+        'materias' => []
+    ];
+
+    file_put_contents(
+        $arquivoMaterias,
+        json_encode(
+            $estadoInicial,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        ),
+        LOCK_EX
+    );
+}
+
+// ==============================
+// CARREGAR MATÉRIAS
+// ==============================
+
+$materiasData = json_decode(
+    file_get_contents($arquivoMaterias),
+    true
+);
+
+if (!is_array($materiasData)) {
+    $materiasData = [
+        'materias' => []
+    ];
+}
+
+if (
+    !isset($materiasData['materias']) ||
+    !is_array($materiasData['materias'])
+) {
+    $materiasData['materias'] = [];
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -19,7 +74,16 @@ $current = basename($_SERVER['PHP_SELF']);
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estudos.css">
   <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-  <script src="../m.escuro/dark-mode.js"></script>
+  <script src="./m.escuro/dark-mode.js"></script>
+
+  <script>
+  window.MATERIAS_DATA = <?= json_encode(
+      $materiasData,
+      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+  ); ?>;
+
+  window.MATERIAS_SAVE_URL = 'salvar_materia.php';
+</script>
 </head>
 <body>
   <header class="cabecalho">
@@ -121,12 +185,12 @@ $current = basename($_SERVER['PHP_SELF']);
         </div>
 
         <div class="methods-grid">
-          <a class="method-card" href="#" data-coming-soon="Flashcards">
+          <a class="method-card" href="flashcards/flashcards.php">
             <div class="method-icon"><i class="fa-solid fa-layer-group"></i></div>
             <div class="method-info">
               <h3>Flashcards</h3>
               <p>Crie cartões de perguntas e respostas para revisar conteúdos.</p>
-              <span class="method-link">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+              <span class="method-link">Abrir <i class="fa-solid fa-arrow-right"></i></span>
             </div>
           </a>
 

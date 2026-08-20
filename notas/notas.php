@@ -465,11 +465,13 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
 <body>
     <header class="cabecalho">
       FOAG
-      <div class="header-icons">
-        <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
-        <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
-        <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
-      </div>
+<div class="header-icons">
+    <a href="../configuracoes/configuracoes.php" class="link-configuracoes" title="Configurações">
+        <i class="fa-solid fa-gear"></i>
+    </a>
+    <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
+    <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
+</div>
     </header>
 
     <div class="container">
