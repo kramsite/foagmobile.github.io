@@ -74,20 +74,87 @@ header.cabecalho {
     font-size: 16px;
 }
 
-/* Ícones do Header */
+
+/* ============= ÍCONES DO HEADER ============= */
 .header-icons {
     display: flex;
+    align-items: center;
     gap: 15px;
-    font-size: 20px;
     color: #ffffff;
-    cursor: pointer;
     user-select: none;
 }
 
-.header-icons i:hover {
-    color: #e3f2fd;
+/* Configurações, Perfil e Sair */
+.header-icons a,
+.header-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 26px;
+    height: 26px;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0 !important;
+    outline: none;
+    border-radius: 0;
+
+    background: transparent !important;
+    color: #ffffff !important;
+
+    box-shadow: none !important;
+    appearance: none;
+    -webkit-appearance: none;
+
+    font: inherit;
+    font-size: 20px;
+    line-height: 1;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.header-icons a i,
+.header-icon-btn i {
+    display: block;
+    margin: 0;
+    padding: 0;
+
+    color: inherit !important;
+    font-size: 20px;
+    line-height: 1;
+
+    pointer-events: none;
+}
+
+/* Hover sem criar caixinha atrás do ícone */
+.header-icons a:hover,
+.header-icon-btn:hover {
+    background: transparent !important;
+    color: #e3f2fd !important;
     transform: scale(1.1);
 }
+
+/* Foco visível para quem navega com teclado */
+.header-icons a:focus-visible,
+.header-icon-btn:focus-visible {
+    outline: 3px solid #ffffff !important;
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Clique */
+.header-icon-btn:active,
+.header-icons a:active {
+    transform: scale(0.95);
+}
+
 
 /* Conteúdo Principal */
 .main-content {
@@ -798,32 +865,4 @@ footer {
     .quick-tips {
         padding: 20px;
     }
-}
-
-/* ============= CORREÇÃO DOS ÍCONES DO HEADER ============= */
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 20px;
-    color: #ffffff;
-    cursor: pointer;
-    user-select: none;
-}
-
-.header-icons a {
-    display: flex;
-    align-items: center;
-    color: #ffffff !important;
-    text-decoration: none;
-}
-
-.header-icons a i {
-    color: inherit !important;
-}
-
-.header-icons a:hover i,
-.header-icons i:hover {
-    color: #e3f2fd !important;
-    transform: scale(1.1);
 }
