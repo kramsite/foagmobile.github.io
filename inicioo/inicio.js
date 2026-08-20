@@ -1,5 +1,9 @@
 document.addEventListener('DOMContentLoaded', function () {
-    // Elementos do DOM
+
+    // =====================================================
+    // ELEMENTOS PRINCIPAIS
+    // =====================================================
+
     const noteModal = document.getElementById('note-modal');
     const addNoteBtn = document.getElementById('add-note');
     const closeNoteModal = document.getElementById('close-note-modal');
@@ -10,401 +14,800 @@ document.addEventListener('DOMContentLoaded', function () {
     const emptyNotes = document.getElementById('empty-notes');
     const createFirstNoteBtn = document.getElementById('create-first-note');
 
-    // Frases motivacionais
-    const motivationalQuotes = [
-        "Organizar é o primeiro passo para o sucesso!",
-        "Cada tarefa concluída é uma vitória!",
-        "A consistência leva à excelência!",
-        "Hoje é um novo dia para ser produtivo!",
-        "Pequenos passos levam a grandes conquistas!",
-        "A organização transforma sonhos em realidade!",
-        "Você está no controle do seu tempo!",
-        "Cada dia é uma nova oportunidade!",
-        "A disciplina é a ponte entre metas e realizações!",
-        "Seu potencial é ilimitado!"
-    ];
-
-    // ========== ÍCONE DO PERFIL ==========
     const perfilIcon = document.getElementById('icon-perfil');
 
-    if (perfilIcon) {
-        perfilIcon.addEventListener('click', function () {
-            window.location.href = '../perfil/perfil.php';
-        });
-    }
+    const logoutModal = document.getElementById('logout-modal');
+    const confirmLogout = document.getElementById('confirm-logout');
+    const cancelLogout = document.getElementById('cancel-logout');
+    const iconSair = document.getElementById('icon-sair');
 
-    // Inicialização
+    const mensagemAcessibilidade =
+        document.getElementById('mensagem-acessibilidade');
+
+    let ultimoFocoAntesDoModal = null;
+
+
+    // =====================================================
+    // FRASES MOTIVACIONAIS
+    // =====================================================
+
+    const motivationalQuotes = [
+        'Organizar é o primeiro passo para o sucesso!',
+        'Cada tarefa concluída é uma vitória!',
+        'A consistência leva à excelência!',
+        'Hoje é um novo dia para ser produtivo!',
+        'Pequenos passos levam a grandes conquistas!',
+        'A organização transforma sonhos em realidade!',
+        'Você está no controle do seu tempo!',
+        'Cada dia é uma nova oportunidade!',
+        'A disciplina é a ponte entre metas e realizações!',
+        'Seu potencial é ilimitado!'
+    ];
+
+
+    // =====================================================
+    // INICIALIZAÇÃO
+    // =====================================================
+
     initializePage();
 
-    // ============= FUNÇÕES DE INICIALIZAÇÃO =============
-
     function initializePage() {
+
         loadMotivationalQuote();
         loadImportantNotes();
         loadReminders();
-        updateStatistics();
         setupEventListeners();
         startLiveUpdates();
+
+        if (noteModal) {
+            noteModal.setAttribute(
+                'aria-hidden',
+                'true'
+            );
+        }
+
+        if (logoutModal) {
+            logoutModal.setAttribute(
+                'aria-hidden',
+                'true'
+            );
+        }
     }
+
+
+    // =====================================================
+    // EVENTOS
+    // =====================================================
 
     function setupEventListeners() {
-        // Modal de anotações
-        addNoteBtn?.addEventListener('click', openNoteModal);
-        closeNoteModal?.addEventListener('click', closeNoteModalFunc);
-        cancelNoteBtn?.addEventListener('click', closeNoteModalFunc);
-        saveNoteBtn?.addEventListener('click', saveNote);
-        createFirstNoteBtn?.addEventListener('click', openNoteModal);
 
-        // Fechar modal clicando fora
-        noteModal?.addEventListener('click', function (e) {
-            if (e.target === noteModal) {
-                closeNoteModalFunc();
+        // PERFIL
+        if (perfilIcon) {
+
+            perfilIcon.addEventListener(
+                'click',
+                function () {
+
+                    window.location.href =
+                        '../perfil/perfil.php';
+
+                }
+            );
+        }
+
+
+        // ANOTAÇÃO
+        addNoteBtn?.addEventListener(
+            'click',
+            openNoteModal
+        );
+
+        closeNoteModal?.addEventListener(
+            'click',
+            closeNoteModalFunc
+        );
+
+        cancelNoteBtn?.addEventListener(
+            'click',
+            closeNoteModalFunc
+        );
+
+        saveNoteBtn?.addEventListener(
+            'click',
+            saveNote
+        );
+
+        createFirstNoteBtn?.addEventListener(
+            'click',
+            openNoteModal
+        );
+
+
+        // FECHAR CLICANDO FORA
+        noteModal?.addEventListener(
+            'click',
+            function (event) {
+
+                if (event.target === noteModal) {
+                    closeNoteModalFunc();
+                }
+
             }
-        });
+        );
 
-        setupLogoutModal();
+
+        // LOGOUT
+        if (iconSair && logoutModal) {
+
+            iconSair.addEventListener(
+                'click',
+                openLogoutModal
+            );
+        }
+
+
+        if (confirmLogout) {
+
+            confirmLogout.addEventListener(
+                'click',
+                function () {
+
+                    window.location.href =
+                        '../login/logout.php';
+
+                }
+            );
+        }
+
+
+        if (cancelLogout) {
+
+            cancelLogout.addEventListener(
+                'click',
+                closeLogoutModal
+            );
+        }
+
+
+        logoutModal?.addEventListener(
+            'click',
+            function (event) {
+
+                if (event.target === logoutModal) {
+                    closeLogoutModal();
+                }
+
+            }
+        );
+
+
+        // ESC FECHA MODAIS
+        document.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (event.key !== 'Escape') {
+                    return;
+                }
+
+
+                if (
+                    noteModal &&
+                    noteModal.style.display === 'flex'
+                ) {
+
+                    closeNoteModalFunc();
+                    return;
+                }
+
+
+                if (
+                    logoutModal &&
+                    logoutModal.style.display === 'flex'
+                ) {
+
+                    closeLogoutModal();
+                }
+
+            }
+        );
     }
 
-    // ============= FRASE MOTIVACIONAL =============
+
+    // =====================================================
+    // ACESSIBILIDADE
+    // =====================================================
+
+    function anunciar(texto) {
+
+        if (!mensagemAcessibilidade) {
+            return;
+        }
+
+        mensagemAcessibilidade.textContent = '';
+
+        setTimeout(
+            function () {
+
+                mensagemAcessibilidade.textContent =
+                    texto;
+
+            },
+            50
+        );
+    }
+
+
+    function guardarFocoAtual() {
+
+        if (
+            document.activeElement
+            instanceof HTMLElement
+        ) {
+
+            ultimoFocoAntesDoModal =
+                document.activeElement;
+        }
+    }
+
+
+    function devolverFoco() {
+
+        if (
+            ultimoFocoAntesDoModal &&
+            typeof ultimoFocoAntesDoModal.focus
+                === 'function'
+        ) {
+
+            ultimoFocoAntesDoModal.focus();
+        }
+
+        ultimoFocoAntesDoModal = null;
+    }
+
+
+    // =====================================================
+    // FRASE MOTIVACIONAL
+    // =====================================================
 
     function loadMotivationalQuote() {
-        const quoteText = document.getElementById('quote-text');
 
-        if (quoteText) {
-            const randomQuote =
-                motivationalQuotes[
-                    Math.floor(Math.random() * motivationalQuotes.length)
-                ];
+        const quoteText =
+            document.getElementById(
+                'quote-text'
+            );
 
-            quoteText.textContent = randomQuote;
+        if (!quoteText) {
+            return;
         }
+
+        const randomQuote =
+            motivationalQuotes[
+                Math.floor(
+                    Math.random()
+                    * motivationalQuotes.length
+                )
+            ];
+
+        quoteText.textContent =
+            randomQuote;
     }
 
-    // ============= ANOTAÇÕES IMPORTANTES =============
+
+    // =====================================================
+    // MODAL DE ANOTAÇÃO
+    // =====================================================
 
     function openNoteModal() {
-        if (noteModal) {
-            if (noteText) {
-                noteText.value = '';
-                noteText.focus();
-            }
 
-            noteModal.style.display = 'flex';
+        if (!noteModal) {
+            return;
         }
+
+        guardarFocoAtual();
+
+        noteModal.style.display =
+            'flex';
+
+        noteModal.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+
+
+        if (noteText) {
+
+            noteText.value = '';
+
+            requestAnimationFrame(
+                function () {
+
+                    noteText.focus();
+
+                }
+            );
+        }
+
+
+        anunciar(
+            'Janela de nova anotação aberta.'
+        );
     }
 
+
     function closeNoteModalFunc() {
-        if (noteModal) {
-            noteModal.style.display = 'none';
+
+        if (!noteModal) {
+            return;
         }
+
+        noteModal.style.display =
+            'none';
+
+        noteModal.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
 
         if (noteText) {
             noteText.value = '';
         }
+
+
+        anunciar(
+            'Janela de nova anotação fechada.'
+        );
+
+        devolverFoco();
     }
 
+
+    // =====================================================
+    // ANOTAÇÕES
+    // =====================================================
+
     function saveNote() {
+
         if (!noteText) {
             return;
         }
 
-        const text = noteText.value.trim();
+
+        const text =
+            noteText.value.trim();
+
 
         if (!text) {
-            alert('Por favor, digite uma anotação!');
+
+            anunciar(
+                'Digite uma anotação antes de salvar.'
+            );
+
+            noteText.focus();
+
             return;
         }
 
-        const notes = getImportantNotes();
+
+        const notes =
+            getImportantNotes();
+
 
         const newNote = {
+
             id: Date.now(),
+
             text: text,
-            date: new Date().toLocaleDateString('pt-BR'),
-            timestamp: new Date().getTime()
+
+            date:
+                new Date()
+                    .toLocaleDateString(
+                        'pt-BR'
+                    ),
+
+            timestamp:
+                Date.now()
         };
 
-        notes.unshift(newNote);
+
+        notes.unshift(
+            newNote
+        );
+
 
         localStorage.setItem(
             'foag_important_notes',
             JSON.stringify(notes)
         );
 
+
         loadImportantNotes();
+
         closeNoteModalFunc();
-        showNotification('Anotação salva com sucesso!');
+
+        showNotification(
+            'Anotação salva com sucesso!'
+        );
     }
 
+
     function getImportantNotes() {
+
         try {
+
             return JSON.parse(
-                localStorage.getItem('foag_important_notes') || '[]'
+                localStorage.getItem(
+                    'foag_important_notes'
+                ) || '[]'
             );
+
         } catch (error) {
-            console.error('Erro ao carregar anotações:', error);
+
+            console.error(
+                'Erro ao carregar anotações:',
+                error
+            );
+
             return [];
         }
     }
 
+
     function loadImportantNotes() {
-        if (!notesList || !emptyNotes) {
+
+        if (
+            !notesList ||
+            !emptyNotes
+        ) {
+
             return;
         }
 
-        const notes = getImportantNotes();
 
-        if (notes.length === 0) {
-            notesList.style.display = 'none';
-            emptyNotes.style.display = 'block';
+        const notes =
+            getImportantNotes();
+
+
+        if (
+            notes.length === 0
+        ) {
+
+            notesList.style.display =
+                'none';
+
+            emptyNotes.style.display =
+                'block';
+
             return;
         }
 
-        emptyNotes.style.display = 'none';
-        notesList.style.display = 'flex';
-        notesList.innerHTML = '';
 
-        const recentNotes = notes.slice(0, 3);
+        emptyNotes.style.display =
+            'none';
 
-        recentNotes.forEach(function (note) {
-            const noteElement = document.createElement('div');
-            noteElement.className = 'note-item';
+        notesList.style.display =
+            'flex';
 
-            const noteTextElement = document.createElement('div');
-            noteTextElement.className = 'note-text';
-            noteTextElement.textContent = note.text;
+        notesList.innerHTML =
+            '';
 
-            const noteDateElement = document.createElement('div');
-            noteDateElement.className = 'note-date';
-            noteDateElement.textContent = note.date;
 
-            noteElement.appendChild(noteTextElement);
-            noteElement.appendChild(noteDateElement);
-
-            notesList.appendChild(noteElement);
-        });
-    }
-
-    function deleteNote(noteId) {
-        const notes = getImportantNotes();
-
-        const updatedNotes = notes.filter(function (note) {
-            return note.id !== noteId;
-        });
-
-        localStorage.setItem(
-            'foag_important_notes',
-            JSON.stringify(updatedNotes)
-        );
-
-        loadImportantNotes();
-    }
-
-    // ============= ESTATÍSTICAS =============
-
-    function updateStatistics() {
-        const currentDate = new Date();
-        const currentMonth = currentDate.getMonth() + 1;
-        const currentYear = currentDate.getFullYear();
-
-        const monthData = loadMonthData(
-            currentYear,
-            currentMonth
-        );
-
-        updatePresenceStats(monthData);
-        updateTaskStats();
-        updateStreak();
-    }
-
-    function loadMonthData(year, month) {
-        const key = `foag_meta_${year}_${month}`;
-        const data = localStorage.getItem(key);
-
-        if (data) {
-            try {
-                return JSON.parse(data);
-            } catch (error) {
-                console.error(
-                    'Erro ao carregar dados do calendário:',
-                    error
-                );
-            }
-        }
-
-        return {
-            pres: 22,
-            falt: 3,
-            atest: 1,
-            sem: 2,
-            provas: 2,
-            percPres: 88
-        };
-    }
-
-    function updatePresenceStats(data) {
-        const totalPresencas =
-            document.getElementById('total-presencas');
-
-        const totalFaltas =
-            document.getElementById('total-faltas');
-
-        const percentualPresenca =
-            document.getElementById('percentual-presenca');
-
-        const progressFill =
-            document.querySelector('.progress-fill');
-
-        if (totalPresencas) {
-            totalPresencas.textContent = data.pres;
-        }
-
-        if (totalFaltas) {
-            totalFaltas.textContent = data.falt;
-        }
-
-        if (percentualPresenca) {
-            percentualPresenca.textContent =
-                data.percPres + '%';
-        }
-
-        if (progressFill) {
-            progressFill.style.width =
-                data.percPres + '%';
-        }
-    }
-
-    function updateTaskStats() {
-        let tarefas = [];
-
-        try {
-            tarefas = JSON.parse(
-                localStorage.getItem('tarefas-salvas') || '[]'
+        const recentNotes =
+            notes.slice(
+                0,
+                3
             );
-        } catch (error) {
-            console.error('Erro ao carregar tarefas:', error);
-        }
 
-        const tarefasPendentes =
-            document.getElementById('tarefas-pendentes');
 
-        if (tarefasPendentes) {
-            const pendentes = tarefas.filter(function (tarefa) {
-                return (
-                    tarefa.texto &&
-                    tarefa.texto.trim() !== ''
+        recentNotes.forEach(
+            function (note) {
+
+                const noteElement =
+                    document.createElement(
+                        'div'
+                    );
+
+                noteElement.className =
+                    'note-item';
+
+
+                const noteTextElement =
+                    document.createElement(
+                        'p'
+                    );
+
+                noteTextElement.className =
+                    'note-text';
+
+                noteTextElement.textContent =
+                    note.text;
+
+
+                const noteDateElement =
+                    document.createElement(
+                        'span'
+                    );
+
+                noteDateElement.className =
+                    'note-date';
+
+                noteDateElement.textContent =
+                    note.date;
+
+
+                noteElement.appendChild(
+                    noteTextElement
                 );
-            }).length;
 
-            tarefasPendentes.textContent = pendentes;
-        }
+                noteElement.appendChild(
+                    noteDateElement
+                );
+
+                notesList.appendChild(
+                    noteElement
+                );
+
+            }
+        );
     }
 
-    function updateStreak() {
-        const diasConsecutivos =
-            document.getElementById('dias-consecutivos');
 
-        if (diasConsecutivos) {
-            const streak =
-                Math.floor(Math.random() * 10) + 1;
-
-            diasConsecutivos.textContent = streak;
-        }
-    }
-
-    // ============= LEMBRETES =============
+    // =====================================================
+    // LEMBRETES
+    // =====================================================
 
     function loadReminders() {
+
         const remindersList =
-            document.getElementById('reminders-list');
+            document.getElementById(
+                'reminders-list'
+            );
 
         const emptyReminders =
-            document.getElementById('empty-reminders');
+            document.getElementById(
+                'empty-reminders'
+            );
 
-        if (!remindersList || !emptyReminders) {
+
+        if (
+            !remindersList ||
+            !emptyReminders
+        ) {
+
             return;
         }
+
 
         const reminders = [
+
             {
-                text: "Reunião com orientador",
-                time: "14:00"
+                text:
+                    'Reunião com orientador',
+
+                time:
+                    '14:00'
             },
+
             {
-                text: "Entrega do projeto",
-                time: "Amanhã"
+                text:
+                    'Entrega do projeto',
+
+                time:
+                    'Amanhã'
             },
+
             {
-                text: "Estudar para prova",
-                time: "18:00"
+                text:
+                    'Estudar para prova',
+
+                time:
+                    '18:00'
             }
+
         ];
 
-        if (reminders.length === 0) {
-            remindersList.style.display = 'none';
-            emptyReminders.style.display = 'block';
+
+        if (
+            reminders.length === 0
+        ) {
+
+            remindersList.style.display =
+                'none';
+
+            emptyReminders.style.display =
+                'block';
+
             return;
         }
 
-        emptyReminders.style.display = 'none';
-        remindersList.style.display = 'block';
-        remindersList.innerHTML = '';
 
-        reminders.slice(0, 2).forEach(function (reminder) {
-            const reminderElement =
-                document.createElement('div');
+        emptyReminders.style.display =
+            'none';
 
-            reminderElement.className = 'reminder-item';
+        remindersList.style.display =
+            'block';
 
-            const iconContainer =
-                document.createElement('div');
+        remindersList.innerHTML =
+            '';
 
-            iconContainer.className = 'reminder-icon';
 
-            const icon =
-                document.createElement('i');
+        reminders.slice(
+            0,
+            2
+        ).forEach(
+            function (reminder) {
 
-            icon.className = 'fa-solid fa-clock';
+                const reminderElement =
+                    document.createElement(
+                        'div'
+                    );
 
-            iconContainer.appendChild(icon);
+                reminderElement.className =
+                    'reminder-item';
 
-            const reminderText =
-                document.createElement('div');
 
-            reminderText.className = 'reminder-text';
-            reminderText.textContent = reminder.text;
+                const iconContainer =
+                    document.createElement(
+                        'div'
+                    );
 
-            const reminderTime =
-                document.createElement('div');
+                iconContainer.className =
+                    'reminder-icon';
 
-            reminderTime.className = 'reminder-time';
-            reminderTime.textContent = reminder.time;
+                iconContainer.setAttribute(
+                    'aria-hidden',
+                    'true'
+                );
 
-            reminderElement.appendChild(iconContainer);
-            reminderElement.appendChild(reminderText);
-            reminderElement.appendChild(reminderTime);
 
-            remindersList.appendChild(reminderElement);
-        });
+                const icon =
+                    document.createElement(
+                        'i'
+                    );
+
+                icon.className =
+                    'fa-solid fa-clock';
+
+
+                iconContainer.appendChild(
+                    icon
+                );
+
+
+                const reminderText =
+                    document.createElement(
+                        'div'
+                    );
+
+                reminderText.className =
+                    'reminder-text';
+
+                reminderText.textContent =
+                    reminder.text;
+
+
+                const reminderTime =
+                    document.createElement(
+                        'div'
+                    );
+
+                reminderTime.className =
+                    'reminder-time';
+
+                reminderTime.textContent =
+                    reminder.time;
+
+
+                reminderElement.appendChild(
+                    iconContainer
+                );
+
+                reminderElement.appendChild(
+                    reminderText
+                );
+
+                reminderElement.appendChild(
+                    reminderTime
+                );
+
+                remindersList.appendChild(
+                    reminderElement
+                );
+
+            }
+        );
     }
 
-    // ============= ATUALIZAÇÕES EM TEMPO REAL =============
 
-    function startLiveUpdates() {
-        setInterval(function () {
-            updateStatistics();
-        }, 60000);
+    // =====================================================
+    // LOGOUT
+    // =====================================================
 
-        setInterval(function () {
-            loadMotivationalQuote();
-        }, 3600000);
+    function openLogoutModal() {
+
+        if (!logoutModal) {
+            return;
+        }
+
+
+        guardarFocoAtual();
+
+
+        logoutModal.style.display =
+            'flex';
+
+
+        logoutModal.setAttribute(
+            'aria-hidden',
+            'false'
+        );
+
+
+        requestAnimationFrame(
+            function () {
+
+                cancelLogout?.focus();
+
+            }
+        );
+
+
+        anunciar(
+            'Confirmação de saída aberta.'
+        );
     }
 
-    // ============= NOTIFICAÇÕES =============
+
+    function closeLogoutModal() {
+
+        if (!logoutModal) {
+            return;
+        }
+
+
+        logoutModal.style.display =
+            'none';
+
+
+        logoutModal.setAttribute(
+            'aria-hidden',
+            'true'
+        );
+
+
+        anunciar(
+            'Confirmação de saída fechada.'
+        );
+
+
+        devolverFoco();
+    }
+
+
+    // =====================================================
+    // NOTIFICAÇÕES
+    // =====================================================
 
     function showNotification(message) {
+
         const notification =
-            document.createElement('div');
+            document.createElement(
+                'div'
+            );
+
+
+        notification.setAttribute(
+            'role',
+            'status'
+        );
+
+
+        notification.setAttribute(
+            'aria-live',
+            'polite'
+        );
+
 
         notification.style.cssText = `
             position: fixed;
@@ -416,171 +819,143 @@ document.addEventListener('DOMContentLoaded', function () {
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             z-index: 10000;
-            animation: slideIn 0.3s ease;
         `;
 
-        notification.textContent = message;
 
-        document.body.appendChild(notification);
+        notification.textContent =
+            message;
 
-        setTimeout(function () {
-            notification.style.animation =
-                'slideOut 0.3s ease';
 
-            setTimeout(function () {
+        document.body.appendChild(
+            notification
+        );
+
+
+        anunciar(
+            message
+        );
+
+
+        setTimeout(
+            function () {
+
                 notification.remove();
-            }, 300);
-        }, 3000);
+
+            },
+            3000
+        );
     }
 
-    // ============= MODAL DE LOGOUT =============
 
-    function setupLogoutModal() {
-        const logoutModal =
-            document.getElementById('logout-modal');
+    // =====================================================
+    // ATUALIZAÇÕES
+    // =====================================================
 
-        const confirmLogout =
-            document.getElementById('confirm-logout');
+    function startLiveUpdates() {
 
-        const cancelLogout =
-            document.getElementById('cancel-logout');
+        setInterval(
+            function () {
 
-        const iconSair =
-            document.getElementById('icon-sair');
+                loadMotivationalQuote();
 
-        if (iconSair && logoutModal) {
-            iconSair.addEventListener('click', function () {
-                logoutModal.style.display = 'flex';
-            });
-        }
-
-        if (confirmLogout) {
-            confirmLogout.addEventListener(
-                'click',
-                function () {
-                    window.location.href =
-                        '../login/index.php';
-                }
-            );
-        }
-
-        if (cancelLogout && logoutModal) {
-            cancelLogout.addEventListener(
-                'click',
-                function () {
-                    logoutModal.style.display = 'none';
-                }
-            );
-        }
-
-        if (logoutModal) {
-            logoutModal.addEventListener(
-                'click',
-                function (e) {
-                    if (e.target === logoutModal) {
-                        logoutModal.style.display = 'none';
-                    }
-                }
-            );
-        }
+            },
+            3600000
+        );
     }
 
-    // ============= ANIMAÇÕES CSS ADICIONAIS =============
-
-    const style = document.createElement('style');
-
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1);
-            }
-
-            50% {
-                transform: scale(1.05);
-            }
-
-            100% {
-                transform: scale(1);
-            }
-        }
-    `;
-
-    document.head.appendChild(style);
 });
 
 
-// ============= MODO ESCURO =============
+// =====================================================
+// MODO ESCURO
+// =====================================================
 
-document.addEventListener('DOMContentLoaded', function () {
-    const isDark =
-        localStorage.getItem('darkMode') === 'true';
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
 
-    document.body.classList.toggle(
-        'dark-mode',
-        isDark
-    );
+        const isDark =
+            localStorage.getItem(
+                'darkMode'
+            ) === 'true';
 
-    const themeToggle =
-        document.getElementById('themeToggle');
 
-    if (themeToggle) {
-        themeToggle.className = isDark
-            ? 'fa-solid fa-sun'
-            : 'fa-solid fa-moon';
+        document.body.classList.toggle(
+            'dark-mode',
+            isDark
+        );
 
-        themeToggle.title = isDark
-            ? 'Modo Claro'
-            : 'Modo Escuro';
+
+        const themeToggle =
+            document.getElementById(
+                'themeToggle'
+            );
+
+
+        if (!themeToggle) {
+            return;
+        }
+
+
+        themeToggle.className =
+            isDark
+                ? 'fa-solid fa-sun'
+                : 'fa-solid fa-moon';
+
+
+        themeToggle.title =
+            isDark
+                ? 'Modo Claro'
+                : 'Modo Escuro';
+
+
+        themeToggle.setAttribute(
+            'aria-label',
+            isDark
+                ? 'Ativar modo claro'
+                : 'Ativar modo escuro'
+        );
+
 
         themeToggle.addEventListener(
             'click',
             function () {
+
                 const isNowDark =
-                    document.body.classList.toggle(
-                        'dark-mode'
-                    );
+                    document.body
+                        .classList
+                        .toggle(
+                            'dark-mode'
+                        );
+
 
                 localStorage.setItem(
                     'darkMode',
                     isNowDark
                 );
 
-                this.className = isNowDark
-                    ? 'fa-solid fa-sun'
-                    : 'fa-solid fa-moon';
 
-                this.title = isNowDark
-                    ? 'Modo Claro'
-                    : 'Modo Escuro';
+                this.className =
+                    isNowDark
+                        ? 'fa-solid fa-sun'
+                        : 'fa-solid fa-moon';
+
+
+                this.title =
+                    isNowDark
+                        ? 'Modo Claro'
+                        : 'Modo Escuro';
+
+
+                this.setAttribute(
+                    'aria-label',
+                    isNowDark
+                        ? 'Ativar modo claro'
+                        : 'Ativar modo escuro'
+                );
+
             }
         );
+
     }
-});
+);

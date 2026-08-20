@@ -2,16 +2,13 @@
 
 session_start();
 
-// ======================================
-// VERIFICAR LOGIN
-// ======================================
-
 if (empty($_SESSION['codigo_usuario'])) {
     header('Location: ../../login/index.php');
     exit;
 }
 
 $codigoUsuario = $_SESSION['codigo_usuario'];
+
 
 // ======================================
 // PASTA DO USUÁRIO
@@ -29,7 +26,7 @@ if (!is_dir($pastaUsuario)) {
 
 
 // ======================================
-// CARREGAR MATÉRIAS
+// CARREGAR materias.json
 // ======================================
 
 $arquivoMaterias =
@@ -41,30 +38,39 @@ $materiasData = [
 
 if (file_exists($arquivoMaterias)) {
 
-    $dados =
+    $conteudoMaterias =
+        file_get_contents(
+            $arquivoMaterias
+        );
+
+    $dadosMaterias =
         json_decode(
-            file_get_contents(
-                $arquivoMaterias
-            ),
+            $conteudoMaterias,
             true
         );
 
+
     if (
-        is_array($dados) &&
-        isset($dados['materias']) &&
-        is_array($dados['materias'])
+        is_array($dadosMaterias) &&
+        isset($dadosMaterias['materias']) &&
+        is_array($dadosMaterias['materias'])
     ) {
-        $materiasData = $dados;
+
+        $materiasData =
+            $dadosMaterias;
+
     }
+
 }
 
 
 // ======================================
-// FLASHCARDS
+// CARREGAR flashcards.json
 // ======================================
 
 $arquivoFlashcards =
     $pastaUsuario . '/flashcards.json';
+
 
 if (!file_exists($arquivoFlashcards)) {
 
@@ -72,15 +78,19 @@ if (!file_exists($arquivoFlashcards)) {
         'baralhos' => []
     ];
 
+
     file_put_contents(
         $arquivoFlashcards,
+
         json_encode(
             $estadoInicial,
             JSON_PRETTY_PRINT |
             JSON_UNESCAPED_UNICODE
         ),
+
         LOCK_EX
     );
+
 }
 
 
@@ -94,9 +104,11 @@ $flashcardsData =
 
 
 if (!is_array($flashcardsData)) {
+
     $flashcardsData = [
         'baralhos' => []
     ];
+
 }
 
 
@@ -104,48 +116,24 @@ if (
     !isset($flashcardsData['baralhos']) ||
     !is_array($flashcardsData['baralhos'])
 ) {
-    $flashcardsData['baralhos'] = [];
+
+    $flashcardsData['baralhos'] =
+        [];
+
 }
 
 ?>
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>FOAG – Flashcards</title>
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
-    >
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="flashcards.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../../m.escuro/dark_basee.css"
-    >
-
-    <script
-        src="../../m.escuro/dark-mode.js"
-    ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> 
+    <link  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">  
+    <link rel="stylesheet" href="flashcards.css">
+    <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
+    <script src=".././m.escuro/dark-mode.js"></script>
 
 
     <script>
@@ -163,6 +151,15 @@ if (
                 JSON_UNESCAPED_UNICODE |
                 JSON_UNESCAPED_SLASHES
             ); ?>;
+
+            window.CARTAO_SAVE_URL =
+            'salvar_cartao.php';
+
+        window.CARTAO_EDIT_URL =
+            'editar_cartao.php';
+        
+        window.CARTAO_DELETE_URL =
+            'excluir_cartao.php';
 
     </script>
 

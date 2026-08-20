@@ -74,7 +74,7 @@ if (
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="estudos.css">
   <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-  <script src="../m.escuro/dark-mode.js"></script>
+  <script src="./m.escuro/dark-mode.js"></script>
 
   <script>
   window.MATERIAS_DATA = <?= json_encode(
@@ -83,6 +83,8 @@ if (
   ); ?>;
 
   window.MATERIAS_SAVE_URL = 'salvar_materia.php';
+  window.MATERIAS_DELETE_URL =
+    'excluir_materia.php';
 </script>
 </head>
 <body>
@@ -185,12 +187,12 @@ if (
         </div>
 
         <div class="methods-grid">
-          <a class="method-card" href="flashcards/flashcards.php" data-coming-soon="Flashcards">
+          <a class="method-card" href="flashcards/flashcards.php">
             <div class="method-icon"><i class="fa-solid fa-layer-group"></i></div>
             <div class="method-info">
               <h3>Flashcards</h3>
               <p>Crie cartões de perguntas e respostas para revisar conteúdos.</p>
-              <span class="method-link">Em breve <i class="fa-solid fa-arrow-right"></i></span>
+              <span class="method-link">Abrir <i class="fa-solid fa-arrow-right"></i></span>
             </div>
           </a>
 
@@ -316,6 +318,52 @@ if (
       </div>
     </div>
   </div>
+
+  <!-- ==========================================
+     MODAL EXCLUIR MATÉRIA
+========================================== -->
+
+<div
+  id="delete-subject-modal"
+  class="modal"
+  aria-hidden="true"
+>
+
+  <div class="modal-content delete-subject-content">
+    <div class="delete-subject-icon"> <i class="fa-regular fa-trash-can"></i> </div>
+    <h3> Excluir matéria?</h3>
+    <p>Você está prestes a excluir <strong id="delete-subject-name"></strong>.</p>
+    <div class="delete-warning"> <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>
+        Todos os baralhos, cartões e revisões dessa matéria
+        também serão excluídos permanentemente.
+      </span>
+    </div>
+
+    <div class="delete-subject-actions">
+
+      <button
+        type="button"
+        id="cancel-delete-subject"
+        class="btn secondary"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        id="confirm-delete-subject"
+        class="btn delete-confirm-btn"
+      >
+        <i class="fa-regular fa-trash-can"></i>
+        Excluir matéria
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

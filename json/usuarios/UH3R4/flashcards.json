@@ -1,0 +1,68 @@
+{
+    "baralhos": [
+        {
+            "id": "BAR_BC2DAEF1",
+            "nome": "Quimica",
+            "materia": "Ciencias",
+            "descricao": "Revisão para o 1° bimestre",
+            "cor": "#1faa1d",
+            "icone": "fa-flask",
+            "cartoes": [
+                {
+                    "id": "CARD_293749A1",
+                    "pergunta": "O que é mitose",
+                    "resposta": "Não faço a menor ideia",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-08-20 14:18:53"
+                },
+                {
+                    "id": "CARD_5EE617F6",
+                    "pergunta": "Ado ado ado",
+                    "resposta": "Quer olhar para mim gosta de quiabo",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-08-20 14:19:12"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 14:03:47"
+        },
+        {
+            "id": "BAR_E8B4237E",
+            "nome": "Algebra",
+            "materia": "Matematica",
+            "descricao": "",
+            "cor": "#c70000",
+            "icone": "fa-calculator",
+            "cartoes": [],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 14:21:58"
+        },
+        {
+            "id": "BAR_410D2E2B",
+            "nome": "Verbo to be",
+            "materia": "Inglês",
+            "descricao": "",
+            "cor": "#f0d528",
+            "icone": "fa-language",
+            "cartoes": [],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 14:22:26"
+        }
+    ]
+}
