@@ -83,6 +83,47 @@ document.addEventListener('DOMContentLoaded', () => {
       ? [...materiasData.materias]
       : [];
 
+      // ==========================================
+      // DADOS DO POMODORO
+      // ==========================================
+
+      const pomodoroData =
+        window.POMODORO_DATA &&
+        typeof window.POMODORO_DATA === 'object'
+          ? window.POMODORO_DATA
+          : {
+              sessions: []
+            };
+
+
+      const sessoesPomodoro =
+        Array.isArray(
+          pomodoroData.sessions
+        )
+          ? pomodoroData.sessions
+          : [];
+
+
+      // ==========================================
+      // DADOS DOS FLASHCARDS
+      // ==========================================
+
+      const flashcardsData =
+        window.FLASHCARDS_DATA &&
+        typeof window.FLASHCARDS_DATA === 'object'
+          ? window.FLASHCARDS_DATA
+          : {
+              baralhos: []
+            };
+
+
+      const baralhos =
+        Array.isArray(
+          flashcardsData.baralhos
+        )
+          ? flashcardsData.baralhos
+          : [];
+
 
   let subjectsCount = 0;
 
@@ -548,6 +589,215 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     );
 
+    // ==========================================
+    // NORMALIZAR NOME DA MATÉRIA
+    // ==========================================
+
+    function normalizarMateria(
+      valor
+    ) {
+
+      return String(
+        valor || ''
+      )
+        .trim()
+        .toLocaleLowerCase(
+          'pt-BR'
+        );
+
+    }
+
+
+    // ==========================================
+    // CALCULAR TEMPO ESTUDADO
+    // ==========================================
+
+    function getMinutosEstudados(
+      nomeMateria
+    ) {
+
+      const nomeNormalizado =
+        normalizarMateria(
+          nomeMateria
+        );
+
+
+      let totalMinutos =
+        0;
+
+
+      sessoesPomodoro.forEach(
+        (sessao) => {
+
+          const disciplina =
+            sessao.discipline ??
+            sessao.disciplina ??
+            sessao.materia ??
+            '';
+
+
+          const modo =
+            sessao.mode ??
+            sessao.modo ??
+            'focus';
+
+
+          const minutos =
+            Number(
+              sessao.minutes ??
+              sessao.minutos ??
+              0
+            );
+
+
+          // Só conta sessões de estudo/foco
+          if (
+            modo !== 'focus'
+          ) {
+
+            return;
+
+          }
+
+
+          // Só conta a matéria correspondente
+          if (
+            normalizarMateria(
+              disciplina
+            ) !==
+            nomeNormalizado
+          ) {
+
+            return;
+
+          }
+
+
+          if (
+            Number.isFinite(
+              minutos
+            ) &&
+            minutos > 0
+          ) {
+
+            totalMinutos +=
+              minutos;
+
+          }
+
+        }
+      );
+
+
+      return Math.round(
+        totalMinutos
+      );
+
+    }
+
+
+    // ==========================================
+    // FORMATAR TEMPO ESTUDADO
+    // ==========================================
+
+    function formatarTempoEstudado(
+      minutos
+    ) {
+
+      if (
+        !minutos ||
+        minutos <= 0
+      ) {
+
+        return '0h estudadas';
+
+      }
+
+
+      const horas =
+        Math.floor(
+          minutos / 60
+        );
+
+
+      const minutosRestantes =
+        minutos % 60;
+
+
+      if (
+        horas === 0
+      ) {
+
+        return `${minutosRestantes}min estudados`;
+
+      }
+
+
+      if (
+        minutosRestantes === 0
+      ) {
+
+        return `${horas}h estudadas`;
+
+      }
+
+
+      return `${horas}h ${minutosRestantes}min estudadas`;
+
+    }
+
+
+    // ==========================================
+    // CONTAR FLASHCARDS DA MATÉRIA
+    // ==========================================
+
+    function getTotalFlashcards(
+      nomeMateria
+    ) {
+
+      const nomeNormalizado =
+        normalizarMateria(
+          nomeMateria
+        );
+
+
+      let total =
+        0;
+
+
+      baralhos.forEach(
+        (baralho) => {
+
+          if (
+            normalizarMateria(
+              baralho.materia
+            ) !==
+            nomeNormalizado
+          ) {
+
+            return;
+
+          }
+
+
+          const cartoes =
+            Array.isArray(
+              baralho.cartoes
+            )
+              ? baralho.cartoes
+              : [];
+
+
+          total +=
+            cartoes.length;
+
+        }
+      );
+
+
+      return total;
+
+    }
 
   // ==========================================
   // CRIAR CARD DA MATÉRIA
@@ -581,43 +831,66 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-    card.innerHTML = `
-      <div class="subject-card-top">
-
-        <div class="subject-card-icon">
-
-          <i
-            class="fa-solid ${materia.icone || 'fa-book'}"
-          ></i>
-
-        </div>
-
-        <h3></h3>
-
-      </div>
+    const minutosEstudados =
+  getMinutosEstudados(
+    materia.nome
+  );
 
 
-      <div class="subject-card-meta">
-
-        <span>
-
-          <i class="fa-solid fa-clock"></i>
-
-          0h estudadas
-
-        </span>
+const tempoEstudado =
+  formatarTempoEstudado(
+    minutosEstudados
+  );
 
 
-        <span>
+const totalFlashcards =
+  getTotalFlashcards(
+    materia.nome
+  );
 
-          <i class="fa-solid fa-layer-group"></i>
 
-          0 flashcards
+card.innerHTML = `
+  <div class="subject-card-top">
 
-        </span>
+    <div class="subject-card-icon">
 
-      </div>
-    `;
+      <i
+        class="fa-solid ${materia.icone || 'fa-book'}"
+      ></i>
+
+    </div>
+
+    <h3></h3>
+
+  </div>
+
+
+  <div class="subject-card-meta">
+
+    <span class="subject-study-time">
+
+      <i class="fa-solid fa-clock"></i>
+
+      ${tempoEstudado}
+
+    </span>
+
+
+    <span class="subject-flashcards-count">
+
+      <i class="fa-solid fa-layer-group"></i>
+
+      ${totalFlashcards}
+      ${
+        totalFlashcards === 1
+          ? 'flashcard'
+          : 'flashcards'
+      }
+
+    </span>
+
+  </div>
+`;
 
 
     // ==================================

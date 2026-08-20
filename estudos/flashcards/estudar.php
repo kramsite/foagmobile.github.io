@@ -841,64 +841,7 @@ $icone =
 
 </div>
 
-<!-- ==========================================
-     MODAL EXCLUIR MATÉRIA
-========================================== -->
 
-<div
-  id="delete-subject-modal"
-  class="modal"
-  aria-hidden="true"
->
-
-  <div class="modal-content delete-subject-content">
-
-    <div class="delete-subject-icon">
-      <i class="fa-regular fa-trash-can"></i>
-    </div>
-
-    <h3>
-      Excluir matéria?
-    </h3>
-
-    <p>
-      Você está prestes a excluir
-      <strong id="delete-subject-name"></strong>.
-    </p>
-
-    <div class="delete-warning">
-      <i class="fa-solid fa-triangle-exclamation"></i>
-
-      <span>
-        Todos os baralhos, cartões e revisões dessa matéria
-        também serão excluídos permanentemente.
-      </span>
-    </div>
-
-    <div class="delete-subject-actions">
-
-      <button
-        type="button"
-        id="cancel-delete-subject"
-        class="btn secondary"
-      >
-        Cancelar
-      </button>
-
-      <button
-        type="button"
-        id="confirm-delete-subject"
-        class="btn delete-confirm-btn"
-      >
-        <i class="fa-regular fa-trash-can"></i>
-        Excluir matéria
-      </button>
-
-    </div>
-
-  </div>
-
-</div>
 
 
 <div

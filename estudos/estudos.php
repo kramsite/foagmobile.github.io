@@ -63,6 +63,83 @@ if (
 ) {
     $materiasData['materias'] = [];
 }
+
+// ======================================
+// POMODORO
+// ======================================
+
+$arquivoPomodoro =
+    $pastaUsuario . '/pomodoro.json';
+
+$pomodoroData = [
+    'sessions' => []
+];
+
+if (file_exists($arquivoPomodoro)) {
+
+    $dadosPomodoro =
+        json_decode(
+            file_get_contents($arquivoPomodoro),
+            true
+        );
+
+    if (is_array($dadosPomodoro)) {
+
+        $pomodoroData =
+            $dadosPomodoro;
+
+    }
+
+}
+
+if (
+    !isset($pomodoroData['sessions']) ||
+    !is_array($pomodoroData['sessions'])
+) {
+
+    $pomodoroData['sessions'] =
+        [];
+
+}
+
+
+// ======================================
+// FLASHCARDS
+// ======================================
+
+$arquivoFlashcards =
+    $pastaUsuario . '/flashcards.json';
+
+$flashcardsData = [
+    'baralhos' => []
+];
+
+if (file_exists($arquivoFlashcards)) {
+
+    $dadosFlashcards =
+        json_decode(
+            file_get_contents($arquivoFlashcards),
+            true
+        );
+
+    if (is_array($dadosFlashcards)) {
+
+        $flashcardsData =
+            $dadosFlashcards;
+
+    }
+
+}
+
+if (
+    !isset($flashcardsData['baralhos']) ||
+    !is_array($flashcardsData['baralhos'])
+) {
+
+    $flashcardsData['baralhos'] =
+        [];
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -77,15 +154,39 @@ if (
   <script src="./m.escuro/dark-mode.js"></script>
 
   <script>
-  window.MATERIAS_DATA = <?= json_encode(
-      $materiasData,
-      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-  ); ?>;
 
-  window.MATERIAS_SAVE_URL = 'salvar_materia.php';
-  window.MATERIAS_DELETE_URL =
-    'excluir_materia.php';
-</script>
+    window.MATERIAS_DATA =
+        <?= json_encode(
+            $materiasData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.POMODORO_DATA =
+        <?= json_encode(
+            $pomodoroData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.FLASHCARDS_DATA =
+        <?= json_encode(
+            $flashcardsData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.MATERIAS_SAVE_URL =
+        'salvar_materia.php';
+
+
+    window.MATERIAS_DELETE_URL =
+        'excluir_materia.php';
+
+    </script>
 </head>
 <body>
   <header class="cabecalho">

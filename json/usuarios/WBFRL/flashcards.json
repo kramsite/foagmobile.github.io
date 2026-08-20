@@ -1,3 +1,29 @@
 {
-    "baralhos": []
+    "baralhos": [
+        {
+            "id": "BAR_EDC80925",
+            "nome": "Algebra",
+            "materia": "matematica",
+            "descricao": "",
+            "cor": "#38ffbd",
+            "icone": "fa-language",
+            "cartoes": [
+                {
+                    "id": "CARD_58AEE2E7",
+                    "pergunta": "batata frita",
+                    "resposta": "Sim",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-08-20 16:48:40"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-08-20 16:48:26"
+        }
+    ]
 }
