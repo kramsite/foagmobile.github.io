@@ -1,0 +1,1047 @@
+[
+    {
+        "cidade": "Rio Branco",
+        "estado": "AC",
+        "label": "Rio Branco - AC"
+    },
+    {
+        "cidade": "Cruzeiro do Sul",
+        "estado": "AC",
+        "label": "Cruzeiro do Sul - AC"
+    },
+    {
+        "cidade": "Sena Madureira",
+        "estado": "AC",
+        "label": "Sena Madureira - AC"
+    },
+    {
+        "cidade": "Tarauacá",
+        "estado": "AC",
+        "label": "Tarauacá - AC"
+    },
+    {
+        "cidade": "Feijó",
+        "estado": "AC",
+        "label": "Feijó - AC"
+    },
+    {
+        "cidade": "Brasiléia",
+        "estado": "AC",
+        "label": "Brasiléia - AC"
+    },
+    {
+        "cidade": "Senador Guiomard",
+        "estado": "AC",
+        "label": "Senador Guiomard - AC"
+    },
+    {
+        "cidade": "Xapuri",
+        "estado": "AC",
+        "label": "Xapuri - AC"
+    },
+    {
+        "cidade": "Maceió",
+        "estado": "AL",
+        "label": "Maceió - AL"
+    },
+    {
+        "cidade": "Arapiraca",
+        "estado": "AL",
+        "label": "Arapiraca - AL"
+    },
+    {
+        "cidade": "Rio Largo",
+        "estado": "AL",
+        "label": "Rio Largo - AL"
+    },
+    {
+        "cidade": "Palmeira dos Índios",
+        "estado": "AL",
+        "label": "Palmeira dos Índios - AL"
+    },
+    {
+        "cidade": "União dos Palmares",
+        "estado": "AL",
+        "label": "União dos Palmares - AL"
+    },
+    {
+        "cidade": "Penedo",
+        "estado": "AL",
+        "label": "Penedo - AL"
+    },
+    {
+        "cidade": "São Miguel dos Campos",
+        "estado": "AL",
+        "label": "São Miguel dos Campos - AL"
+    },
+    {
+        "cidade": "Marechal Deodoro",
+        "estado": "AL",
+        "label": "Marechal Deodoro - AL"
+    },
+    {
+        "cidade": "Macapá",
+        "estado": "AP",
+        "label": "Macapá - AP"
+    },
+    {
+        "cidade": "Santana",
+        "estado": "AP",
+        "label": "Santana - AP"
+    },
+    {
+        "cidade": "Laranjal do Jari",
+        "estado": "AP",
+        "label": "Laranjal do Jari - AP"
+    },
+    {
+        "cidade": "Oiapoque",
+        "estado": "AP",
+        "label": "Oiapoque - AP"
+    },
+    {
+        "cidade": "Mazagão",
+        "estado": "AP",
+        "label": "Mazagão - AP"
+    },
+    {
+        "cidade": "Porto Grande",
+        "estado": "AP",
+        "label": "Porto Grande - AP"
+    },
+    {
+        "cidade": "Pedra Branca do Amapari",
+        "estado": "AP",
+        "label": "Pedra Branca do Amapari - AP"
+    },
+    {
+        "cidade": "Tartarugalzinho",
+        "estado": "AP",
+        "label": "Tartarugalzinho - AP"
+    },
+    {
+        "cidade": "Manaus",
+        "estado": "AM",
+        "label": "Manaus - AM"
+    },
+    {
+        "cidade": "Parintins",
+        "estado": "AM",
+        "label": "Parintins - AM"
+    },
+    {
+        "cidade": "Itacoatiara",
+        "estado": "AM",
+        "label": "Itacoatiara - AM"
+    },
+    {
+        "cidade": "Manacapuru",
+        "estado": "AM",
+        "label": "Manacapuru - AM"
+    },
+    {
+        "cidade": "Coari",
+        "estado": "AM",
+        "label": "Coari - AM"
+    },
+    {
+        "cidade": "Tefé",
+        "estado": "AM",
+        "label": "Tefé - AM"
+    },
+    {
+        "cidade": "Tabatinga",
+        "estado": "AM",
+        "label": "Tabatinga - AM"
+    },
+    {
+        "cidade": "Maués",
+        "estado": "AM",
+        "label": "Maués - AM"
+    },
+    {
+        "cidade": "Salvador",
+        "estado": "BA",
+        "label": "Salvador - BA"
+    },
+    {
+        "cidade": "Feira de Santana",
+        "estado": "BA",
+        "label": "Feira de Santana - BA"
+    },
+    {
+        "cidade": "Vitória da Conquista",
+        "estado": "BA",
+        "label": "Vitória da Conquista - BA"
+    },
+    {
+        "cidade": "Camaçari",
+        "estado": "BA",
+        "label": "Camaçari - BA"
+    },
+    {
+        "cidade": "Juazeiro",
+        "estado": "BA",
+        "label": "Juazeiro - BA"
+    },
+    {
+        "cidade": "Itabuna",
+        "estado": "BA",
+        "label": "Itabuna - BA"
+    },
+    {
+        "cidade": "Lauro de Freitas",
+        "estado": "BA",
+        "label": "Lauro de Freitas - BA"
+    },
+    {
+        "cidade": "Barreiras",
+        "estado": "BA",
+        "label": "Barreiras - BA"
+    },
+    {
+        "cidade": "Fortaleza",
+        "estado": "CE",
+        "label": "Fortaleza - CE"
+    },
+    {
+        "cidade": "Caucaia",
+        "estado": "CE",
+        "label": "Caucaia - CE"
+    },
+    {
+        "cidade": "Juazeiro do Norte",
+        "estado": "CE",
+        "label": "Juazeiro do Norte - CE"
+    },
+    {
+        "cidade": "Maracanaú",
+        "estado": "CE",
+        "label": "Maracanaú - CE"
+    },
+    {
+        "cidade": "Sobral",
+        "estado": "CE",
+        "label": "Sobral - CE"
+    },
+    {
+        "cidade": "Crato",
+        "estado": "CE",
+        "label": "Crato - CE"
+    },
+    {
+        "cidade": "Itapipoca",
+        "estado": "CE",
+        "label": "Itapipoca - CE"
+    },
+    {
+        "cidade": "Iguatu",
+        "estado": "CE",
+        "label": "Iguatu - CE"
+    },
+    {
+        "cidade": "Brasília",
+        "estado": "DF",
+        "label": "Brasília - DF"
+    },
+    {
+        "cidade": "Vitória",
+        "estado": "ES",
+        "label": "Vitória - ES"
+    },
+    {
+        "cidade": "Vila Velha",
+        "estado": "ES",
+        "label": "Vila Velha - ES"
+    },
+    {
+        "cidade": "Serra",
+        "estado": "ES",
+        "label": "Serra - ES"
+    },
+    {
+        "cidade": "Cariacica",
+        "estado": "ES",
+        "label": "Cariacica - ES"
+    },
+    {
+        "cidade": "Linhares",
+        "estado": "ES",
+        "label": "Linhares - ES"
+    },
+    {
+        "cidade": "Cachoeiro de Itapemirim",
+        "estado": "ES",
+        "label": "Cachoeiro de Itapemirim - ES"
+    },
+    {
+        "cidade": "Colatina",
+        "estado": "ES",
+        "label": "Colatina - ES"
+    },
+    {
+        "cidade": "Guarapari",
+        "estado": "ES",
+        "label": "Guarapari - ES"
+    },
+    {
+        "cidade": "Goiânia",
+        "estado": "GO",
+        "label": "Goiânia - GO"
+    },
+    {
+        "cidade": "Aparecida de Goiânia",
+        "estado": "GO",
+        "label": "Aparecida de Goiânia - GO"
+    },
+    {
+        "cidade": "Anápolis",
+        "estado": "GO",
+        "label": "Anápolis - GO"
+    },
+    {
+        "cidade": "Rio Verde",
+        "estado": "GO",
+        "label": "Rio Verde - GO"
+    },
+    {
+        "cidade": "Águas Lindas de Goiás",
+        "estado": "GO",
+        "label": "Águas Lindas de Goiás - GO"
+    },
+    {
+        "cidade": "Luziânia",
+        "estado": "GO",
+        "label": "Luziânia - GO"
+    },
+    {
+        "cidade": "Valparaíso de Goiás",
+        "estado": "GO",
+        "label": "Valparaíso de Goiás - GO"
+    },
+    {
+        "cidade": "Trindade",
+        "estado": "GO",
+        "label": "Trindade - GO"
+    },
+    {
+        "cidade": "São Luís",
+        "estado": "MA",
+        "label": "São Luís - MA"
+    },
+    {
+        "cidade": "Imperatriz",
+        "estado": "MA",
+        "label": "Imperatriz - MA"
+    },
+    {
+        "cidade": "São José de Ribamar",
+        "estado": "MA",
+        "label": "São José de Ribamar - MA"
+    },
+    {
+        "cidade": "Timon",
+        "estado": "MA",
+        "label": "Timon - MA"
+    },
+    {
+        "cidade": "Caxias",
+        "estado": "MA",
+        "label": "Caxias - MA"
+    },
+    {
+        "cidade": "Paço do Lumiar",
+        "estado": "MA",
+        "label": "Paço do Lumiar - MA"
+    },
+    {
+        "cidade": "Codó",
+        "estado": "MA",
+        "label": "Codó - MA"
+    },
+    {
+        "cidade": "Açailândia",
+        "estado": "MA",
+        "label": "Açailândia - MA"
+    },
+    {
+        "cidade": "Cuiabá",
+        "estado": "MT",
+        "label": "Cuiabá - MT"
+    },
+    {
+        "cidade": "Várzea Grande",
+        "estado": "MT",
+        "label": "Várzea Grande - MT"
+    },
+    {
+        "cidade": "Rondonópolis",
+        "estado": "MT",
+        "label": "Rondonópolis - MT"
+    },
+    {
+        "cidade": "Sinop",
+        "estado": "MT",
+        "label": "Sinop - MT"
+    },
+    {
+        "cidade": "Sorriso",
+        "estado": "MT",
+        "label": "Sorriso - MT"
+    },
+    {
+        "cidade": "Tangará da Serra",
+        "estado": "MT",
+        "label": "Tangará da Serra - MT"
+    },
+    {
+        "cidade": "Cáceres",
+        "estado": "MT",
+        "label": "Cáceres - MT"
+    },
+    {
+        "cidade": "Lucas do Rio Verde",
+        "estado": "MT",
+        "label": "Lucas do Rio Verde - MT"
+    },
+    {
+        "cidade": "Campo Grande",
+        "estado": "MS",
+        "label": "Campo Grande - MS"
+    },
+    {
+        "cidade": "Dourados",
+        "estado": "MS",
+        "label": "Dourados - MS"
+    },
+    {
+        "cidade": "Três Lagoas",
+        "estado": "MS",
+        "label": "Três Lagoas - MS"
+    },
+    {
+        "cidade": "Corumbá",
+        "estado": "MS",
+        "label": "Corumbá - MS"
+    },
+    {
+        "cidade": "Ponta Porã",
+        "estado": "MS",
+        "label": "Ponta Porã - MS"
+    },
+    {
+        "cidade": "Naviraí",
+        "estado": "MS",
+        "label": "Naviraí - MS"
+    },
+    {
+        "cidade": "Nova Andradina",
+        "estado": "MS",
+        "label": "Nova Andradina - MS"
+    },
+    {
+        "cidade": "Aquidauana",
+        "estado": "MS",
+        "label": "Aquidauana - MS"
+    },
+    {
+        "cidade": "Belo Horizonte",
+        "estado": "MG",
+        "label": "Belo Horizonte - MG"
+    },
+    {
+        "cidade": "Uberlândia",
+        "estado": "MG",
+        "label": "Uberlândia - MG"
+    },
+    {
+        "cidade": "Contagem",
+        "estado": "MG",
+        "label": "Contagem - MG"
+    },
+    {
+        "cidade": "Juiz de Fora",
+        "estado": "MG",
+        "label": "Juiz de Fora - MG"
+    },
+    {
+        "cidade": "Betim",
+        "estado": "MG",
+        "label": "Betim - MG"
+    },
+    {
+        "cidade": "Montes Claros",
+        "estado": "MG",
+        "label": "Montes Claros - MG"
+    },
+    {
+        "cidade": "Ribeirão das Neves",
+        "estado": "MG",
+        "label": "Ribeirão das Neves - MG"
+    },
+    {
+        "cidade": "Uberaba",
+        "estado": "MG",
+        "label": "Uberaba - MG"
+    },
+    {
+        "cidade": "Belém",
+        "estado": "PA",
+        "label": "Belém - PA"
+    },
+    {
+        "cidade": "Ananindeua",
+        "estado": "PA",
+        "label": "Ananindeua - PA"
+    },
+    {
+        "cidade": "Santarém",
+        "estado": "PA",
+        "label": "Santarém - PA"
+    },
+    {
+        "cidade": "Marabá",
+        "estado": "PA",
+        "label": "Marabá - PA"
+    },
+    {
+        "cidade": "Parauapebas",
+        "estado": "PA",
+        "label": "Parauapebas - PA"
+    },
+    {
+        "cidade": "Castanhal",
+        "estado": "PA",
+        "label": "Castanhal - PA"
+    },
+    {
+        "cidade": "Abaetetuba",
+        "estado": "PA",
+        "label": "Abaetetuba - PA"
+    },
+    {
+        "cidade": "Cametá",
+        "estado": "PA",
+        "label": "Cametá - PA"
+    },
+    {
+        "cidade": "João Pessoa",
+        "estado": "PB",
+        "label": "João Pessoa - PB"
+    },
+    {
+        "cidade": "Campina Grande",
+        "estado": "PB",
+        "label": "Campina Grande - PB"
+    },
+    {
+        "cidade": "Santa Rita",
+        "estado": "PB",
+        "label": "Santa Rita - PB"
+    },
+    {
+        "cidade": "Patos",
+        "estado": "PB",
+        "label": "Patos - PB"
+    },
+    {
+        "cidade": "Bayeux",
+        "estado": "PB",
+        "label": "Bayeux - PB"
+    },
+    {
+        "cidade": "Sousa",
+        "estado": "PB",
+        "label": "Sousa - PB"
+    },
+    {
+        "cidade": "Cabedelo",
+        "estado": "PB",
+        "label": "Cabedelo - PB"
+    },
+    {
+        "cidade": "Cajazeiras",
+        "estado": "PB",
+        "label": "Cajazeiras - PB"
+    },
+    {
+        "cidade": "Curitiba",
+        "estado": "PR",
+        "label": "Curitiba - PR"
+    },
+    {
+        "cidade": "Londrina",
+        "estado": "PR",
+        "label": "Londrina - PR"
+    },
+    {
+        "cidade": "Maringá",
+        "estado": "PR",
+        "label": "Maringá - PR"
+    },
+    {
+        "cidade": "Ponta Grossa",
+        "estado": "PR",
+        "label": "Ponta Grossa - PR"
+    },
+    {
+        "cidade": "Cascavel",
+        "estado": "PR",
+        "label": "Cascavel - PR"
+    },
+    {
+        "cidade": "São José dos Pinhais",
+        "estado": "PR",
+        "label": "São José dos Pinhais - PR"
+    },
+    {
+        "cidade": "Foz do Iguaçu",
+        "estado": "PR",
+        "label": "Foz do Iguaçu - PR"
+    },
+    {
+        "cidade": "Colombo",
+        "estado": "PR",
+        "label": "Colombo - PR"
+    },
+    {
+        "cidade": "Recife",
+        "estado": "PE",
+        "label": "Recife - PE"
+    },
+    {
+        "cidade": "Jaboatão dos Guararapes",
+        "estado": "PE",
+        "label": "Jaboatão dos Guararapes - PE"
+    },
+    {
+        "cidade": "Olinda",
+        "estado": "PE",
+        "label": "Olinda - PE"
+    },
+    {
+        "cidade": "Caruaru",
+        "estado": "PE",
+        "label": "Caruaru - PE"
+    },
+    {
+        "cidade": "Petrolina",
+        "estado": "PE",
+        "label": "Petrolina - PE"
+    },
+    {
+        "cidade": "Paulista",
+        "estado": "PE",
+        "label": "Paulista - PE"
+    },
+    {
+        "cidade": "Cabo de Santo Agostinho",
+        "estado": "PE",
+        "label": "Cabo de Santo Agostinho - PE"
+    },
+    {
+        "cidade": "Camaragibe",
+        "estado": "PE",
+        "label": "Camaragibe - PE"
+    },
+    {
+        "cidade": "Teresina",
+        "estado": "PI",
+        "label": "Teresina - PI"
+    },
+    {
+        "cidade": "Parnaíba",
+        "estado": "PI",
+        "label": "Parnaíba - PI"
+    },
+    {
+        "cidade": "Picos",
+        "estado": "PI",
+        "label": "Picos - PI"
+    },
+    {
+        "cidade": "Piripiri",
+        "estado": "PI",
+        "label": "Piripiri - PI"
+    },
+    {
+        "cidade": "Floriano",
+        "estado": "PI",
+        "label": "Floriano - PI"
+    },
+    {
+        "cidade": "Campo Maior",
+        "estado": "PI",
+        "label": "Campo Maior - PI"
+    },
+    {
+        "cidade": "Barras",
+        "estado": "PI",
+        "label": "Barras - PI"
+    },
+    {
+        "cidade": "União",
+        "estado": "PI",
+        "label": "União - PI"
+    },
+    {
+        "cidade": "Rio de Janeiro",
+        "estado": "RJ",
+        "label": "Rio de Janeiro - RJ"
+    },
+    {
+        "cidade": "São Gonçalo",
+        "estado": "RJ",
+        "label": "São Gonçalo - RJ"
+    },
+    {
+        "cidade": "Duque de Caxias",
+        "estado": "RJ",
+        "label": "Duque de Caxias - RJ"
+    },
+    {
+        "cidade": "Nova Iguaçu",
+        "estado": "RJ",
+        "label": "Nova Iguaçu - RJ"
+    },
+    {
+        "cidade": "Niterói",
+        "estado": "RJ",
+        "label": "Niterói - RJ"
+    },
+    {
+        "cidade": "Belford Roxo",
+        "estado": "RJ",
+        "label": "Belford Roxo - RJ"
+    },
+    {
+        "cidade": "Campos dos Goytacazes",
+        "estado": "RJ",
+        "label": "Campos dos Goytacazes - RJ"
+    },
+    {
+        "cidade": "São João de Meriti",
+        "estado": "RJ",
+        "label": "São João de Meriti - RJ"
+    },
+    {
+        "cidade": "Natal",
+        "estado": "RN",
+        "label": "Natal - RN"
+    },
+    {
+        "cidade": "Mossoró",
+        "estado": "RN",
+        "label": "Mossoró - RN"
+    },
+    {
+        "cidade": "Parnamirim",
+        "estado": "RN",
+        "label": "Parnamirim - RN"
+    },
+    {
+        "cidade": "São Gonçalo do Amarante",
+        "estado": "RN",
+        "label": "São Gonçalo do Amarante - RN"
+    },
+    {
+        "cidade": "Macaíba",
+        "estado": "RN",
+        "label": "Macaíba - RN"
+    },
+    {
+        "cidade": "Ceará-Mirim",
+        "estado": "RN",
+        "label": "Ceará-Mirim - RN"
+    },
+    {
+        "cidade": "Caicó",
+        "estado": "RN",
+        "label": "Caicó - RN"
+    },
+    {
+        "cidade": "Assú",
+        "estado": "RN",
+        "label": "Assú - RN"
+    },
+    {
+        "cidade": "Porto Alegre",
+        "estado": "RS",
+        "label": "Porto Alegre - RS"
+    },
+    {
+        "cidade": "Caxias do Sul",
+        "estado": "RS",
+        "label": "Caxias do Sul - RS"
+    },
+    {
+        "cidade": "Canoas",
+        "estado": "RS",
+        "label": "Canoas - RS"
+    },
+    {
+        "cidade": "Pelotas",
+        "estado": "RS",
+        "label": "Pelotas - RS"
+    },
+    {
+        "cidade": "Santa Maria",
+        "estado": "RS",
+        "label": "Santa Maria - RS"
+    },
+    {
+        "cidade": "Gravataí",
+        "estado": "RS",
+        "label": "Gravataí - RS"
+    },
+    {
+        "cidade": "Viamão",
+        "estado": "RS",
+        "label": "Viamão - RS"
+    },
+    {
+        "cidade": "Novo Hamburgo",
+        "estado": "RS",
+        "label": "Novo Hamburgo - RS"
+    },
+    {
+        "cidade": "Porto Velho",
+        "estado": "RO",
+        "label": "Porto Velho - RO"
+    },
+    {
+        "cidade": "Ji-Paraná",
+        "estado": "RO",
+        "label": "Ji-Paraná - RO"
+    },
+    {
+        "cidade": "Ariquemes",
+        "estado": "RO",
+        "label": "Ariquemes - RO"
+    },
+    {
+        "cidade": "Vilhena",
+        "estado": "RO",
+        "label": "Vilhena - RO"
+    },
+    {
+        "cidade": "Cacoal",
+        "estado": "RO",
+        "label": "Cacoal - RO"
+    },
+    {
+        "cidade": "Rolim de Moura",
+        "estado": "RO",
+        "label": "Rolim de Moura - RO"
+    },
+    {
+        "cidade": "Jaru",
+        "estado": "RO",
+        "label": "Jaru - RO"
+    },
+    {
+        "cidade": "Guajará-Mirim",
+        "estado": "RO",
+        "label": "Guajará-Mirim - RO"
+    },
+    {
+        "cidade": "Boa Vista",
+        "estado": "RR",
+        "label": "Boa Vista - RR"
+    },
+    {
+        "cidade": "Rorainópolis",
+        "estado": "RR",
+        "label": "Rorainópolis - RR"
+    },
+    {
+        "cidade": "Caracaraí",
+        "estado": "RR",
+        "label": "Caracaraí - RR"
+    },
+    {
+        "cidade": "Pacaraima",
+        "estado": "RR",
+        "label": "Pacaraima - RR"
+    },
+    {
+        "cidade": "Mucajaí",
+        "estado": "RR",
+        "label": "Mucajaí - RR"
+    },
+    {
+        "cidade": "Cantá",
+        "estado": "RR",
+        "label": "Cantá - RR"
+    },
+    {
+        "cidade": "Alto Alegre",
+        "estado": "RR",
+        "label": "Alto Alegre - RR"
+    },
+    {
+        "cidade": "Bonfim",
+        "estado": "RR",
+        "label": "Bonfim - RR"
+    },
+    {
+        "cidade": "Florianópolis",
+        "estado": "SC",
+        "label": "Florianópolis - SC"
+    },
+    {
+        "cidade": "Joinville",
+        "estado": "SC",
+        "label": "Joinville - SC"
+    },
+    {
+        "cidade": "Blumenau",
+        "estado": "SC",
+        "label": "Blumenau - SC"
+    },
+    {
+        "cidade": "São José",
+        "estado": "SC",
+        "label": "São José - SC"
+    },
+    {
+        "cidade": "Itajaí",
+        "estado": "SC",
+        "label": "Itajaí - SC"
+    },
+    {
+        "cidade": "Chapecó",
+        "estado": "SC",
+        "label": "Chapecó - SC"
+    },
+    {
+        "cidade": "Criciúma",
+        "estado": "SC",
+        "label": "Criciúma - SC"
+    },
+    {
+        "cidade": "Palhoça",
+        "estado": "SC",
+        "label": "Palhoça - SC"
+    },
+    {
+        "cidade": "São Paulo",
+        "estado": "SP",
+        "label": "São Paulo - SP"
+    },
+    {
+        "cidade": "Guarulhos",
+        "estado": "SP",
+        "label": "Guarulhos - SP"
+    },
+    {
+        "cidade": "Campinas",
+        "estado": "SP",
+        "label": "Campinas - SP"
+    },
+    {
+        "cidade": "São Bernardo do Campo",
+        "estado": "SP",
+        "label": "São Bernardo do Campo - SP"
+    },
+    {
+        "cidade": "Santo André",
+        "estado": "SP",
+        "label": "Santo André - SP"
+    },
+    {
+        "cidade": "Osasco",
+        "estado": "SP",
+        "label": "Osasco - SP"
+    },
+    {
+        "cidade": "Sorocaba",
+        "estado": "SP",
+        "label": "Sorocaba - SP"
+    },
+    {
+        "cidade": "Ribeirão Preto",
+        "estado": "SP",
+        "label": "Ribeirão Preto - SP"
+    },
+    {
+        "cidade": "Aracaju",
+        "estado": "SE",
+        "label": "Aracaju - SE"
+    },
+    {
+        "cidade": "Nossa Senhora do Socorro",
+        "estado": "SE",
+        "label": "Nossa Senhora do Socorro - SE"
+    },
+    {
+        "cidade": "Lagarto",
+        "estado": "SE",
+        "label": "Lagarto - SE"
+    },
+    {
+        "cidade": "Itabaiana",
+        "estado": "SE",
+        "label": "Itabaiana - SE"
+    },
+    {
+        "cidade": "São Cristóvão",
+        "estado": "SE",
+        "label": "São Cristóvão - SE"
+    },
+    {
+        "cidade": "Estância",
+        "estado": "SE",
+        "label": "Estância - SE"
+    },
+    {
+        "cidade": "Tobias Barreto",
+        "estado": "SE",
+        "label": "Tobias Barreto - SE"
+    },
+    {
+        "cidade": "Simão Dias",
+        "estado": "SE",
+        "label": "Simão Dias - SE"
+    },
+    {
+        "cidade": "Palmas",
+        "estado": "TO",
+        "label": "Palmas - TO"
+    },
+    {
+        "cidade": "Araguaína",
+        "estado": "TO",
+        "label": "Araguaína - TO"
+    },
+    {
+        "cidade": "Gurupi",
+        "estado": "TO",
+        "label": "Gurupi - TO"
+    },
+    {
+        "cidade": "Porto Nacional",
+        "estado": "TO",
+        "label": "Porto Nacional - TO"
+    },
+    {
+        "cidade": "Paraíso do Tocantins",
+        "estado": "TO",
+        "label": "Paraíso do Tocantins - TO"
+    },
+    {
+        "cidade": "Colinas do Tocantins",
+        "estado": "TO",
+        "label": "Colinas do Tocantins - TO"
+    },
+    {
+        "cidade": "Guaraí",
+        "estado": "TO",
+        "label": "Guaraí - TO"
+    },
+    {
+        "cidade": "Tocantinópolis",
+        "estado": "TO",
+        "label": "Tocantinópolis - TO"
+    }
+]

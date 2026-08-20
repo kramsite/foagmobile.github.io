@@ -34,6 +34,7 @@ $foto_padrao = 'foto_padrao.png';
 
 $escolas_json = __DIR__ . '/../json/escolas.json';
 $series_json = __DIR__ . '/../json/series.json';
+$cidades_json = __DIR__ . '/../json/cidades.json';
 
 /*
 |--------------------------------------------------------------------------
@@ -62,7 +63,10 @@ function carregarLista($caminho)
         return [];
     }
 
-    $lista = json_decode($conteudo, true);
+    $lista = json_decode(
+        $conteudo,
+        true
+    );
 
     return is_array($lista)
         ? $lista
@@ -73,7 +77,8 @@ function salvarJson($caminho, $dados)
 {
     $json = json_encode(
         $dados,
-        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
+        JSON_PRETTY_PRINT
+        | JSON_UNESCAPED_UNICODE
     );
 
     if ($json === false) {
@@ -85,6 +90,37 @@ function salvarJson($caminho, $dados)
         $json,
         LOCK_EX
     ) !== false;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verificar se cidade/estado existem no cidades.json
+|--------------------------------------------------------------------------
+*/
+
+function localidadeValida(
+    $cidade,
+    $estado,
+    $opcoesCidades
+) {
+    foreach ($opcoesCidades as $opcao) {
+
+        $cidadeOpcao =
+            trim($opcao['cidade'] ?? '');
+
+        $estadoOpcao =
+            trim($opcao['estado'] ?? '');
+
+        if (
+            $cidadeOpcao === $cidade
+            &&
+            $estadoOpcao === $estado
+        ) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 /*
@@ -104,11 +140,14 @@ function criarNomeArquivoUsuario($nome)
     );
 
     if (function_exists('mb_strtolower')) {
+
         $nome = mb_strtolower(
             $nome,
             'UTF-8'
         );
+
     } else {
+
         $nome = strtolower($nome);
     }
 
@@ -214,11 +253,12 @@ function atualizarArquivoLogin(
 
         /*
         |--------------------------------------------------------------------------
-        | Atualizar nome dentro do JSON
+        | Atualizar nome no JSON de login
         |--------------------------------------------------------------------------
         */
 
-        $dadosLogin['nome'] = $novoNome;
+        $dadosLogin['nome'] =
+            $novoNome;
 
         salvarJson(
             $arquivoLogin,
@@ -227,22 +267,20 @@ function atualizarArquivoLogin(
 
         /*
         |--------------------------------------------------------------------------
-        | Renomear arquivo para acompanhar o novo nome
+        | Renomear arquivo de login
         |--------------------------------------------------------------------------
         */
 
         $novoNomeArquivo =
-            criarNomeArquivoUsuario($novoNome);
+            criarNomeArquivoUsuario(
+                $novoNome
+            );
 
-        $novoCaminho = $pastaLogin
+        $novoCaminho =
+            $pastaLogin
             . '/'
             . $novoNomeArquivo
             . '.json';
-
-        /*
-         * Se já existir alguém com esse nome,
-         * acrescenta o código do usuário.
-         */
 
         if (
             file_exists($novoCaminho)
@@ -250,7 +288,9 @@ function atualizarArquivoLogin(
             realpath($novoCaminho)
             !== realpath($arquivoLogin)
         ) {
-            $novoCaminho = $pastaLogin
+
+            $novoCaminho =
+                $pastaLogin
                 . '/'
                 . $novoNomeArquivo
                 . '_'
@@ -259,10 +299,10 @@ function atualizarArquivoLogin(
         }
 
         if (
-            realpath($arquivoLogin)
-            !== realpath($novoCaminho)
+            $arquivoLogin
+            !== $novoCaminho
         ) {
-            rename(
+            @rename(
                 $arquivoLogin,
                 $novoCaminho
             );
@@ -274,7 +314,7 @@ function atualizarArquivoLogin(
 
 /*
 |--------------------------------------------------------------------------
-| Carregar escolas e séries
+| Carregar listas
 |--------------------------------------------------------------------------
 */
 
@@ -286,29 +326,37 @@ $opcoes_series = carregarLista(
     $series_json
 );
 
+$opcoes_cidades = carregarLista(
+    $cidades_json
+);
+
 /*
 |--------------------------------------------------------------------------
-| Verificar perfil
+| Verificar pasta e perfil
 |--------------------------------------------------------------------------
 */
 
 if (!is_dir($pastaUsuario)) {
+
     exit(
         'Pasta do usuário não encontrada.'
     );
 }
 
 if (!file_exists($caminhoPerfil)) {
+
     exit(
         'Perfil do usuário não encontrado.'
     );
 }
 
-$conteudoPerfil = file_get_contents(
-    $caminhoPerfil
-);
+$conteudoPerfil =
+    file_get_contents(
+        $caminhoPerfil
+    );
 
 if ($conteudoPerfil === false) {
+
     exit(
         'Não foi possível carregar o perfil.'
     );
@@ -320,6 +368,7 @@ $usuario = json_decode(
 );
 
 if (!is_array($usuario)) {
+
     exit(
         'Os dados do perfil estão inválidos.'
     );
@@ -327,7 +376,7 @@ if (!is_array($usuario)) {
 
 /*
 |--------------------------------------------------------------------------
-| Garantir que opções atuais apareçam nas listas
+| Garantir opção atual de série
 |--------------------------------------------------------------------------
 */
 
@@ -340,11 +389,18 @@ if (
         true
     )
 ) {
+
     array_unshift(
         $opcoes_series,
         $usuario['serie']
     );
 }
+
+/*
+|--------------------------------------------------------------------------
+| Garantir opção atual de escola
+|--------------------------------------------------------------------------
+*/
 
 if (
     !empty($usuario['escola'])
@@ -355,6 +411,7 @@ if (
         true
     )
 ) {
+
     array_unshift(
         $opcoes_escolas,
         $usuario['escola']
@@ -370,6 +427,12 @@ $mensagem_erro = '';
 */
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    /*
+    |--------------------------------------------------------------------------
+    | Receber dados
+    |--------------------------------------------------------------------------
+    */
 
     $nome = trim(
         $_POST['nome'] ?? ''
@@ -390,6 +453,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $escola = trim(
         $_POST['escola'] ?? ''
     );
+
+    $localidade = trim(
+        $_POST['localidade'] ?? ''
+    );
+
+    /*
+    |--------------------------------------------------------------------------
+    | Separar cidade e estado
+    |--------------------------------------------------------------------------
+    |
+    | O select envia, por exemplo:
+    |
+    | Cuiabá|MT
+    |
+    */
+
+    $cidade = '';
+    $estado = '';
+
+    if ($localidade !== '') {
+
+        $partesLocalidade = explode(
+            '|',
+            $localidade,
+            2
+        );
+
+        $cidade = trim(
+            $partesLocalidade[0] ?? ''
+        );
+
+        $estado = strtoupper(
+            trim(
+                $partesLocalidade[1] ?? ''
+            )
+        );
+    }
 
     /*
     |--------------------------------------------------------------------------
@@ -416,6 +516,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mensagem_erro =
             'Selecione a escola ou faculdade.';
+
+    } elseif ($localidade === '') {
+
+        $mensagem_erro =
+            'Selecione sua cidade.';
+
+    } elseif (
+        $cidade === ''
+        ||
+        $estado === ''
+    ) {
+
+        $mensagem_erro =
+            'A cidade selecionada é inválida.';
+
+    } elseif (
+        !localidadeValida(
+            $cidade,
+            $estado,
+            $opcoes_cidades
+        )
+    ) {
+
+        $mensagem_erro =
+            'Selecione uma cidade disponível na lista.';
     }
 
     /*
@@ -430,7 +555,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     /*
     |--------------------------------------------------------------------------
-    | Upload de foto
+    | Upload da foto
     |--------------------------------------------------------------------------
     */
 
@@ -498,7 +623,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             } else {
 
+                /*
+                |--------------------------------------------------------------------------
+                | Criar pasta de fotos se necessário
+                |--------------------------------------------------------------------------
+                */
+
                 if (!is_dir($pasta_fotos)) {
+
                     mkdir(
                         $pasta_fotos,
                         0775,
@@ -507,8 +639,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
 
                 /*
-                 * Colocamos o código do usuário no nome da foto.
-                 */
+                |--------------------------------------------------------------------------
+                | Nome da nova foto
+                |--------------------------------------------------------------------------
+                */
 
                 $novo_nome =
                     'perfil_'
@@ -523,6 +657,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $destino =
                     $pasta_fotos
                     . $novo_nome;
+
+                /*
+                |--------------------------------------------------------------------------
+                | Salvar foto
+                |--------------------------------------------------------------------------
+                */
 
                 if (
                     move_uploaded_file(
@@ -548,12 +688,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     if (
                         $foto_antiga
-                            !== $foto_padrao
+                        !== $foto_padrao
                         &&
                         is_file(
                             $caminho_antigo
                         )
                     ) {
+
                         unlink(
                             $caminho_antigo
                         );
@@ -594,15 +735,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usuario['escola'] =
             $escola;
 
+        /*
+        |--------------------------------------------------------------------------
+        | Localização
+        |--------------------------------------------------------------------------
+        */
+
+        $usuario['cidade'] =
+            $cidade;
+
+        $usuario['estado'] =
+            $estado;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Foto
+        |--------------------------------------------------------------------------
+        */
+
         $usuario['foto'] =
             $foto_salva;
 
         /*
-         * Garante que o código continue salvo.
-         */
+        |--------------------------------------------------------------------------
+        | Garantir código do usuário
+        |--------------------------------------------------------------------------
+        */
 
         $usuario['codigo_usuario'] =
             $codigoUsuario;
+
+        /*
+        |--------------------------------------------------------------------------
+        | Salvar JSON
+        |--------------------------------------------------------------------------
+        */
 
         if (
             !salvarJson(
@@ -630,7 +797,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             /*
             |--------------------------------------------------------------------------
-            | Atualizar nome do arquivo de login
+            | Atualizar arquivo de login
             |--------------------------------------------------------------------------
             */
 
@@ -639,6 +806,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $codigoUsuario,
                 $nome
             );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Voltar para perfil
+            |--------------------------------------------------------------------------
+            */
 
             header(
                 'Location: perfil.php'
@@ -668,6 +841,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $usuario['escola'] =
         $escola;
+
+    $usuario['cidade'] =
+        $cidade;
+
+    $usuario['estado'] =
+        $estado;
 }
 
 /*
@@ -676,7 +855,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 |--------------------------------------------------------------------------
 */
 
-$foto_perfil = $foto_padrao;
+$foto_perfil =
+    $foto_padrao;
 
 if (!empty($usuario['foto'])) {
 
@@ -691,6 +871,7 @@ if (!empty($usuario['foto'])) {
             . $arquivo_foto
         )
     ) {
+
         $foto_perfil =
             $arquivo_foto;
     }
@@ -712,7 +893,7 @@ $caminho_foto =
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
     <link rel="stylesheet" href="editr.css">
-    <script src="../m.escuro/dark-mode.js"></script>
+    <script src="./m.escuro/dark-mode.js"></script>
 </head>
 
 <body>
@@ -885,6 +1066,77 @@ $caminho_foto =
                                     <?php endforeach; ?>
                                 </select>
                             </div>
+
+                            <div class="campo">
+                                <label for="localidade">
+                                    Cidade
+                                </label>
+
+                                <select
+                                    id="localidade"
+                                    name="localidade"
+                                    required
+                                >
+
+                                    <option value="">
+                                        Selecione sua cidade
+                                    </option>
+
+                                    <?php
+
+                                    $localidadeAtual = '';
+
+                                    if (
+                                        !empty($usuario['cidade'])
+                                        &&
+                                        !empty($usuario['estado'])
+                                    ) {
+                                        $localidadeAtual =
+                                            $usuario['cidade']
+                                            . '|'
+                                            . $usuario['estado'];
+                                    }
+
+                                    foreach (
+                                        $opcoes_cidades
+                                        as $opcaoCidade
+                                    ):
+
+                                        $cidadeOpcao =
+                                            $opcaoCidade['cidade']
+                                            ?? '';
+
+                                        $estadoOpcao =
+                                            $opcaoCidade['estado']
+                                            ?? '';
+
+                                        $labelOpcao =
+                                            $opcaoCidade['label']
+                                            ??
+                                            (
+                                                $cidadeOpcao
+                                                . ' - '
+                                                . $estadoOpcao
+                                            );
+
+                                        $valorOpcao =
+                                            $cidadeOpcao
+                                            . '|'
+                                            . $estadoOpcao;
+
+                                    ?>
+
+                                        <option
+                                            value="<?= escapar($valorOpcao) ?>"
+                                            <?= $valorOpcao === $localidadeAtual ? 'selected' : '' ?>
+                                        >
+                                            <?= escapar($labelOpcao) ?>
+                                        </option>
+
+                                    <?php endforeach; ?>
+
+                                </select>
+                            </div>
                         </div>
 
                         <div class="botoes">
@@ -937,6 +1189,7 @@ $caminho_foto =
             const telefoneInput = document.getElementById("telefone");
             const serieSelect = document.getElementById("serie");
             const escolaSelect = document.getElementById("escola");
+            const localidadeSelect = document.getElementById("localidade");
 
             if (serieSelect) {
                 new Choices(serieSelect, {
@@ -957,6 +1210,17 @@ $caminho_foto =
                     noResultsText: "Nenhum resultado encontrado",
                     noChoicesText: "Nenhuma opção disponível",
                     searchPlaceholderValue: "Buscar escola ou faculdade"
+                });
+            }
+
+            if (localidadeSelect) {
+                new Choices(localidadeSelect, {
+                    searchEnabled: true,
+                    shouldSort: false,
+                    itemSelectText: "",
+                    noResultsText: "Cidade não encontrada",
+                    noChoicesText: "Nenhuma cidade disponível",
+                    searchPlaceholderValue: "Digite sua cidade"
                 });
             }
 

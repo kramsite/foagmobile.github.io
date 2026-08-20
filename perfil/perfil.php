@@ -124,6 +124,22 @@ $serie = $usuario_logado["serie"]
 $escola = $usuario_logado["escola"]
     ?? "Não informado";
 
+$cidade = $usuario_logado["cidade"]
+    ?? "";
+
+$estado = $usuario_logado["estado"]
+    ?? "";
+
+if ($cidade !== '' && $estado !== '') {
+    $localidade = $cidade . ' - ' . $estado;
+} elseif ($cidade !== '') {
+    $localidade = $cidade;
+} elseif ($estado !== '') {
+    $localidade = $estado;
+} else {
+    $localidade = "Não informado";
+}
+
 /*
 |--------------------------------------------------------------------------
 | Foto
@@ -163,7 +179,7 @@ $caminho_foto =
     <link rel="stylesheet" href="dark-per.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../m.escuro/dark-mode.js"></script>
+    <script src="./m.escuro/dark-mode.js"></script>
 </head>
 
 <body>
@@ -374,6 +390,17 @@ $caminho_foto =
                             <div>
                                 <span>Escola ou faculdade</span>
                                 <strong><?= escapar($escola) ?></strong>
+                            </div>
+                        </div>
+
+                        <div class="dado-item">
+                            <div class="dado-item-icone">
+                                <i class="fa-solid fa-location-dot"></i>
+                            </div>
+
+                            <div>
+                                <span>Cidade</span>
+                                <strong><?= escapar($localidade) ?></strong>
                             </div>
                         </div>
                     </div>
