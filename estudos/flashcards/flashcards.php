@@ -152,7 +152,14 @@ if (
                 JSON_UNESCAPED_SLASHES
             ); ?>;
 
-            window.FLASHCARDS_SAVE_URL = 'salvar_baralho.php';
+            window.CARTAO_SAVE_URL =
+            'salvar_cartao.php';
+
+        window.CARTAO_EDIT_URL =
+            'editar_cartao.php';
+        
+        window.CARTAO_DELETE_URL =
+            'excluir_cartao.php';
 
     </script>
 

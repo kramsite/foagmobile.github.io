@@ -6,20 +6,6 @@
             "cor": "#38ffbd",
             "icone": "fa-language",
             "criado_em": "2026-08-18 16:36:05"
-        },
-        {
-            "id": "MAT_918E82D0",
-            "nome": "portugues",
-            "cor": "#d02dd2",
-            "icone": "fa-language",
-            "criado_em": "2026-08-18 17:21:37"
-        },
-        {
-            "id": "MAT_25D8B316",
-            "nome": "Inglês",
-            "cor": "#ff3860",
-            "icone": "fa-language",
-            "criado_em": "2026-08-20 13:36:21"
         }
     ]
 }

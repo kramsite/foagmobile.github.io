@@ -24,6 +24,16 @@ document.addEventListener(
       'salvar_cartao.php';
 
 
+    const EDIT_URL =
+      window.CARTAO_EDIT_URL ||
+      'editar_cartao.php';
+
+
+    const DELETE_URL =
+      window.CARTAO_DELETE_URL ||
+      'excluir_cartao.php';
+
+
     const BARALHO_COR =
       window.BARALHO_COR ||
       '#38a5ff';
@@ -31,8 +41,13 @@ document.addEventListener(
 
     let cartoes =
       Array.isArray(baralho.cartoes)
-        ? baralho.cartoes
+        ? [...baralho.cartoes]
         : [];
+
+
+    // ID do cartão sendo editado
+    let editingCardId =
+      null;
 
 
     // ==========================================
@@ -74,7 +89,20 @@ document.addEventListener(
         'card-answer'
       );
 
+    const modalTitle =
+      document.getElementById(
+        'card-modal-title'
+      );
+
+    const modalSubtitle =
+      document.getElementById(
+        'card-modal-subtitle'
+      );
+
     const submitButton =
+      document.getElementById(
+        'card-submit-btn'
+      ) ||
       cardForm?.querySelector(
         'button[type="submit"]'
       );
@@ -90,7 +118,8 @@ document.addEventListener(
       );
 
 
-    let toastTimer = null;
+    let toastTimer =
+      null;
 
 
     // ==========================================
@@ -136,7 +165,7 @@ document.addEventListener(
 
 
     // ==========================================
-    // DATA
+    // FORMATAR DATA
     // ==========================================
 
     function formatDate(
@@ -147,9 +176,6 @@ document.addEventListener(
         return '';
       }
 
-
-      // Formato vindo do PHP:
-      // 2026-08-20 08:30:00
 
       const date =
         new Date(
@@ -172,10 +198,8 @@ document.addEventListener(
       }
 
 
-      return (
-        date.toLocaleDateString(
-          'pt-BR'
-        )
+      return date.toLocaleDateString(
+        'pt-BR'
       );
 
     }
@@ -199,9 +223,7 @@ document.addEventListener(
       }
 
 
-      if (
-        quantidade > 0
-      ) {
+      if (quantidade > 0) {
 
         if (cardsGrid) {
           cardsGrid.hidden =
@@ -233,336 +255,117 @@ document.addEventListener(
 
 
     // ==========================================
-    // CRIAR CARTÃO VISUAL
+    // ABRIR MODAL NOVO CARTÃO
     // ==========================================
 
-    function createCardElement(
-      cartao
-    ) {
+    function openNewCardModal() {
 
-      const card =
-        document.createElement(
-          'article'
-        );
+      editingCardId =
+        null;
 
 
-      card.className =
-        'flash-card-item';
+      if (modalTitle) {
 
+        modalTitle.textContent =
+          'Novo cartão';
 
-      card.dataset.id =
-        cartao.id || '';
+      }
 
 
-      card.style.setProperty(
-        '--deck-color',
-        BARALHO_COR
-      );
+      if (modalSubtitle) {
 
+        modalSubtitle.textContent =
+          'Crie uma pergunta e sua resposta.';
 
-      // ==========================
-      // PERGUNTA
-      // ==========================
+      }
 
-      const questionBlock =
-        document.createElement(
-          'div'
-        );
 
+      if (submitButton) {
 
-      questionBlock.className =
-        'card-block';
+        submitButton.innerHTML = `
+          <i class="fa-solid fa-plus"></i>
+          Adicionar cartão
+        `;
 
+      }
 
-      const questionLabel =
-        document.createElement(
-          'div'
-        );
 
+      if (cardQuestion) {
 
-      questionLabel.className =
-        'card-label';
+        cardQuestion.value =
+          '';
 
+      }
 
-      questionLabel.innerHTML = `
-        <i class="fa-regular fa-circle-question"></i>
-        Pergunta
-      `;
 
+      if (cardAnswer) {
 
-      const questionText =
-        document.createElement(
-          'div'
-        );
+        cardAnswer.value =
+          '';
 
+      }
 
-      questionText.className =
-        'card-text';
 
-
-      questionText.textContent =
-        cartao.pergunta || '';
-
-
-      questionBlock.appendChild(
-        questionLabel
-      );
-
-
-      questionBlock.appendChild(
-        questionText
-      );
-
-
-      // ==========================
-      // RESPOSTA
-      // ==========================
-
-      const answerBlock =
-        document.createElement(
-          'div'
-        );
-
-
-      answerBlock.className =
-        'card-block';
-
-
-      const answerLabel =
-        document.createElement(
-          'div'
-        );
-
-
-      answerLabel.className =
-        'card-label';
-
-
-      answerLabel.innerHTML = `
-        <i class="fa-regular fa-lightbulb"></i>
-        Resposta
-      `;
-
-
-      const answerText =
-        document.createElement(
-          'div'
-        );
-
-
-      answerText.className =
-        'card-text';
-
-
-      answerText.textContent =
-        cartao.resposta || '';
-
-
-      answerBlock.appendChild(
-        answerLabel
-      );
-
-
-      answerBlock.appendChild(
-        answerText
-      );
-
-
-      // ==========================
-      // RODAPÉ
-      // ==========================
-
-      const footer =
-        document.createElement(
-          'div'
-        );
-
-
-      footer.className =
-        'card-footer';
-
-
-      const created =
-        document.createElement(
-          'span'
-        );
-
-
-      created.className =
-        'card-created';
-
-
-      const dataCriacao =
-        formatDate(
-          cartao.criado_em
-        );
-
-
-      created.textContent =
-        dataCriacao
-          ? `Criado em ${dataCriacao}`
-          : '';
-
-
-      const actions =
-        document.createElement(
-          'div'
-        );
-
-
-      actions.className =
-        'card-actions';
-
-
-      // EDITAR
-      const editBtn =
-        document.createElement(
-          'button'
-        );
-
-
-      editBtn.type =
-        'button';
-
-
-      editBtn.className =
-        'card-action-btn';
-
-
-      editBtn.title =
-        'Editar cartão';
-
-
-      editBtn.innerHTML = `
-        <i class="fa-solid fa-pen"></i>
-      `;
-
-
-      editBtn.addEventListener(
-        'click',
-        () => {
-
-          showToast(
-            'A edição dos cartões será adicionada na próxima etapa.'
-          );
-
-        }
-      );
-
-
-      // EXCLUIR
-      const deleteBtn =
-        document.createElement(
-          'button'
-        );
-
-
-      deleteBtn.type =
-        'button';
-
-
-      deleteBtn.className =
-        'card-action-btn';
-
-
-      deleteBtn.title =
-        'Excluir cartão';
-
-
-      deleteBtn.innerHTML = `
-        <i class="fa-regular fa-trash-can"></i>
-      `;
-
-
-      deleteBtn.addEventListener(
-        'click',
-        () => {
-
-          showToast(
-            'A exclusão será adicionada na próxima etapa.'
-          );
-
-        }
-      );
-
-
-      actions.appendChild(
-        editBtn
-      );
-
-
-      actions.appendChild(
-        deleteBtn
-      );
-
-
-      footer.appendChild(
-        created
-      );
-
-
-      footer.appendChild(
-        actions
-      );
-
-
-      // ==========================
-      // MONTAR
-      // ==========================
-
-      card.appendChild(
-        questionBlock
-      );
-
-
-      card.appendChild(
-        answerBlock
-      );
-
-
-      card.appendChild(
-        footer
-      );
-
-
-      return card;
+      openModal();
 
     }
 
 
     // ==========================================
-    // RENDERIZAR CARTÕES
+    // ABRIR MODAL EDITAR
     // ==========================================
 
-    function renderCards() {
+    function openEditCardModal(
+      cartao
+    ) {
 
-      if (!cardsGrid) {
-        return;
+      editingCardId =
+        cartao.id;
+
+
+      if (modalTitle) {
+
+        modalTitle.textContent =
+          'Editar cartão';
+
       }
 
 
-      cardsGrid.innerHTML =
-        '';
+      if (modalSubtitle) {
+
+        modalSubtitle.textContent =
+          'Altere a pergunta ou a resposta do cartão.';
+
+      }
 
 
-      cartoes.forEach(
-        (cartao) => {
+      if (submitButton) {
 
-          const element =
-            createCardElement(
-              cartao
-            );
+        submitButton.innerHTML = `
+          <i class="fa-solid fa-check"></i>
+          Salvar alterações
+        `;
 
-
-          cardsGrid.appendChild(
-            element
-          );
-
-        }
-      );
+      }
 
 
-      updateCardsState();
+      if (cardQuestion) {
+
+        cardQuestion.value =
+          cartao.pergunta || '';
+
+      }
+
+
+      if (cardAnswer) {
+
+        cardAnswer.value =
+          cartao.resposta || '';
+
+      }
+
+
+      openModal();
 
     }
 
@@ -571,7 +374,7 @@ document.addEventListener(
     // ABRIR MODAL
     // ==========================================
 
-    function openCardModal() {
+    function openModal() {
 
       if (!cardModal) {
         return;
@@ -625,11 +428,475 @@ document.addEventListener(
 
       cardForm?.reset();
 
+
+      editingCardId =
+        null;
+
     }
 
 
     // ==========================================
-    // BOTÕES DO MODAL
+    // EXCLUIR CARTÃO
+    // ==========================================
+
+    async function deleteCard(
+      cartao
+    ) {
+
+      const confirmar =
+        confirm(
+          `Deseja realmente excluir este cartão?\n\n${cartao.pergunta}`
+        );
+
+
+      if (!confirmar) {
+        return;
+      }
+
+
+      try {
+
+        const response =
+          await fetch(
+            DELETE_URL,
+            {
+
+              method:
+                'POST',
+
+              credentials:
+                'same-origin',
+
+              headers: {
+
+                'Content-Type':
+                  'application/json'
+
+              },
+
+              body:
+                JSON.stringify({
+
+                  baralho_id:
+                    BARALHO_ID,
+
+                  cartao_id:
+                    cartao.id
+
+                })
+
+            }
+          );
+
+
+        let result;
+
+
+        try {
+
+          result =
+            await response.json();
+
+        } catch (error) {
+
+          throw new Error(
+            'Resposta inválida do servidor.'
+          );
+
+        }
+
+
+        if (
+          !response.ok ||
+          !result.sucesso
+        ) {
+
+          throw new Error(
+            result.mensagem ||
+            'Não foi possível excluir o cartão.'
+          );
+
+        }
+
+
+        cartoes =
+          cartoes.filter(
+            (item) => {
+
+              return (
+                item.id !==
+                cartao.id
+              );
+
+            }
+          );
+
+
+        renderCards();
+
+
+        showToast(
+          'Cartão excluído com sucesso!'
+        );
+
+
+      } catch (error) {
+
+        console.error(
+          'Erro ao excluir cartão:',
+          error
+        );
+
+
+        showToast(
+          error.message ||
+          'Erro ao excluir cartão.'
+        );
+
+      }
+
+    }
+
+
+    // ==========================================
+    // CRIAR ELEMENTO DO CARTÃO
+    // ==========================================
+
+    function createCardElement(
+      cartao
+    ) {
+
+      const card =
+        document.createElement(
+          'article'
+        );
+
+
+      card.className =
+        'flash-card-item';
+
+
+      card.dataset.id =
+        cartao.id || '';
+
+
+      card.style.setProperty(
+        '--deck-color',
+        BARALHO_COR
+      );
+
+
+      // ==================================
+      // PERGUNTA
+      // ==================================
+
+      const questionBlock =
+        document.createElement(
+          'div'
+        );
+
+
+      questionBlock.className =
+        'card-block';
+
+
+      const questionLabel =
+        document.createElement(
+          'div'
+        );
+
+
+      questionLabel.className =
+        'card-label';
+
+
+      questionLabel.innerHTML = `
+        <i class="fa-regular fa-circle-question"></i>
+        Pergunta
+      `;
+
+
+      const questionText =
+        document.createElement(
+          'div'
+        );
+
+
+      questionText.className =
+        'card-text';
+
+
+      questionText.textContent =
+        cartao.pergunta || '';
+
+
+      questionBlock.appendChild(
+        questionLabel
+      );
+
+
+      questionBlock.appendChild(
+        questionText
+      );
+
+
+      // ==================================
+      // RESPOSTA
+      // ==================================
+
+      const answerBlock =
+        document.createElement(
+          'div'
+        );
+
+
+      answerBlock.className =
+        'card-block';
+
+
+      const answerLabel =
+        document.createElement(
+          'div'
+        );
+
+
+      answerLabel.className =
+        'card-label';
+
+
+      answerLabel.innerHTML = `
+        <i class="fa-regular fa-lightbulb"></i>
+        Resposta
+      `;
+
+
+      const answerText =
+        document.createElement(
+          'div'
+        );
+
+
+      answerText.className =
+        'card-text';
+
+
+      answerText.textContent =
+        cartao.resposta || '';
+
+
+      answerBlock.appendChild(
+        answerLabel
+      );
+
+
+      answerBlock.appendChild(
+        answerText
+      );
+
+
+      // ==================================
+      // RODAPÉ
+      // ==================================
+
+      const footer =
+        document.createElement(
+          'div'
+        );
+
+
+      footer.className =
+        'card-footer';
+
+
+      const created =
+        document.createElement(
+          'span'
+        );
+
+
+      created.className =
+        'card-created';
+
+
+      const dataCriacao =
+        formatDate(
+          cartao.criado_em
+        );
+
+
+      created.textContent =
+        dataCriacao
+          ? `Criado em ${dataCriacao}`
+          : '';
+
+
+      const actions =
+        document.createElement(
+          'div'
+        );
+
+
+      actions.className =
+        'card-actions';
+
+
+      // ==================================
+      // EDITAR
+      // ==================================
+
+      const editBtn =
+        document.createElement(
+          'button'
+        );
+
+
+      editBtn.type =
+        'button';
+
+
+      editBtn.className =
+        'card-action-btn edit';
+
+
+      editBtn.title =
+        'Editar cartão';
+
+
+      editBtn.innerHTML = `
+        <i class="fa-solid fa-pen"></i>
+      `;
+
+
+      editBtn.addEventListener(
+        'click',
+        () => {
+
+          openEditCardModal(
+            cartao
+          );
+
+        }
+      );
+
+
+      // ==================================
+      // EXCLUIR
+      // ==================================
+
+      const deleteBtn =
+        document.createElement(
+          'button'
+        );
+
+
+      deleteBtn.type =
+        'button';
+
+
+      deleteBtn.className =
+        'card-action-btn delete';
+
+
+      deleteBtn.title =
+        'Excluir cartão';
+
+
+      deleteBtn.innerHTML = `
+        <i class="fa-regular fa-trash-can"></i>
+      `;
+
+
+      deleteBtn.addEventListener(
+        'click',
+        () => {
+
+          deleteCard(
+            cartao
+          );
+
+        }
+      );
+
+
+      actions.appendChild(
+        editBtn
+      );
+
+
+      actions.appendChild(
+        deleteBtn
+      );
+
+
+      footer.appendChild(
+        created
+      );
+
+
+      footer.appendChild(
+        actions
+      );
+
+
+      card.appendChild(
+        questionBlock
+      );
+
+
+      card.appendChild(
+        answerBlock
+      );
+
+
+      card.appendChild(
+        footer
+      );
+
+
+      return card;
+
+    }
+
+
+    // ==========================================
+    // RENDERIZAR
+    // ==========================================
+
+    function renderCards() {
+
+      if (!cardsGrid) {
+        return;
+      }
+
+
+      cardsGrid.innerHTML =
+        '';
+
+
+      cartoes.forEach(
+        (cartao) => {
+
+          const element =
+            createCardElement(
+              cartao
+            );
+
+
+          cardsGrid.appendChild(
+            element
+          );
+
+        }
+      );
+
+
+      updateCardsState();
+
+    }
+
+
+    // ==========================================
+    // BOTÕES NOVO CARTÃO
     // ==========================================
 
     document
@@ -638,7 +905,11 @@ document.addEventListener(
       )
       ?.addEventListener(
         'click',
-        openCardModal
+        () => {
+
+          openNewCardModal();
+
+        }
       );
 
 
@@ -648,7 +919,11 @@ document.addEventListener(
       )
       ?.addEventListener(
         'click',
-        openCardModal
+        () => {
+
+          openNewCardModal();
+
+        }
       );
 
 
@@ -690,7 +965,7 @@ document.addEventListener(
 
 
     // ==========================================
-    // CRIAR CARTÃO
+    // SALVAR / EDITAR
     // ==========================================
 
     cardForm?.addEventListener(
@@ -738,6 +1013,16 @@ document.addEventListener(
         }
 
 
+        const estaEditando =
+          editingCardId !== null;
+
+
+        const url =
+          estaEditando
+            ? EDIT_URL
+            : SAVE_URL;
+
+
         const dados = {
 
           baralho_id:
@@ -750,6 +1035,18 @@ document.addEventListener(
             resposta
 
         };
+
+
+        if (estaEditando) {
+
+          dados.cartao_id =
+            editingCardId;
+
+        }
+
+
+        const idEditando =
+          editingCardId;
 
 
         const originalText =
@@ -774,7 +1071,7 @@ document.addEventListener(
 
           const response =
             await fetch(
-              SAVE_URL,
+              url,
               {
 
                 method:
@@ -829,11 +1126,41 @@ document.addEventListener(
           }
 
 
-          if (result.cartao) {
+          if (estaEditando) {
 
-            cartoes.push(
+            const indice =
+              cartoes.findIndex(
+                (cartao) => {
+
+                  return (
+                    cartao.id ===
+                    idEditando
+                  );
+
+                }
+              );
+
+
+            if (
+              indice !== -1 &&
               result.cartao
-            );
+            ) {
+
+              cartoes[indice] =
+                result.cartao;
+
+            }
+
+
+          } else {
+
+            if (result.cartao) {
+
+              cartoes.push(
+                result.cartao
+              );
+
+            }
 
           }
 
@@ -845,7 +1172,9 @@ document.addEventListener(
 
 
           showToast(
-            'Cartão adicionado com sucesso!'
+            estaEditando
+              ? 'Cartão atualizado com sucesso!'
+              : 'Cartão adicionado com sucesso!'
           );
 
 
@@ -894,9 +1223,7 @@ document.addEventListener(
           event.key !==
           'Escape'
         ) {
-
           return;
-
         }
 
 
