@@ -26,7 +26,6 @@ $config_padrao = [
     'tamanho_fonte' => 'media',
     'cor_principal' => 'azul',
     'modo_compacto' => 0,
-    'reduzir_animacoes' => 0,
     'notificacoes_navegador' => 0,
     'lembrete_atividades' => 1,
     'lembrete_provas' => 1,
@@ -34,7 +33,9 @@ $config_padrao = [
     'notificacao_pomodoro' => 1,
     'som_pomodoro' => 1,
     'antecedencia_lembrete' => 15,
-    // ===== ACESSIBILIDADE SIMPLIFICADA =====
+    // ===== ACESSIBILIDADE =====
+    'alto_contraste' => 0,
+    'destacar_links' => 0,
     'libras' => 0,
     'leitura_voz' => 0
 ];
@@ -59,11 +60,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     try {
         $dados = $_POST;
         unset($dados['acao']);
-        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao', 'modo_compacto', 
-                       'reduzir_animacoes', 'notificacoes_navegador', 'lembrete_atividades',
+        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao', 'modo_compacto',
+                       'notificacoes_navegador', 'lembrete_atividades',
                        'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro',
-                       // ===== ACESSIBILIDADE SIMPLIFICADA =====
-                       'libras', 'leitura_voz'];
+                       // ===== ACESSIBILIDADE =====
+                       'alto_contraste', 'destacar_links', 'libras', 'leitura_voz'];
         foreach ($checkboxes as $campo) {
             $dados[$campo] = isset($dados[$campo]) ? 1 : 0;
         }
@@ -125,7 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
 }
 ?>
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -134,7 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- ACESSIBILIDADE GLOBAL -->
-    <script src="../assets/js/acessibilidade.js"></script>
+    <link rel="stylesheet" href="acessibilidade/acessibilidade.css">
+    <script src="acessibilidade/acessibilidade.js" defer></script>
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->
@@ -493,22 +495,69 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                     <!-- ========================================== -->
                     <section class="configuracao-card" id="acessibilidade" aria-labelledby="cabecalho-acessibilidade">
                         <div class="card-cabecalho" id="cabecalho-acessibilidade" role="button" tabindex="0" aria-expanded="false" aria-controls="conteudo-acessibilidade">
-                            <div class="card-icone" aria-hidden="true"><i class="fa-solid fa-universal-access" aria-hidden="true"></i></div>
+                            <div class="card-icone" aria-hidden="true">
+                                <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+                            </div>
+
                             <div>
                                 <h2>Acessibilidade</h2>
                                 <p>Opções para tornar o FOAG mais inclusivo.</p>
                             </div>
-                            <span class="card-toggle" aria-hidden="true"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></span>
+
+                            <span class="card-toggle" aria-hidden="true">
+                                <i class="fa-solid fa-chevron-down" aria-hidden="true"></i>
+                            </span>
                         </div>
+
                         <div class="card-conteudo" id="conteudo-acessibilidade" role="region" aria-labelledby="cabecalho-acessibilidade">
+
+                            <!-- ALTO CONTRASTE -->
+                            <label class="configuracao-item configuracao-switch">
+                                <span class="configuracao-texto">
+                                    <strong>Alto contraste</strong>
+                                    <small>Aumenta o contraste das cores para facilitar a leitura.</small>
+                                </span>
+
+                                <span class="switch">
+                                    <input
+                                        type="checkbox"
+                                        name="alto_contraste"
+                                        <?= ($config['alto_contraste'] ?? 0) ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider" aria-hidden="true"></span>
+                                </span>
+                            </label>
+
+                            <!-- DESTACAR LINKS -->
+                            <label class="configuracao-item configuracao-switch">
+                                <span class="configuracao-texto">
+                                    <strong>Destacar links</strong>
+                                    <small>Sublinha e realça os links para facilitar a identificação.</small>
+                                </span>
+
+                                <span class="switch">
+                                    <input
+                                        type="checkbox"
+                                        name="destacar_links"
+                                        <?= ($config['destacar_links'] ?? 0) ? 'checked' : '' ?>
+                                    >
+                                    <span class="slider" aria-hidden="true"></span>
+                                </span>
+                            </label>
+
                             <!-- LIBRAS -->
                             <label class="configuracao-item configuracao-switch">
                                 <span class="configuracao-texto">
                                     <strong>Libras</strong>
-                                    <small>Ativa o ícone de Libras para acessar o tradutor.</small>
+                                    <small>Ativa o tradutor VLibras nas páginas do FOAG.</small>
                                 </span>
+
                                 <span class="switch">
-                                    <input type="checkbox" name="libras" <?= ($config['libras'] ?? 0) ? 'checked' : '' ?>>
+                                    <input
+                                        type="checkbox"
+                                        name="libras"
+                                        <?= ($config['libras'] ?? 0) ? 'checked' : '' ?>
+                                    >
                                     <span class="slider" aria-hidden="true"></span>
                                 </span>
                             </label>
@@ -519,15 +568,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                                     <strong>Leitura em voz alta</strong>
                                     <small>Ativa a leitura do texto ao clicar sobre ele.</small>
                                 </span>
+
                                 <span class="switch">
-                                    <input type="checkbox" name="leitura_voz" <?= ($config['leitura_voz'] ?? 0) ? 'checked' : '' ?>>
+                                    <input
+                                        type="checkbox"
+                                        name="leitura_voz"
+                                        <?= ($config['leitura_voz'] ?? 0) ? 'checked' : '' ?>
+                                    >
                                     <span class="slider" aria-hidden="true"></span>
                                 </span>
                             </label>
 
-                            <div class="linha-botao" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--cor-borda);">
-                                <button type="button" class="btn-secundario" id="btn-testar-voz" aria-label="Testar leitura em voz alta">
-                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i> Testar leitura
+                            <div class="linha-botao" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--cor-borda, #e5e7eb); gap:10px; flex-wrap:wrap;">
+                                <button
+                                    type="button"
+                                    class="btn-secundario"
+                                    id="btn-testar-voz"
+                                    aria-label="Testar leitura em voz alta"
+                                >
+                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
+                                    Testar leitura
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-secundario"
+                                    id="btn-restaurar-acessibilidade"
+                                    aria-label="Restaurar configurações de acessibilidade"
+                                >
+                                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
+                                    Restaurar acessibilidade
                                 </button>
                             </div>
                         </div>
@@ -850,6 +920,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                 if (data.success) {
                     // ===== SALVAR ACESSIBILIDADE NO LOCALSTORAGE =====
                     const configAcessibilidade = {
+                        tamanho_fonte: document.querySelector('[name="tamanho_fonte"]')?.value || 'media',
+                        alto_contraste: document.querySelector('[name="alto_contraste"]')?.checked || false,
+                        destacar_links: document.querySelector('[name="destacar_links"]')?.checked || false,
                         libras: document.querySelector('[name="libras"]')?.checked || false,
                         leitura_voz: document.querySelector('[name="leitura_voz"]')?.checked || false
                     };
@@ -1120,7 +1193,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         });
 
         // ============================================
-        // 13. TESTAR VOZ
+        // 13. RESTAURAR ACESSIBILIDADE
+        // ============================================
+        document.getElementById('btn-restaurar-acessibilidade')?.addEventListener('click', function() {
+            const campoFonte = document.querySelector('[name="tamanho_fonte"]');
+            const campoContraste = document.querySelector('[name="alto_contraste"]');
+            const campoLinks = document.querySelector('[name="destacar_links"]');
+            const campoLibras = document.querySelector('[name="libras"]');
+            const campoVoz = document.querySelector('[name="leitura_voz"]');
+
+            if (campoFonte) campoFonte.value = 'media';
+            if (campoContraste) campoContraste.checked = false;
+            if (campoLinks) campoLinks.checked = false;
+            if (campoLibras) campoLibras.checked = false;
+            if (campoVoz) campoVoz.checked = false;
+
+            const configAcessibilidade = {
+                tamanho_fonte: 'media',
+                alto_contraste: false,
+                destacar_links: false,
+                libras: false,
+                leitura_voz: false
+            };
+
+            localStorage.setItem(
+                'foag_acessibilidade',
+                JSON.stringify(configAcessibilidade)
+            );
+
+            if (typeof window.atualizarAcessibilidade === 'function') {
+                window.atualizarAcessibilidade(configAcessibilidade);
+            }
+
+            mostrarToast('♿ Acessibilidade restaurada ao padrão.', 'sucesso');
+        });
+
+        // ============================================
+        // 14. TESTAR VOZ
         // ============================================
         document.getElementById('btn-testar-voz')?.addEventListener('click', function() {
             if (window.speechSynthesis) {
@@ -1510,7 +1619,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         body.dark-mode .switch input:focus-visible + .slider { outline-color: #60a5fa !important; }
 
         /* ============================================
-           ACESSIBILIDADE SIMPLIFICADA
+           ACESSIBILIDADE
            ============================================ */
         body .texto-lendo {
             background: rgba(59, 130, 246, 0.15) !important;

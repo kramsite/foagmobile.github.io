@@ -113,21 +113,37 @@ if (!isset($horarioData['html'])) {
 ?>
 
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda e Horário — FOAG</title>
+
+    <title>Agenda e Horário - FOAG</title>
+
     <link rel="stylesheet" href="bloco.css">
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
     <link rel="stylesheet" href="dark_agend.css">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- ACESSIBILIDADE GLOBAL -->
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <script src="../acessibilidade/acessibilidade.js" defer></script>
+
+    <?php
+require_once $_SERVER['DOCUMENT_ROOT']
+    . '/foagmobile.github.io/acessibilidade/carregar_acessibilidade.php';
+?>
+
     <script src="../m.escuro/dark-mode.js"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
+
     <script>
         window.AGENDA_DATA = <?= json_encode(
             $agendaData,
@@ -439,6 +455,11 @@ if (!isset($horarioData['html'])) {
 
 <body>
 
+<?php
+require_once __DIR__ . '/../acessibilidade/menu_acessibilidade.php';
+?>
+
+
     <!-- ======================================
          CABEÇALHO
     ======================================= -->
@@ -470,6 +491,39 @@ if (!isset($horarioData['html'])) {
              MENU
         ======================================= -->
 
+<<<<<<< HEAD
+        <nav class="menu" aria-label="Menu principal">
+            <a
+                href="../inicioo/inicio.php"
+                class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
+
+                <i class="fa-solid fa-house" aria-hidden="true"></i>
+                Início
+            </a>
+
+            <a
+                href="../calend/calendario.php"
+                class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
+
+                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
+                Calendário
+            </a>
+
+            <a
+                href="../bloco/agenda.php"
+                class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
+
+                <i class="fa-solid fa-book" aria-hidden="true"></i>
+                Agenda
+            </a>
+
+            <a
+                href="../pomodoro/pomodoro.php"
+                class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
+
+                <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
+                Pomodoro
+=======
         <nav class="menu">
             <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-house"></i> Início
@@ -485,18 +539,28 @@ if (!isset($horarioData['html'])) {
 
             <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-graduation-cap"></i> Estudos
+>>>>>>> f99e21492b363db6abaac8aeef80d98d385d71cd
             </a>
 
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-check-double"></i> Boletim 
             </a>
 
+<<<<<<< HEAD
+                <i class="fa-solid fa-check-double" aria-hidden="true"></i>
+                Boletim
+            </a>
+
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store" aria-hidden="true"></i> Loja
+=======
             <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja 
+>>>>>>> f99e21492b363db6abaac8aeef80d98d385d71cd
             </a>
 
             <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-trophy"></i> Ranking
+                <i class="fa-solid fa-trophy" aria-hidden="true"></i> Ranking
             </a>
 
         </nav>
@@ -505,7 +569,7 @@ if (!isset($horarioData['html'])) {
              CONTEÚDO
         ======================================= -->
 
-        <main class="main-content">
+        <main class="main-content" id="conteudo-principal" tabindex="-1">
 
             <!-- ==================================
                  HORÁRIO NO TOPO
@@ -615,7 +679,12 @@ if (!isset($horarioData['html'])) {
 
                 <!-- Notas -->
                 <div id="notas">
+                    <label for="nota-texto" class="sr-only">
+                        Escreva sua nota
+                    </label>
+
                     <textarea
+                        id="nota-texto"
                         placeholder="Escreva suas notas aqui..."
                         wrap="soft">
                     </textarea>
@@ -700,10 +769,13 @@ if (!isset($horarioData['html'])) {
 
     <div
         id="modal-nomear-nota"
-        class="modal-nomear-nota">
+        class="modal-nomear-nota"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-modal-nomear">
 
         <div class="modal-content">
-            <h3>Dê um nome para sua nota</h3>
+            <h3 id="titulo-modal-nomear">Dê um nome para sua nota</h3>
 
             <input
                 type="text"
@@ -730,10 +802,13 @@ if (!isset($horarioData['html'])) {
 
     <div
         id="logout-modal"
-        class="modal">
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-logout">
 
         <div class="modal-content">
-            <h3>Ah... já vai?</h3>
+            <h3 id="titulo-logout">Ah... já vai?</h3>
 
             <h4>
                 Tem certeza de que deseja sair?
@@ -757,12 +832,16 @@ if (!isset($horarioData['html'])) {
 
     <div
         id="modal-excluir"
-        class="modal-excluir">
+        class="modal-excluir"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="excluir-titulo"
+        aria-describedby="excluir-mensagem">
 
         <div class="modal-content">
 
             <div class="excluir-icon">
-                <i class="fa-solid fa-trash-can"></i>
+                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
             </div>
 
             <h3 id="excluir-titulo">
@@ -797,10 +876,13 @@ if (!isset($horarioData['html'])) {
 
     <div
         id="modal-sucesso"
-        class="modal">
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="titulo-sucesso">
 
         <div class="modal-content modal-sucesso-content">
-            <h3>Horário salvo!</h3>
+            <h3 id="titulo-sucesso">Horário salvo!</h3>
 
             <p>
                 Suas alterações foram registradas com sucesso.
@@ -819,11 +901,11 @@ if (!isset($horarioData['html'])) {
          MODAL: FOGi
     ======================================= -->
 
-    <div id="fogi-modal">
+    <div id="fogi-modal" role="dialog" aria-modal="true" aria-labelledby="titulo-fogi">
         <div class="fogi-container">
 
             <div class="fogi-header">
-                <span>
+                <span id="titulo-fogi">
                     FOGi — Assistente de Estudos
                 </span>
 
@@ -834,7 +916,8 @@ if (!isset($horarioData['html'])) {
 
             <iframe
                 id="fogi-iframe"
-                src="about:blank">
+                src="about:blank"
+                title="FOGi - Assistente de Estudos">
             </iframe>
         </div>
     </div>
