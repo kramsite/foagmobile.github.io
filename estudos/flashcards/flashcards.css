@@ -1,0 +1,1400 @@
+/* =========================
+   RESET + BASE
+========================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+:root {
+  --azul: #38a5ff;
+  --azul-escuro: #0a83e6;
+  --fundo: #f2f6fc;
+  --branco: #ffffff;
+  --texto: #232323;
+  --texto-suave: #667085;
+  --borda: #dbe3ee;
+}
+
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+
+  background: var(--fundo);
+  color: var(--texto);
+
+  line-height: 1.5;
+}
+
+
+/* =========================
+   CABEÇALHO
+========================= */
+
+header.cabecalho {
+  width: 100%;
+
+  padding: 10px 20px;
+
+  position: relative;
+  z-index: 100;
+
+  background: var(--azul);
+  color: #ffffff;
+
+  font-family: 'Snap ITC', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+
+/* =========================
+   ÍCONES DO CABEÇALHO
+========================= */
+
+.header-icons {
+  position: absolute;
+
+  top: 50%;
+  right: 20px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  font-size: 1.3rem;
+
+  color: #ffffff;
+
+  user-select: none;
+}
+
+.header-icons i {
+  color: #ffffff;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    color 0.2s ease;
+}
+
+.header-icons i:hover {
+  color: #dddddd;
+
+  transform:
+    translateY(-13%)
+    scale(1.1);
+}
+
+
+/* =========================
+   LAYOUT
+========================= */
+
+.container {
+  width: 100%;
+
+  flex: 1;
+
+  display: flex;
+
+  min-height: 0;
+}
+
+
+/* =========================
+   MENU LATERAL
+========================= */
+
+nav.menu {
+  width: 260px;
+
+  flex-shrink: 0;
+
+  padding: 18px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  background: var(--azul);
+
+  box-shadow:
+    5px 5px 15px
+    rgba(0, 0, 0, 0.15);
+}
+
+nav.menu a {
+  padding: 10px 12px;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 8px;
+
+  color: #ffffff;
+
+  text-decoration: none;
+  font-size: 16px;
+
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+nav.menu a i {
+  width: 22px;
+
+  text-align: center;
+}
+
+nav.menu a:hover,
+nav.menu a.active {
+  background:
+    rgba(255, 255, 255, 0.18);
+}
+
+nav.menu a:hover {
+  transform: translateX(2px);
+}
+
+
+/* =========================
+   CONTEÚDO
+========================= */
+
+main.conteudo {
+  flex: 1;
+
+  min-width: 0;
+
+  padding: 30px;
+
+  overflow-y: auto;
+}
+
+.flashcards-wrapper {
+  width: 100%;
+  max-width: 1450px;
+
+  margin: 0 auto;
+}
+
+
+/* =========================
+   VOLTAR PARA ESTUDOS
+========================= */
+
+.flashcards-nav {
+  margin-bottom: 20px;
+}
+
+.back-studies {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+
+  min-height: 42px;
+
+  padding: 10px 16px;
+
+  background: var(--branco);
+  color: var(--azul-escuro);
+
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+.back-studies:hover {
+  transform: translateX(-2px);
+
+  border-color: var(--azul);
+
+  background: #f4faff;
+}
+
+
+/* =========================
+   CABEÇALHO DA PÁGINA
+========================= */
+
+.flashcards-header {
+  margin-bottom: 24px;
+}
+
+.flashcards-header > div {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.page-icon {
+  width: 52px;
+  height: 52px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf5ff;
+  color: var(--azul-escuro);
+
+  border-radius: 14px;
+
+  font-size: 22px;
+}
+
+.flashcards-header h1 {
+  color: #202833;
+
+  font-size: 27px;
+  font-weight: 600;
+}
+
+.flashcards-header p {
+  margin-top: 3px;
+
+  color: var(--texto-suave);
+
+  font-size: 14px;
+}
+
+
+/* =========================
+   ESTATÍSTICAS
+========================= */
+
+.stats-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, minmax(0, 1fr));
+
+  gap: 18px;
+
+  margin-bottom: 24px;
+}
+
+.stat-card {
+  min-height: 105px;
+
+  padding: 20px;
+
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  background: var(--branco);
+
+  border: 1px solid #e4eaf2;
+  border-radius: 16px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(20, 40, 70, 0.04);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 20px
+    rgba(20, 40, 70, 0.07);
+}
+
+.stat-icon {
+  width: 46px;
+  height: 46px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf5ff;
+  color: var(--azul-escuro);
+
+  border-radius: 12px;
+
+  font-size: 18px;
+}
+
+.stat-card > div:last-child {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-label {
+  color: var(--texto-suave);
+
+  font-size: 13px;
+}
+
+.stat-card strong {
+  margin-top: 2px;
+
+  color: #252d38;
+
+  font-size: 24px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   CARD PRINCIPAL
+========================= */
+
+.card {
+  width: 100%;
+
+  padding: 28px;
+
+  background: var(--branco);
+
+  border: 1px solid #e4eaf2;
+  border-radius: 18px;
+
+  box-shadow:
+    0 5px 18px
+    rgba(20, 40, 70, 0.04);
+}
+
+
+/* =========================
+   CABEÇALHO DA SEÇÃO
+========================= */
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 18px;
+
+  margin-bottom: 24px;
+}
+
+.section-header h2 {
+  color: #242b35;
+
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.section-header p {
+  margin-top: 4px;
+
+  color: var(--texto-suave);
+
+  font-size: 13px;
+}
+
+
+/* =========================
+   BOTÕES
+========================= */
+
+.btn {
+  min-height: 42px;
+
+  padding: 10px 17px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  background: var(--azul);
+  color: #ffffff;
+
+  border: none;
+  border-radius: 10px;
+
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 5px 14px
+    rgba(56, 165, 255, 0.2);
+}
+
+.btn.secondary {
+  background: #edf1f5;
+  color: #344054;
+}
+
+.btn.secondary:hover {
+  background: #e4e9ef;
+
+  box-shadow: none;
+}
+
+
+/* =========================
+   FILTRO
+========================= */
+
+.filter-area {
+  margin-bottom: 24px;
+
+  padding: 16px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e7ecf2;
+  border-radius: 12px;
+}
+
+.filter-area .field-group {
+  max-width: 320px;
+}
+
+
+/* =========================
+   CAMPOS
+========================= */
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+}
+
+.lbl {
+  color: #556170;
+
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.input,
+.select,
+textarea {
+  width: 100%;
+
+  min-height: 44px;
+
+  padding: 11px 13px;
+
+  background: #ffffff;
+  color: #222222;
+
+  border: 1px solid #d9e1ea;
+  border-radius: 10px;
+
+  outline: none;
+
+  font-size: 14px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.input:focus,
+.select:focus,
+textarea:focus {
+  border-color: var(--azul);
+
+  box-shadow:
+    0 0 0 3px
+    rgba(56, 165, 255, 0.12);
+}
+
+textarea.input {
+  min-height: 100px;
+
+  resize: vertical;
+}
+
+.optional {
+  margin-left: 4px;
+
+  color: #98a2b3;
+
+  font-size: 11px;
+  font-weight: 400;
+}
+
+
+/* =========================
+   GRID DOS BARALHOS
+========================= */
+
+.decks-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(
+      auto-fill,
+      minmax(245px, 1fr)
+    );
+
+  gap: 18px;
+}
+
+
+/* =========================
+   CARD DE BARALHO
+========================= */
+
+.deck-card {
+  position: relative;
+
+  min-height: 210px;
+
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+
+  background: #ffffff;
+
+  border: 1px solid #e5eaf1;
+  border-radius: 15px;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.deck-card::before {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 4px;
+
+  background:
+    var(
+      --subject-color,
+      #38a5ff
+    );
+}
+
+.deck-card:hover {
+  transform: translateY(-3px);
+
+  border-color: #cfdeec;
+
+  box-shadow:
+    0 8px 20px
+    rgba(20, 40, 70, 0.07);
+}
+
+
+/* =========================
+   TOPO DO BARALHO
+========================= */
+
+.deck-card-top {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+
+  margin-bottom: 14px;
+}
+
+.deck-icon {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 11px;
+
+  background:
+    color-mix(
+      in srgb,
+      var(--subject-color) 12%,
+      white
+    );
+
+  color:
+    var(
+      --subject-color,
+      #38a5ff
+    );
+
+  font-size: 16px;
+}
+
+.deck-card h3 {
+  color: #252d38;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+
+/* =========================
+   MATÉRIA
+========================= */
+
+.deck-subject {
+  width: fit-content;
+
+  margin-bottom: 12px;
+
+  padding: 5px 9px;
+
+  background: #f2f5f8;
+
+  border-radius: 999px;
+
+  color: #667085;
+
+  font-size: 11px;
+  font-weight: 500;
+}
+
+
+/* =========================
+   DESCRIÇÃO
+========================= */
+
+.deck-description {
+  margin-bottom: 18px;
+
+  color: #768190;
+
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   RODAPÉ DO BARALHO
+========================= */
+
+.deck-footer {
+  margin-top: auto;
+
+  padding-top: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  border-top: 1px solid #edf0f4;
+}
+
+.deck-count {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  color: #768190;
+
+  font-size: 12px;
+}
+
+.deck-count i {
+  color:
+    var(
+      --subject-color,
+      #38a5ff
+    );
+}
+
+.deck-study-btn {
+  min-height: 36px;
+
+  padding: 8px 12px;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  background:
+    var(
+      --subject-color,
+      #38a5ff
+    );
+
+  color: #ffffff;
+
+  border: none;
+  border-radius: 9px;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   ESTADO VAZIO
+========================= */
+
+.empty-state {
+  min-height: 300px;
+
+  padding: 30px 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+
+  background: #fafbfd;
+
+  border: 1px dashed #dce4ed;
+  border-radius: 14px;
+}
+
+.empty-state[hidden] {
+  display: none !important;
+}
+
+.decks-grid[hidden] {
+  display: none !important;
+}
+
+.empty-icon {
+  width: 60px;
+  height: 60px;
+
+  margin-bottom: 14px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf5ff;
+  color: var(--azul);
+
+  border-radius: 16px;
+
+  font-size: 23px;
+}
+
+.empty-state h3 {
+  color: #303846;
+
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.empty-state p {
+  max-width: 420px;
+
+  margin: 7px 0 18px;
+
+  color: #7c8796;
+
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+  display: none;
+
+  position: fixed;
+
+  inset: 0;
+
+  z-index: 9999;
+
+  padding: 20px;
+
+  align-items: center;
+  justify-content: center;
+
+  background:
+    rgba(0, 0, 0, 0.45);
+
+  backdrop-filter:
+    blur(2px);
+}
+
+.modal.open {
+  display: flex;
+}
+
+.modal-content {
+  position: relative;
+
+  width: 100%;
+  max-width: 430px;
+
+  padding: 28px;
+
+  background: #ffffff;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 15px 40px
+    rgba(0, 0, 0, 0.18);
+
+  animation:
+    modalAppear
+    0.22s ease;
+}
+
+.deck-modal-content {
+  max-width: 520px;
+}
+
+
+/* =========================
+   FECHAR MODAL
+========================= */
+
+.modal-close {
+  position: absolute;
+
+  top: 15px;
+  right: 15px;
+
+  width: 34px;
+  height: 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #f1f4f7;
+  color: #667085;
+
+  border: none;
+  border-radius: 9px;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+}
+
+.modal-close:hover {
+  background: #e7ebef;
+
+  color: #222222;
+}
+
+
+/* =========================
+   TÍTULO DO MODAL
+========================= */
+
+.modal-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  margin-bottom: 24px;
+
+  padding-right: 35px;
+}
+
+.modal-title-icon {
+  width: 45px;
+  height: 45px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #eaf5ff;
+  color: var(--azul);
+
+  border-radius: 12px;
+}
+
+.modal-title h3 {
+  color: #252d38;
+
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.modal-title p {
+  margin-top: 3px;
+
+  color: #7b8794;
+
+  font-size: 12px;
+}
+
+
+/* =========================
+   FORMULÁRIO DO MODAL
+========================= */
+
+#deck-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 18px;
+}
+
+
+/* =========================
+   AÇÕES DO MODAL
+========================= */
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+
+  margin-top: 4px;
+}
+
+
+/* =========================
+   MODAL LOGOUT
+========================= */
+
+#logout-modal .modal-content {
+  max-width: 420px;
+
+  text-align: center;
+}
+
+#logout-modal h3 {
+  margin-bottom: 8px;
+
+  color: #252d38;
+}
+
+#logout-modal h4 {
+  margin-bottom: 20px;
+
+  color: #667085;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.modal-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+
+/* =========================
+   TOAST
+========================= */
+
+.toast {
+  position: fixed;
+
+  top: 70px;
+  right: 24px;
+
+  z-index: 99999;
+
+  max-width: 340px;
+
+  padding: 12px 17px;
+
+  background: #253140;
+  color: #ffffff;
+
+  border-radius: 10px;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  box-shadow:
+    0 8px 25px
+    rgba(0, 0, 0, 0.18);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  transform:
+    translateY(-10px);
+
+  transition:
+    opacity 0.25s ease,
+    transform 0.25s ease;
+}
+
+.toast.show {
+  opacity: 1;
+
+  transform:
+    translateY(0);
+}
+
+
+/* =========================
+   ANIMAÇÃO
+========================= */
+
+@keyframes modalAppear {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(8px)
+      scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* =========================
+   RODAPÉ
+========================= */
+
+footer {
+  width: 100%;
+
+  padding: 12px 20px;
+
+  background: #232323;
+  color: #ffffff;
+
+  text-align: center;
+  font-size: 14px;
+}
+
+
+/* =========================
+   RESPONSIVIDADE
+========================= */
+
+@media (max-width: 1000px) {
+
+  .stats-grid {
+    grid-template-columns:
+      repeat(2, 1fr);
+  }
+
+}
+
+
+@media (max-width: 768px) {
+
+  .container {
+    flex-direction: column;
+  }
+
+
+  nav.menu {
+    width: 100%;
+
+    flex-direction: column;
+  }
+
+
+  main.conteudo {
+    padding: 22px 16px;
+  }
+
+
+  .stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .section-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+
+  .section-header .btn {
+    width: 100%;
+  }
+
+
+  .filter-area .field-group {
+    max-width: none;
+  }
+
+
+  .decks-grid {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+
+}
+
+
+@media (max-width: 600px) {
+
+  header.cabecalho {
+    padding: 10px 15px;
+
+    font-size: 21px;
+  }
+
+
+  .header-icons {
+    right: 15px;
+
+    gap: 11px;
+
+    font-size: 1.1rem;
+  }
+
+
+  main.conteudo {
+    padding: 18px 12px;
+  }
+
+
+  .flashcards-header h1 {
+    font-size: 23px;
+  }
+
+
+  .page-icon {
+    width: 46px;
+    height: 46px;
+
+    font-size: 19px;
+  }
+
+
+  .card {
+    padding: 20px;
+  }
+
+
+  .decks-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  .modal-content {
+    padding: 24px 18px;
+  }
+
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+
+  .modal-actions .btn {
+    width: 100%;
+  }
+
+
+  .modal-buttons {
+    flex-direction: column;
+  }
+
+
+  .modal-buttons .btn {
+    width: 100%;
+  }
+
+
+  .back-studies {
+    width: 100%;
+  }
+
+
+  .toast {
+    top: 65px;
+
+    left: 12px;
+    right: 12px;
+
+    max-width: none;
+  }
+
+}
+
+/* =========================
+   AÇÕES DOS BARALHOS
+========================= */
+
+.deck-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.deck-manage-btn,
+.deck-study-btn {
+  min-height: 36px;
+
+  padding: 8px 11px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  border-radius: 9px;
+
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform .2s ease,
+    background .2s ease,
+    border-color .2s ease;
+}
+
+.deck-manage-btn {
+  background: #f5f7fa;
+  color: #576373;
+
+  border: 1px solid #dce3ea;
+}
+
+.deck-manage-btn:hover {
+  background: #edf2f7;
+  border-color: #cfd8e3;
+
+  transform: translateY(-1px);
+}
+
+.deck-study-btn {
+  background:
+    var(
+      --subject-color,
+      #38a5ff
+    );
+
+  color: #ffffff;
+
+  border: 1px solid transparent;
+}
+
+.deck-study-btn:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 500px) {
+
+  .deck-footer {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .deck-actions {
+    width: 100%;
+  }
+
+  .deck-manage-btn,
+  .deck-study-btn {
+    flex: 1;
+  }
+
+}
+
+
+@media (max-width: 420px) {
+
+  .flashcards-header > div {
+    align-items: flex-start;
+  }
+
+
+  .stat-card {
+    min-height: 90px;
+
+    padding: 16px;
+  }
+
+
+  .stat-card strong {
+    font-size: 21px;
+  }
+
+
+  .empty-state {
+    min-height: 260px;
+  }
+
+}
