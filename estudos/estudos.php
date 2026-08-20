@@ -63,6 +63,83 @@ if (
 ) {
     $materiasData['materias'] = [];
 }
+
+// ======================================
+// POMODORO
+// ======================================
+
+$arquivoPomodoro =
+    $pastaUsuario . '/pomodoro.json';
+
+$pomodoroData = [
+    'sessions' => []
+];
+
+if (file_exists($arquivoPomodoro)) {
+
+    $dadosPomodoro =
+        json_decode(
+            file_get_contents($arquivoPomodoro),
+            true
+        );
+
+    if (is_array($dadosPomodoro)) {
+
+        $pomodoroData =
+            $dadosPomodoro;
+
+    }
+
+}
+
+if (
+    !isset($pomodoroData['sessions']) ||
+    !is_array($pomodoroData['sessions'])
+) {
+
+    $pomodoroData['sessions'] =
+        [];
+
+}
+
+
+// ======================================
+// FLASHCARDS
+// ======================================
+
+$arquivoFlashcards =
+    $pastaUsuario . '/flashcards.json';
+
+$flashcardsData = [
+    'baralhos' => []
+];
+
+if (file_exists($arquivoFlashcards)) {
+
+    $dadosFlashcards =
+        json_decode(
+            file_get_contents($arquivoFlashcards),
+            true
+        );
+
+    if (is_array($dadosFlashcards)) {
+
+        $flashcardsData =
+            $dadosFlashcards;
+
+    }
+
+}
+
+if (
+    !isset($flashcardsData['baralhos']) ||
+    !is_array($flashcardsData['baralhos'])
+) {
+
+    $flashcardsData['baralhos'] =
+        [];
+
+}
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -77,13 +154,39 @@ if (
   <script src="./m.escuro/dark-mode.js"></script>
 
   <script>
-  window.MATERIAS_DATA = <?= json_encode(
-      $materiasData,
-      JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
-  ); ?>;
 
-  window.MATERIAS_SAVE_URL = 'salvar_materia.php';
-</script>
+    window.MATERIAS_DATA =
+        <?= json_encode(
+            $materiasData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.POMODORO_DATA =
+        <?= json_encode(
+            $pomodoroData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.FLASHCARDS_DATA =
+        <?= json_encode(
+            $flashcardsData,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+
+    window.MATERIAS_SAVE_URL =
+        'salvar_materia.php';
+
+
+    window.MATERIAS_DELETE_URL =
+        'excluir_materia.php';
+
+    </script>
 </head>
 <body>
   <header class="cabecalho">
@@ -316,6 +419,52 @@ if (
       </div>
     </div>
   </div>
+
+  <!-- ==========================================
+     MODAL EXCLUIR MATÉRIA
+========================================== -->
+
+<div
+  id="delete-subject-modal"
+  class="modal"
+  aria-hidden="true"
+>
+
+  <div class="modal-content delete-subject-content">
+    <div class="delete-subject-icon"> <i class="fa-regular fa-trash-can"></i> </div>
+    <h3> Excluir matéria?</h3>
+    <p>Você está prestes a excluir <strong id="delete-subject-name"></strong>.</p>
+    <div class="delete-warning"> <i class="fa-solid fa-triangle-exclamation"></i>
+      <span>
+        Todos os baralhos, cartões e revisões dessa matéria
+        também serão excluídos permanentemente.
+      </span>
+    </div>
+
+    <div class="delete-subject-actions">
+
+      <button
+        type="button"
+        id="cancel-delete-subject"
+        class="btn secondary"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        id="confirm-delete-subject"
+        class="btn delete-confirm-btn"
+      >
+        <i class="fa-regular fa-trash-can"></i>
+        Excluir matéria
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 

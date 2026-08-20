@@ -1079,6 +1079,22 @@ footer {
 
 }
 
+/* =========================
+   EDITAR / EXCLUIR CARTÃO
+========================= */
+
+.card-action-btn.edit:hover {
+  background: #eef7ff;
+  color: #1684df;
+  border-color: #c9e4fb;
+}
+
+.card-action-btn.delete:hover {
+  background: #fff1f1;
+  color: #dc4545;
+  border-color: #ffd0d0;
+}
+
 
 @media (max-width: 550px) {
 

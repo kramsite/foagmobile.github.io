@@ -697,11 +697,11 @@ $icone =
 
             <div>
 
-                <h3>
+               <h3 id="card-modal-title">
                     Novo cartão
                 </h3>
 
-                <p>
+                <p id="card-modal-subtitle">
                     Crie uma pergunta e sua resposta.
                 </p>
 
@@ -775,12 +775,11 @@ $icone =
                 <button
                     type="submit"
                     class="btn"
+                    id="card-submit-btn"
                 >
-
                     <i class="fa-solid fa-plus"></i>
 
                     Adicionar cartão
-
                 </button>
 
 

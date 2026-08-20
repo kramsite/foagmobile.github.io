@@ -14,7 +14,7 @@
   <!-- Página de login -->
   <div class="login-page">
     <div class="left-section">
-      <img src="../img/livro.png" alt="Inspirational image" style="width: 100%; height: 100%; object-fit: cover;">
+      <img src="../img/login.jpeg" alt="Inspirational image" style="width: 100%; height: 100%; object-fit: cover;">
     </div>
     <div class="right-section">
       <h1>Login</h1>
