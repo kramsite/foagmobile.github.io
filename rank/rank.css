@@ -23,9 +23,11 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
     background-color: #f5f7fb;
     color: #232323;
 }
+
 
 /* =========================
    CABEÇALHO
@@ -34,6 +36,7 @@ body {
 header.cabecalho {
     width: 100%;
     padding: 15px;
+
     position: relative;
     z-index: 100;
 
@@ -48,10 +51,17 @@ header.cabecalho {
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
+
+/* =========================
+   ÍCONES DO CABEÇALHO
+========================= */
+
 .header-icons {
     position: absolute;
+
     top: 50%;
     right: 20px;
+
     transform: translateY(-50%);
 
     display: flex;
@@ -67,6 +77,7 @@ header.cabecalho {
 
 .header-icons i {
     color: #ffffff;
+
     cursor: pointer;
 
     transition:
@@ -74,10 +85,24 @@ header.cabecalho {
         transform 0.2s ease;
 }
 
+.header-icons a {
+    display: flex;
+    align-items: center;
+
+    color: #ffffff !important;
+    text-decoration: none;
+}
+
+.header-icons a i {
+    color: inherit !important;
+}
+
+.header-icons a:hover i,
 .header-icons i:hover {
-    color: #006cc5;
+    color: #006cc5 !important;
     transform: translateY(-13%) scale(1.1);
 }
+
 
 /* =========================
    ESTRUTURA PRINCIPAL
@@ -86,23 +111,28 @@ header.cabecalho {
 .container {
     width: 100%;
     flex: 1;
+
     display: flex;
+
     min-height: 0;
 }
 
+
 /* =========================
-   MENU LATERAL
+   MENU PRINCIPAL
 ========================= */
 
 nav.menu {
     width: 260px;
     min-width: 260px;
+
     flex-shrink: 0;
 
     padding: 18px;
 
     display: flex;
     flex-direction: column;
+
     gap: 14px;
 
     background: #38a5ff;
@@ -112,10 +142,12 @@ nav.menu {
 
 nav.menu a {
     width: 100%;
+
     padding: 10px 12px;
 
     display: flex;
     align-items: center;
+
     gap: 8px;
 
     color: #ffffff;
@@ -145,25 +177,29 @@ nav.menu a:hover {
     transform: translateX(2px);
 }
 
+
 /* =========================
    CONTEÚDO PRINCIPAL
 ========================= */
 
 .main-content {
-    flex: 1;
-    min-width: 0;
     width: 100%;
+    flex: 1;
+
+    min-width: 0;
 
     padding: 30px;
 
     display: flex;
     flex-direction: column;
     align-items: stretch;
+
     gap: 25px;
 
     overflow-x: hidden;
     overflow-y: auto;
 }
+
 
 /* =====================================================
    HEADER DO RANKING
@@ -173,25 +209,36 @@ nav.menu a:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     flex-wrap: wrap;
+
     gap: 20px;
 
     padding: 25px 30px;
 
-    background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+    background: linear-gradient(
+        135deg,
+        #1a237e 0%,
+        #283593 100%
+    );
+
     border-radius: 16px;
 
     color: #ffffff;
 
-    box-shadow: 0 8px 30px rgba(26, 35, 126, 0.3);
+    box-shadow:
+        0 8px 30px
+        rgba(26, 35, 126, 0.3);
 }
 
 .ranking-titulo h1 {
-    font-size: 28px;
-    font-weight: 700;
     display: flex;
     align-items: center;
+
     gap: 12px;
+
+    font-size: 28px;
+    font-weight: 700;
 }
 
 .ranking-titulo h1 i {
@@ -199,429 +246,670 @@ nav.menu a:hover {
 }
 
 .ranking-titulo p {
-    opacity: 0.9;
-    font-size: 14px;
     margin-top: 4px;
+
+    font-size: 14px;
+
+    opacity: 0.9;
 }
 
-.ranking-stats {
-    display: flex;
-    gap: 25px;
-    align-items: center;
+
+/* =====================================================
+   ANIMAÇÕES
+===================================================== */
+
+@keyframes slideIn {
+
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.stat-item {
+@keyframes slideUp {
+
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* =====================================================
+   ABAS DE NÍVEL
+===================================================== */
+
+.abas-niveis {
     display: flex;
-    align-items: center;
+    flex-wrap: wrap;
+
     gap: 8px;
 
-    background: rgba(255, 255, 255, 0.12);
-    padding: 10px 18px;
-    border-radius: 12px;
+    margin-bottom: 20px;
 
-    font-size: 18px;
-    font-weight: 700;
+    padding: 10px 0;
 
-    backdrop-filter: blur(10px);
+    border-bottom: 2px solid #eef2f6;
 }
 
-.stat-item i {
-    color: #ffd700;
-}
-
-.stat-item .label {
-    font-size: 12px;
-    font-weight: 400;
-    opacity: 0.8;
-    margin-left: 4px;
-}
-
-/* =====================================================
-   GRID DE RANKINGS
-===================================================== */
-
-.rankings-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
-    gap: 25px;
-
-    padding: 5px 0;
-}
-
-/* =====================================================
-   CARD DO RANKING
-===================================================== */
-
-.rank-card {
-    background: #ffffff;
-    border-radius: 16px;
-    overflow: hidden;
-
-    border: 1px solid #e3e8ef;
-
-    transition: all 0.3s ease;
+.aba-nivel {
+    padding: 8px 20px;
 
     display: flex;
-    flex-direction: column;
+    align-items: center;
+
+    gap: 8px;
+
+    border: 2px solid #e3e8ef;
+    border-radius: 25px;
+
+    background: #ffffff;
+    color: #4a6a8a;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition: all 0.3s ease;
 }
 
-.rank-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+.aba-nivel:hover {
+    border-color: #38a5ff;
+
+    color: #38a5ff;
+
+    transform: translateY(-2px);
 }
 
-.rank-header {
-    padding: 18px 20px;
+.aba-nivel.active {
+    background: #38a5ff;
+    border-color: #38a5ff;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 15px
+        rgba(56, 165, 255, 0.3);
+}
+
+.aba-nivel .badge-nivel {
+    padding: 1px 10px;
+
+    border-radius: 12px;
+
+    background: rgba(0, 0, 0, 0.08);
+
+    font-size: 11px;
+}
+
+.aba-nivel.active .badge-nivel {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+
+/* =====================================================
+   LAYOUT DO RANKING
+===================================================== */
+
+.rank-layout {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 25px;
+}
+
+
+/* =====================================================
+   MENU DE CATEGORIAS
+===================================================== */
+
+.rank-menu-lateral {
+    min-width: 200px;
+    max-width: 200px;
+
+    flex-shrink: 0;
+
+    padding: 12px 8px;
+
+    position: sticky;
+    top: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3e8ef;
+    border-radius: 16px;
+
+    box-shadow:
+        0 4px 20px
+        rgba(0, 0, 0, 0.06);
+}
+
+.rank-menu-lateral .menu-titulo {
+    margin-bottom: 8px;
+
+    padding: 10px 14px 8px;
+
+    border-bottom: 1px solid #eef2f6;
+
+    color: #94a3b8;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    text-transform: uppercase;
+
+    letter-spacing: 1px;
+}
+
+.rank-menu-lateral .menu-item {
+    position: relative;
+
+    padding: 10px 14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    border-radius: 10px;
+
+    color: #4a6a8a;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.rank-menu-lateral .menu-item:hover {
+    background: #f1f5f9;
+
+    color: #1a2a3a;
+}
+
+.rank-menu-lateral .menu-item.active {
+    background: #38a5ff;
+
+    color: #ffffff;
+
+    box-shadow:
+        0 4px 15px
+        rgba(56, 165, 255, 0.25);
+}
+
+.rank-menu-lateral .menu-item .item-icone {
+    width: 24px;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+.rank-menu-lateral .menu-item .item-badge {
+    margin-left: auto;
+
+    padding: 1px 10px;
+
+    background: #eef4fa;
+
+    color: #64748b;
+
+    border-radius: 12px;
+
+    font-size: 11px;
+}
+
+.rank-menu-lateral .menu-item.active .item-badge {
+    background: rgba(255, 255, 255, 0.2);
+
+    color: #ffffff;
+}
+
+.rank-menu-lateral .menu-item .indicador-ativo {
+    display: none;
+
+    width: 4px;
+    height: 20px;
+
+    position: absolute;
+
+    right: 8px;
+
+    border-radius: 4px;
+}
+
+.rank-menu-lateral
+.menu-item.active
+.indicador-ativo {
+    display: block;
+
+    background: #ffffff;
+}
+
+
+/* =====================================================
+   CONTEÚDO DO RANKING
+===================================================== */
+
+.rank-conteudo {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.rank-full {
+    width: 100%;
+
+    display: block;
+
+    animation:
+        slideIn
+        0.4s
+        ease
+        forwards;
+}
+
+.rank-full.hidden {
+    display: none;
+}
+
+
+/* =====================================================
+   CABEÇALHO DE CADA RANKING
+===================================================== */
+
+.rank-full-header {
+    padding: 18px 25px;
 
     display: flex;
     justify-content: space-between;
     align-items: center;
 
-    border-bottom: 4px solid #38a5ff;
-    background: #f8fafc;
+    flex-wrap: wrap;
+
+    gap: 15px;
+
+    background: #ffffff;
+
+    border-radius: 16px 16px 0 0;
+
+    border-bottom:
+        4px solid #38a5ff;
+
+    box-shadow:
+        0 4px 20px
+        rgba(0, 0, 0, 0.06);
 }
 
-.rank-title {
+.rank-full-header .rank-info {
     display: flex;
     align-items: center;
-    gap: 10px;
+
+    gap: 15px;
 }
 
-.rank-title i {
-    font-size: 22px;
+.rank-full-header
+.rank-info
+.icone-grande {
+    width: 46px;
+    height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #f0f7ff;
+
+    font-size: 28px;
 }
 
-.rank-title h2 {
-    font-size: 16px;
-    font-weight: 700;
+.rank-full-header
+.rank-info
+.titulo h2 {
+    margin: 0;
+
     color: #1a2a3a;
+
+    font-size: 20px;
+    font-weight: 700;
 }
 
-.rank-count {
-    font-size: 12px;
-    font-weight: 600;
+.rank-full-header
+.rank-info
+.titulo p {
+    margin: 2px 0 0;
+
     color: #64748b;
-    background: #eef4fa;
-    padding: 4px 12px;
-    border-radius: 20px;
+
+    font-size: 13px;
 }
 
-.rank-body {
-    padding: 12px 16px;
-    flex: 1;
+.rank-full-header .rank-stats {
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
 }
+
+.rank-full-header
+.rank-stats
+.stat {
+    padding: 5px 12px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 6px;
+
+    background: #f8fafc;
+
+    color: #64748b;
+
+    border-radius: 20px;
+
+    font-size: 13px;
+}
+
+.rank-full-header
+.rank-stats
+.stat i {
+    color: #38a5ff;
+}
+
+
+/* =====================================================
+   CORPO DO RANKING
+===================================================== */
+
+.rank-full-body {
+    padding: 5px 0;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border-radius: 0 0 16px 16px;
+
+    box-shadow:
+        0 4px 20px
+        rgba(0, 0, 0, 0.06);
+}
+
 
 /* =====================================================
    ITEM DO RANKING
 ===================================================== */
 
-.rank-item {
+.rank-full-item {
+    padding: 10px 20px;
+
     display: flex;
     align-items: center;
-    gap: 12px;
 
-    padding: 10px 12px;
-    margin-bottom: 6px;
+    gap: 15px;
 
-    border-radius: 10px;
+    border-bottom:
+        1px solid #f0f2f5;
 
     transition: all 0.3s ease;
 }
 
-.rank-item:hover {
-    background: #f1f5f9;
+.rank-full-item:last-child {
+    border-bottom: none;
 }
 
-.rank-item.usuario-destaque {
-    background: #e3f2fd;
-    border: 2px solid #38a5ff;
-    box-shadow: 0 0 20px rgba(56, 165, 255, 0.15);
+.rank-full-item:hover {
+    background: #f8fafc;
 }
 
-.rank-item.usuario-destaque .rank-nome {
+
+/* =========================
+   POSIÇÃO
+========================= */
+
+.rank-full-item .posicao {
+    min-width: 45px;
+
+    color: #4a6a8a;
+
+    font-size: 15px;
     font-weight: 700;
 }
 
-.rank-item .rank-position {
-    min-width: 35px;
-}
+.rank-full-item
+.posicao
+.numero {
+    width: 32px;
+    height: 32px;
 
-.rank-number {
     display: inline-block;
-    width: 30px;
-    height: 30px;
+
+    line-height: 32px;
+
+    text-align: center;
+
+    background: #f1f5f9;
 
     border-radius: 50%;
 
-    background: #eef4fa;
-    color: #4a6a8a;
-
-    font-size: 12px;
-    font-weight: 700;
-
-    text-align: center;
-    line-height: 30px;
+    font-size: 13px;
 }
 
-.rank-item .rank-avatar {
-    font-size: 28px;
-    width: 40px;
-    text-align: center;
+.rank-full-item
+.posicao
+.medalha {
+    font-size: 26px;
 }
 
-.rank-info {
+
+/* =========================
+   AVATAR
+========================= */
+
+.rank-full-item .avatar {
+    width: 42px;
+
+    text-align: center;
+
+    font-size: 30px;
+}
+
+
+/* =========================
+   INFORMAÇÕES
+========================= */
+
+.rank-full-item .info {
     flex: 1;
-    display: flex;
-    flex-direction: column;
 }
 
-.rank-nome {
-    font-size: 14px;
-    font-weight: 500;
-    color: #1a2a3a;
-
+.rank-full-item
+.info
+.nome {
     display: flex;
     align-items: center;
-    gap: 6px;
-}
+    flex-wrap: wrap;
 
-.badge-eu {
-    font-size: 10px;
-    font-weight: 700;
-    color: #ffffff;
-    background: #38a5ff;
-    padding: 1px 8px;
-    border-radius: 10px;
-}
+    gap: 8px;
 
-.rank-valor {
-    font-size: 13px;
+    color: #1a2a3a;
+
+    font-size: 16px;
     font-weight: 600;
 }
 
-.rank-nivel {
+.rank-full-item
+.info
+.nome
+.badge-eu {
+    padding: 1px 10px;
+
+    background: #38a5ff;
+
+    color: #ffffff;
+
+    border-radius: 10px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.rank-full-item
+.info
+.detalhes {
+    margin-top: 2px;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
+
+.rank-full-item
+.info
+.tag-local {
+    display: inline-block;
+
+    padding: 1px 10px;
+
+    background: #eef4fa;
+
+    color: #64748b;
+
+    border-radius: 10px;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   VALOR
+========================= */
+
+.rank-full-item .valor {
+    min-width: 80px;
+
+    text-align: right;
+
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+/* =========================
+   NÍVEL
+========================= */
+
+.rank-full-item .nivel {
     min-width: 70px;
+
     text-align: right;
 }
 
+.rank-full-item
+.nivel
 .nivel-badge {
-    font-size: 10px;
+    padding: 3px 12px;
+
+    color: #ffffff;
+
+    border-radius: 12px;
+
+    font-size: 11px;
     font-weight: 700;
-    color: #ffffff;
-    padding: 3px 10px;
-    border-radius: 12px;
 }
+
 
 /* =====================================================
-   RODAPÉ DO CARD
+   DESTAQUE DO USUÁRIO
 ===================================================== */
 
-.rank-footer {
-    padding: 12px 18px;
-
-    border-top: 1px solid #e3e8ef;
-    background: #f8fafc;
-
-    display: flex;
-    justify-content: center;
-}
-
-.btn-ver-todos {
-    padding: 8px 24px;
-
-    background: transparent;
-    color: #38a5ff;
-
-    border: 2px solid #38a5ff;
-    border-radius: 25px;
-
-    font-size: 13px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    transition: all 0.3s ease;
-}
-
-.btn-ver-todos:hover {
-    background: #38a5ff;
-    color: #ffffff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(56, 165, 255, 0.3);
-}
-
-.btn-ver-todos i {
-    margin-left: 6px;
-    transition: transform 0.3s ease;
-}
-
-.btn-ver-todos:hover i {
-    transform: translateX(4px);
-}
-
-/* =====================================================
-   MODAL DE CATEGORIA
-===================================================== */
-
-.modal-categoria {
-    display: none;
-    position: fixed;
-    inset: 0;
-
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-
-    z-index: 9999;
-
-    justify-content: center;
-    align-items: center;
-}
-
-.modal-categoria .modal-content {
-    background: #ffffff;
-    border-radius: 20px;
-    padding: 30px;
-
-    max-width: 600px;
-    width: 90%;
-    max-height: 80vh;
-
-    display: flex;
-    flex-direction: column;
-
-    animation: slideUp 0.3s ease;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-
-    border-bottom: 2px solid #e3e8ef;
-}
-
-.modal-header h2 {
-    font-size: 22px;
-    color: #1a2a3a;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.modal-header .btn-fechar {
-    width: 36px;
-    height: 36px;
-
-    background: #f1f3f5;
-    border: none;
-    border-radius: 50%;
-
-    font-size: 20px;
-
-    cursor: pointer;
-
-    transition: all 0.3s ease;
-}
-
-.modal-header .btn-fechar:hover {
-    background: #e3e8ef;
-    transform: rotate(90deg);
-}
-
-.modal-body {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 5px;
-}
-
-.categoria-stats {
-    display: flex;
-    gap: 20px;
-
-    padding: 12px 16px;
-
-    background: #f8fafc;
-    border-radius: 12px;
-
-    margin-bottom: 16px;
-
-    font-size: 14px;
-    color: #4a6a8a;
-}
-
-.categoria-stats i {
-    margin-right: 4px;
-}
-
-.categoria-lista {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-}
-
-.categoria-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-
-    padding: 10px 14px;
-
-    border-radius: 10px;
-
-    transition: all 0.3s ease;
-}
-
-.categoria-item:hover {
-    background: #f1f5f9;
-}
-
-.categoria-item.usuario-destaque {
+.rank-full-item.usuario-destaque {
     background: #e3f2fd;
-    border: 2px solid #38a5ff;
+
+    border-left:
+        4px solid #38a5ff;
 }
 
-.categoria-pos {
-    min-width: 35px;
-    font-size: 14px;
-    font-weight: 700;
-    color: #4a6a8a;
+.rank-full-item.usuario-destaque
+.info
+.nome {
+    color: #1a237e;
 }
 
-.categoria-avatar {
-    font-size: 28px;
+
+/* =====================================================
+   PÓDIO
+===================================================== */
+
+.rank-full-item.podium-1 {
+    background:
+        linear-gradient(
+            135deg,
+            #fffde7,
+            #fff8e1
+        );
 }
 
-.categoria-nome {
-    flex: 1;
-    font-size: 14px;
-    font-weight: 500;
-    color: #1a2a3a;
-}
+.rank-full-item.podium-1
+.posicao
+.numero {
+    background:
+        linear-gradient(
+            135deg,
+            #ffd700,
+            #ffb300
+        );
 
-.categoria-valor {
-    font-size: 14px;
-    font-weight: 700;
-}
-
-.categoria-nivel {
-    font-size: 12px;
-    color: #64748b;
-    background: #eef4fa;
-    padding: 2px 10px;
-    border-radius: 12px;
-}
-
-.categoria-item .badge-eu {
-    font-size: 10px;
-    font-weight: 700;
     color: #ffffff;
-    background: #38a5ff;
-    padding: 1px 8px;
-    border-radius: 10px;
+
+    font-size: 16px;
 }
+
+.rank-full-item.podium-2
+.posicao
+.numero {
+    background:
+        linear-gradient(
+            135deg,
+            #e0e0e0,
+            #bdbdbd
+        );
+
+    color: #ffffff;
+}
+
+.rank-full-item.podium-3
+.posicao
+.numero {
+    background:
+        linear-gradient(
+            135deg,
+            #d7a86e,
+            #b87333
+        );
+
+    color: #ffffff;
+}
+
 
 /* =====================================================
    MODAL DE LOGOUT
@@ -629,17 +917,20 @@ nav.menu a:hover {
 
 .modal {
     display: none;
+
     position: fixed;
+
     inset: 0;
 
     padding: 20px;
 
-    background: rgba(0, 0, 0, 0.55);
-
-    z-index: 3000;
-
     justify-content: center;
     align-items: center;
+
+    background:
+        rgba(0, 0, 0, 0.55);
+
+    z-index: 3000;
 }
 
 .modal .modal-content {
@@ -649,15 +940,21 @@ nav.menu a:hover {
     padding: 26px;
 
     background: #ffffff;
+
     color: #333333;
 
     border-radius: 12px;
 
     text-align: center;
 
-    box-shadow: 0 8px 28px rgba(0, 0, 0, 0.3);
+    box-shadow:
+        0 8px 28px
+        rgba(0, 0, 0, 0.3);
 
-    animation: slideUp 0.3s ease;
+    animation:
+        slideUp
+        0.3s
+        ease;
 }
 
 .modal .modal-content h3 {
@@ -666,6 +963,7 @@ nav.menu a:hover {
 
 .modal .modal-content h4 {
     margin-bottom: 15px;
+
     line-height: 1.5;
 }
 
@@ -675,21 +973,29 @@ nav.menu a:hover {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
+
     gap: 12px;
 }
 
 .modal-buttons button {
     width: auto;
+
     margin: 0;
 
     padding: 9px 17px;
 
+    border: none;
+    border-radius: 8px;
+
     font-size: 14px;
     font-weight: bold;
+
+    cursor: pointer;
 }
 
 #confirm-logout {
     background-color: #38a5ff;
+
     color: #ffffff;
 }
 
@@ -699,6 +1005,7 @@ nav.menu a:hover {
 
 #cancel-logout {
     background-color: #e0e0e0;
+
     color: #333333;
 }
 
@@ -706,34 +1013,43 @@ nav.menu a:hover {
     background-color: #bdbdbd;
 }
 
+
 /* =========================
    RODAPÉ
 ========================= */
 
 footer {
     width: 100%;
+
     padding: 10px;
 
     background-color: #232323;
+
     color: #ffffff;
 
     text-align: center;
+
     font-size: 14px;
 }
 
+
 /* =====================================================
-   RESPONSIVIDADE
+   RESPONSIVIDADE — TABLET
 ===================================================== */
 
 @media (max-width: 768px) {
+
     header.cabecalho {
         padding: 12px 15px;
+
         font-size: 21px;
     }
 
     .header-icons {
         right: 15px;
+
         gap: 11px;
+
         font-size: 19px;
     }
 
@@ -760,77 +1076,166 @@ footer {
 
     .main-content {
         padding: 18px 12px;
+
         gap: 20px;
     }
 
     .ranking-header {
         flex-direction: column;
+
         text-align: center;
+
         padding: 20px;
     }
 
     .ranking-titulo h1 {
-        font-size: 22px;
         justify-content: center;
+
+        font-size: 22px;
     }
 
-    .ranking-stats {
+    .rank-layout {
+        flex-direction: column;
+    }
+
+    .rank-menu-lateral {
+        width: 100%;
+
+        min-width: 100%;
+        max-width: 100%;
+
+        position: relative;
+
+        top: 0;
+
+        display: flex;
         flex-wrap: wrap;
-        justify-content: center;
-        gap: 10px;
+
+        padding: 10px 8px;
+
+        gap: 4px;
+
+        border-radius: 12px;
     }
 
-    .stat-item {
-        font-size: 15px;
-        padding: 8px 14px;
-    }
+    .rank-menu-lateral
+    .menu-titulo {
+        width: 100%;
 
-    .rankings-grid {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
+        padding: 6px 12px;
 
-    .rank-item {
-        padding: 8px 10px;
-    }
-
-    .rank-item .rank-avatar {
-        font-size: 22px;
-        width: 32px;
-    }
-
-    .rank-nome {
-        font-size: 13px;
-    }
-
-    .rank-valor {
         font-size: 12px;
     }
 
-    .modal-categoria .modal-content {
-        padding: 20px;
-        max-height: 70vh;
+    .rank-menu-lateral
+    .menu-item {
+        flex: 0 0 auto;
+
+        padding: 6px 12px;
+
+        border-radius: 8px;
+
+        font-size: 12px;
     }
 
-    .modal-header h2 {
-        font-size: 18px;
+    .rank-menu-lateral
+    .menu-item
+    .item-badge {
+        display: none;
     }
 
-    .categoria-item {
+    .rank-menu-lateral
+    .menu-item
+    .indicador-ativo {
+        display: none !important;
+    }
+
+    .abas-niveis {
+        justify-content: center;
+    }
+
+    .aba-nivel {
+        padding: 6px 14px;
+
+        font-size: 12px;
+    }
+
+    .rank-full-header {
+        flex-direction: column;
+
+        padding: 16px 18px;
+
+        text-align: center;
+    }
+
+    .rank-full-header
+    .rank-info {
+        flex-direction: column;
+    }
+
+    .rank-full-header
+    .rank-stats {
         flex-wrap: wrap;
-        gap: 6px;
+        justify-content: center;
+    }
+
+    .rank-full-item {
+        flex-wrap: wrap;
+
+        gap: 8px;
+
+        padding: 10px 14px;
+    }
+
+    .rank-full-item
+    .posicao {
+        min-width: 35px;
+    }
+
+    .rank-full-item
+    .avatar {
+        width: 36px;
+
+        font-size: 24px;
+    }
+
+    .rank-full-item
+    .info
+    .nome {
+        font-size: 14px;
+    }
+
+    .rank-full-item
+    .valor {
+        min-width: 60px;
+
+        font-size: 16px;
+    }
+
+    .rank-full-item
+    .nivel {
+        min-width: 55px;
     }
 }
 
+
+/* =====================================================
+   RESPONSIVIDADE — CELULAR
+===================================================== */
+
 @media (max-width: 480px) {
+
     header.cabecalho {
         padding: 11px 10px;
+
         font-size: 19px;
     }
 
     .header-icons {
         right: 10px;
+
         gap: 9px;
+
         font-size: 17px;
     }
 
@@ -850,73 +1255,115 @@ footer {
         padding: 15px;
     }
 
-    .rank-card {
-        border-radius: 12px;
+    .ranking-titulo h1 {
+        font-size: 19px;
     }
 
-    .rank-header {
-        padding: 14px 16px;
+    .abas-niveis {
+        gap: 6px;
     }
 
-    .rank-title h2 {
+    .aba-nivel {
+        padding: 4px 12px;
+
+        font-size: 11px;
+    }
+
+    .rank-menu-lateral
+    .menu-item {
+        padding: 4px 10px;
+
+        font-size: 11px;
+    }
+
+    .rank-full-item {
+        padding: 8px 10px;
+
+        gap: 6px;
+    }
+
+    .rank-full-item
+    .posicao {
+        min-width: 28px;
+    }
+
+    .rank-full-item
+    .posicao
+    .numero {
+        width: 24px;
+        height: 24px;
+
+        line-height: 24px;
+
+        font-size: 10px;
+    }
+
+    .rank-full-item
+    .posicao
+    .medalha {
+        font-size: 20px;
+    }
+
+    .rank-full-item
+    .avatar {
+        width: 30px;
+
+        font-size: 20px;
+    }
+
+    .rank-full-item
+    .info
+    .nome {
+        flex-wrap: wrap;
+
+        font-size: 12px;
+    }
+
+    .rank-full-item
+    .info
+    .detalhes {
+        font-size: 10px;
+    }
+
+    .rank-full-item
+    .info
+    .tag-local {
+        padding: 0 8px;
+
+        font-size: 9px;
+    }
+
+    .rank-full-item
+    .valor {
+        min-width: 50px;
+
         font-size: 14px;
     }
 
-    .rank-body {
-        padding: 10px 12px;
-    }
-
-    .rank-item {
-        padding: 6px 8px;
-        gap: 8px;
-    }
-
-    .rank-number {
-        width: 24px;
-        height: 24px;
-        font-size: 10px;
-        line-height: 24px;
-    }
-
-    .rank-item .rank-avatar {
-        font-size: 20px;
-        width: 28px;
-    }
-
-    .rank-nivel {
-        min-width: 50px;
-    }
-
+    .rank-full-item
+    .nivel
     .nivel-badge {
-        font-size: 9px;
         padding: 2px 8px;
+
+        font-size: 9px;
     }
-}
 
-/* ============= CORREÇÃO DOS ÍCONES DO HEADER ============= */
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 22px;
-    color: #ffffff;
-    cursor: pointer;
-    user-select: none;
-}
+    .rank-full-header
+    .rank-info
+    .titulo h2 {
+        font-size: 16px;
+    }
 
-.header-icons a {
-    display: flex;
-    align-items: center;
-    color: #ffffff !important;
-    text-decoration: none;
-}
+    .rank-full-header
+    .rank-info
+    .icone-grande {
+        width: 38px;
+        height: 38px;
 
-.header-icons a i {
-    color: inherit !important;
-}
+        font-size: 22px;
+    }
 
-.header-icons a:hover i,
-.header-icons i:hover {
-    color: #006cc5 !important;
-    transform: translateY(-13%) scale(1.1);
+    .modal .modal-content {
+        padding: 20px;
+    }
 }
