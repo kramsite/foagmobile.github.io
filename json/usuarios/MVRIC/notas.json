@@ -1,0 +1,173 @@
+{
+    "nota_maxima": 10,
+    "media_aprovacao": 7,
+    "tipo_curso": "escola",
+    "pesos": {
+        "1": 10,
+        "2": 10,
+        "3": 10,
+        "4": 10
+    },
+    "periodos": {
+        "Padrão": {
+            "materias": [
+                "matematica",
+                "historia",
+                "geografia",
+                "portugues",
+                "ciencias",
+                "ed. fisica",
+                "quimica",
+                "ingles",
+                "matematica financeira",
+                "artes"
+            ],
+            "notas": [
+                {
+                    "1": 10,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7.5,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9,
+                    "2": 9.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 4,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 10,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 4,
+                    "2": 7,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                }
+            ]
+        },
+        "2026": {
+            "materias": [
+                "matematica",
+                "historia",
+                "geografia",
+                "portugues",
+                "ciencias",
+                "ed. fisica",
+                "quimica",
+                "ingles",
+                "matematica financeira",
+                "artes",
+                ""
+            ],
+            "notas": [
+                {
+                    "1": 10,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7.5,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9.5,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 4,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 4,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": null,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                }
+            ]
+        }
+    },
+    "periodo_atual": "Padrão"
+}

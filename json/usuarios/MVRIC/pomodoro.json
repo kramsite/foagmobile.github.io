@@ -1,0 +1,17 @@
+{
+    "disciplines": [
+        "Geral",
+        "ingles"
+    ],
+    "sessions": [
+        {
+            "ts": 1787280677796,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "ingles"
+        }
+    ],
+    "goals": {
+        "ingles": 7
+    }
+}
