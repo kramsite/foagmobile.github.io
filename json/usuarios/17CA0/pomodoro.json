@@ -1,0 +1,23 @@
+{
+    "disciplines": [
+        "Geral",
+        "ESTAGIO IV"
+    ],
+    "sessions": [
+        {
+            "ts": 1787277752554,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "ESTAGIO IV"
+        },
+        {
+            "ts": 1787277772985,
+            "minutes": 2,
+            "mode": "focus",
+            "discipline": "Geral"
+        }
+    ],
+    "goals": {
+        "ESTAGIO IV": 2
+    }
+}
