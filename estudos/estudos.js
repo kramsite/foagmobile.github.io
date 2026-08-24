@@ -19,6 +19,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const subjectIcon =
     document.getElementById('subject-icon');
 
+  const subjectModalTitle =
+    document.getElementById('subject-modal-title');
+
+  const subjectModalDescription =
+    document.getElementById('subject-modal-description');
+
   const subjectsGrid =
     document.getElementById('subjects-grid');
 
@@ -60,6 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
     window.MATERIAS_SAVE_URL ||
     'salvar_materia.php';
 
+  const UPDATE_MATERIA_URL =
+    window.MATERIAS_UPDATE_URL ||
+    'editar_materia.php';
+
   const DELETE_MATERIA_URL =
     window.MATERIAS_DELETE_URL ||
     'excluir_materia.php';
@@ -83,46 +93,47 @@ document.addEventListener('DOMContentLoaded', () => {
       ? [...materiasData.materias]
       : [];
 
-      // ==========================================
-      // DADOS DO POMODORO
-      // ==========================================
 
-      const pomodoroData =
-        window.POMODORO_DATA &&
-        typeof window.POMODORO_DATA === 'object'
-          ? window.POMODORO_DATA
-          : {
-              sessions: []
-            };
+  // ==========================================
+  // DADOS DO POMODORO
+  // ==========================================
 
-
-      const sessoesPomodoro =
-        Array.isArray(
-          pomodoroData.sessions
-        )
-          ? pomodoroData.sessions
-          : [];
+  const pomodoroData =
+    window.POMODORO_DATA &&
+    typeof window.POMODORO_DATA === 'object'
+      ? window.POMODORO_DATA
+      : {
+          sessions: []
+        };
 
 
-      // ==========================================
-      // DADOS DOS FLASHCARDS
-      // ==========================================
-
-      const flashcardsData =
-        window.FLASHCARDS_DATA &&
-        typeof window.FLASHCARDS_DATA === 'object'
-          ? window.FLASHCARDS_DATA
-          : {
-              baralhos: []
-            };
+  const sessoesPomodoro =
+    Array.isArray(
+      pomodoroData.sessions
+    )
+      ? pomodoroData.sessions
+      : [];
 
 
-      const baralhos =
-        Array.isArray(
-          flashcardsData.baralhos
-        )
-          ? flashcardsData.baralhos
-          : [];
+  // ==========================================
+  // DADOS DOS FLASHCARDS
+  // ==========================================
+
+  const flashcardsData =
+    window.FLASHCARDS_DATA &&
+    typeof window.FLASHCARDS_DATA === 'object'
+      ? window.FLASHCARDS_DATA
+      : {
+          baralhos: []
+        };
+
+
+  const baralhos =
+    Array.isArray(
+      flashcardsData.baralhos
+    )
+      ? flashcardsData.baralhos
+      : [];
 
 
   let subjectsCount = 0;
@@ -132,6 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let materiaParaExcluir = null;
 
   let cardParaExcluir = null;
+
+  let materiaEmEdicao = null;
 
 
   // ==========================================
@@ -172,6 +185,25 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
   };
+
+
+  // ==========================================
+  // NORMALIZAR NOME DA MATÉRIA
+  // ==========================================
+
+  function normalizarMateria(
+    valor
+  ) {
+
+    return String(
+      valor || ''
+    )
+      .trim()
+      .toLocaleLowerCase(
+        'pt-BR'
+      );
+
+  }
 
 
   // ==========================================
@@ -232,6 +264,503 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================
+  // CALCULAR TEMPO ESTUDADO
+  // ==========================================
+
+  function getMinutosEstudados(
+    nomeMateria
+  ) {
+
+    const nomeNormalizado =
+      normalizarMateria(
+        nomeMateria
+      );
+
+
+    let totalMinutos =
+      0;
+
+
+    sessoesPomodoro.forEach(
+      (sessao) => {
+
+        const disciplina =
+          sessao.discipline ??
+          sessao.disciplina ??
+          sessao.materia ??
+          '';
+
+
+        const modo =
+          sessao.mode ??
+          sessao.modo ??
+          'focus';
+
+
+        const minutos =
+          Number(
+            sessao.minutes ??
+            sessao.minutos ??
+            0
+          );
+
+
+        if (
+          modo !== 'focus'
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          normalizarMateria(
+            disciplina
+          ) !==
+          nomeNormalizado
+        ) {
+
+          return;
+
+        }
+
+
+        if (
+          Number.isFinite(
+            minutos
+          ) &&
+          minutos > 0
+        ) {
+
+          totalMinutos +=
+            minutos;
+
+        }
+
+      }
+    );
+
+
+    return Math.round(
+      totalMinutos
+    );
+
+  }
+
+
+  // ==========================================
+  // FORMATAR TEMPO ESTUDADO
+  // ==========================================
+
+  function formatarTempoEstudado(
+    minutos
+  ) {
+
+    if (
+      !minutos ||
+      minutos <= 0
+    ) {
+
+      return '0h estudadas';
+
+    }
+
+
+    const horas =
+      Math.floor(
+        minutos / 60
+      );
+
+
+    const minutosRestantes =
+      minutos % 60;
+
+
+    if (
+      horas === 0
+    ) {
+
+      return `${minutosRestantes}min estudados`;
+
+    }
+
+
+    if (
+      minutosRestantes === 0
+    ) {
+
+      return `${horas}h estudadas`;
+
+    }
+
+
+    return `${horas}h ${minutosRestantes}min estudadas`;
+
+  }
+
+
+  // ==========================================
+  // CONTAR FLASHCARDS DA MATÉRIA
+  // ==========================================
+
+  function getTotalFlashcards(
+    nomeMateria
+  ) {
+
+    const nomeNormalizado =
+      normalizarMateria(
+        nomeMateria
+      );
+
+
+    let total =
+      0;
+
+
+    baralhos.forEach(
+      (baralho) => {
+
+        if (
+          normalizarMateria(
+            baralho.materia
+          ) !==
+          nomeNormalizado
+        ) {
+
+          return;
+
+        }
+
+
+        const cartoes =
+          Array.isArray(
+            baralho.cartoes
+          )
+            ? baralho.cartoes
+            : [];
+
+
+        total +=
+          cartoes.length;
+
+      }
+    );
+
+
+    return total;
+
+  }
+
+
+  // ==========================================
+  // ABRIR MODAL NOVA MATÉRIA
+  // ==========================================
+
+  const openSubjectModal = () => {
+
+    if (!subjectModal) {
+      return;
+    }
+
+
+    materiaEmEdicao =
+      null;
+
+
+    if (subjectForm) {
+
+      subjectForm.reset();
+
+    }
+
+
+    if (subjectColor) {
+
+      subjectColor.value =
+        '#38a5ff';
+
+    }
+
+
+    if (subjectIcon) {
+
+      subjectIcon.value =
+        'fa-book';
+
+    }
+
+
+    if (subjectModalTitle) {
+
+      subjectModalTitle.textContent =
+        'Nova matéria';
+
+    }
+
+
+    if (subjectModalDescription) {
+
+      subjectModalDescription.textContent =
+        'Escolha um nome, uma cor e um ícone para identificar a matéria.';
+
+    }
+
+
+    if (submitButton) {
+
+      submitButton.innerHTML = `
+        <i class="fa-solid fa-plus"></i>
+        Adicionar
+      `;
+
+    }
+
+
+    subjectModal.classList.add(
+      'open'
+    );
+
+
+    subjectModal.setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+
+    setTimeout(
+      () => {
+
+        subjectName?.focus();
+
+      },
+      50
+    );
+
+  };
+
+
+  // ==========================================
+  // ABRIR MODAL EDITAR MATÉRIA
+  // ==========================================
+
+  const openEditSubjectModal = (
+    materia
+  ) => {
+
+    if (
+      !subjectModal ||
+      !materia
+    ) {
+
+      return;
+
+    }
+
+
+    materiaEmEdicao =
+      materia;
+
+
+    if (subjectName) {
+
+      subjectName.value =
+        materia.nome ||
+        '';
+
+    }
+
+
+    if (subjectColor) {
+
+      subjectColor.value =
+        materia.cor ||
+        '#94a3b8';
+
+    }
+
+
+    if (subjectIcon) {
+
+      const iconeAtual =
+        materia.icone ||
+        'fa-circle-question';
+
+
+      const existeOpcao =
+        Array.from(
+          subjectIcon.options
+        ).some(
+          (option) => {
+
+            return (
+              option.value ===
+              iconeAtual
+            );
+
+          }
+        );
+
+
+      if (!existeOpcao) {
+
+        const option =
+          document.createElement(
+            'option'
+          );
+
+
+        option.value =
+          iconeAtual;
+
+
+        option.textContent =
+          'Ícone atual';
+
+
+        subjectIcon.appendChild(
+          option
+        );
+
+      }
+
+
+      subjectIcon.value =
+        iconeAtual;
+
+    }
+
+
+    if (subjectModalTitle) {
+
+      subjectModalTitle.textContent =
+        'Editar matéria';
+
+    }
+
+
+    if (subjectModalDescription) {
+
+      subjectModalDescription.textContent =
+        'Altere o nome, a cor ou o ícone. O vínculo com o boletim será mantido.';
+
+    }
+
+
+    if (submitButton) {
+
+      submitButton.innerHTML = `
+        <i class="fa-solid fa-check"></i>
+        Salvar alterações
+      `;
+
+    }
+
+
+    subjectModal.classList.add(
+      'open'
+    );
+
+
+    subjectModal.setAttribute(
+      'aria-hidden',
+      'false'
+    );
+
+
+    setTimeout(
+      () => {
+
+        subjectName?.focus();
+
+      },
+      50
+    );
+
+  };
+
+
+  // ==========================================
+  // FECHAR MODAL DE MATÉRIA
+  // ==========================================
+
+  const closeSubjectModal = () => {
+
+    if (!subjectModal) {
+      return;
+    }
+
+
+    subjectModal.classList.remove(
+      'open'
+    );
+
+
+    subjectModal.setAttribute(
+      'aria-hidden',
+      'true'
+    );
+
+
+    materiaEmEdicao =
+      null;
+
+
+    if (subjectForm) {
+
+      subjectForm.reset();
+
+    }
+
+
+    if (subjectColor) {
+
+      subjectColor.value =
+        '#38a5ff';
+
+    }
+
+
+    if (subjectIcon) {
+
+      subjectIcon.value =
+        'fa-book';
+
+    }
+
+
+    if (subjectModalTitle) {
+
+      subjectModalTitle.textContent =
+        'Nova matéria';
+
+    }
+
+
+    if (subjectModalDescription) {
+
+      subjectModalDescription.textContent =
+        'Escolha um nome, uma cor e um ícone para identificar a matéria.';
+
+    }
+
+
+    if (
+      submitButton &&
+      !submitButton.disabled
+    ) {
+
+      submitButton.innerHTML = `
+        <i class="fa-solid fa-plus"></i>
+        Adicionar
+      `;
+
+    }
+
+  };
+
+
+  // ==========================================
   // ABRIR MODAL DE EXCLUSÃO
   // ==========================================
 
@@ -247,6 +776,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
       return;
+
     }
 
 
@@ -293,7 +823,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (
       confirmDeleteSubject?.disabled
     ) {
+
       return;
+
     }
 
 
@@ -330,6 +862,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ) {
 
       return;
+
     }
 
 
@@ -444,10 +977,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
 
-      // ==================================
-      // REMOVER DO ARRAY
-      // ==================================
-
       materias =
         materias.filter(
           (item) => {
@@ -461,23 +990,11 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
 
-      // ==================================
-      // REMOVER CARD DA TELA
-      // ==================================
-
       card.remove();
 
 
-      // ==================================
-      // ATUALIZAR ESTADO
-      // ==================================
-
       updateSubjectsState();
 
-
-      // ==================================
-      // FECHAR MODAL
-      // ==================================
 
       deleteSubjectModal.classList.remove(
         'open'
@@ -555,255 +1072,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================
-  // BOTÕES DO MODAL DE EXCLUSÃO
-  // ==========================================
-
-  confirmDeleteSubject
-    ?.addEventListener(
-      'click',
-      executarExclusaoMateria
-    );
-
-
-  cancelDeleteSubject
-    ?.addEventListener(
-      'click',
-      fecharModalExcluirMateria
-    );
-
-
-  deleteSubjectModal
-    ?.addEventListener(
-      'click',
-      (event) => {
-
-        if (
-          event.target ===
-          deleteSubjectModal
-        ) {
-
-          fecharModalExcluirMateria();
-
-        }
-
-      }
-    );
-
-    // ==========================================
-    // NORMALIZAR NOME DA MATÉRIA
-    // ==========================================
-
-    function normalizarMateria(
-      valor
-    ) {
-
-      return String(
-        valor || ''
-      )
-        .trim()
-        .toLocaleLowerCase(
-          'pt-BR'
-        );
-
-    }
-
-
-    // ==========================================
-    // CALCULAR TEMPO ESTUDADO
-    // ==========================================
-
-    function getMinutosEstudados(
-      nomeMateria
-    ) {
-
-      const nomeNormalizado =
-        normalizarMateria(
-          nomeMateria
-        );
-
-
-      let totalMinutos =
-        0;
-
-
-      sessoesPomodoro.forEach(
-        (sessao) => {
-
-          const disciplina =
-            sessao.discipline ??
-            sessao.disciplina ??
-            sessao.materia ??
-            '';
-
-
-          const modo =
-            sessao.mode ??
-            sessao.modo ??
-            'focus';
-
-
-          const minutos =
-            Number(
-              sessao.minutes ??
-              sessao.minutos ??
-              0
-            );
-
-
-          // Só conta sessões de estudo/foco
-          if (
-            modo !== 'focus'
-          ) {
-
-            return;
-
-          }
-
-
-          // Só conta a matéria correspondente
-          if (
-            normalizarMateria(
-              disciplina
-            ) !==
-            nomeNormalizado
-          ) {
-
-            return;
-
-          }
-
-
-          if (
-            Number.isFinite(
-              minutos
-            ) &&
-            minutos > 0
-          ) {
-
-            totalMinutos +=
-              minutos;
-
-          }
-
-        }
-      );
-
-
-      return Math.round(
-        totalMinutos
-      );
-
-    }
-
-
-    // ==========================================
-    // FORMATAR TEMPO ESTUDADO
-    // ==========================================
-
-    function formatarTempoEstudado(
-      minutos
-    ) {
-
-      if (
-        !minutos ||
-        minutos <= 0
-      ) {
-
-        return '0h estudadas';
-
-      }
-
-
-      const horas =
-        Math.floor(
-          minutos / 60
-        );
-
-
-      const minutosRestantes =
-        minutos % 60;
-
-
-      if (
-        horas === 0
-      ) {
-
-        return `${minutosRestantes}min estudados`;
-
-      }
-
-
-      if (
-        minutosRestantes === 0
-      ) {
-
-        return `${horas}h estudadas`;
-
-      }
-
-
-      return `${horas}h ${minutosRestantes}min estudadas`;
-
-    }
-
-
-    // ==========================================
-    // CONTAR FLASHCARDS DA MATÉRIA
-    // ==========================================
-
-    function getTotalFlashcards(
-      nomeMateria
-    ) {
-
-      const nomeNormalizado =
-        normalizarMateria(
-          nomeMateria
-        );
-
-
-      let total =
-        0;
-
-
-      baralhos.forEach(
-        (baralho) => {
-
-          if (
-            normalizarMateria(
-              baralho.materia
-            ) !==
-            nomeNormalizado
-          ) {
-
-            return;
-
-          }
-
-
-          const cartoes =
-            Array.isArray(
-              baralho.cartoes
-            )
-              ? baralho.cartoes
-              : [];
-
-
-          total +=
-            cartoes.length;
-
-        }
-      );
-
-
-      return total;
-
-    }
-
-  // ==========================================
   // CRIAR CARD DA MATÉRIA
   // ==========================================
 
-  const createSubjectCard = (materia) => {
+  const createSubjectCard = (
+    materia
+  ) => {
 
     if (!subjectsGrid) {
       return;
@@ -821,76 +1095,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     card.dataset.id =
-      materia.id || '';
+      materia.id ||
+      '';
 
 
     card.style.setProperty(
       '--subject-color',
       materia.cor ||
-      '#38a5ff'
+      '#94a3b8'
     );
 
 
     const minutosEstudados =
-  getMinutosEstudados(
-    materia.nome
-  );
+      getMinutosEstudados(
+        materia.nome
+      );
 
 
-const tempoEstudado =
-  formatarTempoEstudado(
-    minutosEstudados
-  );
+    const tempoEstudado =
+      formatarTempoEstudado(
+        minutosEstudados
+      );
 
 
-const totalFlashcards =
-  getTotalFlashcards(
-    materia.nome
-  );
+    const totalFlashcards =
+      getTotalFlashcards(
+        materia.nome
+      );
 
 
-card.innerHTML = `
-  <div class="subject-card-top">
+    card.innerHTML = `
+      <div class="subject-card-top">
 
-    <div class="subject-card-icon">
+        <div class="subject-card-icon">
 
-      <i
-        class="fa-solid ${materia.icone || 'fa-book'}"
-      ></i>
+          <i
+            class="fa-solid ${materia.icone || 'fa-circle-question'}"
+          ></i>
 
-    </div>
+        </div>
 
-    <h3></h3>
+        <h3></h3>
 
-  </div>
-
-
-  <div class="subject-card-meta">
-
-    <span class="subject-study-time">
-
-      <i class="fa-solid fa-clock"></i>
-
-      ${tempoEstudado}
-
-    </span>
+      </div>
 
 
-    <span class="subject-flashcards-count">
+      <div class="subject-card-meta">
 
-      <i class="fa-solid fa-layer-group"></i>
+        <span class="subject-study-time">
 
-      ${totalFlashcards}
-      ${
-        totalFlashcards === 1
-          ? 'flashcard'
-          : 'flashcards'
-      }
+          <i class="fa-solid fa-clock"></i>
 
-    </span>
+          ${tempoEstudado}
 
-  </div>
-`;
+        </span>
+
+
+        <span class="subject-flashcards-count">
+
+          <i class="fa-solid fa-layer-group"></i>
+
+          ${totalFlashcards}
+
+          ${
+            totalFlashcards === 1
+              ? 'flashcard'
+              : 'flashcards'
+          }
+
+        </span>
+
+      </div>
+    `;
 
 
     // ==================================
@@ -910,6 +1186,70 @@ card.innerHTML = `
         'Sem nome';
 
     }
+
+
+    // ==================================
+    // ÁREA DOS BOTÕES
+    // ==================================
+
+    const actions =
+      document.createElement(
+        'div'
+      );
+
+
+    actions.className =
+      'subject-card-actions';
+
+
+    // ==================================
+    // BOTÃO EDITAR
+    // ==================================
+
+    const editButton =
+      document.createElement(
+        'button'
+      );
+
+
+    editButton.type =
+      'button';
+
+
+    editButton.className =
+      'subject-edit-btn';
+
+
+    editButton.title =
+      'Editar matéria';
+
+
+    editButton.setAttribute(
+      'aria-label',
+      `Editar ${materia.nome}`
+    );
+
+
+    editButton.innerHTML = `
+      <i class="fa-regular fa-pen-to-square"></i>
+    `;
+
+
+    editButton.addEventListener(
+      'click',
+      (event) => {
+
+        event.preventDefault();
+
+        event.stopPropagation();
+
+
+        openEditSubjectModal(
+          materia
+        );
+
+      }
+    );
 
 
     // ==================================
@@ -963,8 +1303,18 @@ card.innerHTML = `
     );
 
 
-    card.appendChild(
+    actions.appendChild(
+      editButton
+    );
+
+
+    actions.appendChild(
       deleteButton
+    );
+
+
+    card.appendChild(
+      actions
     );
 
 
@@ -1014,80 +1364,7 @@ card.innerHTML = `
 
 
   // ==========================================
-  // ABRIR MODAL NOVA MATÉRIA
-  // ==========================================
-
-  const openSubjectModal = () => {
-
-    if (!subjectModal) {
-      return;
-    }
-
-
-    subjectModal.classList.add(
-      'open'
-    );
-
-
-    subjectModal.setAttribute(
-      'aria-hidden',
-      'false'
-    );
-
-
-    setTimeout(
-      () => {
-
-        subjectName?.focus();
-
-      },
-      50
-    );
-
-  };
-
-
-  // ==========================================
-  // FECHAR MODAL NOVA MATÉRIA
-  // ==========================================
-
-  const closeSubjectModal = () => {
-
-    if (!subjectModal) {
-      return;
-    }
-
-
-    subjectModal.classList.remove(
-      'open'
-    );
-
-
-    subjectModal.setAttribute(
-      'aria-hidden',
-      'true'
-    );
-
-
-    if (subjectForm) {
-
-      subjectForm.reset();
-
-    }
-
-
-    if (subjectColor) {
-
-      subjectColor.value =
-        '#38a5ff';
-
-    }
-
-  };
-
-
-  // ==========================================
-  // BOTÕES ABRIR MODAL
+  // BOTÕES ABRIR NOVA MATÉRIA
   // ==========================================
 
   document
@@ -1166,6 +1443,42 @@ card.innerHTML = `
 
 
   // ==========================================
+  // MODAL DE EXCLUSÃO
+  // ==========================================
+
+  confirmDeleteSubject
+    ?.addEventListener(
+      'click',
+      executarExclusaoMateria
+    );
+
+
+  cancelDeleteSubject
+    ?.addEventListener(
+      'click',
+      fecharModalExcluirMateria
+    );
+
+
+  deleteSubjectModal
+    ?.addEventListener(
+      'click',
+      (event) => {
+
+        if (
+          event.target ===
+          deleteSubjectModal
+        ) {
+
+          fecharModalExcluirMateria();
+
+        }
+
+      }
+    );
+
+
+  // ==========================================
   // ESC
   // ==========================================
 
@@ -1219,7 +1532,7 @@ card.innerHTML = `
 
 
   // ==========================================
-  // SALVAR MATÉRIA
+  // SALVAR / EDITAR MATÉRIA
   // ==========================================
 
   subjectForm?.addEventListener(
@@ -1254,21 +1567,35 @@ card.innerHTML = `
 
 
       // ==================================
-      // EVITAR REPETIDA
+      // EVITAR MATÉRIA REPETIDA
       // ==================================
 
       const existe =
         materias.some(
           (materia) => {
 
-            return (
+            const mesmoNome =
+              normalizarMateria(
+                materia.nome
+              ) ===
+              normalizarMateria(
+                nome
+              );
+
+
+            const mesmaMateria =
+              materiaEmEdicao &&
               String(
-                materia.nome ||
-                ''
-              )
-                .trim()
-                .toLowerCase() ===
-              nome.toLowerCase()
+                materia.id
+              ) ===
+              String(
+                materiaEmEdicao.id
+              );
+
+
+            return (
+              mesmoNome &&
+              !mesmaMateria
             );
 
           }
@@ -1284,6 +1611,27 @@ card.innerHTML = `
         return;
 
       }
+
+
+      // ==================================
+      // DESCOBRIR SE É EDIÇÃO OU CRIAÇÃO
+      // ==================================
+
+      const editando =
+        Boolean(
+          materiaEmEdicao
+        );
+
+
+      const materiaId =
+        materiaEmEdicao?.id ||
+        null;
+
+
+      const url =
+        editando
+          ? UPDATE_MATERIA_URL
+          : SAVE_MATERIA_URL;
 
 
       // ==================================
@@ -1314,9 +1662,31 @@ card.innerHTML = `
 
       try {
 
+        const payload = {
+
+          nome:
+            nome,
+
+          cor:
+            cor,
+
+          icone:
+            icone
+
+        };
+
+
+        if (editando) {
+
+          payload.id =
+            materiaId;
+
+        }
+
+
         const response =
           await fetch(
-            SAVE_MATERIA_URL,
+            url,
             {
 
               method:
@@ -1333,18 +1703,9 @@ card.innerHTML = `
               },
 
               body:
-                JSON.stringify({
-
-                  nome:
-                    nome,
-
-                  cor:
-                    cor,
-
-                  icone:
-                    icone
-
-                })
+                JSON.stringify(
+                  payload
+                )
 
             }
           );
@@ -1381,32 +1742,74 @@ card.innerHTML = `
 
 
         // ==================================
-        // ADICIONAR NO ARRAY
+        // SE ESTIVER EDITANDO
         // ==================================
 
-        materias.push(
-          data.materia
-        );
+        if (editando) {
+
+          materias =
+            materias.map(
+              (materia) => {
+
+                if (
+                  String(
+                    materia.id
+                  ) ===
+                  String(
+                    materiaId
+                  )
+                ) {
+
+                  return (
+                    data.materia
+                  );
+
+                }
+
+
+                return materia;
+
+              }
+            );
+
+
+          carregarMaterias();
+
+
+          showToast(
+            `Matéria “${data.materia.nome}” atualizada.`
+          );
+
+        }
 
 
         // ==================================
-        // CRIAR CARD
+        // SE FOR NOVA MATÉRIA
         // ==================================
 
-        createSubjectCard(
-          data.materia
-        );
+        else {
+
+          materias.push(
+            data.materia
+          );
 
 
-        updateSubjectsState();
+          createSubjectCard(
+            data.materia
+          );
+
+
+          updateSubjectsState();
+
+
+          showToast(
+            `Matéria “${data.materia.nome}” adicionada.`
+          );
+
+        }
 
 
         closeSubjectModal();
-
-
-        showToast(
-          `Matéria “${data.materia.nome}” adicionada.`
-        );
 
 
       } catch (error) {
@@ -1431,8 +1834,16 @@ card.innerHTML = `
             false;
 
 
-          submitButton.innerHTML =
-            textoBotaoOriginal;
+          if (
+            subjectModal?.classList.contains(
+              'open'
+            )
+          ) {
+
+            submitButton.innerHTML =
+              textoBotaoOriginal;
+
+          }
 
         }
 

@@ -10,8 +10,28 @@
     },
     "periodos": {
         "Padrão": {
-            "materias": [],
-            "notas": []
+            "materias": [
+                "matematica",
+                "biologia"
+            ],
+            "notas": [
+                {
+                    "1": null,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": null,
+                    "2": null,
+                    "3": null,
+                    "4": null
+                }
+            ],
+            "materia_ids": [
+                "MAT_ADEFFDD5",
+                "mat_d7201e4e39f9"
+            ]
         }
     },
     "periodo_atual": "Padrão"

@@ -183,10 +183,47 @@ if (
         'salvar_materia.php';
 
 
+    window.MATERIAS_UPDATE_URL =
+        'editar_materia.php';
+
+
     window.MATERIAS_DELETE_URL =
         'excluir_materia.php';
 
     </script>
+
+  <style>
+    .subject-card-actions {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      display: flex;
+      gap: 8px;
+      z-index: 2;
+    }
+
+    .subject-edit-btn,
+    .subject-delete-btn {
+      width: 34px;
+      height: 34px;
+      border: 0;
+      border-radius: 9px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .subject-edit-btn {
+      background: rgba(56, 165, 255, 0.12);
+      color: #238ddf;
+    }
+
+    .subject-edit-btn:hover {
+      background: rgba(56, 165, 255, 0.22);
+    }
+  </style>
+
 </head>
 <body>
   <header class="cabecalho">
@@ -360,8 +397,8 @@ if (
       <div class="modal-title">
         <div class="modal-title-icon"><i class="fa-solid fa-book"></i></div>
         <div>
-          <h3>Nova matéria</h3>
-          <p>Escolha um nome, uma cor e um ícone para identificar a matéria.</p>
+          <h3 id="subject-modal-title">Nova matéria</h3>
+          <p id="subject-modal-description">Escolha um nome, uma cor e um ícone para identificar a matéria.</p>
         </div>
       </div>
 
@@ -390,6 +427,7 @@ if (
         <label class="field-group">
           <span class="lbl">Ícone</span>
           <select class="select" id="subject-icon">
+            <option value="fa-circle-question">Não definido (?)</option>
             <option value="fa-book">Livro</option>
             <option value="fa-calculator">Matemática</option>
             <option value="fa-flask">Ciências / Química</option>

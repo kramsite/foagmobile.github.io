@@ -16,193 +16,805 @@ if (empty($_SESSION['codigo_usuario'])) {
 $codigoUsuario = $_SESSION['codigo_usuario'];
 
 // ======================================
-// ARQUIVO JSON DO USUÁRIO
+// ARQUIVOS JSON DO USUÁRIO
 // ======================================
 
 $baseJsonDir = __DIR__ . '/../json/usuarios';
-
 $pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 
-// Usaremos notas.json, que já é criado no cadastro
-$arquivoBoletim = $pastaUsuario . '/notas.json';
-
-// A pasta já deve existir desde o cadastro
 if (!is_dir($pastaUsuario)) {
     exit("Pasta do usuário não encontrada.");
 }
 
+$arquivoBoletim = $pastaUsuario . '/notas.json';
+$arquivoMaterias = $pastaUsuario . '/materias.json';
+
+// ======================================
+// FUNÇÕES AUXILIARES DE JSON / MATÉRIAS
+// ======================================
+
+function salvarJsonArquivo($arquivo, $dados)
+{
+    return file_put_contents(
+        $arquivo,
+        json_encode(
+            $dados,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ),
+        LOCK_EX
+    );
+}
+
+function ehListaNumerica($array)
+{
+    if (!is_array($array)) {
+        return false;
+    }
+
+    if (count($array) === 0) {
+        return true;
+    }
+
+    return array_keys($array) === range(0, count($array) - 1);
+}
+
+function chaveNomeMateria($nome)
+{
+    $nome = trim((string)$nome);
+
+    if (function_exists('mb_strtolower')) {
+        return mb_strtolower($nome, 'UTF-8');
+    }
+
+    return strtolower($nome);
+}
+
+function gerarIdMateria()
+{
+    try {
+        return 'mat_' . bin2hex(random_bytes(6));
+    } catch (Throwable $e) {
+        return 'mat_' . uniqid();
+    }
+}
+
+function notasVazias()
+{
+    return [
+        1 => null,
+        2 => null,
+        3 => null,
+        4 => null
+    ];
+}
+
+function normalizarNotasLinha($notas)
+{
+    $resultado = notasVazias();
+
+    if (!is_array($notas)) {
+        return $resultado;
+    }
+
+    for ($i = 1; $i <= 4; $i++) {
+        if (array_key_exists($i, $notas)) {
+            $resultado[$i] = $notas[$i];
+        } elseif (array_key_exists((string)$i, $notas)) {
+            $resultado[$i] = $notas[(string)$i];
+        }
+    }
+
+    return $resultado;
+}
+
+function indiceMateriaPorId($materias, $id)
+{
+    $id = (string)$id;
+
+    foreach ($materias as $indice => $materia) {
+        if (
+            is_array($materia) &&
+            isset($materia['id']) &&
+            (string)$materia['id'] === $id
+        ) {
+            return $indice;
+        }
+    }
+
+    return -1;
+}
+
+function indiceMateriaPorNome($materias, $nome)
+{
+    $chave = chaveNomeMateria($nome);
+
+    if ($chave === '') {
+        return -1;
+    }
+
+    foreach ($materias as $indice => $materia) {
+        if (!is_array($materia)) {
+            continue;
+        }
+
+        if (
+            chaveNomeMateria($materia['nome'] ?? '') ===
+            $chave
+        ) {
+            return $indice;
+        }
+    }
+
+    return -1;
+}
+
+function criarMateriaPadraoBoletim($nome)
+{
+    return [
+        'id'    => gerarIdMateria(),
+        'nome'  => trim((string)$nome),
+
+        // Criada pelo Boletim:
+        // cor neutra + ícone de interrogação.
+        // Depois o usuário personaliza em Estudos.
+        'cor'   => '#94a3b8',
+        'icone' => 'fa-circle-question'
+    ];
+}
+
+/**
+ * Faz o Boletim usar a lista oficial de materias.json.
+ *
+ * - preserva notas existentes pelo ID;
+ * - migra estrutura antiga por nome;
+ * - adiciona automaticamente matérias criadas em Estudos;
+ * - remove da tabela matérias que já não existem em materias.json.
+ */
+function sincronizarPeriodoComMaterias(&$periodo, $materiasGlobais)
+{
+    if (!is_array($periodo)) {
+        $periodo = [];
+    }
+
+    $nomesAntigos = (
+        isset($periodo['materias']) &&
+        is_array($periodo['materias'])
+    )
+        ? $periodo['materias']
+        : [];
+
+    $idsAntigos = (
+        isset($periodo['materia_ids']) &&
+        is_array($periodo['materia_ids'])
+    )
+        ? $periodo['materia_ids']
+        : [];
+
+    $notasAntigas = (
+        isset($periodo['notas']) &&
+        is_array($periodo['notas'])
+    )
+        ? $periodo['notas']
+        : [];
+
+    $notasPorId = [];
+
+    $totalLinhas = max(
+        count($nomesAntigos),
+        count($idsAntigos),
+        count($notasAntigas)
+    );
+
+    for ($i = 0; $i < $totalLinhas; $i++) {
+        $id = trim((string)($idsAntigos[$i] ?? ''));
+        $nome = trim((string)($nomesAntigos[$i] ?? ''));
+
+        if (
+            $id === '' ||
+            indiceMateriaPorId($materiasGlobais, $id) < 0
+        ) {
+            $indiceNome =
+                indiceMateriaPorNome(
+                    $materiasGlobais,
+                    $nome
+                );
+
+            if ($indiceNome >= 0) {
+                $id =
+                    (string)$materiasGlobais[$indiceNome]['id'];
+            }
+        }
+
+        if ($id !== '') {
+            $notasPorId[$id] =
+                normalizarNotasLinha(
+                    $notasAntigas[$i] ?? []
+                );
+        }
+    }
+
+    $novosNomes = [];
+    $novosIds   = [];
+    $novasNotas = [];
+
+    foreach ($materiasGlobais as $materia) {
+        if (
+            !is_array($materia) ||
+            trim((string)($materia['nome'] ?? '')) === ''
+        ) {
+            continue;
+        }
+
+        $id =
+            trim((string)($materia['id'] ?? ''));
+
+        if ($id === '') {
+            continue;
+        }
+
+        $novosNomes[] =
+            trim((string)$materia['nome']);
+
+        $novosIds[] =
+            $id;
+
+        $novasNotas[] =
+            $notasPorId[$id] ??
+            notasVazias();
+    }
+
+    $periodo['materias']   = $novosNomes;
+    $periodo['materia_ids'] = $novosIds;
+    $periodo['notas']      = $novasNotas;
+}
+
+// ======================================
+// CARREGAR materias.json
+// ======================================
+
+$materiasData = [
+    'materias' => []
+];
+
+if (file_exists($arquivoMaterias)) {
+    $materiasLidas =
+        json_decode(
+            file_get_contents($arquivoMaterias),
+            true
+        );
+
+    if (is_array($materiasLidas)) {
+        // Compatibilidade caso o JSON antigo seja uma lista direta.
+        if (
+            isset($materiasLidas['materias']) &&
+            is_array($materiasLidas['materias'])
+        ) {
+            $materiasData =
+                $materiasLidas;
+        } elseif (ehListaNumerica($materiasLidas)) {
+            $materiasData = [
+                'materias' => $materiasLidas
+            ];
+        }
+    }
+}
+
+$materiasNormalizadas = [];
+$idsUsados = [];
+$nomesUsados = [];
+
+foreach ($materiasData['materias'] as $materia) {
+    if (is_string($materia)) {
+        $materia = [
+            'nome' => $materia
+        ];
+    }
+
+    if (!is_array($materia)) {
+        continue;
+    }
+
+    $nome =
+        trim(
+            (string)($materia['nome'] ?? '')
+        );
+
+    if ($nome === '') {
+        continue;
+    }
+
+    $chaveNome =
+        chaveNomeMateria($nome);
+
+    // Evita matérias duplicadas pelo nome.
+    if (isset($nomesUsados[$chaveNome])) {
+        continue;
+    }
+
+    $id =
+        trim(
+            (string)($materia['id'] ?? '')
+        );
+
+    if (
+        $id === '' ||
+        isset($idsUsados[$id])
+    ) {
+        $id = gerarIdMateria();
+    }
+
+    $materia['id'] = $id;
+    $materia['nome'] = $nome;
+
+    if (
+        !isset($materia['cor']) ||
+        trim((string)$materia['cor']) === ''
+    ) {
+        $materia['cor'] = '#38a5ff';
+    }
+
+    if (
+        !isset($materia['icone']) ||
+        trim((string)$materia['icone']) === ''
+    ) {
+        $materia['icone'] = 'fa-book';
+    }
+
+    $materiasNormalizadas[] = $materia;
+    $idsUsados[$id] = true;
+    $nomesUsados[$chaveNome] = true;
+}
+
+$materiasData['materias'] =
+    $materiasNormalizadas;
+
+// ======================================
+// ESTRUTURA PADRÃO DO BOLETIM
+// ======================================
+
 $defaultData = [
     'nota_maxima'     => 10,
     'media_aprovacao' => 6,
-    'tipo_curso'      => 'escola', // 'escola' ou 'faculdade'
-    'pesos'           => [1 => 1, 2 => 1, 3 => 1, 4 => 1],
+    'tipo_curso'      => 'escola',
+    'pesos'           => [
+        1 => 1,
+        2 => 1,
+        3 => 1,
+        4 => 1
+    ],
     'periodos'        => [
         'Padrão' => [
-            'materias' => [],
-            'notas'    => []
+            'materias'    => [],
+            'materia_ids' => [],
+            'notas'       => []
         ]
     ],
     'periodo_atual'   => 'Padrão',
 ];
 
-// Carrega JSON se existir
+// ======================================
+// CARREGAR notas.json
+// ======================================
+
 if (file_exists($arquivoBoletim)) {
-    $data = json_decode(file_get_contents($arquivoBoletim), true);
+    $data =
+        json_decode(
+            file_get_contents($arquivoBoletim),
+            true
+        );
+
     if (!is_array($data)) {
         $data = $defaultData;
     }
 } else {
-    // Primeira vez: tenta migrar algum dado da sessão antiga (se existir)
+    // Primeira vez: tenta migrar dados antigos da sessão.
     $data = $defaultData;
 
     if (isset($_SESSION['nota_maxima'])) {
-        $data['nota_maxima'] = (float)$_SESSION['nota_maxima'];
+        $data['nota_maxima'] =
+            (float)$_SESSION['nota_maxima'];
     }
+
     if (isset($_SESSION['media_aprovacao'])) {
-        $data['media_aprovacao'] = (float)$_SESSION['media_aprovacao'];
+        $data['media_aprovacao'] =
+            (float)$_SESSION['media_aprovacao'];
     }
-    if (isset($_SESSION['tipo_curso']) && in_array($_SESSION['tipo_curso'], ['escola', 'faculdade'])) {
-        $data['tipo_curso'] = $_SESSION['tipo_curso'];
+
+    if (
+        isset($_SESSION['tipo_curso']) &&
+        in_array(
+            $_SESSION['tipo_curso'],
+            ['escola', 'faculdade'],
+            true
+        )
+    ) {
+        $data['tipo_curso'] =
+            $_SESSION['tipo_curso'];
     }
-    if (isset($_SESSION['pesos']) && is_array($_SESSION['pesos'])) {
-        $data['pesos'] = $data['pesos'] + $_SESSION['pesos']; // mantém padrão se faltar algo
+
+    if (
+        isset($_SESSION['pesos']) &&
+        is_array($_SESSION['pesos'])
+    ) {
+        $data['pesos'] =
+            $data['pesos'] +
+            $_SESSION['pesos'];
     }
-    if (isset($_SESSION['periodos']) && is_array($_SESSION['periodos'])) {
-        $data['periodos'] = $_SESSION['periodos'];
+
+    if (
+        isset($_SESSION['periodos']) &&
+        is_array($_SESSION['periodos'])
+    ) {
+        $data['periodos'] =
+            $_SESSION['periodos'];
     } else {
-        // fallback para estrutura antiga (materias/notas soltas)
-        $materiasOld = isset($_SESSION['materias']) ? $_SESSION['materias'] : [];
-        $notasOld    = isset($_SESSION['notas']) ? $_SESSION['notas'] : [];
+        $materiasOld =
+            isset($_SESSION['materias'])
+                ? $_SESSION['materias']
+                : [];
+
+        $notasOld =
+            isset($_SESSION['notas'])
+                ? $_SESSION['notas']
+                : [];
+
         $data['periodos'] = [
             'Padrão' => [
-                'materias' => $materiasOld,
-                'notas'    => $notasOld
+                'materias'    => $materiasOld,
+                'materia_ids' => [],
+                'notas'       => $notasOld
             ]
         ];
     }
+
     if (isset($_SESSION['periodo_atual'])) {
-        $data['periodo_atual'] = (string)$_SESSION['periodo_atual'];
+        $data['periodo_atual'] =
+            (string)$_SESSION['periodo_atual'];
     }
-
-    file_put_contents(
-        $arquivoBoletim,
-        json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-    );
 }
 
-/* Garante campos básicos na estrutura */
-if (!isset($data['nota_maxima']))     $data['nota_maxima'] = 10;
-if (!isset($data['media_aprovacao'])) $data['media_aprovacao'] = 6;
-if (!isset($data['tipo_curso']))      $data['tipo_curso'] = 'escola';
-if (!isset($data['pesos']) || !is_array($data['pesos'])) {
-    $data['pesos'] = [1 => 1, 2 => 1, 3 => 1, 4 => 1];
+// ======================================
+// GARANTIR CAMPOS DO notas.json
+// ======================================
+
+if (!isset($data['nota_maxima'])) {
+    $data['nota_maxima'] = 10;
 }
+
+if (!isset($data['media_aprovacao'])) {
+    $data['media_aprovacao'] = 6;
+}
+
+if (
+    !isset($data['tipo_curso']) ||
+    !in_array(
+        $data['tipo_curso'],
+        ['escola', 'faculdade'],
+        true
+    )
+) {
+    $data['tipo_curso'] = 'escola';
+}
+
+if (
+    !isset($data['pesos']) ||
+    !is_array($data['pesos'])
+) {
+    $data['pesos'] = [
+        1 => 1,
+        2 => 1,
+        3 => 1,
+        4 => 1
+    ];
+}
+
 for ($i = 1; $i <= 4; $i++) {
-    if (!isset($data['pesos'][$i])) $data['pesos'][$i] = 1;
+    if (!isset($data['pesos'][$i])) {
+        $data['pesos'][$i] = 1;
+    }
 }
-if (!isset($data['periodos']) || !is_array($data['periodos'])) {
+
+if (
+    !isset($data['periodos']) ||
+    !is_array($data['periodos'])
+) {
     $data['periodos'] = [
         'Padrão' => [
-            'materias' => [],
-            'notas'    => []
+            'materias'    => [],
+            'materia_ids' => [],
+            'notas'       => []
         ]
     ];
 }
-if (!isset($data['periodo_atual']) || !isset($data['periodos'][$data['periodo_atual']])) {
+
+if (
+    !isset($data['periodo_atual']) ||
+    !isset(
+        $data['periodos'][$data['periodo_atual']]
+    )
+) {
     $data['periodo_atual'] = 'Padrão';
+
+    if (!isset($data['periodos']['Padrão'])) {
+        $data['periodos']['Padrão'] = [
+            'materias'    => [],
+            'materia_ids' => [],
+            'notas'       => []
+        ];
+    }
 }
 
-/* =====================
-   VARIÁVEIS ATUAIS
-   ===================== */
-$notaMaxima     = $data['nota_maxima'];
-$mediaAprovacao = $data['media_aprovacao'];
-$tipoCurso      = $data['tipo_curso'];
-$pesos          = $data['pesos'];
-$periodos       = $data['periodos'];
-$periodoAtual   = $data['periodo_atual'];
+// ======================================
+// MIGRAR MATÉRIAS ANTIGAS DO BOLETIM
+// PARA materias.json
+// ======================================
 
-/* =====================
-   FUNÇÕES AUXILIARES
-   ===================== */
+foreach ($data['periodos'] as &$periodoMigracao) {
+    if (!is_array($periodoMigracao)) {
+        $periodoMigracao = [
+            'materias'    => [],
+            'materia_ids' => [],
+            'notas'       => []
+        ];
+    }
 
-// média ponderada + status
-function calcularMediaEStatus($notas, $mediaAprovacao, $pesos)
-{
-    $somaNP = 0;  // soma(nota * peso)
-    $somaW  = 0;  // soma(pesos)
+    if (
+        !isset($periodoMigracao['materias']) ||
+        !is_array($periodoMigracao['materias'])
+    ) {
+        $periodoMigracao['materias'] = [];
+    }
+
+    if (
+        !isset($periodoMigracao['materia_ids']) ||
+        !is_array($periodoMigracao['materia_ids'])
+    ) {
+        $periodoMigracao['materia_ids'] = [];
+    }
+
+    if (
+        !isset($periodoMigracao['notas']) ||
+        !is_array($periodoMigracao['notas'])
+    ) {
+        $periodoMigracao['notas'] = [];
+    }
+
+    foreach (
+        $periodoMigracao['materias']
+        as $indiceMateriaAntiga => $nomeMateriaAntiga
+    ) {
+        $nomeMateriaAntiga =
+            trim(
+                (string)$nomeMateriaAntiga
+            );
+
+        if ($nomeMateriaAntiga === '') {
+            continue;
+        }
+
+        $idMateriaAntiga =
+            trim(
+                (string)(
+                    $periodoMigracao['materia_ids']
+                        [$indiceMateriaAntiga] ??
+                    ''
+                )
+            );
+
+        /*
+         * Só importa para materias.json quando a linha
+         * ainda NÃO tem ID. Isso identifica a estrutura
+         * antiga do Boletim.
+         *
+         * Se já existe ID e ele sumiu de materias.json,
+         * significa que a matéria foi excluída em Estudos
+         * e não deve ser recriada aqui.
+         */
+        if ($idMateriaAntiga !== '') {
+            continue;
+        }
+
+        if (
+            indiceMateriaPorNome(
+                $materiasData['materias'],
+                $nomeMateriaAntiga
+            ) < 0
+        ) {
+            $materiasData['materias'][] =
+                criarMateriaPadraoBoletim(
+                    $nomeMateriaAntiga
+                );
+        }
+    }
+}
+
+unset($periodoMigracao);
+
+// ======================================
+// SINCRONIZAR PERÍODO ATUAL COM Estudos
+// ======================================
+
+$periodoAtual =
+    $data['periodo_atual'];
+
+if (!isset($data['periodos'][$periodoAtual])) {
+    $data['periodos'][$periodoAtual] = [
+        'materias'    => [],
+        'materia_ids' => [],
+        'notas'       => []
+    ];
+}
+
+sincronizarPeriodoComMaterias(
+    $data['periodos'][$periodoAtual],
+    $materiasData['materias']
+);
+
+// Salva possíveis migrações antes do POST.
+salvarJsonArquivo(
+    $arquivoMaterias,
+    $materiasData
+);
+
+salvarJsonArquivo(
+    $arquivoBoletim,
+    $data
+);
+
+// ======================================
+// FUNÇÕES DO BOLETIM
+// ======================================
+
+function calcularMediaEStatus(
+    $notas,
+    $mediaAprovacao,
+    $pesos
+) {
+    $somaNP = 0;
+    $somaW  = 0;
 
     for ($i = 1; $i <= 4; $i++) {
-        $nota = isset($notas[$i]) ? $notas[$i] : null;
-        $w    = isset($pesos[$i]) ? $pesos[$i] : 1;
+        $nota =
+            isset($notas[$i])
+                ? $notas[$i]
+                : null;
 
-        if ($nota !== null && $nota !== '' && $w > 0) {
+        $w =
+            isset($pesos[$i])
+                ? $pesos[$i]
+                : 1;
+
+        if (
+            $nota !== null &&
+            $nota !== '' &&
+            $w > 0
+        ) {
             $nota = (float)$nota;
-            $somaNP += $nota * $w;
-            $somaW  += $w;
+
+            $somaNP +=
+                $nota * $w;
+
+            $somaW += $w;
         }
     }
 
     if ($somaW == 0) {
-        return array('media' => 0, 'status' => '-', 'precisa' => null);
+        return [
+            'media'   => 0,
+            'status'  => '-',
+            'precisa' => null
+        ];
     }
 
-    $media = $somaNP / $somaW;
+    $media =
+        $somaNP / $somaW;
 
     if ($media >= $mediaAprovacao) {
         $status = 'Aprovado';
-    } elseif ($media >= $mediaAprovacao * 0.5) {
+    } elseif (
+        $media >=
+        $mediaAprovacao * 0.5
+    ) {
         $status = 'Recuperação';
     } else {
         $status = 'Reprovado';
     }
 
-    return array('media' => $media, 'status' => $status, 'precisa' => null);
+    return [
+        'media'   => $media,
+        'status'  => $status,
+        'precisa' => null
+    ];
 }
 
-// quanto precisa na próxima avaliação (ponderada)
-function calcularQuantoPrecisa($notas, $mediaAlvo, $notaMaxima, $pesos)
-{
-    $totalAvaliacoes = 4;
-    $indiceProxima   = null;
-    $somaNP          = 0;
-    $somaWFeitas     = 0;
+function calcularQuantoPrecisa(
+    $notas,
+    $mediaAlvo,
+    $notaMaxima,
+    $pesos
+) {
+    $indiceProxima = null;
+    $somaNP        = 0;
+    $somaWFeitas   = 0;
 
-    for ($i = 1; $i <= $totalAvaliacoes; $i++) {
-        $nota = isset($notas[$i]) ? $notas[$i] : null;
-        $w    = isset($pesos[$i]) ? $pesos[$i] : 1;
-        if ($w <= 0) continue;
+    for ($i = 1; $i <= 4; $i++) {
+        $nota =
+            isset($notas[$i])
+                ? $notas[$i]
+                : null;
 
-        if ($nota !== null && $nota !== '') {
-            $nota        = (float)$nota;
-            $somaNP      += $nota * $w;
-            $somaWFeitas += $w;
+        $w =
+            isset($pesos[$i])
+                ? $pesos[$i]
+                : 1;
+
+        if ($w <= 0) {
+            continue;
+        }
+
+        if (
+            $nota !== null &&
+            $nota !== ''
+        ) {
+            $nota = (float)$nota;
+
+            $somaNP +=
+                $nota * $w;
+
+            $somaWFeitas +=
+                $w;
         } elseif ($indiceProxima === null) {
             $indiceProxima = $i;
         }
     }
 
-    if ($indiceProxima === null || $somaWFeitas == 0) {
+    if (
+        $indiceProxima === null ||
+        $somaWFeitas == 0
+    ) {
         return null;
     }
 
     $somaWTodas = 0;
+
     for ($i = 1; $i <= 4; $i++) {
-        $w = isset($pesos[$i]) ? $pesos[$i] : 1;
+        $w =
+            isset($pesos[$i])
+                ? $pesos[$i]
+                : 1;
+
         if ($w > 0) {
-            $somaWTodas += $w;
+            $somaWTodas +=
+                $w;
         }
     }
 
-    $wProx = isset($pesos[$indiceProxima]) ? $pesos[$indiceProxima] : 1;
-    if ($wProx <= 0 || $somaWTodas == 0) {
+    $wProx =
+        isset($pesos[$indiceProxima])
+            ? $pesos[$indiceProxima]
+            : 1;
+
+    if (
+        $wProx <= 0 ||
+        $somaWTodas == 0
+    ) {
         return null;
     }
 
-    // (somaNP + x*wProx) / somaWTodas = mediaAlvo
-    $necessaria = ($mediaAlvo * $somaWTodas - $somaNP) / $wProx;
+    $necessaria =
+        (
+            $mediaAlvo *
+            $somaWTodas -
+            $somaNP
+        ) /
+        $wProx;
 
-    if ($necessaria < 0) $necessaria = 0;
+    if ($necessaria < 0) {
+        $necessaria = 0;
+    }
+
     if ($necessaria > $notaMaxima) {
         return 'Impossível';
     }
@@ -210,180 +822,507 @@ function calcularQuantoPrecisa($notas, $mediaAlvo, $notaMaxima, $pesos)
     return $necessaria;
 }
 
-/* =====================
-   TRATAMENTO POST
-   ===================== */
+// ======================================
+// VARIÁVEIS ATUAIS
+// ======================================
+
+$notaMaxima     = $data['nota_maxima'];
+$mediaAprovacao = $data['media_aprovacao'];
+$tipoCurso      = $data['tipo_curso'];
+$pesos          = $data['pesos'];
+$periodos       = $data['periodos'];
+$periodoAtual   = $data['periodo_atual'];
+
+// ======================================
+// TRATAMENTO POST
+// ======================================
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-    // qual período estamos mexendo nesse POST
-    if (isset($_POST['periodo_atual_form']) && $_POST['periodo_atual_form'] !== '') {
-        $periodoAlvo = $_POST['periodo_atual_form'];
-    } else {
-        $periodoAlvo = $data['periodo_atual'];
-    }
+    $periodoAlvo =
+        (
+            isset($_POST['periodo_atual_form']) &&
+            $_POST['periodo_atual_form'] !== ''
+        )
+            ? (string)$_POST['periodo_atual_form']
+            : (string)$data['periodo_atual'];
 
     if (!isset($data['periodos'][$periodoAlvo])) {
         $data['periodos'][$periodoAlvo] = [
-            'materias' => [],
-            'notas'    => []
+            'materias'    => [],
+            'materia_ids' => [],
+            'notas'       => []
         ];
     }
 
-    $materiasRef =& $data['periodos'][$periodoAlvo]['materias'];
-    $notasRef    =& $data['periodos'][$periodoAlvo]['notas'];
-
-    // 0) salvar tudo o que tá na tela (matérias e notas)
-    foreach ($_POST as $key => $value) {
-
-        // Matéria
-        if (strpos($key, 'materia_') === 0) {
-            $linha = (int) substr($key, 8);
-            $materiasRef[$linha] = $value;
-        }
-
-        // Nota (nota_linha_avaliacao)
-        if (strpos($key, 'nota_') === 0) {
-            $parte   = substr($key, 5);
-            $pedacos = explode('_', $parte);
-            if (count($pedacos) === 2) {
-                $linha     = (int)$pedacos[0];
-                $avaliacao = (int)$pedacos[1];
-
-                if (!isset($notasRef[$linha])) {
-                    $notasRef[$linha] = [1 => null, 2 => null, 3 => null, 4 => null];
-                }
-
-                $value = trim($value);
-                $notasRef[$linha][$avaliacao] = ($value === '') ? null : (float)$value;
-            }
-        }
-    }
-
-    // 1) Configurações
-    if (isset($_POST['salvar_config'])) {
-
-        if (isset($_POST['tipo_curso']) && ($_POST['tipo_curso'] === 'escola' || $_POST['tipo_curso'] === 'faculdade')) {
-            $data['tipo_curso'] = $_POST['tipo_curso'];
-        }
-
-        // nota máxima / média
-        if (isset($_POST['nota_maxima']) && $_POST['nota_maxima'] !== '') {
-            $notaMax = (float)$_POST['nota_maxima'];
-        } else {
-            $notaMax = $data['nota_maxima'];
-        }
-
-        if (isset($_POST['media_aprovacao']) && $_POST['media_aprovacao'] !== '') {
-            $mediaAp = (float)$_POST['media_aprovacao'];
-        } else {
-            $mediaAp = $data['media_aprovacao'];
-        }
-
-        if ($notaMax <= 0) $notaMax = 10;
-        if ($mediaAp <= 0) $mediaAp = 6;
-
-        $data['nota_maxima']     = $notaMax;
-        $data['media_aprovacao'] = $mediaAp;
-
-        // pesos
-        $novosPesos = [];
-        for ($i = 1; $i <= 4; $i++) {
-            $campo = 'peso_' . $i;
-            if (isset($_POST[$campo]) && $_POST[$campo] !== '') {
-                $w = (float)$_POST[$campo];
-            } else {
-                $w = 1;
-            }
-            if ($w < 0) $w = 0;
-            $novosPesos[$i] = $w;
-        }
-        $data['pesos'] = $novosPesos;
-
-        // selecionar período
-        if (isset($_POST['periodo_atual']) && $_POST['periodo_atual'] !== '') {
-            $periodoSel = $_POST['periodo_atual'];
-        } else {
-            $periodoSel = $data['periodo_atual'];
-        }
-
-        // criar novo período se digitou
-        $novoPeriodo = '';
-        if (isset($_POST['novo_periodo'])) {
-            $novoPeriodo = trim($_POST['novo_periodo']);
-        }
-        if ($novoPeriodo !== '') {
-            if (!isset($data['periodos'][$novoPeriodo])) {
-                $data['periodos'][$novoPeriodo] = [
-                    'materias' => [],
-                    'notas'    => []
-                ];
-            }
-            $periodoSel = $novoPeriodo;
-        }
-
-        $data['periodo_atual'] = $periodoSel;
-    }
-
-    // 2) adicionar/remover linhas
-    if (isset($_POST['adicionar_linha'])) {
-        $materiasRef[] = '';
-        $notasRef[]    = [1 => null, 2 => null, 3 => null, 4 => null];
-    }
-
-    if (isset($_POST['remover_linha']) && count($materiasRef) > 0) {
-        array_pop($materiasRef);
-        array_pop($notasRef);
-    }
-
-    // 3) limpar linha
-    if (isset($_POST['limpar_linha']) && isset($_POST['linha_index'])) {
-        $idx = (int)$_POST['linha_index'];
-        if (isset($materiasRef[$idx])) {
-            $materiasRef[$idx] = '';
-            $notasRef[$idx]    = [1 => null, 2 => null, 3 => null, 4 => null];
-        }
-    }
-
-    // 4) limpar tudo desse período
-    if (isset($_POST['limpar_tudo'])) {
-        $materiasRef = [];
-        $notasRef    = [];
-    }
-
-    // Salva no JSON
-    file_put_contents(
-        $arquivoBoletim,
-        json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+    // Antes de mexer nas linhas, garante que esse
+    // período esteja alinhado com materias.json.
+    sincronizarPeriodoComMaterias(
+        $data['periodos'][$periodoAlvo],
+        $materiasData['materias']
     );
 
-    // Atualiza variáveis depois do POST
-    $notaMaxima     = $data['nota_maxima'];
-    $mediaAprovacao = $data['media_aprovacao'];
-    $tipoCurso      = $data['tipo_curso'];
-    $pesos          = $data['pesos'];
-    $periodos       = $data['periodos'];
-    $periodoAtual   = $data['periodo_atual'];
+    $materiasRef =&
+        $data['periodos'][$periodoAlvo]['materias'];
+
+    $materiaIdsRef =&
+        $data['periodos'][$periodoAlvo]['materia_ids'];
+
+    $notasRef =&
+        $data['periodos'][$periodoAlvo]['notas'];
+
+    // ==================================
+    // 0) SALVAR MATÉRIAS DA TELA
+    // ==================================
+
+    foreach ($_POST as $key => $value) {
+        if (
+            preg_match(
+                '/^materia_(\d+)$/',
+                $key,
+                $matches
+            )
+        ) {
+            $linha =
+                (int)$matches[1];
+
+            $nome =
+                trim(
+                    (string)$value
+                );
+
+            $id =
+                trim(
+                    (string)(
+                        $_POST[
+                            'materia_id_' .
+                            $linha
+                        ] ??
+                        (
+                            $materiaIdsRef[$linha] ??
+                            ''
+                        )
+                    )
+                );
+
+            $indicePorId =
+                $id !== ''
+                    ? indiceMateriaPorId(
+                        $materiasData['materias'],
+                        $id
+                    )
+                    : -1;
+
+            // Matéria já existente:
+            // permite renomear pelo Boletim,
+            // preservando cor e ícone.
+            if ($indicePorId >= 0) {
+                $nomeAtual =
+                    trim(
+                        (string)(
+                            $materiasData['materias']
+                                [$indicePorId]['nome'] ??
+                            ''
+                        )
+                    );
+
+                if ($nome === '') {
+                    $nome = $nomeAtual;
+                }
+
+                $indiceMesmoNome =
+                    indiceMateriaPorNome(
+                        $materiasData['materias'],
+                        $nome
+                    );
+
+                // Evita criar dois IDs com o mesmo nome.
+                if (
+                    $indiceMesmoNome >= 0 &&
+                    $indiceMesmoNome !== $indicePorId
+                ) {
+                    $nome = $nomeAtual;
+                }
+
+                $materiasData['materias']
+                    [$indicePorId]['nome'] =
+                    $nome;
+
+                $materiasRef[$linha] =
+                    $nome;
+
+                $materiaIdsRef[$linha] =
+                    $id;
+
+                continue;
+            }
+
+            // Linha nova do Boletim.
+            if ($nome !== '') {
+                $indicePorNome =
+                    indiceMateriaPorNome(
+                        $materiasData['materias'],
+                        $nome
+                    );
+
+                if ($indicePorNome >= 0) {
+                    $materia =
+                        $materiasData['materias']
+                            [$indicePorNome];
+                } else {
+                    $materia =
+                        criarMateriaPadraoBoletim(
+                            $nome
+                        );
+
+                    $materiasData['materias'][] =
+                        $materia;
+                }
+
+                $materiasRef[$linha] =
+                    $materia['nome'];
+
+                $materiaIdsRef[$linha] =
+                    $materia['id'];
+            } else {
+                $materiasRef[$linha] = '';
+                $materiaIdsRef[$linha] = '';
+            }
+        }
+    }
+
+    // ==================================
+    // SALVAR NOTAS DA TELA
+    // ==================================
+
+    foreach ($_POST as $key => $value) {
+        if (
+            preg_match(
+                '/^nota_(\d+)_(\d+)$/',
+                $key,
+                $matches
+            )
+        ) {
+            $linha =
+                (int)$matches[1];
+
+            $avaliacao =
+                (int)$matches[2];
+
+            if (
+                $avaliacao < 1 ||
+                $avaliacao > 4
+            ) {
+                continue;
+            }
+
+            if (!isset($notasRef[$linha])) {
+                $notasRef[$linha] =
+                    notasVazias();
+            }
+
+            $value =
+                trim(
+                    (string)$value
+                );
+
+            $notasRef[$linha][$avaliacao] =
+                ($value === '')
+                    ? null
+                    : (float)$value;
+        }
+    }
+
+    // ==================================
+    // 1) CONFIGURAÇÕES
+    // ==================================
+
+    if (isset($_POST['salvar_config'])) {
+
+        if (
+            isset($_POST['tipo_curso']) &&
+            in_array(
+                $_POST['tipo_curso'],
+                ['escola', 'faculdade'],
+                true
+            )
+        ) {
+            $data['tipo_curso'] =
+                $_POST['tipo_curso'];
+        }
+
+        $notaMax =
+            (
+                isset($_POST['nota_maxima']) &&
+                $_POST['nota_maxima'] !== ''
+            )
+                ? (float)$_POST['nota_maxima']
+                : (float)$data['nota_maxima'];
+
+        $mediaAp =
+            (
+                isset($_POST['media_aprovacao']) &&
+                $_POST['media_aprovacao'] !== ''
+            )
+                ? (float)$_POST['media_aprovacao']
+                : (float)$data['media_aprovacao'];
+
+        if ($notaMax <= 0) {
+            $notaMax = 10;
+        }
+
+        if ($mediaAp <= 0) {
+            $mediaAp = 6;
+        }
+
+        $data['nota_maxima'] =
+            $notaMax;
+
+        $data['media_aprovacao'] =
+            $mediaAp;
+
+        $novosPesos = [];
+
+        for ($i = 1; $i <= 4; $i++) {
+            $campo = 'peso_' . $i;
+
+            $w =
+                (
+                    isset($_POST[$campo]) &&
+                    $_POST[$campo] !== ''
+                )
+                    ? (float)$_POST[$campo]
+                    : 1;
+
+            if ($w < 0) {
+                $w = 0;
+            }
+
+            $novosPesos[$i] =
+                $w;
+        }
+
+        $data['pesos'] =
+            $novosPesos;
+
+        $periodoSel =
+            (
+                isset($_POST['periodo_atual']) &&
+                $_POST['periodo_atual'] !== ''
+            )
+                ? (string)$_POST['periodo_atual']
+                : (string)$data['periodo_atual'];
+
+        $novoPeriodo =
+            isset($_POST['novo_periodo'])
+                ? trim(
+                    (string)$_POST['novo_periodo']
+                )
+                : '';
+
+        if ($novoPeriodo !== '') {
+            if (
+                !isset(
+                    $data['periodos'][$novoPeriodo]
+                )
+            ) {
+                $data['periodos'][$novoPeriodo] = [
+                    'materias'    => [],
+                    'materia_ids' => [],
+                    'notas'       => []
+                ];
+            }
+
+            $periodoSel =
+                $novoPeriodo;
+        }
+
+        if (
+            !isset(
+                $data['periodos'][$periodoSel]
+            )
+        ) {
+            $data['periodos'][$periodoSel] = [
+                'materias'    => [],
+                'materia_ids' => [],
+                'notas'       => []
+            ];
+        }
+
+        $data['periodo_atual'] =
+            $periodoSel;
+
+        // Ao trocar/criar período, ele já nasce
+        // com as matérias de materias.json.
+        sincronizarPeriodoComMaterias(
+            $data['periodos'][$periodoSel],
+            $materiasData['materias']
+        );
+    }
+
+    // ==================================
+    // 2) ADICIONAR LINHA
+    // ==================================
+
+    if (isset($_POST['adicionar_linha'])) {
+        $materiasRef[] = '';
+        $materiaIdsRef[] = '';
+        $notasRef[] =
+            notasVazias();
+    }
+
+    // Remove somente uma linha ainda vazia.
+    // Matéria real deve ser excluída em Estudos.
+    if (
+        isset($_POST['remover_linha']) &&
+        count($materiasRef) > 0
+    ) {
+        $ultimo =
+            count($materiasRef) - 1;
+
+        $ultimoId =
+            trim(
+                (string)(
+                    $materiaIdsRef[$ultimo] ??
+                    ''
+                )
+            );
+
+        $ultimoNome =
+            trim(
+                (string)(
+                    $materiasRef[$ultimo] ??
+                    ''
+                )
+            );
+
+        if (
+            $ultimoId === '' &&
+            $ultimoNome === ''
+        ) {
+            array_pop($materiasRef);
+            array_pop($materiaIdsRef);
+            array_pop($notasRef);
+        }
+    }
+
+    // ==================================
+    // 3) LIMPAR NOTAS DA LINHA
+    // ==================================
+
+    if (
+        isset($_POST['limpar_linha']) &&
+        isset($_POST['linha_index'])
+    ) {
+        $idx =
+            (int)$_POST['linha_index'];
+
+        if (isset($materiasRef[$idx])) {
+            $notasRef[$idx] =
+                notasVazias();
+        }
+    }
+
+    // ==================================
+    // 4) LIMPAR TODAS AS NOTAS
+    // ==================================
+
+    if (isset($_POST['limpar_tudo'])) {
+        foreach ($materiasRef as $idx => $materiaNome) {
+            $notasRef[$idx] =
+                notasVazias();
+        }
+    }
+
+    // ==================================
+    // SALVAR OS DOIS JSONS
+    // ==================================
+
+    salvarJsonArquivo(
+        $arquivoMaterias,
+        $materiasData
+    );
+
+    salvarJsonArquivo(
+        $arquivoBoletim,
+        $data
+    );
+
+    // Atualiza variáveis para renderizar
+    // imediatamente o resultado do POST.
+    $notaMaxima =
+        $data['nota_maxima'];
+
+    $mediaAprovacao =
+        $data['media_aprovacao'];
+
+    $tipoCurso =
+        $data['tipo_curso'];
+
+    $pesos =
+        $data['pesos'];
+
+    $periodos =
+        $data['periodos'];
+
+    $periodoAtual =
+        $data['periodo_atual'];
 }
 
-/* labels das colunas conforme tipo */
+// ======================================
+// LABELS DAS AVALIAÇÕES
+// ======================================
+
 if ($tipoCurso === 'escola') {
-    $labelsAval = array('1º Bimestre', '2º Bimestre', '3º Bimestre', '4º Bimestre');
+    $labelsAval = [
+        '1º Bimestre',
+        '2º Bimestre',
+        '3º Bimestre',
+        '4º Bimestre'
+    ];
 } else {
-    $labelsAval = array('P1', 'P2', 'Trabalho', 'P3');
-}
-
-// garantir que o período atual exista
-if (!isset($data['periodos'][$periodoAtual])) {
-    $data['periodos'][$periodoAtual] = [
-        'materias' => [],
-        'notas'    => []
+    $labelsAval = [
+        'P1',
+        'P2',
+        'Trabalho',
+        'P3'
     ];
 }
 
-$materias = $data['periodos'][$periodoAtual]['materias'];
-$notasAll = $data['periodos'][$periodoAtual]['notas'];
+// ======================================
+// DADOS DO PERÍODO ATUAL
+// ======================================
 
-$current = basename($_SERVER['PHP_SELF']); // pra menu ativo
+if (!isset($data['periodos'][$periodoAtual])) {
+    $data['periodos'][$periodoAtual] = [
+        'materias'    => [],
+        'materia_ids' => [],
+        'notas'       => []
+    ];
+
+    sincronizarPeriodoComMaterias(
+        $data['periodos'][$periodoAtual],
+        $materiasData['materias']
+    );
+}
+
+$materias =
+    $data['periodos']
+        [$periodoAtual]['materias'];
+
+$materiaIds =
+    $data['periodos']
+        [$periodoAtual]['materia_ids'] ??
+    [];
+
+$notasAll =
+    $data['periodos']
+        [$periodoAtual]['notas'];
+
+$current =
+    basename(
+        $_SERVER['PHP_SELF']
+    );
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -649,8 +1588,15 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
                           $statusTooltip = 'Sua média ficou bem abaixo da média mínima.';
                       }
 
+                      $materiaId = htmlspecialchars(
+                          (string)($materiaIds[$i] ?? '')
+                      );
+
                       echo '<tr>';
-                      echo '<td><input type="text" name="materia_' . $i . '" value="' . $materia . '" placeholder="Ex: Cálculo I"></td>';
+                      echo '<td>
+                              <input type="hidden" name="materia_id_' . $i . '" value="' . $materiaId . '">
+                              <input type="text" name="materia_' . $i . '" value="' . $materia . '" placeholder="Ex: Cálculo I">
+                            </td>';
 
                       for ($a = 1; $a <= 4; $a++) {
                           $notaVal       = isset($notas[$a]) ? $notas[$a] : null;
@@ -699,7 +1645,7 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
                       echo '<td>
                               <button type="submit" name="limpar_linha" value="1" class="btn-linha"
                                       onclick="document.getElementById(\'linha_index\').value=' . (int)$i . ';">
-                                Limpar
+                                Limpar notas
                               </button>
                             </td>';
 
@@ -714,8 +1660,8 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
 
           <div class="buttons-notas">
             <button type="submit" name="adicionar_linha">Adicionar matéria</button>
-            <button type="submit" name="remover_linha">Remover última</button>
-            <button type="submit" name="limpar_tudo">Limpar tudo</button>
+            <button type="submit" name="remover_linha">Remover linha vazia</button>
+            <button type="submit" name="limpar_tudo">Limpar todas as notas</button>
             <button type="submit" name="salvar_edicoes" class="btn-destaque">Salvar alterações</button>
           </div>
         </form>
@@ -725,7 +1671,13 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
       <section class="card-notas">
         <h2 class="titulo-tabela">Resumo geral</h2>
         <?php
-        $totalMaterias = count($materias);
+        $totalMaterias = 0;
+
+        foreach ($materias as $materiaContagem) {
+            if (trim((string)$materiaContagem) !== '') {
+                $totalMaterias++;
+            }
+        }
         $aprovadas = 0;
         $recuperacao = 0;
         $reprovadas = 0;
@@ -848,59 +1800,6 @@ $current = basename($_SERVER['PHP_SELF']); // pra menu ativo
     &copy; 2025 FOAG. Todos os direitos reservados.
   </footer>
 
-  <script>
-    // Modal FOGi
-    const fogiBtn   = document.getElementById("icon-fogi");
-    const fogiModal = document.getElementById("fogi-modal");
-    const fogiFrame = document.getElementById("fogi-iframe");
-    const fogiClose = document.getElementById("fogi-close");
-
-    fogiBtn && fogiBtn.addEventListener("click", () => {
-      fogiFrame.src = "http://127.0.0.1:5000";
-      fogiModal.style.display = "flex";
-      document.body.style.overflow = "hidden";
-    });
-
-    fogiClose && fogiClose.addEventListener("click", () => {
-      fogiModal.style.display = "none";
-      fogiFrame.src = "about:blank";
-      document.body.style.overflow = "";
-    });
-
-    window.addEventListener("message", (ev) => {
-      if (ev.data && ev.data.type === "FOGI_CLOSE") {
-        fogiModal.style.display = "none";
-        fogiFrame.src = "about:blank";
-        document.body.style.overflow = "";
-      }
-    });
-
-    // Logout modal
-    const logoutModal = document.getElementById('logout-modal');
-    const iconPerfil = document.getElementById('icon-perfil');
-    const iconSair   = document.getElementById('icon-sair');
-    const confirmLogout = document.getElementById('confirm-logout');
-    const cancelLogout  = document.getElementById('cancel-logout');
-
-    iconPerfil && iconPerfil.addEventListener('click', () => {
-      window.location.href = '../perfil/perfil.php';
-    });
-
-    iconSair && iconSair.addEventListener('click', () => {
-      logoutModal.style.display = 'flex';
-    });
-
-    confirmLogout && confirmLogout.addEventListener('click', () => {
-      window.location.href = '../login/index.php';
-    });
-
-    cancelLogout && cancelLogout.addEventListener('click', () => {
-      logoutModal.style.display = 'none';
-    });
-
-    logoutModal && logoutModal.addEventListener('click', (e) => {
-      if (e.target === logoutModal) logoutModal.style.display = 'none';
-    });
-  </script>
+  <script src="notas.js"></script>
 </body>
 </html>

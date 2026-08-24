@@ -313,14 +313,14 @@ include __DIR__
             </a>
 
 
-            <a href="../pomodoro/pomodoro.php">
+            <a href="../estudos/estudos.php">
 
                 <i
-                    class="fa-solid fa-stopwatch"
+                    class="fa-solid fa-graduation-cap"
                     aria-hidden="true"
                 ></i>
 
-                Pomodoro
+                Estudos
             </a>
 
 

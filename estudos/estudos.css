@@ -708,49 +708,53 @@ main.conteudo {
 }
 
 /* =========================
-   EXCLUIR MATÉRIA
+   EDITAR / EXCLUIR MATÉRIA
 ========================= */
 
+.subject-card {
+  position: relative;
+}
+
 .subject-card-top {
-  padding-right: 40px;
+  padding-right: 90px;
 }
 
 
-.subject-delete-btn {
+/* ÁREA DOS BOTÕES */
 
+.subject-card-actions {
   position: absolute;
-
   top: 13px;
   right: 13px;
 
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  z-index: 5;
+}
+
+
+/* BOTÕES */
+
+.subject-card-actions .subject-edit-btn,
+.subject-card-actions .subject-delete-btn {
+  position: static;
 
   width: 34px;
   height: 34px;
-
 
   display: flex;
   align-items: center;
   justify-content: center;
 
-
-  background: #fff5f5;
-
-  color: #dc4c4c;
-
-
-  border: 1px solid #ffd6d6;
-
   border-radius: 9px;
-
 
   cursor: pointer;
 
-
   opacity: 0;
 
-  transform:
-    translateY(-3px);
-
+  transform: translateY(-3px);
 
   transition:
     opacity .2s ease,
@@ -758,37 +762,74 @@ main.conteudo {
     background .2s ease,
     border-color .2s ease,
     color .2s ease;
-
 }
 
+
+/* MOSTRAR AO PASSAR O MOUSE */
 
 .subject-card:hover
-.subject-delete-btn {
-
+.subject-card-actions .subject-edit-btn,
+.subject-card:hover
+.subject-card-actions .subject-delete-btn {
   opacity: 1;
-
-  transform:
-    translateY(0);
-
+  transform: translateY(0);
 }
 
 
-.subject-delete-btn:hover {
+/* =========================
+   BOTÃO EDITAR
+========================= */
+
+.subject-edit-btn {
+  background: #eef7ff;
+  color: #1684df;
+
+  border: 1px solid #c9e4fb;
+}
+
+.subject-edit-btn:hover {
+  background: #dceeff;
+  color: #0874ce;
+
+  border-color: #a8d5fa;
+}
+
+
+/* =========================
+   BOTÃO EXCLUIR
+========================= */
+
+.subject-card-actions .subject-delete-btn {
+  background: #fff5f5;
+  color: #dc4c4c;
+
+  border: 1px solid #ffd6d6;
+}
+
+.subject-card-actions .subject-delete-btn:hover {
   background: #ffe7e7;
   border-color: #ffbbbb;
   color: #c93636;
 }
 
-.subject-delete-btn:disabled {
+.subject-card-actions .subject-delete-btn:disabled {
   opacity: .55;
   cursor: not-allowed;
 }
 
+
+/* =========================
+   CELULAR
+========================= */
+
 @media (max-width: 768px) {
-  .subject-delete-btn {
+
+  .subject-card-actions .subject-edit-btn,
+  .subject-card-actions .subject-delete-btn {
     opacity: 1;
     transform: none;
   }
+
 }
 
 /* =========================

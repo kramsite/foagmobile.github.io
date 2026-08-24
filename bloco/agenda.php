@@ -491,39 +491,6 @@ require_once __DIR__ . '/../acessibilidade/menu_acessibilidade.php';
              MENU
         ======================================= -->
 
-<<<<<<< HEAD
-        <nav class="menu" aria-label="Menu principal">
-            <a
-                href="../inicioo/inicio.php"
-                class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
-
-                <i class="fa-solid fa-house" aria-hidden="true"></i>
-                Início
-            </a>
-
-            <a
-                href="../calend/calendario.php"
-                class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-
-                <i class="fa-solid fa-calendar-days" aria-hidden="true"></i>
-                Calendário
-            </a>
-
-            <a
-                href="../bloco/agenda.php"
-                class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
-
-                <i class="fa-solid fa-book" aria-hidden="true"></i>
-                Agenda
-            </a>
-
-            <a
-                href="../pomodoro/pomodoro.php"
-                class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
-
-                <i class="fa-solid fa-stopwatch" aria-hidden="true"></i>
-                Pomodoro
-=======
         <nav class="menu">
             <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-house"></i> Início
@@ -539,24 +506,14 @@ require_once __DIR__ . '/../acessibilidade/menu_acessibilidade.php';
 
             <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-graduation-cap"></i> Estudos
->>>>>>> f99e21492b363db6abaac8aeef80d98d385d71cd
             </a>
 
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-check-double"></i> Boletim 
             </a>
 
-<<<<<<< HEAD
-                <i class="fa-solid fa-check-double" aria-hidden="true"></i>
-                Boletim
-            </a>
-
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store" aria-hidden="true"></i> Loja
-=======
             <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja 
->>>>>>> f99e21492b363db6abaac8aeef80d98d385d71cd
             </a>
 
             <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
