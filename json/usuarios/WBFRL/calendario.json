@@ -4,10 +4,10 @@
     "configuracoes": {
         "2026": {
             "meta_anual": 75,
-            "inicio_ano_letivo": "",
-            "fim_ano_letivo": "",
-            "inicio_ferias_meio": "",
-            "fim_ferias_meio": ""
+            "inicio_ano_letivo": "2026-02-02",
+            "fim_ano_letivo": "2026-12-09",
+            "inicio_ferias_meio": "2026-07-06",
+            "fim_ferias_meio": "2026-07-20"
         }
     }
 }
