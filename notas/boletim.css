@@ -784,3 +784,565 @@ footer {
     color: #006cc5 !important;
     transform: translateY(-13%) scale(1.1);
 }
+
+/* ==========================================
+   CABEÇALHO DO BOLETIM
+========================================== */
+
+.boletim-topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 24px;
+
+  margin-bottom: 24px;
+}
+
+.boletim-eyebrow {
+  display: block;
+
+  margin-bottom: 3px;
+
+  color: #0a83e6;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  text-transform: uppercase;
+
+  letter-spacing: .06em;
+}
+
+.boletim-titulo h1 {
+  margin: 0 0 5px;
+
+  color: #1e293b;
+
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.boletim-titulo p {
+  margin: 0;
+
+  color: #64748b;
+
+  font-size: 14px;
+}
+
+
+/* ==========================================
+   SELETOR RÁPIDO DE PERÍODO
+========================================== */
+
+.periodo-rapido {
+  min-width: 190px;
+
+  padding: 12px 14px;
+
+  background: #ffffff;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+
+  box-shadow:
+    0 5px 16px
+    rgba(0, 0, 0, .05);
+}
+
+.periodo-rapido label {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-bottom: 6px;
+
+  color: #64748b;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.periodo-rapido label i {
+  color: #38a5ff;
+}
+
+.periodo-rapido select {
+  width: 100%;
+
+  padding: 8px 10px;
+
+  background: #f8fafc;
+
+  color: #334155;
+
+  border: 1px solid #dbe3ee;
+  border-radius: 8px;
+
+  outline: none;
+
+  font-family: 'Poppins', sans-serif;
+
+  cursor: pointer;
+}
+
+.periodo-rapido select:focus {
+  border-color: #38a5ff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(56, 165, 255, .12);
+}
+
+
+/* ==========================================
+   CARD DO BOLETIM
+========================================== */
+
+.card-notas {
+  border-radius: 16px;
+
+  border: 1px solid #e4eaf2;
+
+  box-shadow:
+    0 8px 24px
+    rgba(0, 0, 0, .05);
+}
+
+
+/* ==========================================
+   TABELA
+========================================== */
+
+.table-scroll {
+  width: 100%;
+
+  overflow-x: auto;
+
+  margin-top: 20px;
+
+  border: 1px solid #e6ebf2;
+  border-radius: 13px;
+}
+
+.tabela-notas {
+  width: 100%;
+
+  min-width: 1050px;
+
+  border-collapse: separate;
+  border-spacing: 0;
+
+  background: #ffffff;
+}
+
+
+/* CABEÇALHO */
+
+.tabela-notas thead th {
+  padding: 13px 10px;
+
+  background: #f5f9fd;
+
+  color: #475569;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  text-align: center;
+
+  border-bottom:
+    1px solid #dfe7f0;
+
+  white-space: nowrap;
+}
+
+.tabela-notas thead th:first-child {
+  text-align: left;
+
+  padding-left: 15px;
+}
+
+
+/* LINHAS */
+
+.tabela-notas tbody td {
+  padding: 11px 9px;
+
+  border-bottom:
+    1px solid #edf1f5;
+
+  text-align: center;
+
+  vertical-align: middle;
+
+  transition:
+    background .2s ease;
+}
+
+.tabela-notas tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.tabela-notas tbody tr:hover td {
+  background: #f9fcff;
+}
+
+
+/* ==========================================
+   NOME DA MATÉRIA
+========================================== */
+
+.tabela-notas td:first-child {
+  min-width: 180px;
+
+  text-align: left;
+}
+
+.tabela-notas td:first-child input {
+  font-weight: 600;
+
+  color: #253247;
+}
+
+
+/* ==========================================
+   INPUTS DAS NOTAS
+========================================== */
+
+.tabela-notas input[type="text"],
+.tabela-notas .input-nota {
+  width: 100%;
+
+  min-width: 75px;
+
+  padding: 9px 8px;
+
+  background: #f8fafc;
+
+  color: #334155;
+
+  border: 1px solid #dce4ed;
+  border-radius: 8px;
+
+  outline: none;
+
+  text-align: center;
+
+  font-family: 'Poppins', sans-serif;
+
+  transition:
+    border .2s ease,
+    box-shadow .2s ease,
+    background .2s ease;
+}
+
+.tabela-notas td:first-child input {
+  text-align: left;
+}
+
+.tabela-notas input:focus {
+  background: #ffffff;
+
+  border-color: #38a5ff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(56, 165, 255, .12);
+}
+
+
+/* ==========================================
+   MÉDIA
+========================================== */
+
+.celula-media {
+  min-width: 75px;
+
+  color: #1684df;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  background: #f6fbff;
+}
+
+
+/* ==========================================
+   STATUS
+========================================== */
+
+.badge-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 95px;
+
+  padding: 6px 10px;
+
+  border-radius: 20px;
+
+  font-size: 11px;
+  font-weight: 600;
+}
+
+
+/* APROVADO */
+
+.status-aprovado {
+  background: #e8f8ef;
+
+  color: #25834b;
+
+  border:
+    1px solid #c7ecd7;
+}
+
+
+/* RECUPERAÇÃO */
+
+.status-recuperacao {
+  background: #fff6df;
+
+  color: #a66a00;
+
+  border:
+    1px solid #f8df9c;
+}
+
+
+/* REPROVADO */
+
+.status-reprovado {
+  background: #fff0f0;
+
+  color: #c94040;
+
+  border:
+    1px solid #f6caca;
+}
+
+
+/* ==========================================
+   QUANTO PRECISA
+========================================== */
+
+.celula-precisa {
+  color: #475569;
+
+  font-weight: 600;
+}
+
+.badge-precisa.impossivel {
+  display: inline-block;
+
+  padding: 5px 9px;
+
+  background: #fff0f0;
+
+  color: #c94040;
+
+  border-radius: 8px;
+
+  font-size: 11px;
+}
+
+
+/* ==========================================
+   BOTÃO LIMPAR
+========================================== */
+
+.btn-linha {
+  padding: 7px 10px;
+
+  background: #f8fafc;
+
+  color: #64748b;
+
+  border: 1px solid #dfe5ec;
+  border-radius: 8px;
+
+  cursor: pointer;
+
+  transition:
+    background .2s ease,
+    color .2s ease,
+    border .2s ease;
+}
+
+.btn-linha:hover {
+  background: #fff1f1;
+
+  color: #d14343;
+
+  border-color: #f3c8c8;
+}
+
+
+/* ==========================================
+   BOTÕES ABAIXO DA TABELA
+========================================== */
+
+.buttons-notas {
+  display: flex;
+  align-items: center;
+
+  flex-wrap: wrap;
+
+  gap: 10px;
+
+  margin-top: 18px;
+}
+
+.buttons-notas button {
+  padding: 10px 14px;
+
+  border: 1px solid #dce4ed;
+  border-radius: 9px;
+
+  background: #f8fafc;
+
+  color: #475569;
+
+  font-family: 'Poppins', sans-serif;
+  font-weight: 500;
+
+  cursor: pointer;
+}
+
+.buttons-notas button:hover {
+  background: #eef6fd;
+
+  border-color: #c4e0f8;
+}
+
+.buttons-notas .btn-destaque {
+  margin-left: auto;
+
+  background: #38a5ff;
+
+  color: #ffffff;
+
+  border-color: #38a5ff;
+
+  font-weight: 600;
+}
+
+.buttons-notas .btn-destaque:hover {
+  background: #168fe9;
+}
+
+
+/* ==========================================
+   RESUMO
+========================================== */
+
+.resumo-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(5, minmax(0, 1fr));
+
+  gap: 12px;
+
+  margin-top: 18px;
+}
+
+.resumo-card {
+  padding: 16px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5eaf0;
+  border-radius: 12px;
+
+  text-align: center;
+}
+
+.resumo-label {
+  display: block;
+
+  margin-bottom: 5px;
+
+  color: #64748b;
+
+  font-size: 11px;
+}
+
+.resumo-valor {
+  color: #263547;
+
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.resumo-card.aprovado {
+  background: #f1fbf5;
+}
+
+.resumo-card.recuperacao {
+  background: #fffbef;
+}
+
+.resumo-card.reprovado {
+  background: #fff5f5;
+}
+
+.resumo-card.geral {
+  background: #eef7ff;
+}
+
+.resumo-card.geral
+.resumo-valor {
+  color: #1684df;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 900px) {
+
+  .boletim-topo {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .periodo-rapido {
+    width: 100%;
+  }
+
+  .resumo-grid {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+}
+
+
+@media (max-width: 520px) {
+
+  .boletim-titulo h1 {
+    font-size: 25px;
+  }
+
+  .resumo-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .buttons-notas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .buttons-notas button,
+  .buttons-notas .btn-destaque {
+    width: 100%;
+    margin-left: 0;
+  }
+
+}

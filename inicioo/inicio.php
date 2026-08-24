@@ -1,242 +1,658 @@
 <?php
 session_start();
 
-$userId = $_SESSION['user_id'] ?? null;
+if (empty($_SESSION['codigo_usuario'])) {
+    header('Location: ../login/index.php');
+    exit;
+}
+
+$codigoUsuario = $_SESSION['codigo_usuario'];
 $current = basename($_SERVER['PHP_SELF']);
 
-// --------- VALORES PADRÃO ----------
-$diasConsecutivos    = 0;
-$tarefasPendentes    = 0;
-$percentualGeral     = 0;
-$totalPresencas      = 0;
-$totalFaltas         = 0;
-$percentualPresenca  = 0;
-$notasImportantes    = [];
+$pastaUsuario =
+    __DIR__ .
+    '/../json/usuarios/' .
+    $codigoUsuario;
 
-try {
+if (!is_dir($pastaUsuario)) {
+    exit('Pasta do usuário não encontrada.');
+}
 
-    // ========= FREQUÊNCIA (CALENDÁRIO) =========
-    $anoMes = date('Y-m');
+// ==========================================
+// FUNÇÕES AUXILIARES
+// ==========================================
 
-    $arquivoFreq = __DIR__ . "/../json/frequencia_{$anoMes}.json";
+function carregarJsonInicio($arquivo, $padrao = [])
+{
+    if (!file_exists($arquivo)) {
+        return $padrao;
+    }
 
-    if (file_exists($arquivoFreq)) {
+    $dados = json_decode(
+        file_get_contents($arquivo),
+        true
+    );
 
-        $dadosFreq = json_decode(
-            file_get_contents($arquivoFreq),
-            true
-        );
+    return is_array($dados)
+        ? $dados
+        : $padrao;
+}
 
-        if (is_array($dadosFreq)) {
+function normalizarListaTarefas($dados)
+{
+    if (!is_array($dados)) {
+        return [];
+    }
 
-            foreach ($dadosFreq as $dia => $info) {
-
-                $status = null;
-
-                if (is_array($info)) {
-                    $status =
-                        $info['status']
-                        ?? $info['cor']
-                        ?? null;
-                }
-
-                if (
-                    in_array(
-                        $status,
-                        ['presenca', 'verde'],
-                        true
-                    )
-                ) {
-
-                    $totalPresencas++;
-
-                } elseif (
-                    in_array(
-                        $status,
-                        ['falta', 'vermelho'],
-                        true
-                    )
-                ) {
-
-                    $totalFaltas++;
-                }
-            }
-
-            $aulasPossiveis =
-                $totalPresencas + $totalFaltas;
-
-            if ($aulasPossiveis > 0) {
-
-                $percentualPresenca = round(
-                    ($totalPresencas / $aulasPossiveis)
-                    * 100
-                );
-            }
+    foreach (['tarefas', 'items', 'agenda', 'eventos'] as $chave) {
+        if (
+            isset($dados[$chave]) &&
+            is_array($dados[$chave])
+        ) {
+            return array_values($dados[$chave]);
         }
     }
 
+    $ehLista = array_keys($dados) === range(
+        0,
+        max(count($dados) - 1, 0)
+    );
 
-    // ========= AGENDA / TAREFAS =========
-    $hoje = date('Y-m-d');
+    return $ehLista
+        ? array_values($dados)
+        : [];
+}
 
-    $diasProdutivosMapa = [];
+function tarefaConcluida($tarefa)
+{
+    return !empty(
+        $tarefa['concluida'] ??
+        $tarefa['completed'] ??
+        $tarefa['feito'] ??
+        false
+    );
+}
 
-    $arquivoAgenda =
-        __DIR__ . "/../json/agenda.json";
+function tarefaTexto($tarefa)
+{
+    return trim(
+        (string)(
+            $tarefa['texto'] ??
+            $tarefa['titulo'] ??
+            $tarefa['title'] ??
+            $tarefa['descricao'] ??
+            ''
+        )
+    );
+}
 
-    if (file_exists($arquivoAgenda)) {
+function tarefaData($tarefa)
+{
+    return trim(
+        (string)(
+            $tarefa['data'] ??
+            $tarefa['date'] ??
+            $tarefa['prazo'] ??
+            ''
+        )
+    );
+}
 
-        $dadosAgenda = json_decode(
-            file_get_contents($arquivoAgenda),
-            true
-        );
+function tarefaHora($tarefa)
+{
+    return trim(
+        (string)(
+            $tarefa['hora'] ??
+            $tarefa['time'] ??
+            ''
+        )
+    );
+}
 
-        if (is_array($dadosAgenda)) {
+function calcularMediaLinhaInicio($notas, $pesos)
+{
+    if (!is_array($notas)) {
+        return null;
+    }
 
-            foreach ($dadosAgenda as $tarefa) {
+    $soma = 0;
+    $somaPesos = 0;
 
-                if (!is_array($tarefa)) {
-                    continue;
-                }
+    for ($i = 1; $i <= 4; $i++) {
+        $nota =
+            $notas[$i] ??
+            $notas[(string)$i] ??
+            null;
 
-                $data =
-                    $tarefa['data']
-                    ?? null;
+        $peso =
+            $pesos[$i] ??
+            $pesos[(string)$i] ??
+            1;
 
-                $concluida =
-                    $tarefa['concluida']
-                    ?? false;
+        if (
+            $nota === null ||
+            $nota === '' ||
+            (float)$peso <= 0
+        ) {
+            continue;
+        }
 
-                $texto =
-                    $tarefa['texto']
-                    ?? ($tarefa['titulo'] ?? null);
+        $soma +=
+            (float)$nota *
+            (float)$peso;
 
-                $importante =
-                    $tarefa['importante']
-                    ?? false;
+        $somaPesos +=
+            (float)$peso;
+    }
 
+    return $somaPesos > 0
+        ? $soma / $somaPesos
+        : null;
+}
 
-                // tarefas de hoje
-                if (
-                    $data === $hoje
-                    && empty($concluida)
-                ) {
+function coletarStatusFrequencia($dados, &$presencas, &$faltas)
+{
+    if (!is_array($dados)) {
+        return;
+    }
 
-                    $tarefasPendentes++;
-                }
+    $status =
+        $dados['status'] ??
+        $dados['cor'] ??
+        null;
 
+    if ($status !== null) {
+        if (
+            in_array(
+                $status,
+                ['presenca', 'presença', 'verde'],
+                true
+            )
+        ) {
+            $presencas++;
+        } elseif (
+            in_array(
+                $status,
+                ['falta', 'vermelho'],
+                true
+            )
+        ) {
+            $faltas++;
+        }
+    }
 
-                // dias produtivos
-                if (
-                    !empty($concluida)
-                    && $data
-                ) {
-
-                    $diasProdutivosMapa[$data] = true;
-                }
-
-
-                // notas importantes
-                if (
-                    !empty($importante)
-                    && !empty($texto)
-                ) {
-
-                    $notasImportantes[] = [
-                        'texto' => $texto,
-                        'data'  => $data
-                    ];
-                }
-            }
-
-
-            // mais recentes primeiro
-            usort(
-                $notasImportantes,
-                function ($a, $b) {
-
-                    return strcmp(
-                        $b['data'] ?? '',
-                        $a['data'] ?? ''
-                    );
-                }
+    foreach ($dados as $valor) {
+        if (is_array($valor)) {
+            coletarStatusFrequencia(
+                $valor,
+                $presencas,
+                $faltas
             );
-
-
-            // máximo 5
-            $notasImportantes =
-                array_slice(
-                    $notasImportantes,
-                    0,
-                    5
-                );
-
-
-            // dias consecutivos
-            $diasConsecutivos = 0;
-
-            $dataCursor =
-                new DateTime($hoje);
-
-            while (true) {
-
-                $dataStr =
-                    $dataCursor->format(
-                        'Y-m-d'
-                    );
-
-                if (
-                    !isset(
-                        $diasProdutivosMapa[$dataStr]
-                    )
-                ) {
-                    break;
-                }
-
-                $diasConsecutivos++;
-
-                $dataCursor->modify('-1 day');
-            }
         }
     }
+}
 
+// ==========================================
+// ARQUIVOS DO USUÁRIO
+// ==========================================
 
-    // ========= TAXA GERAL =========
+$arquivoAgenda =
+    $pastaUsuario .
+    '/agenda.json';
 
-    $pesoFreq   = 0.6;
-    $pesoAgenda = 0.4;
+$arquivoMaterias =
+    $pastaUsuario .
+    '/materias.json';
 
-    $indiceAgenda = 0;
+$arquivoPomodoro =
+    $pastaUsuario .
+    '/pomodoro.json';
 
-    if ($diasConsecutivos > 0) {
+$arquivoNotas =
+    $pastaUsuario .
+    '/notas.json';
 
-        $indiceAgenda =
-            min(
-                $diasConsecutivos,
-                10
-            ) * 10;
+$arquivoCalendario =
+    $pastaUsuario .
+    '/calendario.json';
+
+$arquivoInicio =
+    $pastaUsuario .
+    '/inicio.json';
+
+$arquivoFreqMes =
+    $pastaUsuario .
+    '/frequencia_' .
+    date('Y-m') .
+    '.json';
+
+// ==========================================
+// DADOS BASE
+// ==========================================
+
+$agendaData =
+    carregarJsonInicio(
+        $arquivoAgenda,
+        []
+    );
+
+$materiasData =
+    carregarJsonInicio(
+        $arquivoMaterias,
+        ['materias' => []]
+    );
+
+$pomodoroData =
+    carregarJsonInicio(
+        $arquivoPomodoro,
+        ['sessions' => []]
+    );
+
+$notasData =
+    carregarJsonInicio(
+        $arquivoNotas,
+        []
+    );
+
+$calendarioData =
+    carregarJsonInicio(
+        $arquivoCalendario,
+        []
+    );
+
+$inicioData =
+    carregarJsonInicio(
+        $arquivoInicio,
+        ['anotacoes_importantes' => []]
+    );
+
+if (
+    !isset($inicioData['anotacoes_importantes']) ||
+    !is_array($inicioData['anotacoes_importantes'])
+) {
+    $inicioData['anotacoes_importantes'] = [];
+}
+
+$tarefas =
+    normalizarListaTarefas(
+        $agendaData
+    );
+
+$materias =
+    isset($materiasData['materias']) &&
+    is_array($materiasData['materias'])
+        ? $materiasData['materias']
+        : [];
+
+$sessoes =
+    isset($pomodoroData['sessions']) &&
+    is_array($pomodoroData['sessions'])
+        ? $pomodoroData['sessions']
+        : [];
+
+// ==========================================
+// AGENDA / PRODUTIVIDADE
+// ==========================================
+
+$hoje =
+    date('Y-m-d');
+
+$tarefasPendentes =
+    0;
+
+$diasProdutivosMapa =
+    [];
+
+$proximosLembretes =
+    [];
+
+foreach ($tarefas as $tarefa) {
+    if (!is_array($tarefa)) {
+        continue;
     }
 
-    $percentualGeraldouble =
-        ($percentualPresenca * $pesoFreq)
-        +
-        ($indiceAgenda * $pesoAgenda);
+    $data =
+        tarefaData($tarefa);
 
-    $percentualGeral =
-        (int) round(
+    $hora =
+        tarefaHora($tarefa);
+
+    $texto =
+        tarefaTexto($tarefa);
+
+    $concluida =
+        tarefaConcluida($tarefa);
+
+    if (
+        $data === $hoje &&
+        !$concluida
+    ) {
+        $tarefasPendentes++;
+    }
+
+    if (
+        $concluida &&
+        $data !== ''
+    ) {
+        $diasProdutivosMapa[$data] = true;
+    }
+
+    if (
+        !$concluida &&
+        $texto !== '' &&
+        $data !== '' &&
+        $data >= $hoje
+    ) {
+        $proximosLembretes[] = [
+            'texto' => $texto,
+            'data'  => $data,
+            'hora'  => $hora
+        ];
+    }
+}
+
+usort(
+    $proximosLembretes,
+    function ($a, $b) {
+        $dataA =
+            ($a['data'] ?? '') .
+            ' ' .
+            ($a['hora'] ?? '');
+
+        $dataB =
+            ($b['data'] ?? '') .
+            ' ' .
+            ($b['hora'] ?? '');
+
+        return strcmp(
+            $dataA,
+            $dataB
+        );
+    }
+);
+
+$proximosLembretes =
+    array_slice(
+        $proximosLembretes,
+        0,
+        4
+    );
+
+$diasConsecutivos =
+    0;
+
+$dataCursor =
+    new DateTime($hoje);
+
+while (true) {
+    $dataStr =
+        $dataCursor->format(
+            'Y-m-d'
+        );
+
+    if (
+        !isset(
+            $diasProdutivosMapa[$dataStr]
+        )
+    ) {
+        break;
+    }
+
+    $diasConsecutivos++;
+
+    $dataCursor->modify(
+        '-1 day'
+    );
+}
+
+// ==========================================
+// ESTUDOS / POMODORO
+// ==========================================
+
+$totalMinutosEstudados =
+    0;
+
+$totalSessoes =
+    0;
+
+foreach ($sessoes as $sessao) {
+    if (!is_array($sessao)) {
+        continue;
+    }
+
+    $modo =
+        $sessao['mode'] ??
+        $sessao['modo'] ??
+        'focus';
+
+    if ($modo !== 'focus') {
+        continue;
+    }
+
+    $minutos =
+        (int)(
+            $sessao['minutes'] ??
+            $sessao['minutos'] ??
+            0
+        );
+
+    if ($minutos > 0) {
+        $totalMinutosEstudados +=
+            $minutos;
+
+        $totalSessoes++;
+    }
+}
+
+$horasEstudadas =
+    intdiv(
+        $totalMinutosEstudados,
+        60
+    );
+
+$minutosRestantes =
+    $totalMinutosEstudados % 60;
+
+$tempoEstudadoFormatado =
+    $horasEstudadas > 0
+        ? $horasEstudadas .
+          'h ' .
+          str_pad(
+              (string)$minutosRestantes,
+              2,
+              '0',
+              STR_PAD_LEFT
+          ) .
+          'min'
+        : $minutosRestantes .
+          'min';
+
+// ==========================================
+// BOLETIM
+// ==========================================
+
+$notaMaxima =
+    (float)(
+        $notasData['nota_maxima'] ??
+        10
+    );
+
+$pesos =
+    isset($notasData['pesos']) &&
+    is_array($notasData['pesos'])
+        ? $notasData['pesos']
+        : [
+            1 => 1,
+            2 => 1,
+            3 => 1,
+            4 => 1
+        ];
+
+$periodos =
+    isset($notasData['periodos']) &&
+    is_array($notasData['periodos'])
+        ? $notasData['periodos']
+        : [];
+
+$periodoAtual =
+    (string)(
+        $notasData['periodo_atual'] ??
+        ''
+    );
+
+$dadosPeriodo =
+    isset($periodos[$periodoAtual]) &&
+    is_array($periodos[$periodoAtual])
+        ? $periodos[$periodoAtual]
+        : [];
+
+$nomesPeriodo =
+    isset($dadosPeriodo['materias']) &&
+    is_array($dadosPeriodo['materias'])
+        ? $dadosPeriodo['materias']
+        : [];
+
+$notasPeriodo =
+    isset($dadosPeriodo['notas']) &&
+    is_array($dadosPeriodo['notas'])
+        ? $dadosPeriodo['notas']
+        : [];
+
+$somaMedias =
+    0;
+
+$totalMedias =
+    0;
+
+$materiaAtencao =
+    null;
+
+foreach ($nomesPeriodo as $indice => $nomeMateria) {
+    $media =
+        calcularMediaLinhaInicio(
+            $notasPeriodo[$indice] ?? [],
+            $pesos
+        );
+
+    if ($media === null) {
+        continue;
+    }
+
+    $somaMedias +=
+        $media;
+
+    $totalMedias++;
+
+    if (
+        $materiaAtencao === null ||
+        $media <
+        $materiaAtencao['media']
+    ) {
+        $materiaAtencao = [
+            'nome'  => (string)$nomeMateria,
+            'media' => $media
+        ];
+    }
+}
+
+$mediaGeral =
+    $totalMedias > 0
+        ? $somaMedias /
+          $totalMedias
+        : 0;
+
+$percentualMedia =
+    $notaMaxima > 0
+        ? (int)round(
             min(
-                $percentualGeraldouble,
-                100
+                100,
+                max(
+                    0,
+                    ($mediaGeral /
+                    $notaMaxima) *
+                    100
+                )
+            )
+        )
+        : 0;
+
+// ==========================================
+// FREQUÊNCIA
+// ==========================================
+
+$totalPresencas =
+    0;
+
+$totalFaltas =
+    0;
+
+if (!empty($calendarioData)) {
+    coletarStatusFrequencia(
+        $calendarioData,
+        $totalPresencas,
+        $totalFaltas
+    );
+} elseif (file_exists($arquivoFreqMes)) {
+    $dadosFreqMes =
+        carregarJsonInicio(
+            $arquivoFreqMes,
+            []
+        );
+
+    coletarStatusFrequencia(
+        $dadosFreqMes,
+        $totalPresencas,
+        $totalFaltas
+    );
+}
+
+$totalAulas =
+    $totalPresencas +
+    $totalFaltas;
+
+$percentualPresenca =
+    $totalAulas > 0
+        ? (int)round(
+            ($totalPresencas /
+            $totalAulas) *
+            100
+        )
+        : 0;
+
+// ==========================================
+// ANOTAÇÕES IMPORTANTES
+// ==========================================
+
+$anotacoesImportantes =
+    $inicioData[
+        'anotacoes_importantes'
+    ];
+
+usort(
+    $anotacoesImportantes,
+    function ($a, $b) {
+        return (
+            (int)(
+                $b['timestamp'] ??
+                0
+            )
+        ) <=> (
+            (int)(
+                $a['timestamp'] ??
+                0
             )
         );
+    }
+);
 
-} catch (Throwable $e) {
+$anotacoesImportantes =
+    array_slice(
+        $anotacoesImportantes,
+        0,
+        5
+    );
 
-    // echo "Erro: " . $e->getMessage();
-
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -254,8 +670,6 @@ try {
 
 
 <?php
-include __DIR__
-    . '/../acessibilidade/menu_acessibilidade.php';
 ?>
 
 
@@ -544,7 +958,7 @@ include __DIR__
                     >
 
                         <i
-                            class="fa-solid fa-chart-line"
+                            class="fa-solid fa-stopwatch"
                         ></i>
 
                     </div>
@@ -554,15 +968,15 @@ include __DIR__
 
                         <span
                             class="stat-number-large"
-                            id="percentual-geral"
+                            id="tempo-estudado"
                         >
-                            <?= $percentualGeral ?>%
+                            <?= htmlspecialchars($tempoEstudadoFormatado) ?>
                         </span>
 
                         <span
                             class="stat-label-large"
                         >
-                            Taxa de produtividade
+                            Tempo estudado
                         </span>
 
                     </div>
@@ -660,7 +1074,7 @@ include __DIR__
                             aria-hidden="true"
                         ></i>
 
-                        Resumo do Mês
+                        Resumo dos Estudos
 
                     </h2>
 
@@ -679,11 +1093,11 @@ include __DIR__
                                 class="metric-value"
                                 id="total-presencas"
                             >
-                                <?= $totalPresencas ?>
+                                <?= count($materias) ?>
                             </span>
 
                             <span class="metric-label">
-                                Presenças
+                                Matérias
                             </span>
 
                         </div>
@@ -693,14 +1107,14 @@ include __DIR__
                         <div class="metric">
 
                             <span
-                                class="metric-value faltas"
+                                class="metric-value"
                                 id="total-faltas"
                             >
-                                <?= $totalFaltas ?>
+                                <?= $totalSessoes ?>
                             </span>
 
                             <span class="metric-label">
-                                Faltas
+                                Sessões
                             </span>
 
                         </div>
@@ -713,11 +1127,11 @@ include __DIR__
                                 class="metric-value"
                                 id="percentual-presenca"
                             >
-                                <?= $percentualPresenca ?>%
+                                <?= number_format($mediaGeral, 2, ',', '.') ?>
                             </span>
 
                             <span class="metric-label">
-                                Frequência
+                                Média geral
                             </span>
 
                         </div>
@@ -734,23 +1148,35 @@ include __DIR__
                         <div
                             class="progress-bar"
                             role="progressbar"
-                            aria-label="Frequência mensal"
+                            aria-label="Desempenho médio no boletim"
                             aria-valuemin="0"
                             aria-valuemax="100"
-                            aria-valuenow="<?= $percentualPresenca ?>"
+                            aria-valuenow="<?= $percentualMedia ?>"
                         >
 
                             <div
                                 class="progress-fill"
-                                style="width: <?= $percentualPresenca ?>%"
+                                style="width: <?= $percentualMedia ?>%"
                             ></div>
 
                         </div>
 
 
                         <span class="progress-text">
-                            Meta: 85% de frequência
+                            <?php if ($totalMedias > 0): ?>
+                                Desempenho atual: <?= number_format($percentualMedia, 0, ',', '.') ?>%
+                            <?php else: ?>
+                                Adicione notas no Boletim para acompanhar sua média.
+                            <?php endif; ?>
                         </span>
+
+                        <?php if ($materiaAtencao): ?>
+                            <p class="progress-text" style="margin-top:8px;">
+                                <strong>Precisa de atenção:</strong>
+                                <?= htmlspecialchars($materiaAtencao['nome']) ?>
+                                (<?= number_format($materiaAtencao['media'], 2, ',', '.') ?>)
+                            </p>
+                        <?php endif; ?>
 
                     </div>
 
@@ -810,12 +1236,12 @@ include __DIR__
 
 
                         <?php if (
-                            !empty($notasImportantes)
+                            !empty($anotacoesImportantes)
                         ): ?>
 
 
                             <?php foreach (
-                                $notasImportantes
+                                $anotacoesImportantes
                                 as $nota
                             ): ?>
 
@@ -826,14 +1252,14 @@ include __DIR__
                                     <p class="note-text">
 
                                         <?= htmlspecialchars(
-                                            $nota['texto']
+                                            $nota['text']
                                         ) ?>
 
                                     </p>
 
 
                                     <?php if (
-                                        !empty($nota['data'])
+                                        !empty($nota['date'])
                                     ): ?>
 
 
@@ -842,7 +1268,7 @@ include __DIR__
                                             <?= date(
                                                 'd/m/Y',
                                                 strtotime(
-                                                    $nota['data']
+                                                    $nota['date']
                                                 )
                                             ) ?>
 
@@ -868,7 +1294,7 @@ include __DIR__
                     <div
                         class="empty-notes"
                         id="empty-notes"
-                        style="<?= !empty($notasImportantes)
+                        style="<?= !empty($anotacoesImportantes)
                             ? 'display:none;'
                             : '' ?>"
                     >
@@ -936,12 +1362,49 @@ include __DIR__
                     <div
                         class="reminders-list"
                         id="reminders-list"
-                    ></div>
+                    >
+                        <?php foreach ($proximosLembretes as $lembrete): ?>
+                            <div class="reminder-item">
+                                <div class="reminder-icon" aria-hidden="true">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+
+                                <div class="reminder-text">
+                                    <?= htmlspecialchars($lembrete['texto']) ?>
+                                </div>
+
+                                <div class="reminder-time">
+                                    <?php
+                                    $dataLembrete = $lembrete['data'];
+
+                                    if ($dataLembrete === $hoje) {
+                                        echo $lembrete['hora'] !== ''
+                                            ? htmlspecialchars($lembrete['hora'])
+                                            : 'Hoje';
+                                    } else {
+                                        echo date(
+                                            'd/m',
+                                            strtotime($dataLembrete)
+                                        );
+
+                                        if ($lembrete['hora'] !== '') {
+                                            echo ' · ' .
+                                                htmlspecialchars(
+                                                    $lembrete['hora']
+                                                );
+                                        }
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
 
 
                     <div
                         class="empty-reminders"
                         id="empty-reminders"
+                        style="<?= !empty($proximosLembretes) ? 'display:none;' : '' ?>"
                     >
 
                         <i
@@ -1189,6 +1652,9 @@ include __DIR__
 
 
 
+<script>
+window.INICIO_NOTE_SAVE_URL = 'salvar_anotacao.php';
+</script>
 <script src="inicio.js"></script>
 
 

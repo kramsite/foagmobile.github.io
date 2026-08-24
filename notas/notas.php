@@ -839,6 +839,49 @@ $periodoAtual   = $data['periodo_atual'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+    // ==================================
+    // TROCAR PERÍODO RAPIDAMENTE
+    // ==================================
+
+    if (isset($_POST['trocar_periodo'])) {
+
+        $novoPeriodo = trim(
+            (string)(
+                $_POST['periodo_atual'] ??
+                ''
+            )
+        );
+
+        if (
+            $novoPeriodo !== '' &&
+            isset($data['periodos'][$novoPeriodo])
+        ) {
+            $data['periodo_atual'] = $novoPeriodo;
+
+            sincronizarPeriodoComMaterias(
+                $data['periodos'][$novoPeriodo],
+                $materiasData['materias']
+            );
+        }
+
+        salvarJsonArquivo(
+            $arquivoMaterias,
+            $materiasData
+        );
+
+        salvarJsonArquivo(
+            $arquivoBoletim,
+            $data
+        );
+
+        header(
+            'Location: ' .
+            $_SERVER['PHP_SELF']
+        );
+
+        exit;
+    }
+
     $periodoAlvo =
         (
             isset($_POST['periodo_atual_form']) &&
@@ -1448,6 +1491,50 @@ $current =
 
         <main class="main-content">
 
+      <!-- ==========================================
+           CABEÇALHO DO BOLETIM
+      =========================================== -->
+      <section class="boletim-topo">
+        <div class="boletim-titulo">
+          <span class="boletim-eyebrow">Desempenho acadêmico</span>
+          <h1>Boletim</h1>
+          <p>Acompanhe suas notas, médias e desempenho em cada matéria.</p>
+        </div>
+
+        <form method="POST" class="periodo-rapido">
+          <input type="hidden" name="trocar_periodo" value="1">
+
+          <label for="filtro-periodo">
+            <i class="fa-regular fa-calendar"></i>
+            Período
+          </label>
+
+          <select
+            id="filtro-periodo"
+            name="periodo_atual"
+            onchange="this.form.submit()"
+          >
+            <?php
+            foreach ($data['periodos'] as $nomePeriodo => $dadosPeriodo) {
+                $selected = (
+                    $nomePeriodo === $periodoAtual
+                )
+                    ? 'selected'
+                    : '';
+
+                echo '<option value="' .
+                    htmlspecialchars($nomePeriodo) .
+                    '" ' .
+                    $selected .
+                    '>' .
+                    htmlspecialchars($nomePeriodo) .
+                    '</option>';
+            }
+            ?>
+          </select>
+        </form>
+      </section>
+
       <!-- CARD CONFIGURAÇÕES -->
       <section class="card-notas card-config">
         <div class="config-header">
@@ -1543,6 +1630,7 @@ $current =
         <form method="POST">
           <input type="hidden" name="periodo_atual_form" value="<?= htmlspecialchars($periodoAtual); ?>">
 
+          <div class="table-scroll">
           <table class="tabela-notas">
             <thead>
               <tr>
@@ -1655,6 +1743,7 @@ $current =
               ?>
             </tbody>
           </table>
+          </div>
 
           <input type="hidden" id="linha_index" name="linha_index" value="">
 

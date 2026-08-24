@@ -4,74 +4,166 @@ document.addEventListener('DOMContentLoaded', function () {
     // ELEMENTOS PRINCIPAIS
     // =====================================================
 
-    const noteModal = document.getElementById('note-modal');
-    const addNoteBtn = document.getElementById('add-note');
-    const closeNoteModal = document.getElementById('close-note-modal');
-    const cancelNoteBtn = document.getElementById('cancel-note');
-    const saveNoteBtn = document.getElementById('save-note');
-    const noteText = document.getElementById('note-text');
-    const notesList = document.getElementById('notes-list');
-    const emptyNotes = document.getElementById('empty-notes');
-    const createFirstNoteBtn = document.getElementById('create-first-note');
+    const noteModal =
+        document.getElementById(
+            'note-modal'
+        );
 
-    const perfilIcon = document.getElementById('icon-perfil');
+    const addNoteBtn =
+        document.getElementById(
+            'add-note'
+        );
 
-    const logoutModal = document.getElementById('logout-modal');
-    const confirmLogout = document.getElementById('confirm-logout');
-    const cancelLogout = document.getElementById('cancel-logout');
-    const iconSair = document.getElementById('icon-sair');
+    const closeNoteModal =
+        document.getElementById(
+            'close-note-modal'
+        );
+
+    const cancelNoteBtn =
+        document.getElementById(
+            'cancel-note'
+        );
+
+    const saveNoteBtn =
+        document.getElementById(
+            'save-note'
+        );
+
+    const noteText =
+        document.getElementById(
+            'note-text'
+        );
+
+    const notesList =
+        document.getElementById(
+            'notes-list'
+        );
+
+    const emptyNotes =
+        document.getElementById(
+            'empty-notes'
+        );
+
+    const createFirstNoteBtn =
+        document.getElementById(
+            'create-first-note'
+        );
+
+
+    // =====================================================
+    // PERFIL
+    // =====================================================
+
+    const perfilIcon =
+        document.getElementById(
+            'icon-perfil'
+        );
+
+
+    // =====================================================
+    // LOGOUT
+    // =====================================================
+
+    const logoutModal =
+        document.getElementById(
+            'logout-modal'
+        );
+
+    const confirmLogout =
+        document.getElementById(
+            'confirm-logout'
+        );
+
+    const cancelLogout =
+        document.getElementById(
+            'cancel-logout'
+        );
+
+    const iconSair =
+        document.getElementById(
+            'icon-sair'
+        );
+
+
+    // =====================================================
+    // FOGI
+    // =====================================================
+
+    const fogiBtn =
+        document.getElementById(
+            'icon-fogi'
+        );
+
+    const fogiModal =
+        document.getElementById(
+            'fogi-modal'
+        );
+
+    const fogiFrame =
+        document.getElementById(
+            'fogi-iframe'
+        );
+
+    const fogiClose =
+        document.getElementById(
+            'fogi-close'
+        );
+
+
+    // =====================================================
+    // ACESSIBILIDADE
+    // =====================================================
 
     const mensagemAcessibilidade =
-        document.getElementById('mensagem-acessibilidade');
-
-    let ultimoFocoAntesDoModal = null;
+        document.getElementById(
+            'mensagem-acessibilidade'
+        );
 
 
     // =====================================================
-    // FRASES MOTIVACIONAIS
+    // URL PARA SALVAR ANOTAÇÃO
     // =====================================================
 
-    const motivationalQuotes = [
-        'Organizar é o primeiro passo para o sucesso!',
-        'Cada tarefa concluída é uma vitória!',
-        'A consistência leva à excelência!',
-        'Hoje é um novo dia para ser produtivo!',
-        'Pequenos passos levam a grandes conquistas!',
-        'A organização transforma sonhos em realidade!',
-        'Você está no controle do seu tempo!',
-        'Cada dia é uma nova oportunidade!',
-        'A disciplina é a ponte entre metas e realizações!',
-        'Seu potencial é ilimitado!'
-    ];
+    const NOTE_SAVE_URL =
+        window.INICIO_NOTE_SAVE_URL ||
+        'salvar_anotacao.php';
+
+
+    let ultimoFocoAntesDoModal =
+        null;
 
 
     // =====================================================
     // INICIALIZAÇÃO
     // =====================================================
 
-    initializePage();
+    iniciarPagina();
 
-    function initializePage() {
 
-        loadMotivationalQuote();
-        loadImportantNotes();
-        loadReminders();
-        setupEventListeners();
-        startLiveUpdates();
+    function iniciarPagina() {
+
+        configurarEventos();
+
 
         if (noteModal) {
+
             noteModal.setAttribute(
                 'aria-hidden',
                 'true'
             );
+
         }
 
+
         if (logoutModal) {
+
             logoutModal.setAttribute(
                 'aria-hidden',
                 'true'
             );
+
         }
+
     }
 
 
@@ -79,9 +171,13 @@ document.addEventListener('DOMContentLoaded', function () {
     // EVENTOS
     // =====================================================
 
-    function setupEventListeners() {
+    function configurarEventos() {
 
+
+        // ==========================================
         // PERFIL
+        // ==========================================
+
         if (perfilIcon) {
 
             perfilIcon.addEventListener(
@@ -93,124 +189,201 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 }
             );
+
         }
 
 
-        // ANOTAÇÃO
+        // ==========================================
+        // NOVA ANOTAÇÃO
+        // ==========================================
+
         addNoteBtn?.addEventListener(
             'click',
-            openNoteModal
+            abrirModalAnotacao
         );
 
-        closeNoteModal?.addEventListener(
-            'click',
-            closeNoteModalFunc
-        );
-
-        cancelNoteBtn?.addEventListener(
-            'click',
-            closeNoteModalFunc
-        );
-
-        saveNoteBtn?.addEventListener(
-            'click',
-            saveNote
-        );
 
         createFirstNoteBtn?.addEventListener(
             'click',
-            openNoteModal
+            abrirModalAnotacao
         );
 
 
-        // FECHAR CLICANDO FORA
-        noteModal?.addEventListener(
+        closeNoteModal?.addEventListener(
             'click',
+            fecharModalAnotacao
+        );
+
+
+        cancelNoteBtn?.addEventListener(
+            'click',
+            fecharModalAnotacao
+        );
+
+
+        saveNoteBtn?.addEventListener(
+            'click',
+            salvarAnotacao
+        );
+
+
+        // CTRL + ENTER SALVA ANOTAÇÃO
+
+        noteText?.addEventListener(
+            'keydown',
             function (event) {
 
-                if (event.target === noteModal) {
-                    closeNoteModalFunc();
+                if (
+                    event.ctrlKey &&
+                    event.key === 'Enter'
+                ) {
+
+                    salvarAnotacao();
+
                 }
 
             }
         );
 
 
-        // LOGOUT
-        if (iconSair && logoutModal) {
+        // ==========================================
+        // CLICAR FORA DO MODAL
+        // ==========================================
 
-            iconSair.addEventListener(
-                'click',
-                openLogoutModal
-            );
-        }
+        noteModal?.addEventListener(
+            'click',
+            function (event) {
 
+                if (
+                    event.target ===
+                    noteModal
+                ) {
 
-        if (confirmLogout) {
-
-            confirmLogout.addEventListener(
-                'click',
-                function () {
-
-                    window.location.href =
-                        '../login/logout.php';
+                    fecharModalAnotacao();
 
                 }
-            );
-        }
+
+            }
+        );
 
 
-        if (cancelLogout) {
+        // ==========================================
+        // LOGOUT
+        // ==========================================
 
-            cancelLogout.addEventListener(
-                'click',
-                closeLogoutModal
-            );
-        }
+        iconSair?.addEventListener(
+            'click',
+            abrirModalLogout
+        );
+
+
+        confirmLogout?.addEventListener(
+            'click',
+            function () {
+
+                window.location.href =
+                    '../login/logout.php';
+
+            }
+        );
+
+
+        cancelLogout?.addEventListener(
+            'click',
+            fecharModalLogout
+        );
 
 
         logoutModal?.addEventListener(
             'click',
             function (event) {
 
-                if (event.target === logoutModal) {
-                    closeLogoutModal();
+                if (
+                    event.target ===
+                    logoutModal
+                ) {
+
+                    fecharModalLogout();
+
                 }
 
             }
         );
 
 
+        // ==========================================
+        // FOGI
+        // ==========================================
+
+        fogiBtn?.addEventListener(
+            'click',
+            abrirFogi
+        );
+
+
+        fogiClose?.addEventListener(
+            'click',
+            fecharFogi
+        );
+
+
+        // ==========================================
         // ESC FECHA MODAIS
+        // ==========================================
+
         document.addEventListener(
             'keydown',
             function (event) {
 
-                if (event.key !== 'Escape') {
+                if (
+                    event.key !==
+                    'Escape'
+                ) {
+
                     return;
+
                 }
 
 
                 if (
                     noteModal &&
-                    noteModal.style.display === 'flex'
+                    noteModal.style.display ===
+                    'flex'
                 ) {
 
-                    closeNoteModalFunc();
+                    fecharModalAnotacao();
+
                     return;
+
                 }
 
 
                 if (
                     logoutModal &&
-                    logoutModal.style.display === 'flex'
+                    logoutModal.style.display ===
+                    'flex'
                 ) {
 
-                    closeLogoutModal();
+                    fecharModalLogout();
+
+                    return;
+
+                }
+
+
+                if (
+                    fogiModal &&
+                    fogiModal.style.display ===
+                    'flex'
+                ) {
+
+                    fecharFogi();
+
                 }
 
             }
         );
+
     }
 
 
@@ -220,11 +393,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function anunciar(texto) {
 
-        if (!mensagemAcessibilidade) {
+        if (
+            !mensagemAcessibilidade
+        ) {
+
             return;
+
         }
 
-        mensagemAcessibilidade.textContent = '';
+
+        mensagemAcessibilidade.textContent =
+            '';
+
 
         setTimeout(
             function () {
@@ -235,6 +415,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             50
         );
+
     }
 
 
@@ -247,7 +428,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             ultimoFocoAntesDoModal =
                 document.activeElement;
+
         }
+
     }
 
 
@@ -255,42 +438,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (
             ultimoFocoAntesDoModal &&
-            typeof ultimoFocoAntesDoModal.focus
-                === 'function'
+            typeof ultimoFocoAntesDoModal.focus ===
+            'function'
         ) {
 
             ultimoFocoAntesDoModal.focus();
+
         }
 
-        ultimoFocoAntesDoModal = null;
-    }
 
+        ultimoFocoAntesDoModal =
+            null;
 
-    // =====================================================
-    // FRASE MOTIVACIONAL
-    // =====================================================
-
-    function loadMotivationalQuote() {
-
-        const quoteText =
-            document.getElementById(
-                'quote-text'
-            );
-
-        if (!quoteText) {
-            return;
-        }
-
-        const randomQuote =
-            motivationalQuotes[
-                Math.floor(
-                    Math.random()
-                    * motivationalQuotes.length
-                )
-            ];
-
-        quoteText.textContent =
-            randomQuote;
     }
 
 
@@ -298,16 +457,23 @@ document.addEventListener('DOMContentLoaded', function () {
     // MODAL DE ANOTAÇÃO
     // =====================================================
 
-    function openNoteModal() {
+    function abrirModalAnotacao() {
 
-        if (!noteModal) {
+        if (
+            !noteModal
+        ) {
+
             return;
+
         }
+
 
         guardarFocoAtual();
 
+
         noteModal.style.display =
             'flex';
+
 
         noteModal.setAttribute(
             'aria-hidden',
@@ -317,7 +483,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (noteText) {
 
-            noteText.value = '';
+            noteText.value =
+                '';
+
 
             requestAnimationFrame(
                 function () {
@@ -326,23 +494,31 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 }
             );
+
         }
 
 
         anunciar(
             'Janela de nova anotação aberta.'
         );
+
     }
 
 
-    function closeNoteModalFunc() {
+    function fecharModalAnotacao() {
 
-        if (!noteModal) {
+        if (
+            !noteModal
+        ) {
+
             return;
+
         }
+
 
         noteModal.style.display =
             'none';
+
 
         noteModal.setAttribute(
             'aria-hidden',
@@ -351,7 +527,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         if (noteText) {
-            noteText.value = '';
+
+            noteText.value =
+                '';
+
         }
 
 
@@ -359,364 +538,285 @@ document.addEventListener('DOMContentLoaded', function () {
             'Janela de nova anotação fechada.'
         );
 
+
         devolverFoco();
+
     }
 
 
     // =====================================================
-    // ANOTAÇÕES
+    // SALVAR ANOTAÇÃO
     // =====================================================
 
-    function saveNote() {
+    async function salvarAnotacao() {
 
-        if (!noteText) {
+        if (
+            !noteText
+        ) {
+
             return;
+
         }
 
 
-        const text =
+        const texto =
             noteText.value.trim();
 
 
-        if (!text) {
+        if (
+            texto === ''
+        ) {
 
             anunciar(
                 'Digite uma anotação antes de salvar.'
             );
 
+
             noteText.focus();
 
             return;
+
         }
 
 
-        const notes =
-            getImportantNotes();
+        if (
+            texto.length > 200
+        ) {
+
+            mostrarNotificacao(
+                'A anotação deve ter no máximo 200 caracteres.',
+                'erro'
+            );
+
+            return;
+
+        }
 
 
-        const newNote = {
-
-            id: Date.now(),
-
-            text: text,
-
-            date:
-                new Date()
-                    .toLocaleDateString(
-                        'pt-BR'
-                    ),
-
-            timestamp:
-                Date.now()
-        };
+        const conteudoOriginalBotao =
+            saveNoteBtn
+                ? saveNoteBtn.innerHTML
+                : 'Salvar';
 
 
-        notes.unshift(
-            newNote
-        );
+        if (saveNoteBtn) {
+
+            saveNoteBtn.disabled =
+                true;
 
 
-        localStorage.setItem(
-            'foag_important_notes',
-            JSON.stringify(notes)
-        );
+            saveNoteBtn.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Salvando...
+            `;
 
+        }
 
-        loadImportantNotes();
-
-        closeNoteModalFunc();
-
-        showNotification(
-            'Anotação salva com sucesso!'
-        );
-    }
-
-
-    function getImportantNotes() {
 
         try {
 
-            return JSON.parse(
-                localStorage.getItem(
-                    'foag_important_notes'
-                ) || '[]'
+            const resposta =
+                await fetch(
+                    NOTE_SAVE_URL,
+                    {
+
+                        method:
+                            'POST',
+
+                        credentials:
+                            'same-origin',
+
+                        headers: {
+
+                            'Content-Type':
+                                'application/json'
+
+                        },
+
+                        body:
+                            JSON.stringify({
+                                text:
+                                    texto
+                            })
+
+                    }
+                );
+
+
+            let dados;
+
+
+            try {
+
+                dados =
+                    await resposta.json();
+
+            } catch (erro) {
+
+                throw new Error(
+                    'Resposta inválida do servidor.'
+                );
+
+            }
+
+
+            if (
+                !resposta.ok ||
+                !dados.sucesso
+            ) {
+
+                throw new Error(
+                    dados.mensagem ||
+                    'Não foi possível salvar a anotação.'
+                );
+
+            }
+
+
+            adicionarAnotacaoNaTela(
+                dados.anotacao
             );
 
-        } catch (error) {
+
+            fecharModalAnotacao();
+
+
+            mostrarNotificacao(
+                'Anotação salva com sucesso!'
+            );
+
+
+        } catch (erro) {
 
             console.error(
-                'Erro ao carregar anotações:',
-                error
+                'Erro ao salvar anotação:',
+                erro
             );
 
-            return [];
+
+            mostrarNotificacao(
+                erro.message ||
+                'Erro ao salvar anotação.',
+                'erro'
+            );
+
+
+        } finally {
+
+            if (saveNoteBtn) {
+
+                saveNoteBtn.disabled =
+                    false;
+
+
+                saveNoteBtn.innerHTML =
+                    conteudoOriginalBotao;
+
+            }
+
         }
+
     }
 
 
-    function loadImportantNotes() {
+    // =====================================================
+    // ADICIONAR ANOTAÇÃO NA TELA
+    // =====================================================
+
+    function adicionarAnotacaoNaTela(
+        anotacao
+    ) {
 
         if (
             !notesList ||
-            !emptyNotes
+            !anotacao
         ) {
 
             return;
+
         }
 
 
-        const notes =
-            getImportantNotes();
+        const item =
+            document.createElement(
+                'div'
+            );
 
 
-        if (
-            notes.length === 0
-        ) {
-
-            notesList.style.display =
-                'none';
-
-            emptyNotes.style.display =
-                'block';
-
-            return;
-        }
+        item.className =
+            'note-item';
 
 
-        emptyNotes.style.display =
-            'none';
+        const texto =
+            document.createElement(
+                'p'
+            );
+
+
+        texto.className =
+            'note-text';
+
+
+        texto.textContent =
+            anotacao.text ||
+            '';
+
+
+        const data =
+            document.createElement(
+                'span'
+            );
+
+
+        data.className =
+            'note-date';
+
+
+        data.textContent =
+            anotacao.date ||
+            '';
+
+
+        item.appendChild(
+            texto
+        );
+
+
+        item.appendChild(
+            data
+        );
+
+
+        notesList.prepend(
+            item
+        );
+
 
         notesList.style.display =
             'flex';
 
-        notesList.innerHTML =
-            '';
 
+        if (emptyNotes) {
 
-        const recentNotes =
-            notes.slice(
-                0,
-                3
-            );
-
-
-        recentNotes.forEach(
-            function (note) {
-
-                const noteElement =
-                    document.createElement(
-                        'div'
-                    );
-
-                noteElement.className =
-                    'note-item';
-
-
-                const noteTextElement =
-                    document.createElement(
-                        'p'
-                    );
-
-                noteTextElement.className =
-                    'note-text';
-
-                noteTextElement.textContent =
-                    note.text;
-
-
-                const noteDateElement =
-                    document.createElement(
-                        'span'
-                    );
-
-                noteDateElement.className =
-                    'note-date';
-
-                noteDateElement.textContent =
-                    note.date;
-
-
-                noteElement.appendChild(
-                    noteTextElement
-                );
-
-                noteElement.appendChild(
-                    noteDateElement
-                );
-
-                notesList.appendChild(
-                    noteElement
-                );
-
-            }
-        );
-    }
-
-
-    // =====================================================
-    // LEMBRETES
-    // =====================================================
-
-    function loadReminders() {
-
-        const remindersList =
-            document.getElementById(
-                'reminders-list'
-            );
-
-        const emptyReminders =
-            document.getElementById(
-                'empty-reminders'
-            );
-
-
-        if (
-            !remindersList ||
-            !emptyReminders
-        ) {
-
-            return;
-        }
-
-
-        const reminders = [
-
-            {
-                text:
-                    'Reunião com orientador',
-
-                time:
-                    '14:00'
-            },
-
-            {
-                text:
-                    'Entrega do projeto',
-
-                time:
-                    'Amanhã'
-            },
-
-            {
-                text:
-                    'Estudar para prova',
-
-                time:
-                    '18:00'
-            }
-
-        ];
-
-
-        if (
-            reminders.length === 0
-        ) {
-
-            remindersList.style.display =
+            emptyNotes.style.display =
                 'none';
 
-            emptyReminders.style.display =
-                'block';
-
-            return;
         }
 
 
-        emptyReminders.style.display =
-            'none';
+        // MÁXIMO DE 5 NA TELA
 
-        remindersList.style.display =
-            'block';
+        while (
+            notesList.children.length >
+            5
+        ) {
 
-        remindersList.innerHTML =
-            '';
+            notesList
+                .lastElementChild
+                ?.remove();
 
+        }
 
-        reminders.slice(
-            0,
-            2
-        ).forEach(
-            function (reminder) {
-
-                const reminderElement =
-                    document.createElement(
-                        'div'
-                    );
-
-                reminderElement.className =
-                    'reminder-item';
-
-
-                const iconContainer =
-                    document.createElement(
-                        'div'
-                    );
-
-                iconContainer.className =
-                    'reminder-icon';
-
-                iconContainer.setAttribute(
-                    'aria-hidden',
-                    'true'
-                );
-
-
-                const icon =
-                    document.createElement(
-                        'i'
-                    );
-
-                icon.className =
-                    'fa-solid fa-clock';
-
-
-                iconContainer.appendChild(
-                    icon
-                );
-
-
-                const reminderText =
-                    document.createElement(
-                        'div'
-                    );
-
-                reminderText.className =
-                    'reminder-text';
-
-                reminderText.textContent =
-                    reminder.text;
-
-
-                const reminderTime =
-                    document.createElement(
-                        'div'
-                    );
-
-                reminderTime.className =
-                    'reminder-time';
-
-                reminderTime.textContent =
-                    reminder.time;
-
-
-                reminderElement.appendChild(
-                    iconContainer
-                );
-
-                reminderElement.appendChild(
-                    reminderText
-                );
-
-                reminderElement.appendChild(
-                    reminderTime
-                );
-
-                remindersList.appendChild(
-                    reminderElement
-                );
-
-            }
-        );
     }
 
 
@@ -724,10 +824,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // LOGOUT
     // =====================================================
 
-    function openLogoutModal() {
+    function abrirModalLogout() {
 
-        if (!logoutModal) {
+        if (
+            !logoutModal
+        ) {
+
             return;
+
         }
 
 
@@ -756,13 +860,18 @@ document.addEventListener('DOMContentLoaded', function () {
         anunciar(
             'Confirmação de saída aberta.'
         );
+
     }
 
 
-    function closeLogoutModal() {
+    function fecharModalLogout() {
 
-        if (!logoutModal) {
+        if (
+            !logoutModal
+        ) {
+
             return;
+
         }
 
 
@@ -782,14 +891,92 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         devolverFoco();
+
     }
+
+
+    // =====================================================
+    // FOGI
+    // =====================================================
+
+    function abrirFogi() {
+
+        if (
+            !fogiModal ||
+            !fogiFrame
+        ) {
+
+            return;
+
+        }
+
+
+        fogiFrame.src =
+            'http://127.0.0.1:5000';
+
+
+        fogiModal.style.display =
+            'flex';
+
+
+        document.body.style.overflow =
+            'hidden';
+
+    }
+
+
+    function fecharFogi() {
+
+        if (
+            !fogiModal ||
+            !fogiFrame
+        ) {
+
+            return;
+
+        }
+
+
+        fogiModal.style.display =
+            'none';
+
+
+        fogiFrame.src =
+            'about:blank';
+
+
+        document.body.style.overflow =
+            '';
+
+    }
+
+
+    window.addEventListener(
+        'message',
+        function (event) {
+
+            if (
+                event.data &&
+                event.data.type ===
+                'FOGI_CLOSE'
+            ) {
+
+                fecharFogi();
+
+            }
+
+        }
+    );
 
 
     // =====================================================
     // NOTIFICAÇÕES
     // =====================================================
 
-    function showNotification(message) {
+    function mostrarNotificacao(
+        mensagem,
+        tipo = 'sucesso'
+    ) {
 
         const notification =
             document.createElement(
@@ -809,21 +996,30 @@ document.addEventListener('DOMContentLoaded', function () {
         );
 
 
+        const background =
+            tipo === 'erro'
+                ? '#dc4c4c'
+                : '#38a5ff';
+
+
         notification.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
-            background: #38a5ff;
+            max-width: 360px;
+            background: ${background};
             color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            padding: 12px 18px;
+            border-radius: 9px;
+            box-shadow: 0 5px 18px rgba(0, 0, 0, 0.18);
             z-index: 10000;
+            font-size: 13px;
+            font-family: 'Poppins', sans-serif;
         `;
 
 
         notification.textContent =
-            message;
+            mensagem;
 
 
         document.body.appendChild(
@@ -832,7 +1028,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
         anunciar(
-            message
+            mensagem
         );
 
 
@@ -844,23 +1040,7 @@ document.addEventListener('DOMContentLoaded', function () {
             },
             3000
         );
-    }
 
-
-    // =====================================================
-    // ATUALIZAÇÕES
-    // =====================================================
-
-    function startLiveUpdates() {
-
-        setInterval(
-            function () {
-
-                loadMotivationalQuote();
-
-            },
-            3600000
-        );
     }
 
 });
@@ -877,7 +1057,8 @@ document.addEventListener(
         const isDark =
             localStorage.getItem(
                 'darkMode'
-            ) === 'true';
+            ) ===
+            'true';
 
 
         document.body.classList.toggle(
@@ -892,8 +1073,12 @@ document.addEventListener(
             );
 
 
-        if (!themeToggle) {
+        if (
+            !themeToggle
+        ) {
+
             return;
+
         }
 
 

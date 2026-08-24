@@ -6,235 +6,337 @@ session_start();
 // ======================================
 
 if (empty($_SESSION['codigo_usuario'])) {
-    header("Location: ../login/index.php");
+    header('Location: ../login/index.php');
     exit;
 }
 
-$codigoUsuario = $_SESSION['codigo_usuario'];
+$codigoUsuario =
+    $_SESSION['codigo_usuario'];
 
-// ======================================
-// PÁGINA ATUAL
-// ======================================
+$current =
+    basename($_SERVER['PHP_SELF']);
 
-$current = basename($_SERVER['PHP_SELF']);
+$anoSelecionado =
+    isset($_GET['ano'])
+        ? (int)$_GET['ano']
+        : (int)date('Y');
 
-// ======================================
-// FERIADOS
-// ======================================
-
-$arquivoFeriados = __DIR__ . '/../json/feriados.json';
-
-$feriados = [];
-
-if (file_exists($arquivoFeriados)) {
-
-    $conteudoFeriados = file_get_contents(
-        $arquivoFeriados
-    );
-
-    if ($conteudoFeriados !== false) {
-
-        $dadosFeriados = json_decode(
-            $conteudoFeriados,
-            true
-        );
-
-        if (is_array($dadosFeriados)) {
-            $feriados = $dadosFeriados;
-        }
-    }
+if (
+    $anoSelecionado < 2000 ||
+    $anoSelecionado > 2100
+) {
+    $anoSelecionado =
+        (int)date('Y');
 }
 
 // ======================================
 // PASTA DO USUÁRIO
 // ======================================
 
-$baseJsonDir = __DIR__ . '/../json/usuarios';
-
-$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+$pastaUsuario =
+    __DIR__ .
+    '/../json/usuarios/' .
+    $codigoUsuario;
 
 if (!is_dir($pastaUsuario)) {
-    exit("Pasta do usuário não encontrada.");
+    exit('Pasta do usuário não encontrada.');
+}
+
+// ======================================
+// FUNÇÃO AUXILIAR JSON
+// ======================================
+
+function carregarJsonCalendario(
+    $arquivo,
+    $padrao
+) {
+    if (!file_exists($arquivo)) {
+        file_put_contents(
+            $arquivo,
+            json_encode(
+                $padrao,
+                JSON_PRETTY_PRINT |
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES
+            ),
+            LOCK_EX
+        );
+
+        return $padrao;
+    }
+
+    $conteudo =
+        file_get_contents($arquivo);
+
+    $dados =
+        json_decode(
+            $conteudo ?: '',
+            true
+        );
+
+    return is_array($dados)
+        ? $dados
+        : $padrao;
+}
+
+// ======================================
+// FERIADOS
+// ======================================
+
+$arquivoFeriados =
+    __DIR__ .
+    '/../json/feriados.json';
+
+$feriados = [];
+
+if (file_exists($arquivoFeriados)) {
+    $dadosFeriados =
+        json_decode(
+            file_get_contents(
+                $arquivoFeriados
+            ) ?: '',
+            true
+        );
+
+    if (is_array($dadosFeriados)) {
+        $feriados =
+            $dadosFeriados;
+    }
 }
 
 // ======================================
 // AGENDA DO USUÁRIO
 // ======================================
 
-$arquivoAgenda = $pastaUsuario . '/agenda.json';
+$arquivoAgenda =
+    $pastaUsuario .
+    '/agenda.json';
 
-$estruturaInicialAgenda = [
-    'notas' => [],
-    'tarefas' => [],
-    'nao_esquecer' => []
-];
-
-if (!file_exists($arquivoAgenda)) {
-
-    file_put_contents(
+$agendaData =
+    carregarJsonCalendario(
         $arquivoAgenda,
-        json_encode(
-            $estruturaInicialAgenda,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        ),
-        LOCK_EX
+        [
+            'notas' => [],
+            'tarefas' => [],
+            'nao_esquecer' => []
+        ]
     );
-}
 
-$conteudoAgenda = file_get_contents(
-    $arquivoAgenda
-);
-
-$agendaData = json_decode(
-    $conteudoAgenda ?: '',
-    true
-);
-
-if (!is_array($agendaData)) {
-    $agendaData = $estruturaInicialAgenda;
+foreach (
+    ['notas', 'tarefas', 'nao_esquecer']
+    as $chave
+) {
+    if (
+        !isset($agendaData[$chave]) ||
+        !is_array($agendaData[$chave])
+    ) {
+        $agendaData[$chave] = [];
+    }
 }
 
 // ======================================
 // CALENDÁRIO DO USUÁRIO
 // ======================================
 
-$arquivoCalend = $pastaUsuario . '/calendario.json';
+$arquivoCalend =
+    $pastaUsuario .
+    '/calendario.json';
 
-$calendarioInicial = [
-    'dias' => [],
-    'metas' => []
-];
-
-if (!file_exists($arquivoCalend)) {
-
-    file_put_contents(
+$calendData =
+    carregarJsonCalendario(
         $arquivoCalend,
-        json_encode(
-            $calendarioInicial,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        ),
-        LOCK_EX
+        [
+            'dias' => [],
+            'metas' => [],
+            'configuracoes' => []
+        ]
     );
+
+foreach (
+    ['dias', 'metas', 'configuracoes']
+    as $chave
+) {
+    if (
+        !isset($calendData[$chave]) ||
+        !is_array($calendData[$chave])
+    ) {
+        $calendData[$chave] = [];
+    }
 }
 
-$conteudoCalendario = file_get_contents(
-    $arquivoCalend
-);
+// ======================================
+// FUNÇÕES DO CALENDÁRIO
+// ======================================
 
-$calendData = json_decode(
-    $conteudoCalendario ?: '',
-    true
-);
-
-if (!is_array($calendData)) {
-    $calendData = $calendarioInicial;
-}
-
-$arquivoAgenda = $pastaUsuario . '/agenda.json';
-if (!file_exists($arquivoAgenda)) {
-  $estruturaInicial = [
-    'notas'        => [],
-    'tarefas'      => [],
-    'nao_esquecer' => []
-  ];
-  file_put_contents(
-    $arquivoAgenda,
-    json_encode($estruturaInicial, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-  );
-}
-
-$agendaData = json_decode(file_get_contents($arquivoAgenda), true) ?? [
-  'notas'        => [],
-  'tarefas'      => [],
-  'nao_esquecer' => []
-];
-
-
-// ================== CALENDÁRIO DO USUÁRIO ==================
-$arquivoCalend = $pastaUsuario . '/calendario.json';
-
-if (!file_exists($arquivoCalend)) {
-  $calendarioInicial = [
-    'dias'  => [], // 'YYYY-MM-DD' => 'vermelho' | 'amarelo' | 'sem-aula' | 'roxo'
-    'metas' => []  // 'ANO-MES' => 80, 90...
-  ];
-  file_put_contents(
-    $arquivoCalend,
-    json_encode($calendarioInicial, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
-  );
-}
-
-$calendData = json_decode(file_get_contents($arquivoCalend), true);
-if (!is_array($calendData)) {
-  $calendData = ['dias' => [], 'metas' => []];
-}
-
-
-// ================== FUNÇÕES DO CALENDÁRIO ==================
-
-// Função para gerar os dias de cada mês
-function obterDiasDoMes($mes, $ano) {
+function obterDiasDoMes(
+    $mes,
+    $ano
+) {
     $meses = [
-        'Janeiro' => 1, 'Fevereiro' => 2, 'Março' => 3, 'Abril' => 4,
-        'Maio' => 5, 'Junho' => 6, 'Julho' => 7, 'Agosto' => 8,
-        'Setembro' => 9, 'Outubro' => 10, 'Novembro' => 11, 'Dezembro' => 12
+        'Janeiro' => 1,
+        'Fevereiro' => 2,
+        'Março' => 3,
+        'Abril' => 4,
+        'Maio' => 5,
+        'Junho' => 6,
+        'Julho' => 7,
+        'Agosto' => 8,
+        'Setembro' => 9,
+        'Outubro' => 10,
+        'Novembro' => 11,
+        'Dezembro' => 12
     ];
-    $numeroMes = $meses[$mes];
-    $diasNoMes = cal_days_in_month(CAL_GREGORIAN, $numeroMes, $ano);
-    $primeiroDiaSemana = date('w', strtotime("$ano-$numeroMes-01"));
+
+    $numeroMes =
+        $meses[$mes];
+
+    $diasNoMes =
+        cal_days_in_month(
+            CAL_GREGORIAN,
+            $numeroMes,
+            $ano
+        );
+
+    $primeiroDiaSemana =
+        (int)date(
+            'w',
+            strtotime(
+                sprintf(
+                    '%04d-%02d-01',
+                    $ano,
+                    $numeroMes
+                )
+            )
+        );
 
     $dias = [];
-    for ($i = 0; $i < $primeiroDiaSemana; $i++) $dias[] = '';
-    for ($i = 1; $i <= $diasNoMes; $i++) $dias[] = $i;
-    return [$dias, $numeroMes];
+
+    for (
+        $i = 0;
+        $i < $primeiroDiaSemana;
+        $i++
+    ) {
+        $dias[] = '';
+    }
+
+    for (
+        $i = 1;
+        $i <= $diasNoMes;
+        $i++
+    ) {
+        $dias[] = $i;
+    }
+
+    return [
+        $dias,
+        $numeroMes
+    ];
 }
 
-// Gera o calendário completo (todos os meses)
-function gerarCalendario() {
+function gerarCalendario(
+    $ano
+) {
     global $feriados;
-    // Histórico por ano via ?ano=YYYY
-    $ano = isset($_GET['ano']) ? (int)$_GET['ano'] : (int)date('Y');
 
-    $meses = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-    $diasSemana = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+    $meses = [
+        'Janeiro',
+        'Fevereiro',
+        'Março',
+        'Abril',
+        'Maio',
+        'Junho',
+        'Julho',
+        'Agosto',
+        'Setembro',
+        'Outubro',
+        'Novembro',
+        'Dezembro'
+    ];
+
+    $diasSemana = [
+        'Dom',
+        'Seg',
+        'Ter',
+        'Qua',
+        'Qui',
+        'Sex',
+        'Sáb'
+    ];
 
     foreach ($meses as $mes) {
-        list($dias, $numeroMes) = obterDiasDoMes($mes, $ano);
+        [
+            $dias,
+            $numeroMes
+        ] =
+            obterDiasDoMes(
+                $mes,
+                $ano
+            );
 
-        echo "<div class='mes' data-ano='$ano' data-mes='$numeroMes'>";
+        echo "<div class='mes' data-ano='{$ano}' data-mes='{$numeroMes}'>";
         echo "  <div class='calendario-mes'>";
-        echo "    <div class='header-mes'>$mes</div>";
+        echo "    <div class='header-mes'>{$mes}</div>";
         echo "    <div class='dias'>";
 
-        foreach ($diasSemana as $dia) {
-            echo "<div class='dia header-dia'><strong>$dia</strong></div>";
+        foreach (
+            $diasSemana as $diaSemana
+        ) {
+            echo "<div class='dia header-dia'><strong>{$diaSemana}</strong></div>";
         }
 
-        foreach ($dias as $d) {
-            if ($d) {
-                $dataAtual = sprintf('%04d-%02d-%02d', $ano, $numeroMes, $d);
-                $classeExtra = '';
-                $attrExtra = '';
-                if (isset($feriados[$dataAtual])) {
-                    // marca feriado + nome no data-attribute (tooltip)
-                    $classeExtra = 'feriado';
-                    $nomeFeriado = htmlspecialchars($feriados[$dataAtual], ENT_QUOTES, 'UTF-8');
-                    $attrExtra = " data-feriado=\"$nomeFeriado\"";
-                }
-                echo "<div class='dia $classeExtra'$attrExtra data-date='$dataAtual'>
-                        <span class='num-dia'>$d</span>
-                        <div class='dots'></div>
-                      </div>";
-            } else {
+        foreach ($dias as $dia) {
+            if (!$dia) {
                 echo "<div class='dia'></div>";
+                continue;
             }
+
+            $dataAtual =
+                sprintf(
+                    '%04d-%02d-%02d',
+                    $ano,
+                    $numeroMes,
+                    $dia
+                );
+
+            $classeExtra = '';
+            $attrExtra = '';
+
+            if (
+                isset(
+                    $feriados[$dataAtual]
+                )
+            ) {
+                $classeExtra =
+                    'feriado';
+
+                $nomeFeriado =
+                    htmlspecialchars(
+                        $feriados[$dataAtual],
+                        ENT_QUOTES,
+                        'UTF-8'
+                    );
+
+                $attrExtra =
+                    " data-feriado=\"{$nomeFeriado}\"";
+            }
+
+            echo "
+                <div
+                    class='dia {$classeExtra}'
+                    {$attrExtra}
+                    data-date='{$dataAtual}'
+                >
+                    <span class='num-dia'>{$dia}</span>
+                    <div class='dots'></div>
+                </div>
+            ";
         }
 
-        echo "    </div>"; // .dias
-        echo "  </div>";   // .calendario-mes
+        echo "    </div>";
+        echo "  </div>";
 
-        // TUDO DENTRO DO MINI CALENDÁRIO (por mês)
         echo "  <div class='info-mes'>";
+
         echo "    <div class='toolbar-cal'>";
         echo "      <div class='lado-a'>";
         echo "        <label>Ano:</label>";
@@ -247,7 +349,7 @@ function gerarCalendario() {
         echo "    </div>";
 
         echo "    <div class='bloco-cores'>";
-        echo "      <p class='texto-cores'>Selecione a cor e depois clique no dia:</p>";
+        echo "      <p class='texto-cores'>Selecione uma opção e depois clique no dia:</p>";
         echo "      <div class='botoes-cores'>";
         echo "        <div class='cor-item'><button class='btn-cor' data-cor='vermelho' style='background:#e74c3c'></button><span>Faltou</span></div>";
         echo "        <div class='cor-item'><button class='btn-cor' data-cor='amarelo' style='background:#f1c40f'></button><span>Atestado</span></div>";
@@ -259,13 +361,18 @@ function gerarCalendario() {
 
         echo "    <div class='painel-metas'>";
         echo "      <div class='linha'>";
-        echo "        <label>Meta de presença (%):</label>";
+        echo "        <label>Meta de presença do mês (%):</label>";
         echo "        <input class='meta-presenca' type='number' min='0' max='100' value='80'>";
         echo "      </div>";
+
         echo "      <div class='linha linha-progress'>";
         echo "        <div class='progress-wrap'><div class='progress-bar'></div></div>";
         echo "        <span class='label-presenca'>0%</span>";
         echo "      </div>";
+
+        echo "      <p class='meta-status-mes'></p>";
+        echo "      <p class='faltas-restantes-mes'></p>";
+
         echo "      <div class='resumos'>";
         echo "        <span><b>Presenças</b>: <span class='count-presenca'>0</span></span>";
         echo "        <span><b>Faltas</b>: <span class='count-falta'>0</span></span>";
@@ -275,8 +382,7 @@ function gerarCalendario() {
         echo "      </div>";
         echo "    </div>";
 
-        // Mini-agenda integrada com Agenda
-               echo "    <div class='mini-agenda'>";
+        echo "    <div class='mini-agenda'>";
         echo "      <div class='agenda-header'>";
         echo "        <strong class='agenda-data'></strong>";
         echo "        <button class='agenda-fechar'>×</button>";
@@ -296,159 +402,787 @@ function gerarCalendario() {
         echo "      </div>";
 
         echo "    </div>";
-
-
-        echo "  </div>"; // .info-mes
-        echo "</div>";   // .mes
+        echo "  </div>";
+        echo "</div>";
     }
 }
 ?>
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calendário</title>
-  <link rel="stylesheet" href="calendario.css">
-  <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-  <link rel="stylesheet" href="dark_calendario.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-  <script src="../m.escuro/dark-mode.js"></script>
-  <!-- Export PNG -->
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <meta charset="UTF-8">
 
-      <script>
-    window.CAL_AGENDA_DATA      = <?= json_encode($agendaData,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-    window.CAL_AGENDA_SAVE_URL  = "../bloco/salvar_agenda.php";
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
-    window.CAL_HORARIO_URL      = "../horario/horario_api.php";
+    <title>Calendário - FOAG</title>
 
-    // NOVO: dados do calendário salvo
-    window.CAL_CALEND_DATA      = <?= json_encode($calendData,  JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>;
-    window.CAL_CALEND_SAVE_URL  = "salvar_calendario.php";
-  </script>
+    <link
+        rel="stylesheet"
+        href="calendario.css"
+    >
 
+    <link
+        rel="stylesheet"
+        href="../m.escuro/dark_basee.css"
+    >
 
+    <link
+        rel="stylesheet"
+        href="dark_calendario.css"
+    >
+
+    <link
+        rel="stylesheet"
+        href="calendario_dashboard.css"
+    >
+
+    <style>
+        /* Mantém o painel anual acima dos meses sem alterar o grid original */
+        .calendario-area {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+
+        .calendario-area > .frequencia-anual,
+        .calendario-area > .calendario-container {
+            width: 100%;
+            min-width: 0;
+            box-sizing: border-box;
+        }
+    </style>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
+
+    <script src="../m.escuro/dark-mode.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+    <script>
+        window.CAL_AGENDA_DATA =
+            <?= json_encode(
+                $agendaData,
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES
+            ); ?>;
+
+        window.CAL_AGENDA_SAVE_URL =
+            "../bloco/salvar_agenda.php";
+
+        window.CAL_HORARIO_URL =
+            "../horario/horario_api.php";
+
+        window.CAL_CALEND_DATA =
+            <?= json_encode(
+                $calendData,
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES
+            ); ?>;
+
+        window.CAL_CALEND_SAVE_URL =
+            "salvar_calendario.php";
+
+        window.CAL_ANO =
+            <?= (int)$anoSelecionado ?>;
+    </script>
 </head>
 
 <body>
-  <!-- Backdrop para bloquear interação no fundo quando um mês estiver expandido -->
-  <div id="cal-backdrop" aria-hidden="true"></div>
 
-  <header class="cabecalho">
-  FOAG
+    <div
+        id="cal-backdrop"
+        aria-hidden="true"
+    ></div>
 
-  <div class="header-icons">
-    <a href="../configuracoes/configuracoes.php" class="link-configuracoes" title="Configurações">
-      <i class="fa-solid fa-gear"></i>
-    </a>
-    <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
-    <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
-  </div>
-</header>
 
-  <div class="container">
-    <nav class="menu">
-      <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-house"></i> Início
-      </a>
+    <!-- ======================================
+         CABEÇALHO
+    ======================================= -->
 
-      <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-calendar-days"></i> Calendário
-      </a>
+    <header class="cabecalho">
 
-      <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-book"></i> Agenda
-      </a>
+        FOAG
 
-      <a href="../pomodoro/pomodoro.php" class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-stopwatch"></i> Pomodoro
-      </a>
+        <div class="header-icons">
 
-      <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
-        <i class="fa-solid fa-check-double"></i> Boletim
-      </a>
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja
+            <a
+                href="../configuracoes/configuracoes.php"
+                class="link-configuracoes"
+                title="Configurações"
+            >
+                <i class="fa-solid fa-gear"></i>
             </a>
-            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-trophy"></i> Ranking
-            </a>
-    </nav>
 
-    <div class="conteudo">
-      <div class="calendario-container">
-        <div class="calendario">
-          <?php gerarCalendario(); ?>
+            <i
+                id="icon-perfil"
+                class="fa-regular fa-user"
+                title="Perfil"
+            ></i>
+
+            <i
+                id="icon-sair"
+                class="fa-solid fa-right-from-bracket"
+                title="Sair"
+            ></i>
+
         </div>
-      </div>
+
+    </header>
+
+
+    <div class="container">
+
+        <!-- ======================================
+             MENU
+        ======================================= -->
+
+        <nav class="menu">
+
+            <a
+                href="../inicioo/inicio.php"
+                class="<?= $current === 'inicio.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-house"></i>
+                Início
+            </a>
+
+            <a
+                href="../calend/calendario.php"
+                class="<?= $current === 'calendario.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-calendar-days"></i>
+                Calendário
+            </a>
+
+            <a
+                href="../bloco/agenda.php"
+                class="<?= $current === 'agenda.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-book"></i>
+                Agenda
+            </a>
+
+            <a
+                href="../pomodoro/pomodoro.php"
+                class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-stopwatch"></i>
+                Pomodoro
+            </a>
+
+            <a
+                href="../notas/notas.php"
+                class="<?= $current === 'notas.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-check-double"></i>
+                Boletim
+            </a>
+
+            <a
+                href="../loja/loja.php"
+                class="<?= $current === 'loja.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-store"></i>
+                Loja
+            </a>
+
+            <a
+                href="../rank/rank.php"
+                class="<?= $current === 'rank.php' ? 'active' : '' ?>"
+            >
+                <i class="fa-solid fa-trophy"></i>
+                Ranking
+            </a>
+
+        </nav>
+
+
+        <div class="conteudo">
+
+            <div class="calendario-area">
+
+            <!-- ======================================
+                 PAINEL ANUAL DE FREQUÊNCIA
+            ======================================= -->
+
+            <section
+                class="frequencia-anual"
+                id="frequencia-anual"
+                data-ano="<?= (int)$anoSelecionado ?>"
+            >
+
+                <div class="freq-anual-topo">
+
+                    <div>
+
+                        <span class="freq-eyebrow">
+                            Acompanhamento acadêmico
+                        </span>
+
+                        <h1>
+                            Frequência anual
+                            <?= (int)$anoSelecionado ?>
+                        </h1>
+
+                        <p>
+                            Configure seu período letivo e acompanhe
+                            sua presença durante o ano.
+                        </p>
+
+                    </div>
+
+
+                    <div
+                        class="freq-risco"
+                        id="freq-risco"
+                    >
+                        Aguardando configuração
+                    </div>
+
+                </div>
+
+
+                <!-- CONFIGURAÇÃO DO ANO -->
+
+                <div class="freq-config-card">
+
+                    <div class="freq-config-header">
+
+                        <div>
+
+                            <h2>
+                                <i class="fa-solid fa-calendar-check"></i>
+                                Período letivo
+                            </h2>
+
+                            <p>
+                                As alterações são salvas automaticamente.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="freq-config-grid">
+
+                        <label class="freq-field">
+
+                            <span>
+                                Meta anual de presença
+                            </span>
+
+                            <div class="freq-input-suffix">
+
+                                <input
+                                    type="number"
+                                    id="meta-anual"
+                                    min="0"
+                                    max="100"
+                                    value="80"
+                                >
+
+                                <b>%</b>
+
+                            </div>
+
+                        </label>
+
+
+                        <label class="freq-field">
+
+                            <span>
+                                Início do ano letivo
+                            </span>
+
+                            <input
+                                type="date"
+                                id="inicio-ano-letivo"
+                                min="<?= (int)$anoSelecionado ?>-01-01"
+                                max="<?= (int)$anoSelecionado ?>-12-31"
+                            >
+
+                        </label>
+
+
+                        <label class="freq-field">
+
+                            <span>
+                                Final do ano letivo
+                            </span>
+
+                            <input
+                                type="date"
+                                id="fim-ano-letivo"
+                                min="<?= (int)$anoSelecionado ?>-01-01"
+                                max="<?= (int)$anoSelecionado ?>-12-31"
+                            >
+
+                        </label>
+
+
+                        <label class="freq-field">
+
+                            <span>
+                                Início das férias do meio do ano
+                            </span>
+
+                            <input
+                                type="date"
+                                id="inicio-ferias-meio"
+                                min="<?= (int)$anoSelecionado ?>-01-01"
+                                max="<?= (int)$anoSelecionado ?>-12-31"
+                            >
+
+                        </label>
+
+
+                        <label class="freq-field">
+
+                            <span>
+                                Final das férias do meio do ano
+                            </span>
+
+                            <input
+                                type="date"
+                                id="fim-ferias-meio"
+                                min="<?= (int)$anoSelecionado ?>-01-01"
+                                max="<?= (int)$anoSelecionado ?>-12-31"
+                            >
+
+                        </label>
+
+                    </div>
+
+
+                    <p
+                        class="freq-config-erro"
+                        id="freq-config-erro"
+                        aria-live="polite"
+                    ></p>
+
+                </div>
+
+
+                <!-- RESUMO ANUAL -->
+
+                <div class="freq-resumo-grid">
+
+                    <article class="freq-stat">
+
+                        <div class="freq-stat-icon">
+                            <i class="fa-solid fa-percent"></i>
+                        </div>
+
+                        <div>
+
+                            <span
+                                class="freq-stat-value"
+                                id="freq-anual-percentual"
+                            >
+                                0%
+                            </span>
+
+                            <span class="freq-stat-label">
+                                Presença geral
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="freq-stat">
+
+                        <div class="freq-stat-icon danger">
+                            <i class="fa-solid fa-user-xmark"></i>
+                        </div>
+
+                        <div>
+
+                            <span
+                                class="freq-stat-value"
+                                id="freq-anual-faltas"
+                            >
+                                0
+                            </span>
+
+                            <span class="freq-stat-label">
+                                Total de faltas
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="freq-stat">
+
+                        <div class="freq-stat-icon warning">
+                            <i class="fa-solid fa-file-medical"></i>
+                        </div>
+
+                        <div>
+
+                            <span
+                                class="freq-stat-value"
+                                id="freq-anual-atestados"
+                            >
+                                0
+                            </span>
+
+                            <span class="freq-stat-label">
+                                Atestados
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="freq-stat">
+
+                        <div class="freq-stat-icon success">
+                            <i class="fa-solid fa-arrow-trend-up"></i>
+                        </div>
+
+                        <div>
+
+                            <span
+                                class="freq-stat-value freq-stat-text"
+                                id="freq-melhor-mes"
+                            >
+                                —
+                            </span>
+
+                            <span class="freq-stat-label">
+                                Melhor mês
+                            </span>
+
+                        </div>
+
+                    </article>
+
+
+                    <article class="freq-stat">
+
+                        <div class="freq-stat-icon danger-soft">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                        </div>
+
+                        <div>
+
+                            <span
+                                class="freq-stat-value freq-stat-text"
+                                id="freq-mes-mais-faltas"
+                            >
+                                —
+                            </span>
+
+                            <span class="freq-stat-label">
+                                Mês com mais faltas
+                            </span>
+
+                        </div>
+
+                    </article>
+
+                </div>
+
+
+                <!-- META ANUAL -->
+
+                <div class="freq-meta-card">
+
+                    <div class="freq-meta-title">
+
+                        <div>
+
+                            <strong>
+                                Meta anual
+                            </strong>
+
+                            <span id="freq-meta-resumo">
+                                Meta: 80% · Atual: 0%
+                            </span>
+
+                        </div>
+
+
+                        <strong
+                            class="freq-meta-percent"
+                            id="freq-meta-percent"
+                        >
+                            0%
+                        </strong>
+
+                    </div>
+
+
+                    <div class="freq-progress-track">
+
+                        <div
+                            class="freq-progress-fill"
+                            id="freq-progress-fill"
+                        ></div>
+
+                    </div>
+
+
+                    <div class="freq-meta-mensagens">
+
+                        <p id="freq-diferenca-meta">
+                            Configure o período letivo para acompanhar a meta.
+                        </p>
+
+                        <p id="freq-faltas-restantes">
+                            —
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LEGENDA -->
+
+                <div class="freq-legenda">
+
+                    <strong>
+                        Legenda:
+                    </strong>
+
+                    <span>
+                        <i class="legenda-dot verde"></i>
+                        Presença automática
+                    </span>
+
+                    <span>
+                        <i class="legenda-dot vermelho"></i>
+                        Falta
+                    </span>
+
+                    <span>
+                        <i class="legenda-dot amarelo"></i>
+                        Atestado
+                    </span>
+
+                    <span>
+                        <i class="legenda-dot laranja"></i>
+                        Sem aula
+                    </span>
+
+                    <span>
+                        <i class="legenda-dot roxo"></i>
+                        Prova
+                    </span>
+
+                    <span>
+                        <i class="legenda-dot azul"></i>
+                        Tarefa
+                    </span>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 CALENDÁRIOS
+            ======================================= -->
+
+            <div class="calendario-container">
+
+                <div class="calendario">
+
+                    <?php
+                    gerarCalendario(
+                        $anoSelecionado
+                    );
+                    ?>
+
+                </div>
+
+            </div>
+
+            </div>
+            <!-- /.calendario-area -->
+
+        </div>
+
     </div>
-  </div>
 
-  <!-- Modal de Confirmação -->
-  <div id="logout-modal" class="modal">
-    <div class="modal-content">
-      <h3>Ah... já vai?</h3>
-      <h4>Tem certeza que deseja sair?</h4>
-      <div class="modal-buttons">
-        <button id="confirm-logout">Sim</button>
-        <button id="cancel-logout">Cancelar</button>
-      </div>
+
+    <!-- ======================================
+         MODAL LOGOUT
+    ======================================= -->
+
+    <div
+        id="logout-modal"
+        class="modal"
+    >
+
+        <div class="modal-content">
+
+            <h3>
+                Ah... já vai?
+            </h3>
+
+            <h4>
+                Tem certeza que deseja sair?
+            </h4>
+
+            <div class="modal-buttons">
+
+                <button id="confirm-logout">
+                    Sim
+                </button>
+
+                <button id="cancel-logout">
+                    Cancelar
+                </button>
+
+            </div>
+
+        </div>
+
     </div>
-  </div>
 
-  <!-- Modal da FOGi -->
-  <div id="fogi-modal">
-    <div class="fogi-container">
-      <div class="fogi-header">
-        <span>FOGi — Assistente de Estudos</span>
-        <button id="fogi-close">Fechar</button>
-      </div>
-      <iframe id="fogi-iframe" src="about:blank"></iframe>
+
+    <!-- ======================================
+         MODAL FOGI
+    ======================================= -->
+
+    <div id="fogi-modal">
+
+        <div class="fogi-container">
+
+            <div class="fogi-header">
+
+                <span>
+                    FOGi — Assistente de Estudos
+                </span>
+
+                <button id="fogi-close">
+                    Fechar
+                </button>
+
+            </div>
+
+            <iframe
+                id="fogi-iframe"
+                src="about:blank"
+                title="FOGi — Assistente de Estudos"
+            ></iframe>
+
+        </div>
+
     </div>
-  </div>
 
-  <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
 
-  <script src="calend.js"></script>
+    <footer>
+        &copy; 2026 FOAG.
+        Todos os direitos reservados.
+    </footer>
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const fogiBtn   = document.getElementById("icon-fogi");
-      const fogiModal = document.getElementById("fogi-modal");
-      const fogiFrame = document.getElementById("fogi-iframe");
-      const fogiClose = document.getElementById("fogi-close");
 
-      // Se faltar algum elemento, não tenta fazer nada
-      if (!fogiBtn || !fogiModal || !fogiFrame || !fogiClose) {
-        console.warn("FOGi: elemento não encontrado na página.");
-        return;
-      }
+    <script src="calend.js"></script>
 
-      // abre IA
-      fogiBtn.addEventListener("click", () => {
-        fogiFrame.src = "http://127.0.0.1:5000";  // Flask/Ollama rodando
-        fogiModal.style.display = "flex";
-        document.body.style.overflow = "hidden";
-      });
 
-      // fecha IA pelo botão "Fechar" do modal
-      fogiClose.addEventListener("click", () => {
-        fogiModal.style.display = "none";
-        fogiFrame.src = "about:blank"; // limpa sessão
-        document.body.style.overflow = "";
-      });
+    <script>
+        document.addEventListener(
+            'DOMContentLoaded',
+            () => {
+                const fogiBtn =
+                    document.getElementById(
+                        'icon-fogi'
+                    );
 
-      // sair da IA via postMessage (botão X dentro do FOGi.html)
-      window.addEventListener("message", (ev) => {
-        if (ev.data && ev.data.type === "FOGI_CLOSE") {
-          fogiModal.style.display = "none";
-          fogiFrame.src = "about:blank";
-          document.body.style.overflow = "";
-        }
-      });
-    });
-  </script>
+                const fogiModal =
+                    document.getElementById(
+                        'fogi-modal'
+                    );
+
+                const fogiFrame =
+                    document.getElementById(
+                        'fogi-iframe'
+                    );
+
+                const fogiClose =
+                    document.getElementById(
+                        'fogi-close'
+                    );
+
+                if (
+                    !fogiBtn ||
+                    !fogiModal ||
+                    !fogiFrame ||
+                    !fogiClose
+                ) {
+                    return;
+                }
+
+                fogiBtn.addEventListener(
+                    'click',
+                    () => {
+                        fogiFrame.src =
+                            'http://127.0.0.1:5000';
+
+                        fogiModal.style.display =
+                            'flex';
+
+                        document.body.style.overflow =
+                            'hidden';
+                    }
+                );
+
+                fogiClose.addEventListener(
+                    'click',
+                    () => {
+                        fogiModal.style.display =
+                            'none';
+
+                        fogiFrame.src =
+                            'about:blank';
+
+                        document.body.style.overflow =
+                            '';
+                    }
+                );
+
+                window.addEventListener(
+                    'message',
+                    ev => {
+                        if (
+                            ev.data &&
+                            ev.data.type ===
+                                'FOGI_CLOSE'
+                        ) {
+                            fogiModal.style.display =
+                                'none';
+
+                            fogiFrame.src =
+                                'about:blank';
+
+                            document.body.style.overflow =
+                                '';
+                        }
+                    }
+                );
+            }
+        );
+    </script>
+
 </body>
 </html>

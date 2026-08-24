@@ -1,706 +1,4101 @@
-// calend.js — FOAG (Calendário + Agenda + Horários)
+// calend.js — FOAG
+// Calendário + Agenda + Frequência anual
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ------- AGENDA (ligação com agenda.php) -------
-  const agendaData = window.CAL_AGENDA_DATA || {
-    notas: [],
-    tarefas: [],
-    nao_esquecer: []
-  };
-  const AGENDA_SAVE_URL = window.CAL_AGENDA_SAVE_URL || '../bloco/salvar_agenda.php';
-  const HORARIO_API_URL = window.CAL_HORARIO_URL     || '../horario/horario_api.php';
-  // ----- DADOS DO CALENDÁRIO (cores + metas) -----
-  const rawCalendData = window.CAL_CALEND_DATA || {};
+
+  // =====================================================
+  // DADOS
+  // =====================================================
+
+  const agendaData =
+    window.CAL_AGENDA_DATA || {
+      notas: [],
+      tarefas: [],
+      nao_esquecer: []
+    };
+
+  const rawCalendData =
+    window.CAL_CALEND_DATA || {};
 
   const calendData = {
-    dias:  (rawCalendData.dias  && typeof rawCalendData.dias  === 'object') ? rawCalendData.dias  : {},
-    metas: (rawCalendData.metas && typeof rawCalendData.metas === 'object') ? rawCalendData.metas : {}
+    dias:
+      rawCalendData.dias &&
+      typeof rawCalendData.dias === 'object'
+        ? rawCalendData.dias
+        : {},
+
+    metas:
+      rawCalendData.metas &&
+      typeof rawCalendData.metas === 'object'
+        ? rawCalendData.metas
+        : {},
+
+    configuracoes:
+      rawCalendData.configuracoes &&
+      typeof rawCalendData.configuracoes === 'object'
+        ? rawCalendData.configuracoes
+        : {}
   };
 
-  const CALEND_SAVE_URL = window.CAL_CALEND_SAVE_URL || 'salvar_calendario.php';
+  const AGENDA_SAVE_URL =
+    window.CAL_AGENDA_SAVE_URL ||
+    '../bloco/salvar_agenda.php';
 
-  function salvarCalendarioServidor() {
-    try {
-      fetch(CALEND_SAVE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(calendData)
-      })
-        .then(r => r.text())
-        .then(txt => console.log('Calendário salvo:', txt))
-        .catch(err => console.error('Erro ao salvar calendário:', err));
-    } catch (e) {
-      console.error('Erro fetch calendário:', e);
+  const HORARIO_API_URL =
+    window.CAL_HORARIO_URL ||
+    '../horario/horario_api.php';
+
+  const CALEND_SAVE_URL =
+    window.CAL_CALEND_SAVE_URL ||
+    'salvar_calendario.php';
+
+  const ANO_ATUAL =
+    Number(
+      window.CAL_ANO ||
+      new Date().getFullYear()
+    );
+
+  const NOMES_MESES = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro'
+  ];
+
+
+  // =====================================================
+  // DATA
+  // =====================================================
+
+  function hojeIso() {
+
+    const agora =
+      new Date();
+
+    return (
+      `${agora.getFullYear()}-` +
+      `${String(
+        agora.getMonth() + 1
+      ).padStart(2, '0')}-` +
+      `${String(
+        agora.getDate()
+      ).padStart(2, '0')}`
+    );
+
+  }
+
+
+  function dataIsoValida(
+    valor
+  ) {
+
+    return (
+      typeof valor === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(
+        valor
+      )
+    );
+
+  }
+
+
+  function diaSemanaIso(
+    iso
+  ) {
+
+    return new Date(
+      iso + 'T00:00:00'
+    ).getDay();
+
+  }
+
+
+  function ehFimDeSemana(
+    iso
+  ) {
+
+    const diaSemana =
+      diaSemanaIso(
+        iso
+      );
+
+    return (
+      diaSemana === 0 ||
+      diaSemana === 6
+    );
+
+  }
+
+
+  function isoEntre(
+    iso,
+    inicio,
+    fim
+  ) {
+
+    return (
+      dataIsoValida(inicio) &&
+      dataIsoValida(fim) &&
+      iso >= inicio &&
+      iso <= fim
+    );
+
+  }
+
+
+  // =====================================================
+  // CONFIGURAÇÃO DO ANO
+  // =====================================================
+
+  function obterConfigAno(
+    ano = ANO_ATUAL
+  ) {
+
+    const chave =
+      String(
+        ano
+      );
+
+
+    if (
+      !calendData.configuracoes[
+        chave
+      ] ||
+      typeof calendData
+        .configuracoes[
+          chave
+        ] !== 'object'
+    ) {
+
+      calendData.configuracoes[
+        chave
+      ] = {};
+
     }
-  }
 
 
-  function salvarAgendaServidor() {
-    try {
-      fetch(AGENDA_SAVE_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(agendaData)
-      })
-        .then(res => res.text())
-        .then(txt => {
-          console.log('Agenda salva via calendário:', txt);
-        })
-        .catch(err => console.error('Erro ao salvar agenda via calendário:', err));
-    } catch (e) {
-      console.error('Erro fetch agenda:', e);
+    const config =
+      calendData.configuracoes[
+        chave
+      ];
+
+
+    if (
+      !Number.isFinite(
+        Number(
+          config.meta_anual
+        )
+      )
+    ) {
+
+      config.meta_anual =
+        80;
+
     }
+
+
+    config.inicio_ano_letivo =
+      dataIsoValida(
+        config.inicio_ano_letivo
+      )
+        ? config.inicio_ano_letivo
+        : '';
+
+
+    config.fim_ano_letivo =
+      dataIsoValida(
+        config.fim_ano_letivo
+      )
+        ? config.fim_ano_letivo
+        : '';
+
+
+    config.inicio_ferias_meio =
+      dataIsoValida(
+        config.inicio_ferias_meio
+      )
+        ? config.inicio_ferias_meio
+        : '';
+
+
+    config.fim_ferias_meio =
+      dataIsoValida(
+        config.fim_ferias_meio
+      )
+        ? config.fim_ferias_meio
+        : '';
+
+
+    return config;
+
   }
 
-  function tarefasDoDia(iso) {
-    const lista = Array.isArray(agendaData.tarefas) ? agendaData.tarefas : [];
-    return lista.filter(t => t.data === iso && t.texto && t.texto.trim() !== '');
+
+  function periodoLetivoPermite(
+    iso,
+    config
+  ) {
+
+    if (
+      config.inicio_ano_letivo &&
+      iso <
+        config.inicio_ano_letivo
+    ) {
+
+      return false;
+
+    }
+
+
+    if (
+      config.fim_ano_letivo &&
+      iso >
+        config.fim_ano_letivo
+    ) {
+
+      return false;
+
+    }
+
+
+    if (
+      isoEntre(
+        iso,
+        config.inicio_ferias_meio,
+        config.fim_ferias_meio
+      )
+    ) {
+
+      return false;
+
+    }
+
+
+    return true;
+
   }
+
+
+  function validarConfigAno(
+    config
+  ) {
+
+    if (
+      config.inicio_ano_letivo &&
+      config.fim_ano_letivo &&
+      config.inicio_ano_letivo >
+        config.fim_ano_letivo
+    ) {
+
+      return (
+        'O início do ano letivo não pode ser depois do final.'
+      );
+
+    }
+
+
+    if (
+      config.inicio_ferias_meio &&
+      config.fim_ferias_meio &&
+      config.inicio_ferias_meio >
+        config.fim_ferias_meio
+    ) {
+
+      return (
+        'O início das férias não pode ser depois do final.'
+      );
+
+    }
+
+
+    return '';
+
+  }
+
+
+  // =====================================================
+  // SALVAR CALENDÁRIO
+  // =====================================================
+
+  async function salvarCalendarioServidor() {
+
+    try {
+
+      const resposta =
+        await fetch(
+          CALEND_SAVE_URL,
+          {
+            method:
+              'POST',
+
+            credentials:
+              'same-origin',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body:
+              JSON.stringify(
+                calendData
+              )
+          }
+        );
+
+
+      if (
+        !resposta.ok
+      ) {
+
+        throw new Error(
+          'HTTP ' +
+          resposta.status
+        );
+
+      }
+
+
+      const retorno =
+        await resposta
+          .json()
+          .catch(
+            () => null
+          );
+
+
+      if (
+        retorno &&
+        retorno.sucesso === false
+      ) {
+
+        throw new Error(
+          retorno.mensagem ||
+          'Erro ao salvar calendário.'
+        );
+
+      }
+
+
+      return true;
+
+
+    } catch (erro) {
+
+      console.error(
+        'Erro ao salvar calendário:',
+        erro
+      );
+
+
+      return false;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // SALVAR AGENDA
+  // =====================================================
+
+  async function salvarAgendaServidor() {
+
+    try {
+
+      await fetch(
+        AGENDA_SAVE_URL,
+        {
+          method:
+            'POST',
+
+          credentials:
+            'same-origin',
+
+          headers: {
+            'Content-Type':
+              'application/json'
+          },
+
+          body:
+            JSON.stringify(
+              agendaData
+            )
+        }
+      );
+
+
+    } catch (erro) {
+
+      console.error(
+        'Erro ao salvar agenda:',
+        erro
+      );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // ELEMENTOS DO PAINEL ANUAL
+  // =====================================================
+
+  const inputMetaAnual =
+    document.getElementById(
+      'meta-anual'
+    );
+
+  const inputInicioAno =
+    document.getElementById(
+      'inicio-ano-letivo'
+    );
+
+  const inputFimAno =
+    document.getElementById(
+      'fim-ano-letivo'
+    );
+
+  const inputInicioFerias =
+    document.getElementById(
+      'inicio-ferias-meio'
+    );
+
+  const inputFimFerias =
+    document.getElementById(
+      'fim-ferias-meio'
+    );
+
+  const erroConfig =
+    document.getElementById(
+      'freq-config-erro'
+    );
+
+
+  // =====================================================
+  // PREENCHER CONFIGURAÇÃO
+  // =====================================================
+
+  function preencherConfigAno() {
+
+    const config =
+      obterConfigAno();
+
+
+    if (
+      inputMetaAnual
+    ) {
+
+      inputMetaAnual.value =
+        String(
+          clamp(
+            Number(
+              config.meta_anual
+            ),
+            0,
+            100
+          )
+        );
+
+    }
+
+
+    if (
+      inputInicioAno
+    ) {
+
+      inputInicioAno.value =
+        config.inicio_ano_letivo;
+
+    }
+
+
+    if (
+      inputFimAno
+    ) {
+
+      inputFimAno.value =
+        config.fim_ano_letivo;
+
+    }
+
+
+    if (
+      inputInicioFerias
+    ) {
+
+      inputInicioFerias.value =
+        config.inicio_ferias_meio;
+
+    }
+
+
+    if (
+      inputFimFerias
+    ) {
+
+      inputFimFerias.value =
+        config.fim_ferias_meio;
+
+    }
+
+  }
+
+
+  // =====================================================
+  // ATUALIZAR CONFIGURAÇÃO
+  // =====================================================
+
+  async function atualizarConfigAno() {
+
+    const config =
+      obterConfigAno();
+
+
+    config.meta_anual =
+      clamp(
+        Number(
+          inputMetaAnual?.value ||
+          80
+        ),
+        0,
+        100
+      );
+
+
+    config.inicio_ano_letivo =
+      inputInicioAno?.value ||
+      '';
+
+
+    config.fim_ano_letivo =
+      inputFimAno?.value ||
+      '';
+
+
+    config.inicio_ferias_meio =
+      inputInicioFerias?.value ||
+      '';
+
+
+    config.fim_ferias_meio =
+      inputFimFerias?.value ||
+      '';
+
+
+    const erro =
+      validarConfigAno(
+        config
+      );
+
+
+    if (
+      erroConfig
+    ) {
+
+      erroConfig.textContent =
+        erro;
+
+    }
+
+
+    if (
+      erro
+    ) {
+
+      return;
+
+    }
+
+
+    await salvarCalendarioServidor();
+
+
+    atualizarTudo();
+
+  }
+
+
+  [
+    inputMetaAnual,
+    inputInicioAno,
+    inputFimAno,
+    inputInicioFerias,
+    inputFimFerias
+  ].forEach(
+    input => {
+
+      input?.addEventListener(
+        'change',
+        atualizarConfigAno
+      );
+
+    }
+  );
+
+
+  // =====================================================
+  // TAREFAS DO DIA
+  // =====================================================
+
+  function tarefasDoDia(
+    iso
+  ) {
+
+    const lista =
+      Array.isArray(
+        agendaData.tarefas
+      )
+        ? agendaData.tarefas
+        : [];
+
+
+    return lista.filter(
+      tarefa =>
+        tarefa.data === iso &&
+        tarefa.texto &&
+        tarefa.texto.trim() !== ''
+    );
+
+  }
+
+
+  // =====================================================
+  // MARCAR DIAS COM TAREFA
+  // =====================================================
 
   function marcarDiasComTarefa() {
-    if (!agendaData || !Array.isArray(agendaData.tarefas)) return;
 
-    agendaData.tarefas.forEach(t => {
-      const iso = t.data;
-      if (!iso) return;
-      const diaEl = document.querySelector(`.calendario .dia[data-date="${iso}"]`);
-      if (diaEl) {
-        diaEl.classList.add('has-tarefa');
-        atualizarDots(diaEl);
-      }
-    });
-  }
+    if (
+      !Array.isArray(
+        agendaData.tarefas
+      )
+    ) {
 
-  // salva / atualiza tarefa desse dia com origem "calendario"
-  function salvarTextoDoDiaNaAgenda(iso, texto) {
-    if (!Array.isArray(agendaData.tarefas)) {
-      agendaData.tarefas = [];
+      return;
+
     }
 
-    // remove tarefas desse dia criadas pelo calendário (pra não duplicar)
-    agendaData.tarefas = agendaData.tarefas.filter(
-      t => !(t.data === iso && t.origem === 'calendario')
+
+    agendaData.tarefas.forEach(
+      tarefa => {
+
+        const iso =
+          tarefa.data;
+
+
+        if (
+          !iso
+        ) {
+
+          return;
+
+        }
+
+
+        const dia =
+          document.querySelector(
+            `.calendario .dia[data-date="${iso}"]`
+          );
+
+
+        if (
+          dia
+        ) {
+
+          dia.classList.add(
+            'has-tarefa'
+          );
+
+        }
+
+      }
     );
 
-    const txt = (texto || '').trim();
-    if (txt !== '') {
-      agendaData.tarefas.push({
-        texto: txt,
-        data: iso,
-        origem: 'calendario'
-      });
+  }
+
+
+  // =====================================================
+  // SALVAR TAREFA DO CALENDÁRIO
+  // =====================================================
+
+  function salvarTextoDoDiaNaAgenda(
+    iso,
+    texto
+  ) {
+
+    if (
+      !Array.isArray(
+        agendaData.tarefas
+      )
+    ) {
+
+      agendaData.tarefas =
+        [];
+
     }
 
-    // atualiza bolinha azul no dia imediatamente
-    const diaEl = document.querySelector(`.calendario .dia[data-date="${iso}"]`);
-    if (diaEl) {
-      if (txt !== '') {
-        diaEl.classList.add('has-tarefa');
-      } else {
-        diaEl.classList.remove('has-tarefa');
-      }
-      atualizarDots(diaEl);
+
+    agendaData.tarefas =
+      agendaData.tarefas.filter(
+        tarefa =>
+          !(
+            tarefa.data === iso &&
+            tarefa.origem ===
+              'calendario'
+          )
+      );
+
+
+    const textoLimpo =
+      (texto || '')
+        .trim();
+
+
+    if (
+      textoLimpo
+    ) {
+
+      agendaData.tarefas.push({
+        texto:
+          textoLimpo,
+
+        data:
+          iso,
+
+        origem:
+          'calendario'
+      });
+
     }
+
+
+    const dia =
+      document.querySelector(
+        `.calendario .dia[data-date="${iso}"]`
+      );
+
+
+    if (
+      dia
+    ) {
+
+      dia.classList.toggle(
+        'has-tarefa',
+        Boolean(
+          textoLimpo
+        )
+      );
+
+
+      atualizarDots(
+        dia
+      );
+
+    }
+
 
     salvarAgendaServidor();
+
   }
 
-  // ------- HORÁRIO (ligação com horário.php via API) -------
-  async function buscarHorarios(iso) {
-    if (!HORARIO_API_URL) return [];
+
+  // =====================================================
+  // BUSCAR HORÁRIOS
+  // =====================================================
+
+  async function buscarHorarios(
+    iso
+  ) {
+
+    if (
+      !HORARIO_API_URL
+    ) {
+
+      return [];
+
+    }
+
 
     try {
-      const url = `${HORARIO_API_URL}?data=${encodeURIComponent(iso)}`;
-      const res = await fetch(url);
-      if (!res.ok) throw new Error('HTTP ' + res.status);
 
-      const json = await res.json();
-      if (!json || !json.html) return [];
+      const url =
+        `${HORARIO_API_URL}` +
+        `?data=${encodeURIComponent(
+          iso
+        )}`;
 
-      const html = json.html;
 
-      // pega o dia da semana pelo ISO
-      const data = new Date(iso + 'T00:00:00');
-      const diaSemana = data.getDay(); // 0=domingo ... 6=sábado
+      const resposta =
+        await fetch(
+          url
+        );
 
-      const mapCol = {
-        1: 1, // segunda
-        2: 2, // terça
-        3: 3, // quarta
-        4: 4, // quinta
-        5: 5  // sexta
-      };
 
-      const colIndex = mapCol[diaSemana];
-      if (!colIndex) {
-        return []; // sábado/domingo → sem aula
+      if (
+        !resposta.ok
+      ) {
+
+        throw new Error(
+          'HTTP ' +
+          resposta.status
+        );
+
       }
 
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(`<table>${html}</table>`, 'text/html');
-      const trs = doc.querySelectorAll('tr');
 
-      const materias = new Set();
+      const json =
+        await resposta.json();
 
-      trs.forEach(tr => {
-        const tds = tr.querySelectorAll('td');
-        if (tds.length > colIndex) {
-          const texto = tds[colIndex].textContent.trim();
-          if (texto) materias.add(texto);
-        }
-      });
 
-      return Array.from(materias);
-    } catch (e) {
-      console.error('Erro ao buscar horários do dia:', e);
+      if (
+        !json ||
+        !json.html
+      ) {
+
+        return [];
+
+      }
+
+
+      const diaSemana =
+        diaSemanaIso(
+          iso
+        );
+
+
+      const mapaColuna = {
+        1: 1,
+        2: 2,
+        3: 3,
+        4: 4,
+        5: 5
+      };
+
+
+      const coluna =
+        mapaColuna[
+          diaSemana
+        ];
+
+
+      if (
+        !coluna
+      ) {
+
+        return [];
+
+      }
+
+
+      const parser =
+        new DOMParser();
+
+
+      const documento =
+        parser.parseFromString(
+          `<table>${json.html}</table>`,
+          'text/html'
+        );
+
+
+      const materias =
+        new Set();
+
+
+      documento
+        .querySelectorAll(
+          'tr'
+        )
+        .forEach(
+          linha => {
+
+            const colunas =
+              linha.querySelectorAll(
+                'td'
+              );
+
+
+            if (
+              colunas.length >
+              coluna
+            ) {
+
+              const texto =
+                colunas[
+                  coluna
+                ]
+                  .textContent
+                  .trim();
+
+
+              if (
+                texto
+              ) {
+
+                materias.add(
+                  texto
+                );
+
+              }
+
+            }
+
+          }
+        );
+
+
+      return Array.from(
+        materias
+      );
+
+
+    } catch (erro) {
+
+      console.error(
+        'Erro ao buscar horários:',
+        erro
+      );
+
+
       return [];
-    }
-  }
 
-  // ========== UTIL: FECHAR MÊS ==========
-  function fecharMes(mes) {
-    if (!mes) return;
-    mes.classList.remove('expanded');
-    mes.__corSelecionada = null;
-    mes?.__atualizarBotoesCor?.();
-
-    // garante que o botão X some no card fechado
-    const btnFechar = mes.querySelector('.fechar-btn');
-    if (btnFechar) btnFechar.style.display = 'none';
-
-    if (!document.querySelector('.mes.expanded')) {
-      document.body.classList.remove('no-scroll');
-      document.getElementById('cal-backdrop')?.classList.remove('ativo');
-    }
-  }
-
-  // ========== EXPANDIR MÊS ==========
-  document.querySelectorAll('.mes').forEach(mes => {
-    mes.addEventListener('click', () => {
-      const aberto = document.querySelector('.mes.expanded');
-      if (aberto && aberto !== mes) return;
-
-      if (!mes.classList.contains('expanded')) {
-        mes.classList.add('expanded');
-        document.body.classList.add('no-scroll');
-        document.getElementById('cal-backdrop')?.classList.add('ativo');
-
-        let fechar = mes.querySelector('.fechar-btn');
-        if (!fechar) {
-          fechar = document.createElement('button');
-          fechar.textContent = '×';
-          fechar.classList.add('fechar-btn');
-          fechar.onclick = e => {
-            e.stopPropagation();
-            fecharMes(mes);
-          };
-          mes.appendChild(fechar);
-        }
-        fechar.style.display = 'flex';
-      }
-    });
-  });
-
-  // ========== SELEÇÃO DE COR ==========
-  document.querySelectorAll('.mes').forEach(mes => {
-    mes.__corSelecionada = null;
-    const botoesCor = mes.querySelectorAll('.btn-cor');
-
-    function atualizarBotoesCorLocal() {
-      botoesCor.forEach(botao => {
-        if (botao.dataset.cor === mes.__corSelecionada) {
-          botao.classList.add('selecionado');
-          botao.style.outline = '3px solid #555';
-          botao.style.transform = 'scale(1.3)';
-        } else {
-          botao.classList.remove('selecionado');
-          botao.style.outline = 'none';
-          botao.style.transform = 'scale(1)';
-        }
-      });
     }
 
-    mes.__atualizarBotoesCor = atualizarBotoesCorLocal;
+  }
 
-    botoesCor.forEach(botao => {
-      botao.addEventListener('click', e => {
-        e.stopPropagation();
-        const cor = botao.dataset.cor;
 
-        botoesCor.forEach(b => b.classList.remove('selecionado'));
+  // =====================================================
+  // STATUS DO DIA
+  // =====================================================
 
-        if (mes.__corSelecionada === cor) {
-          mes.__corSelecionada = null;
-        } else {
-          mes.__corSelecionada = cor;
-          botao.classList.add('selecionado');
-        }
+  function statusDia(
+    dia
+  ) {
 
-        atualizarBotoesCorLocal();
-      });
-    });
-  });
+    if (
+      dia.classList.contains(
+        'vermelho'
+      )
+    ) {
 
-  // ========== DOTS ==========
-  function atualizarDots(diaEl) {
-    const dots = diaEl.querySelector('.dots');
-    if (!dots) return;
-    dots.innerHTML = '';
+      return 'vermelho';
 
-    if (diaEl.classList.contains('vermelho')) dots.appendChild(criaDot('vermelho'));
-    if (diaEl.classList.contains('amarelo'))  dots.appendChild(criaDot('amarelo'));
-    if (diaEl.classList.contains('sem-aula')) dots.appendChild(criaDot('semaula'));
-    if (diaEl.classList.contains('roxo'))     dots.appendChild(criaDot('roxo'));
-
-    // pontinho azul escuro se tiver tarefa
-    if (diaEl.classList.contains('has-tarefa')) {
-      dots.appendChild(criaDot('tarefa'));
     }
+
+
+    if (
+      dia.classList.contains(
+        'amarelo'
+      )
+    ) {
+
+      return 'amarelo';
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'sem-aula'
+      )
+    ) {
+
+      return 'sem-aula';
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'roxo'
+      )
+    ) {
+
+      return 'roxo';
+
+    }
+
+
+    return null;
+
   }
 
-  function criaDot(tipo) {
-    const s = document.createElement('span');
-    s.className = `dot ${tipo}`;
-    return s;
+
+  // =====================================================
+  // VERIFICAR DIA LETIVO
+  // =====================================================
+
+  function diaContaComoLetivo(
+    dia,
+    config,
+    incluirFuturo = false
+  ) {
+
+    const iso =
+      dia.getAttribute(
+        'data-date'
+      );
+
+
+    if (
+      !iso
+    ) {
+
+      return false;
+
+    }
+
+
+    if (
+      ehFimDeSemana(
+        iso
+      ) ||
+      dia.classList.contains(
+        'feriado'
+      ) ||
+      dia.classList.contains(
+        'sem-aula'
+      ) ||
+      !periodoLetivoPermite(
+        iso,
+        config
+      )
+    ) {
+
+      return false;
+
+    }
+
+
+    if (
+      !incluirFuturo &&
+      iso > hojeIso()
+    ) {
+
+      return false;
+
+    }
+
+
+    return true;
+
   }
 
-    // ========== CLIQUE NOS DIAS (para cores) ==========
-  document.querySelectorAll('.mes').forEach(mes => {
-    mes.addEventListener('click', e => {
-      if (!mes.classList.contains('expanded')) return;
-      if (!mes.__corSelecionada) return;
 
-      const t = e.target.closest?.('.dia');
-      if (!t || t.classList.contains('header-dia') || t.textContent.trim() === '') return;
+  // =====================================================
+  // PRESENÇA AUTOMÁTICA
+  // =====================================================
 
-      if (t.classList.contains('feriado')) {
-        alert('Este dia é feriado automático e não pode ser alterado.');
-        return;
-      }
+  function ehPresencaAutomatica(
+    dia
+  ) {
 
-      t.classList.remove('vermelho', 'amarelo', 'sem-aula', 'roxo');
-
-      if (mes.__corSelecionada !== 'limpar') {
-        t.classList.add(mes.__corSelecionada);
-      }
-
-      const iso = t.getAttribute('data-date');
-      if (iso) {
-        // qual status ficou no final?
-        let status = null;
-        if (t.classList.contains('vermelho'))  status = 'vermelho';
-        else if (t.classList.contains('amarelo'))  status = 'amarelo';
-        else if (t.classList.contains('sem-aula')) status = 'sem-aula';
-        else if (t.classList.contains('roxo'))     status = 'roxo';
-
-        if (status) {
-          calendData.dias[iso] = status;
-        } else {
-          delete calendData.dias[iso];
-        }
-        salvarCalendarioServidor();
-      }
-
-      setTimeout(() => {
-        atualizarDots(t);
-        recalcularMetricasDoMes(mes);
-      }, 0);
-    });
-  });
+    const mes =
+      dia.closest(
+        '.mes'
+      );
 
 
-  // ========== MÉTRICAS / METAS ==========
-  function clamp(n, min, max) {
-    return Math.max(min, Math.min(max, n));
-  }
+    if (
+      !mes
+    ) {
 
-  function recalcularMetricasDoMes(mes) {
-    const dias = [...mes.querySelectorAll('.dia')].filter(
-      d => !d.classList.contains('header-dia') && d.querySelector('.num-dia')
+      return false;
+
+    }
+
+
+    const config =
+      obterConfigAno(
+        Number(
+          mes.dataset.ano
+        )
+      );
+
+
+    if (
+      !diaContaComoLetivo(
+        dia,
+        config,
+        false
+      )
+    ) {
+
+      return false;
+
+    }
+
+
+    return (
+      !dia.classList.contains(
+        'vermelho'
+      ) &&
+      !dia.classList.contains(
+        'amarelo'
+      )
     );
 
-    let pres = 0, falt = 0, atest = 0, sem = 0, provas = 0, totalValidos = 0;
+  }
 
-    dias.forEach(d => {
-      if (d.classList.contains('sem-aula')) { sem++; return; }
-      if (!d.classList.contains('feriado')) totalValidos++;
 
-      if (d.classList.contains('vermelho')) falt++;
-      if (d.classList.contains('amarelo'))  atest++;
-      if (d.classList.contains('roxo'))     provas++;
+  // =====================================================
+  // MARCAÇÕES DO PERÍODO LETIVO
+  // =====================================================
 
-      const marcado = d.classList.contains('vermelho') || d.classList.contains('amarelo');
-      const feriado = d.classList.contains('feriado');
-      if (!marcado && !feriado) pres++;
-    });
+  function aplicarMarcacoesPeriodo() {
 
-    const metaInput = mes.querySelector('.meta-presenca');
-    const progress  = mes.querySelector('.progress-bar');
-    const label     = mes.querySelector('.label-presenca');
+    const config =
+      obterConfigAno();
 
-    mes.querySelector('.count-presenca').textContent = pres;
-    mes.querySelector('.count-falta').textContent    = falt;
-    mes.querySelector('.count-atestado').textContent = atest;
-    mes.querySelector('.count-semaula').textContent  = sem;
-    mes.querySelector('.count-prova').textContent    = provas;
 
-    const meta     = clamp(parseInt(metaInput?.value || '80', 10), 0, 100);
-    const percPres = totalValidos > 0 ? Math.round((pres / totalValidos) * 100) : 0;
+    document
+      .querySelectorAll(
+        '.calendario .dia[data-date]'
+      )
+      .forEach(
+        dia => {
 
-    if (progress) progress.style.width = Math.min(100, Math.round((percPres / meta) * 100)) + '%';
-    if (label)    label.textContent = `${percPres}%`;
+          const iso =
+            dia.getAttribute(
+              'data-date'
+            );
 
-    const ano = mes.dataset.ano;
-    const idx = mes.dataset.mes;
-    localStorage.setItem(
-      `foag_meta_${ano}_${idx}`,
-      JSON.stringify({ meta, percPres, pres, falt, atest, sem, provas })
+
+          dia.classList.remove(
+            'ferias-meio-ano',
+            'fora-periodo-letivo'
+          );
+
+
+          dia
+            .querySelectorAll(
+              '.periodo-badge'
+            )
+            .forEach(
+              badge => {
+
+                badge.remove();
+
+              }
+            );
+
+
+          if (
+            config.inicio_ano_letivo &&
+            iso <
+              config.inicio_ano_letivo
+          ) {
+
+            dia.classList.add(
+              'fora-periodo-letivo'
+            );
+
+          }
+
+
+          if (
+            config.fim_ano_letivo &&
+            iso >
+              config.fim_ano_letivo
+          ) {
+
+            dia.classList.add(
+              'fora-periodo-letivo'
+            );
+
+          }
+
+
+          if (
+            isoEntre(
+              iso,
+              config.inicio_ferias_meio,
+              config.fim_ferias_meio
+            )
+          ) {
+
+            dia.classList.add(
+              'ferias-meio-ano'
+            );
+
+          }
+
+
+          const marcacoes = [
+
+            {
+              data:
+                config.inicio_ano_letivo,
+
+              texto:
+                'Início'
+            },
+
+            {
+              data:
+                config.fim_ano_letivo,
+
+              texto:
+                'Fim'
+            },
+
+            {
+              data:
+                config.inicio_ferias_meio,
+
+              texto:
+                'Férias'
+            },
+
+            {
+              data:
+                config.fim_ferias_meio,
+
+              texto:
+                'Fim férias'
+            }
+
+          ];
+
+
+          marcacoes.forEach(
+            item => {
+
+              if (
+                item.data &&
+                iso === item.data
+              ) {
+
+                const badge =
+                  document.createElement(
+                    'span'
+                  );
+
+
+                badge.className =
+                  'periodo-badge';
+
+
+                badge.textContent =
+                  item.texto;
+
+
+                dia.appendChild(
+                  badge
+                );
+
+              }
+
+            }
+          );
+
+        }
+      );
+
+  }
+
+
+  // =====================================================
+  // DOTS
+  // =====================================================
+
+  function criaDot(
+    tipo
+  ) {
+
+    const dot =
+      document.createElement(
+        'span'
+      );
+
+
+    dot.className =
+      `dot ${tipo}`;
+
+
+    return dot;
+
+  }
+
+
+  function atualizarDots(
+    dia
+  ) {
+
+    const dots =
+      dia.querySelector(
+        '.dots'
+      );
+
+
+    if (
+      !dots
+    ) {
+
+      return;
+
+    }
+
+
+    dots.innerHTML =
+      '';
+
+
+    dia.classList.remove(
+      'presenca-automatica'
     );
+
+
+    if (
+      ehPresencaAutomatica(
+        dia
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'presenca'
+        )
+      );
+
+
+      dia.classList.add(
+        'presenca-automatica'
+      );
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'vermelho'
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'vermelho'
+        )
+      );
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'amarelo'
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'amarelo'
+        )
+      );
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'sem-aula'
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'semaula'
+        )
+      );
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'roxo'
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'roxo'
+        )
+      );
+
+    }
+
+
+    if (
+      dia.classList.contains(
+        'has-tarefa'
+      )
+    ) {
+
+      dots.appendChild(
+        criaDot(
+          'tarefa'
+        )
+      );
+
+    }
+
   }
 
-    document.querySelectorAll('.mes .meta-presenca').forEach(inp => {
-    inp.addEventListener('change', e => {
-      const mes = e.target.closest('.mes');
-      const ano = mes.dataset.ano;
-      const idx = mes.dataset.mes;
-      const key = `${ano}-${idx}`;
 
-      const valor = parseInt(e.target.value || '0', 10);
-      calendData.metas[key] = isNaN(valor) ? 0 : valor;
+  // =====================================================
+  // DESTACAR HOJE
+  // =====================================================
 
-      salvarCalendarioServidor();
-      recalcularMetricasDoMes(mes);
-    });
-  });
+  function destacarHoje() {
+
+    const hoje =
+      hojeIso();
 
 
-  // ========== MINI-AGENDA (Agenda + Horários) ==========
-  function formataDataBR(iso) {
-    const [y, m, d] = iso.split('-').map(Number);
-    return `${String(d).padStart(2, '0')}/${String(m).padStart(2, '0')}/${y}`;
+    document
+      .querySelectorAll(
+        '.calendario .dia[data-date]'
+      )
+      .forEach(
+        dia => {
+
+          const iso =
+            dia.getAttribute(
+              'data-date'
+            );
+
+
+          dia.classList.toggle(
+            'dia-hoje',
+            iso === hoje
+          );
+
+
+          const existente =
+            dia.querySelector(
+              '.hoje-badge'
+            );
+
+
+          if (
+            iso === hoje &&
+            !existente
+          ) {
+
+            const badge =
+              document.createElement(
+                'span'
+              );
+
+
+            badge.className =
+              'hoje-badge';
+
+
+            badge.textContent =
+              'Hoje';
+
+
+            dia.appendChild(
+              badge
+            );
+
+          }
+
+
+          if (
+            iso !== hoje &&
+            existente
+          ) {
+
+            existente.remove();
+
+          }
+
+        }
+      );
+
   }
 
-  // Duplo clique = ir direto pro editor
-  document.querySelectorAll('.mes .dia').forEach(d => {
-    d.addEventListener('dblclick', e => {
-      const mes = d.closest('.mes');
-      if (!mes || !mes.classList.contains('expanded')) return;
-      if (d.classList.contains('header-dia')) return;
 
-      const box     = mes.querySelector('.mini-agenda');
-      const dataEl  = box?.querySelector('.agenda-data');
-      const notasEl = box?.querySelector('.agenda-notas');
+  // =====================================================
+  // DIAS RESTANTES DO PERÍODO
+  // =====================================================
 
-      if (!box || !dataEl || !notasEl) return;
+  function diasRestantesPeriodo(
+    dias,
+    config
+  ) {
 
-      const iso = d.getAttribute('data-date');
-      if (!iso) return;
+    const hoje =
+      hojeIso();
 
-      box.dataset.date = iso;
-      dataEl.textContent = formataDataBR(iso);
 
-      const lista     = tarefasDoDia(iso);
-      const tarefaCal = lista.find(t => t.origem === 'calendario');
-      notasEl.value = tarefaCal ? tarefaCal.texto : '';
+    return dias.filter(
+      dia => {
 
-      const resumo = box.querySelector('.agenda-resumo');
-      const editor = box.querySelector('.agenda-editor');
-      if (resumo) resumo.style.display = 'none';
-      if (editor) editor.style.display = 'block';
+        const iso =
+          dia.getAttribute(
+            'data-date'
+          );
 
-      box.classList.add('aberto');
-      notasEl.focus();
-      e.stopPropagation();
-    });
-  });
 
-  document.querySelectorAll('.mes .agenda-fechar').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const mes = e.target.closest('.mes');
-      const box = mes.querySelector('.mini-agenda');
-      box.classList.remove('aberto');
-    });
-  });
+        return (
+          iso &&
+          iso > hoje &&
+          diaContaComoLetivo(
+            dia,
+            config,
+            true
+          )
+        );
 
-  document.querySelectorAll('.mes .agenda-salvar').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const mes    = e.target.closest('.mes');
-      const box    = mes.querySelector('.mini-agenda');
-      const notasEl = box?.querySelector('.agenda-notas');
-      const iso    = box?.dataset.date;
-
-      if (!iso || !notasEl) {
-        box?.classList.remove('aberto');
-        return;
       }
+    ).length;
 
-      salvarTextoDoDiaNaAgenda(iso, notasEl.value);
-      box.classList.remove('aberto');
-    });
-  });
+  }
 
-  // Clique simples no dia (sem cor selecionada) → mini-agenda com opções
-  document.querySelectorAll('.mes .dia').forEach(diaEl => {
-    diaEl.addEventListener('click', e => {
-      const mes = diaEl.closest('.mes');
-      if (!mes || !mes.classList.contains('expanded')) return;
-      if (mes.__corSelecionada) return;
-      if (diaEl.classList.contains('header-dia')) return;
 
-      const iso = diaEl.getAttribute('data-date');
-      if (!iso) return;
+  // =====================================================
+  // QUANTAS FALTAS AINDA PODE TER
+  // =====================================================
 
-      e.stopPropagation();
+  function calcularFaltasPossiveis(
+    presencas,
+    totalAtual,
+    diasRestantes,
+    meta
+  ) {
 
-      const mini   = mes.querySelector('.mini-agenda');
-      const dataEl = mini?.querySelector('.agenda-data');
-      const resumo = mini?.querySelector('.agenda-resumo');
-      const editor = mini?.querySelector('.agenda-editor');
-      const notas  = mini?.querySelector('.agenda-notas');
-      const btnVer  = mini?.querySelector('.btn-ver-tarefas');
-      const btnNova = mini?.querySelector('.btn-nova-tarefa');
-      const btnHor  = mini?.querySelector('.btn-ver-horarios');
+    const alvo =
+      clamp(
+        Number(
+          meta
+        ),
+        0,
+        100
+      ) / 100;
 
-      if (!mini || !dataEl || !resumo || !editor || !notas || !btnVer || !btnNova || !btnHor) return;
 
-      mini.dataset.date = iso;
-      dataEl.textContent = formataDataBR(iso);
+    if (
+      alvo <= 0
+    ) {
 
-      // Ver tarefas do dia
-      btnVer.onclick = () => {
-        const ts = tarefasDoDia(iso);
-        if (!ts.length) {
-          resumo.innerHTML = `<p class="agenda-resumo-vazio">Nenhuma tarefa cadastrada para este dia.</p>`;
-        } else {
-          resumo.innerHTML = `
-            <div class="agenda-bloco">
-              <strong>Tarefas do dia</strong>
-              <ul>${ts.map(t => `<li>${t.texto}</li>`).join('')}</ul>
-            </div>
-          `;
+      return null;
+
+    }
+
+
+    const totalFinal =
+      totalAtual +
+      diasRestantes;
+
+
+    const presencasSeForTodos =
+      presencas +
+      diasRestantes;
+
+
+    const maxFaltas =
+      Math.floor(
+        presencasSeForTodos -
+        alvo *
+        totalFinal +
+        0.000000001
+      );
+
+
+    return Math.max(
+      0,
+      maxFaltas
+    );
+
+  }
+
+
+  // =====================================================
+  // CALCULAR MÉTRICAS DO MÊS
+  // =====================================================
+
+  function calcularMetricasMesDados(
+    mes
+  ) {
+
+    const config =
+      obterConfigAno(
+        Number(
+          mes.dataset.ano
+        )
+      );
+
+
+    const dias = [
+      ...mes.querySelectorAll(
+        '.dia[data-date]'
+      )
+    ];
+
+
+    let presencas =
+      0;
+
+    let faltas =
+      0;
+
+    let atestados =
+      0;
+
+    let semAula =
+      0;
+
+    let provas =
+      0;
+
+    let totalDiasLetivos =
+      0;
+
+
+    dias.forEach(
+      dia => {
+
+        const iso =
+          dia.getAttribute(
+            'data-date'
+          );
+
+
+        if (
+          !iso
+        ) {
+
+          return;
+
         }
-        resumo.style.display = 'block';
-        editor.style.display = 'none';
-      };
 
-      // Agendar nova tarefa
-      btnNova.onclick = () => {
-        const lista = tarefasDoDia(iso);
-        const tCal  = lista.find(t => t.origem === 'calendario');
-        notas.value = tCal ? (tCal.texto || '') : '';
-        editor.style.display = 'block';
-        resumo.style.display = 'none';
-        notas.focus();
-      };
 
-      // Ver horários do dia
-      btnHor.onclick = async () => {
-        resumo.style.display = 'block';
-        editor.style.display = 'none';
-        resumo.innerHTML = `<p>Carregando horários...</p>`;
+        if (
+          dia.classList.contains(
+            'sem-aula'
+          )
+        ) {
 
-        const horarios = await buscarHorarios(iso);
+          semAula++;
 
-        if (!horarios.length) {
-          resumo.innerHTML = `<p class="agenda-resumo-vazio">Nenhum horário cadastrado para este dia.</p>`;
-        } else {
-          const materias = Array.from(new Set(horarios)); // remove duplicados
-
-          resumo.innerHTML = `
-            <div class="agenda-bloco">
-              <strong>Horários do dia</strong>
-              <p>${materias.join(', ')}</p>
-            </div>
-          `;
         }
-      };
 
-      // padrão ao clicar
-      if (tarefasDoDia(iso).length) {
-        btnVer.click();
-      } else {
-        btnNova.click();
+
+        if (
+          dia.classList.contains(
+            'roxo'
+          )
+        ) {
+
+          provas++;
+
+        }
+
+
+        if (
+          !diaContaComoLetivo(
+            dia,
+            config,
+            false
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        totalDiasLetivos++;
+
+
+        if (
+          dia.classList.contains(
+            'vermelho'
+          )
+        ) {
+
+          faltas++;
+
+          return;
+
+        }
+
+
+        if (
+          dia.classList.contains(
+            'amarelo'
+          )
+        ) {
+
+          atestados++;
+
+          return;
+
+        }
+
+
+        presencas++;
+
       }
+    );
 
-      mini.classList.add('aberto');
-    });
-  });
 
-  // ========== EXPORTAR / IMPRIMIR ==========
-  document.querySelectorAll('.mes .btn-imprimir').forEach(btn => {
-    btn.addEventListener('click', e => {
-      e.preventDefault();
-      const mes = e.target.closest('.mes');
-      if (!mes.classList.contains('expanded')) {
-        mes.classList.add('expanded');
-        document.body.classList.add('no-scroll');
-        document.getElementById('cal-backdrop')?.classList.add('ativo');
+    const percentual =
+      totalDiasLetivos > 0
 
-        let fechar = mes.querySelector('.fechar-btn');
-        if (!fechar) {
-          fechar = document.createElement('button');
-          fechar.textContent = '×';
-          fechar.classList.add('fechar-btn');
-          fechar.onclick = ev => {
-            ev.stopPropagation();
-            fecharMes(mes);
+        ? Math.round(
+            (
+              presencas /
+              totalDiasLetivos
+            ) *
+            100
+          )
+
+        : 0;
+
+
+    const diasRestantes =
+      diasRestantesPeriodo(
+        dias,
+        config
+      );
+
+
+    return {
+      presencas,
+      faltas,
+      atestados,
+      semAula,
+      provas,
+      totalDiasLetivos,
+      percentual,
+      diasRestantes
+    };
+
+  }
+
+
+  // =====================================================
+  // TEXTO DA META
+  // =====================================================
+
+  function textoDiferencaMeta(
+    atual,
+    meta
+  ) {
+
+    const diferenca =
+      Math.round(
+        (
+          atual -
+          meta
+        ) *
+        10
+      ) / 10;
+
+
+    if (
+      diferenca > 0
+    ) {
+
+      return (
+        `Você está ${Math.abs(
+          diferenca
+        )} pontos percentuais acima da meta.`
+      );
+
+    }
+
+
+    if (
+      diferenca < 0
+    ) {
+
+      return (
+        `Você está ${Math.abs(
+          diferenca
+        )} pontos percentuais abaixo da meta.`
+      );
+
+    }
+
+
+    return (
+      'Você está exatamente na meta.'
+    );
+
+  }
+
+
+  // =====================================================
+  // RECALCULAR MÊS
+  // =====================================================
+
+  function recalcularMetricasDoMes(
+    mes
+  ) {
+
+    const dados =
+      calcularMetricasMesDados(
+        mes
+      );
+
+
+    const metaInput =
+      mes.querySelector(
+        '.meta-presenca'
+      );
+
+
+    const meta =
+      clamp(
+        Number(
+          metaInput?.value ||
+          80
+        ),
+        0,
+        100
+      );
+
+
+    const campos = {
+
+      '.count-presenca':
+        dados.presencas,
+
+      '.count-falta':
+        dados.faltas,
+
+      '.count-atestado':
+        dados.atestados,
+
+      '.count-semaula':
+        dados.semAula,
+
+      '.count-prova':
+        dados.provas
+
+    };
+
+
+    Object.entries(
+      campos
+    ).forEach(
+      ([seletor, valor]) => {
+
+        const elemento =
+          mes.querySelector(
+            seletor
+          );
+
+
+        if (
+          elemento
+        ) {
+
+          elemento.textContent =
+            String(
+              valor
+            );
+
+        }
+
+      }
+    );
+
+
+    const barra =
+      mes.querySelector(
+        '.progress-bar'
+      );
+
+
+    const label =
+      mes.querySelector(
+        '.label-presenca'
+      );
+
+
+    if (
+      barra
+    ) {
+
+      barra.style.width =
+        `${Math.min(
+          100,
+          dados.percentual
+        )}%`;
+
+    }
+
+
+    if (
+      label
+    ) {
+
+      label.textContent =
+        `${dados.percentual}%`;
+
+    }
+
+
+    const statusMeta =
+      mes.querySelector(
+        '.meta-status-mes'
+      );
+
+
+    if (
+      statusMeta
+    ) {
+
+      statusMeta.textContent =
+        (
+          `Meta: ${meta}% · ` +
+          `Atual: ${dados.percentual}% · ` +
+          textoDiferencaMeta(
+            dados.percentual,
+            meta
+          )
+        );
+
+    }
+
+
+    const faltasRestantes =
+      mes.querySelector(
+        '.faltas-restantes-mes'
+      );
+
+
+    if (
+      faltasRestantes
+    ) {
+
+      const quantidade =
+        calcularFaltasPossiveis(
+          dados.presencas,
+          dados.totalDiasLetivos,
+          dados.diasRestantes,
+          meta
+        );
+
+
+      faltasRestantes.textContent =
+        quantidade === null
+
+          ? (
+              'Meta 0%: não há limite calculado de faltas.'
+            )
+
+          : (
+              `Você ainda pode ter até ` +
+              `${quantidade} ` +
+              `${quantidade === 1
+                ? 'falta'
+                : 'faltas'} ` +
+              `mantendo pelo menos ${meta}%, ` +
+              `considerando os dias letivos restantes do mês.`
+            );
+
+    }
+
+
+    return dados;
+
+  }
+
+
+  // =====================================================
+  // CLASSIFICAÇÃO DA FREQUÊNCIA
+  // =====================================================
+
+  function classificacaoRisco(
+    percentual
+  ) {
+
+    if (
+      percentual > 85
+    ) {
+
+      return {
+        texto:
+          'Frequência ótima',
+
+        classe:
+          'otima'
+      };
+
+    }
+
+
+    if (
+      percentual >= 75
+    ) {
+
+      return {
+        texto:
+          'Atenção',
+
+        classe:
+          'atencao'
+      };
+
+    }
+
+
+    return {
+      texto:
+        'Risco de reprovação por frequência',
+
+      classe:
+        'risco'
+    };
+
+  }
+
+
+  // =====================================================
+  // RESUMO ANUAL
+  // =====================================================
+
+  function atualizarResumoAnual() {
+
+    const meses = [
+      ...document.querySelectorAll(
+        '.mes'
+      )
+    ];
+
+
+    let presencas =
+      0;
+
+    let faltas =
+      0;
+
+    let atestados =
+      0;
+
+    let totalDiasLetivos =
+      0;
+
+    let diasRestantes =
+      0;
+
+
+    const porMes =
+      [];
+
+
+    meses.forEach(
+      mes => {
+
+        const dados =
+          recalcularMetricasDoMes(
+            mes
+          );
+
+
+        presencas +=
+          dados.presencas;
+
+
+        faltas +=
+          dados.faltas;
+
+
+        atestados +=
+          dados.atestados;
+
+
+        totalDiasLetivos +=
+          dados.totalDiasLetivos;
+
+
+        diasRestantes +=
+          dados.diasRestantes;
+
+
+        porMes.push({
+
+          mes:
+            Number(
+              mes.dataset.mes
+            ),
+
+          ...dados
+
+        });
+
+      }
+    );
+
+
+    const percentual =
+      totalDiasLetivos > 0
+
+        ? Math.round(
+            (
+              presencas /
+              totalDiasLetivos
+            ) *
+            100
+          )
+
+        : 0;
+
+
+    const mesesComDados =
+      porMes.filter(
+        item =>
+          item.totalDiasLetivos >
+          0
+      );
+
+
+    const melhorMes =
+      mesesComDados.length
+
+        ? [...mesesComDados]
+            .sort(
+              (a, b) =>
+                b.percentual -
+                a.percentual
+            )[0]
+
+        : null;
+
+
+    const mesMaisFaltas =
+      mesesComDados.length
+
+        ? [...mesesComDados]
+            .sort(
+              (a, b) =>
+                b.faltas -
+                a.faltas
+            )[0]
+
+        : null;
+
+
+    const config =
+      obterConfigAno();
+
+
+    const meta =
+      clamp(
+        Number(
+          config.meta_anual ||
+          80
+        ),
+        0,
+        100
+      );
+
+
+    const periodoConfigurado =
+      Boolean(
+        config.inicio_ano_letivo &&
+        config.fim_ano_letivo
+      );
+
+
+    const faltasPossiveis =
+      periodoConfigurado
+
+        ? calcularFaltasPossiveis(
+            presencas,
+            totalDiasLetivos,
+            diasRestantes,
+            meta
+          )
+
+        : null;
+
+
+    const risco =
+      totalDiasLetivos > 0
+
+        ? classificacaoRisco(
+            percentual
+          )
+
+        : {
+            texto:
+              periodoConfigurado
+                ? 'Sem dias letivos contabilizados'
+                : 'Configure o período letivo',
+
+            classe:
+              ''
           };
-          mes.appendChild(fechar);
+
+
+    const mapaTexto = {
+
+      'freq-anual-percentual':
+        `${percentual}%`,
+
+      'freq-anual-faltas':
+        String(
+          faltas
+        ),
+
+      'freq-anual-atestados':
+        String(
+          atestados
+        ),
+
+      'freq-melhor-mes':
+        melhorMes
+
+          ? (
+              `${NOMES_MESES[
+                melhorMes.mes - 1
+              ]} · ` +
+              `${melhorMes.percentual}%`
+            )
+
+          : '—',
+
+      'freq-mes-mais-faltas':
+        mesMaisFaltas
+
+          ? (
+              `${NOMES_MESES[
+                mesMaisFaltas.mes - 1
+              ]} · ` +
+              `${mesMaisFaltas.faltas}`
+            )
+
+          : '—',
+
+      'freq-meta-resumo':
+        (
+          `Meta: ${meta}% · ` +
+          `Atual: ${percentual}%`
+        ),
+
+      'freq-meta-percent':
+        `${percentual}%`,
+
+      'freq-diferenca-meta':
+        periodoConfigurado
+
+          ? textoDiferencaMeta(
+              percentual,
+              meta
+            )
+
+          : (
+              'Defina o início e o final do ano letivo para calcular a meta anual.'
+            ),
+
+      'freq-faltas-restantes':
+        !periodoConfigurado
+
+          ? (
+              'As faltas restantes serão calculadas depois que o período letivo for definido.'
+            )
+
+          : (
+              faltasPossiveis === null
+
+                ? (
+                    'Meta 0%: não há limite calculado de faltas.'
+                  )
+
+                : (
+                    `Você ainda pode ter até ` +
+                    `${faltasPossiveis} ` +
+                    `${faltasPossiveis === 1
+                      ? 'falta'
+                      : 'faltas'} ` +
+                    `mantendo pelo menos ${meta}%, ` +
+                    `considerando os dias letivos restantes do ano.`
+                  )
+            )
+
+    };
+
+
+    Object.entries(
+      mapaTexto
+    ).forEach(
+      ([id, texto]) => {
+
+        const elemento =
+          document.getElementById(
+            id
+          );
+
+
+        if (
+          elemento
+        ) {
+
+          elemento.textContent =
+            texto;
+
         }
-        fechar.style.display = 'flex';
+
       }
-      window.print();
-    });
-  });
+    );
 
-  document.querySelectorAll('.mes .btn-exportar-png').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.preventDefault();
-      const mes = e.target.closest('.mes');
-      const bloco = mes.querySelector('.calendario-mes');
-      if (!bloco) return;
 
-      const ano = mes.dataset.ano;
-      const idx = mes.dataset.mes;
-      const nomes = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-      const nomeMes = nomes[parseInt(idx, 10) - 1] || idx;
+    const barra =
+      document.getElementById(
+        'freq-progress-fill'
+      );
 
-      if (typeof html2canvas !== 'function') {
-        console.warn('html2canvas não carregado.');
-        return;
-      }
 
-      const canvas = await html2canvas(bloco, {
-        useCORS: true,
-        backgroundColor: '#ffffff',
-        scale: 2
-      });
+    if (
+      barra
+    ) {
 
-      const link = document.createElement('a');
-      link.download = `Calendario_${nomeMes}_${ano}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    });
-  });
+      barra.style.width =
+        `${Math.min(
+          100,
+          percentual
+        )}%`;
 
-  // ========== SELETOR DE ANO ==========
-  document.querySelectorAll('.mes .anoSelect').forEach(sel => {
-    const urlParams = new URLSearchParams(location.search);
-    const anoAtual = parseInt(urlParams.get('ano') || new Date().getFullYear(), 10);
-
-    for (let a = anoAtual - 4; a <= anoAtual + 4; a++) {
-      const op = document.createElement('option');
-      op.value = a;
-      op.textContent = a;
-      if (a === anoAtual) op.selected = true;
-      sel.appendChild(op);
     }
 
-    sel.addEventListener('change', () => {
-      const url = new URL(location.href);
-      url.searchParams.set('ano', sel.value);
-      location.href = url.toString();
-    });
-  });
 
-  // ========== GARANTIR VISIBILIDADE DO PAINEL DE METAS ==========
-  function verificarVisibilidadeMeta(mes) {
-    const metas = mes.querySelector('.painel-metas');
-    if (!metas) return;
-    metas.style.display = 'flex';
-    metas.style.visibility = 'visible';
-    metas.style.opacity = '1';
+    const badge =
+      document.getElementById(
+        'freq-risco'
+      );
+
+
+    if (
+      badge
+    ) {
+
+      badge.textContent =
+        risco.texto;
+
+
+      badge.classList.remove(
+        'otima',
+        'atencao',
+        'risco'
+      );
+
+
+      if (
+        risco.classe
+      ) {
+
+        badge.classList.add(
+          risco.classe
+        );
+
+      }
+
+    }
+
   }
 
-    // ========== INICIALIZAÇÃO ==========
 
-  // 1) aplicar cores salvas
-  document.querySelectorAll('.calendario .dia').forEach(diaEl => {
-    const iso = diaEl.getAttribute('data-date');
-    if (!iso) return;
-    const status = calendData.dias?.[iso];
-    if (status) {
-      diaEl.classList.add(status); // 'vermelho', 'amarelo', 'sem-aula', 'roxo'
+  // =====================================================
+  // FECHAR MÊS
+  // =====================================================
+
+  function fecharMes(
+    mes
+  ) {
+
+    if (
+      !mes
+    ) {
+
+      return;
+
     }
-    atualizarDots(diaEl);
-  });
 
-  // 2) marcar dias com tarefa
+
+    mes.classList.remove(
+      'expanded'
+    );
+
+
+    mes.__corSelecionada =
+      null;
+
+
+    mes
+      .__atualizarBotoesCor
+      ?.();
+
+
+    const botao =
+      mes.querySelector(
+        '.fechar-btn'
+      );
+
+
+    if (
+      botao
+    ) {
+
+      botao.style.display =
+        'none';
+
+    }
+
+
+    if (
+      !document.querySelector(
+        '.mes.expanded'
+      )
+    ) {
+
+      document.body
+        .classList
+        .remove(
+          'no-scroll'
+        );
+
+
+      document
+        .getElementById(
+          'cal-backdrop'
+        )
+        ?.classList
+        .remove(
+          'ativo'
+        );
+
+    }
+
+  }
+
+
+  // =====================================================
+  // ABRIR MÊS
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes'
+    )
+    .forEach(
+      mes => {
+
+        mes.addEventListener(
+          'click',
+          () => {
+
+            const aberto =
+              document.querySelector(
+                '.mes.expanded'
+              );
+
+
+            if (
+              aberto &&
+              aberto !== mes
+            ) {
+
+              return;
+
+            }
+
+
+            if (
+              mes.classList.contains(
+                'expanded'
+              )
+            ) {
+
+              return;
+
+            }
+
+
+            mes.classList.add(
+              'expanded'
+            );
+
+
+            document.body
+              .classList
+              .add(
+                'no-scroll'
+              );
+
+
+            document
+              .getElementById(
+                'cal-backdrop'
+              )
+              ?.classList
+              .add(
+                'ativo'
+              );
+
+
+            let fechar =
+              mes.querySelector(
+                '.fechar-btn'
+              );
+
+
+            if (
+              !fechar
+            ) {
+
+              fechar =
+                document.createElement(
+                  'button'
+                );
+
+
+              fechar.type =
+                'button';
+
+
+              fechar.textContent =
+                '×';
+
+
+              fechar.className =
+                'fechar-btn';
+
+
+              fechar.addEventListener(
+                'click',
+                evento => {
+
+                  evento.stopPropagation();
+
+
+                  fecharMes(
+                    mes
+                  );
+
+                }
+              );
+
+
+              mes.appendChild(
+                fechar
+              );
+
+            }
+
+
+            fechar.style.display =
+              'flex';
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // SELEÇÃO DE STATUS
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes'
+    )
+    .forEach(
+      mes => {
+
+        mes.__corSelecionada =
+          null;
+
+
+        const botoes =
+          mes.querySelectorAll(
+            '.btn-cor'
+          );
+
+
+        function atualizarBotoes() {
+
+          botoes.forEach(
+            botao => {
+
+              const ativo =
+                botao.dataset.cor ===
+                mes.__corSelecionada;
+
+
+              botao.classList.toggle(
+                'selecionado',
+                ativo
+              );
+
+
+              botao.style.outline =
+                ativo
+                  ? '3px solid #555'
+                  : 'none';
+
+
+              botao.style.transform =
+                ativo
+                  ? 'scale(1.3)'
+                  : 'scale(1)';
+
+            }
+          );
+
+        }
+
+
+        mes.__atualizarBotoesCor =
+          atualizarBotoes;
+
+
+        botoes.forEach(
+          botao => {
+
+            botao.addEventListener(
+              'click',
+              evento => {
+
+                evento.stopPropagation();
+
+
+                const cor =
+                  botao.dataset.cor;
+
+
+                mes.__corSelecionada =
+                  mes.__corSelecionada ===
+                  cor
+
+                    ? null
+                    : cor;
+
+
+                atualizarBotoes();
+
+              }
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // MARCAR DIA
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes'
+    )
+    .forEach(
+      mes => {
+
+        mes.addEventListener(
+          'click',
+          async evento => {
+
+            if (
+              !mes.classList.contains(
+                'expanded'
+              ) ||
+              !mes.__corSelecionada
+            ) {
+
+              return;
+
+            }
+
+
+            const dia =
+              evento.target.closest?.(
+                '.dia'
+              );
+
+
+            if (
+              !dia ||
+              dia.classList.contains(
+                'header-dia'
+              ) ||
+              !dia.getAttribute(
+                'data-date'
+              )
+            ) {
+
+              return;
+
+            }
+
+
+            evento.stopPropagation();
+
+
+            const iso =
+              dia.getAttribute(
+                'data-date'
+              );
+
+
+            const cor =
+              mes.__corSelecionada;
+
+
+            if (
+              dia.classList.contains(
+                'feriado'
+              )
+            ) {
+
+              alert(
+                'Este dia é feriado automático e não pode ser alterado.'
+              );
+
+
+              return;
+
+            }
+
+
+            if (
+              iso > hojeIso() &&
+              (
+                cor === 'vermelho' ||
+                cor === 'amarelo'
+              )
+            ) {
+
+              alert(
+                'Não é possível marcar falta ou atestado em uma data futura.'
+              );
+
+
+              return;
+
+            }
+
+
+            dia.classList.remove(
+              'vermelho',
+              'amarelo',
+              'sem-aula',
+              'roxo'
+            );
+
+
+            if (
+              cor !== 'limpar'
+            ) {
+
+              dia.classList.add(
+                cor
+              );
+
+            }
+
+
+            const status =
+              statusDia(
+                dia
+              );
+
+
+            if (
+              status
+            ) {
+
+              calendData.dias[
+                iso
+              ] = status;
+
+            } else {
+
+              delete calendData.dias[
+                iso
+              ];
+
+            }
+
+
+            await salvarCalendarioServidor();
+
+
+            atualizarTudo();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // ALTERAR META MENSAL
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .meta-presenca'
+    )
+    .forEach(
+      input => {
+
+        input.addEventListener(
+          'change',
+          async evento => {
+
+            const mes =
+              evento.target.closest(
+                '.mes'
+              );
+
+
+            const chave =
+              `${mes.dataset.ano}-` +
+              `${mes.dataset.mes}`;
+
+
+            calendData.metas[
+              chave
+            ] =
+              clamp(
+                Number(
+                  evento.target.value ||
+                  0
+                ),
+                0,
+                100
+              );
+
+
+            await salvarCalendarioServidor();
+
+
+            atualizarTudo();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // FORMATAR DATA
+  // =====================================================
+
+  function formataDataBR(
+    iso
+  ) {
+
+    const [
+      ano,
+      mes,
+      dia
+    ] =
+      iso
+        .split('-')
+        .map(
+          Number
+        );
+
+
+    return (
+      `${String(
+        dia
+      ).padStart(2, '0')}/` +
+
+      `${String(
+        mes
+      ).padStart(2, '0')}/` +
+
+      `${ano}`
+    );
+
+  }
+
+
+  // =====================================================
+  // DUPLO CLIQUE NO DIA
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .dia[data-date]'
+    )
+    .forEach(
+      dia => {
+
+        dia.addEventListener(
+          'dblclick',
+          evento => {
+
+            const mes =
+              dia.closest(
+                '.mes'
+              );
+
+
+            if (
+              !mes ||
+              !mes.classList.contains(
+                'expanded'
+              )
+            ) {
+
+              return;
+
+            }
+
+
+            const box =
+              mes.querySelector(
+                '.mini-agenda'
+              );
+
+
+            const dataEl =
+              box?.querySelector(
+                '.agenda-data'
+              );
+
+
+            const notasEl =
+              box?.querySelector(
+                '.agenda-notas'
+              );
+
+
+            if (
+              !box ||
+              !dataEl ||
+              !notasEl
+            ) {
+
+              return;
+
+            }
+
+
+            const iso =
+              dia.getAttribute(
+                'data-date'
+              );
+
+
+            box.dataset.date =
+              iso;
+
+
+            dataEl.textContent =
+              formataDataBR(
+                iso
+              );
+
+
+            const tarefa =
+              tarefasDoDia(
+                iso
+              ).find(
+                item =>
+                  item.origem ===
+                  'calendario'
+              );
+
+
+            notasEl.value =
+              tarefa?.texto ||
+              '';
+
+
+            const resumo =
+              box.querySelector(
+                '.agenda-resumo'
+              );
+
+
+            const editor =
+              box.querySelector(
+                '.agenda-editor'
+              );
+
+
+            if (
+              resumo
+            ) {
+
+              resumo.style.display =
+                'none';
+
+            }
+
+
+            if (
+              editor
+            ) {
+
+              editor.style.display =
+                'block';
+
+            }
+
+
+            box.classList.add(
+              'aberto'
+            );
+
+
+            notasEl.focus();
+
+
+            evento.stopPropagation();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // FECHAR MINI AGENDA
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .agenda-fechar'
+    )
+    .forEach(
+      botao => {
+
+        botao.addEventListener(
+          'click',
+          evento => {
+
+            evento.preventDefault();
+
+            evento.stopPropagation();
+
+
+            botao
+              .closest(
+                '.mes'
+              )
+              ?.querySelector(
+                '.mini-agenda'
+              )
+              ?.classList
+              .remove(
+                'aberto'
+              );
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // SALVAR MINI AGENDA
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .agenda-salvar'
+    )
+    .forEach(
+      botao => {
+
+        botao.addEventListener(
+          'click',
+          evento => {
+
+            evento.preventDefault();
+
+            evento.stopPropagation();
+
+
+            const mes =
+              botao.closest(
+                '.mes'
+              );
+
+
+            const box =
+              mes?.querySelector(
+                '.mini-agenda'
+              );
+
+
+            const textarea =
+              box?.querySelector(
+                '.agenda-notas'
+              );
+
+
+            const iso =
+              box?.dataset.date;
+
+
+            if (
+              !iso ||
+              !textarea
+            ) {
+
+              return;
+
+            }
+
+
+            salvarTextoDoDiaNaAgenda(
+              iso,
+              textarea.value
+            );
+
+
+            box.classList.remove(
+              'aberto'
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // CLIQUE SIMPLES NO DIA
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .dia[data-date]'
+    )
+    .forEach(
+      dia => {
+
+        dia.addEventListener(
+          'click',
+          evento => {
+
+            const mes =
+              dia.closest(
+                '.mes'
+              );
+
+
+            if (
+              !mes ||
+              !mes.classList.contains(
+                'expanded'
+              ) ||
+              mes.__corSelecionada
+            ) {
+
+              return;
+
+            }
+
+
+            evento.stopPropagation();
+
+
+            const iso =
+              dia.getAttribute(
+                'data-date'
+              );
+
+
+            const mini =
+              mes.querySelector(
+                '.mini-agenda'
+              );
+
+
+            const dataEl =
+              mini?.querySelector(
+                '.agenda-data'
+              );
+
+
+            const resumo =
+              mini?.querySelector(
+                '.agenda-resumo'
+              );
+
+
+            const editor =
+              mini?.querySelector(
+                '.agenda-editor'
+              );
+
+
+            const notas =
+              mini?.querySelector(
+                '.agenda-notas'
+              );
+
+
+            const btnVer =
+              mini?.querySelector(
+                '.btn-ver-tarefas'
+              );
+
+
+            const btnNova =
+              mini?.querySelector(
+                '.btn-nova-tarefa'
+              );
+
+
+            const btnHorarios =
+              mini?.querySelector(
+                '.btn-ver-horarios'
+              );
+
+
+            if (
+              !mini ||
+              !dataEl ||
+              !resumo ||
+              !editor ||
+              !notas ||
+              !btnVer ||
+              !btnNova ||
+              !btnHorarios
+            ) {
+
+              return;
+
+            }
+
+
+            mini.dataset.date =
+              iso;
+
+
+            dataEl.textContent =
+              formataDataBR(
+                iso
+              );
+
+
+            btnVer.onclick =
+              () => {
+
+                const tarefas =
+                  tarefasDoDia(
+                    iso
+                  );
+
+
+                resumo.style.display =
+                  'block';
+
+
+                editor.style.display =
+                  'none';
+
+
+                if (
+                  !tarefas.length
+                ) {
+
+                  resumo.innerHTML =
+                    `
+                    <p class="agenda-resumo-vazio">
+                      Nenhuma tarefa cadastrada para este dia.
+                    </p>
+                    `;
+
+
+                  return;
+
+                }
+
+
+                resumo.innerHTML = `
+                  <div class="agenda-bloco">
+
+                    <strong>
+                      Tarefas do dia
+                    </strong>
+
+                    <ul>
+
+                      ${
+                        tarefas
+                          .map(
+                            tarefa =>
+                              `<li>${escapeHtml(
+                                tarefa.texto
+                              )}</li>`
+                          )
+                          .join('')
+                      }
+
+                    </ul>
+
+                  </div>
+                `;
+
+              };
+
+
+            btnNova.onclick =
+              () => {
+
+                const tarefa =
+                  tarefasDoDia(
+                    iso
+                  ).find(
+                    item =>
+                      item.origem ===
+                      'calendario'
+                  );
+
+
+                notas.value =
+                  tarefa?.texto ||
+                  '';
+
+
+                resumo.style.display =
+                  'none';
+
+
+                editor.style.display =
+                  'block';
+
+
+                notas.focus();
+
+              };
+
+
+            btnHorarios.onclick =
+              async () => {
+
+                resumo.style.display =
+                  'block';
+
+
+                editor.style.display =
+                  'none';
+
+
+                resumo.innerHTML =
+                  '<p>Carregando horários...</p>';
+
+
+                const horarios =
+                  await buscarHorarios(
+                    iso
+                  );
+
+
+                if (
+                  !horarios.length
+                ) {
+
+                  resumo.innerHTML =
+                    `
+                    <p class="agenda-resumo-vazio">
+                      Nenhum horário cadastrado para este dia.
+                    </p>
+                    `;
+
+
+                  return;
+
+                }
+
+
+                resumo.innerHTML = `
+                  <div class="agenda-bloco">
+
+                    <strong>
+                      Horários do dia
+                    </strong>
+
+                    <p>
+
+                      ${
+                        horarios
+                          .map(
+                            escapeHtml
+                          )
+                          .join(', ')
+                      }
+
+                    </p>
+
+                  </div>
+                `;
+
+              };
+
+
+            if (
+              tarefasDoDia(
+                iso
+              ).length
+            ) {
+
+              btnVer.click();
+
+            } else {
+
+              btnNova.click();
+
+            }
+
+
+            mini.classList.add(
+              'aberto'
+            );
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // IMPRIMIR
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .btn-imprimir'
+    )
+    .forEach(
+      botao => {
+
+        botao.addEventListener(
+          'click',
+          evento => {
+
+            evento.preventDefault();
+
+            evento.stopPropagation();
+
+
+            window.print();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // EXPORTAR PNG
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .btn-exportar-png'
+    )
+    .forEach(
+      botao => {
+
+        botao.addEventListener(
+          'click',
+          async evento => {
+
+            evento.preventDefault();
+
+            evento.stopPropagation();
+
+
+            const mes =
+              botao.closest(
+                '.mes'
+              );
+
+
+            const bloco =
+              mes?.querySelector(
+                '.calendario-mes'
+              );
+
+
+            if (
+              !bloco ||
+              typeof html2canvas !==
+                'function'
+            ) {
+
+              return;
+
+            }
+
+
+            const numeroMes =
+              Number(
+                mes.dataset.mes
+              );
+
+
+            const canvas =
+              await html2canvas(
+                bloco,
+                {
+                  useCORS:
+                    true,
+
+                  backgroundColor:
+                    '#ffffff',
+
+                  scale:
+                    2
+                }
+              );
+
+
+            const link =
+              document.createElement(
+                'a'
+              );
+
+
+            link.download =
+              `Calendario_` +
+              `${NOMES_MESES[
+                numeroMes - 1
+              ]}_` +
+              `${mes.dataset.ano}.png`;
+
+
+            link.href =
+              canvas.toDataURL(
+                'image/png'
+              );
+
+
+            link.click();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // SELETOR DE ANO
+  // =====================================================
+
+  document
+    .querySelectorAll(
+      '.mes .anoSelect'
+    )
+    .forEach(
+      select => {
+
+        for (
+          let ano =
+            ANO_ATUAL - 4;
+
+          ano <=
+            ANO_ATUAL + 4;
+
+          ano++
+        ) {
+
+          const option =
+            document.createElement(
+              'option'
+            );
+
+
+          option.value =
+            String(
+              ano
+            );
+
+
+          option.textContent =
+            String(
+              ano
+            );
+
+
+          option.selected =
+            ano ===
+            ANO_ATUAL;
+
+
+          select.appendChild(
+            option
+          );
+
+        }
+
+
+        select.addEventListener(
+          'change',
+          () => {
+
+            const url =
+              new URL(
+                location.href
+              );
+
+
+            url.searchParams.set(
+              'ano',
+              select.value
+            );
+
+
+            location.href =
+              url.toString();
+
+          }
+        );
+
+      }
+    );
+
+
+  // =====================================================
+  // PERFIL / LOGOUT
+  // =====================================================
+
+  const perfilIcon =
+    document.getElementById(
+      'icon-perfil'
+    );
+
+
+  const logoutModal =
+    document.getElementById(
+      'logout-modal'
+    );
+
+
+  const iconSair =
+    document.getElementById(
+      'icon-sair'
+    );
+
+
+  const confirmLogout =
+    document.getElementById(
+      'confirm-logout'
+    );
+
+
+  const cancelLogout =
+    document.getElementById(
+      'cancel-logout'
+    );
+
+
+  perfilIcon?.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../perfil/perfil.php';
+
+    }
+  );
+
+
+  iconSair?.addEventListener(
+    'click',
+    () => {
+
+      if (
+        logoutModal
+      ) {
+
+        logoutModal.style.display =
+          'flex';
+
+      }
+
+    }
+  );
+
+
+  confirmLogout?.addEventListener(
+    'click',
+    () => {
+
+      window.location.href =
+        '../login/logout.php';
+
+    }
+  );
+
+
+  cancelLogout?.addEventListener(
+    'click',
+    () => {
+
+      if (
+        logoutModal
+      ) {
+
+        logoutModal.style.display =
+          'none';
+
+      }
+
+    }
+  );
+
+
+  logoutModal?.addEventListener(
+    'click',
+    evento => {
+
+      if (
+        evento.target ===
+        logoutModal
+      ) {
+
+        logoutModal.style.display =
+          'none';
+
+      }
+
+    }
+  );
+
+
+  // =====================================================
+  // UTILIDADES
+  // =====================================================
+
+  function clamp(
+    numero,
+    minimo,
+    maximo
+  ) {
+
+    return Math.max(
+      minimo,
+      Math.min(
+        maximo,
+        numero
+      )
+    );
+
+  }
+
+
+  function escapeHtml(
+    valor
+  ) {
+
+    const div =
+      document.createElement(
+        'div'
+      );
+
+
+    div.textContent =
+      String(
+        valor ?? ''
+      );
+
+
+    return div.innerHTML;
+
+  }
+
+
+  // =====================================================
+  // ATUALIZAÇÃO GERAL
+  // =====================================================
+
+  function atualizarTudo() {
+
+    aplicarMarcacoesPeriodo();
+
+
+    destacarHoje();
+
+
+    document
+      .querySelectorAll(
+        '.calendario .dia[data-date]'
+      )
+      .forEach(
+        atualizarDots
+      );
+
+
+    atualizarResumoAnual();
+
+  }
+
+
+  // =====================================================
+  // PAINEL ANUAL EXPANSÍVEL
+  // =====================================================
+
+  function configurarPainelAnualExpansivel() {
+
+    const painel =
+      document.getElementById(
+        'frequencia-anual'
+      );
+
+
+    if (
+      !painel
+    ) {
+
+      return;
+
+    }
+
+
+    const topo =
+      painel.querySelector(
+        '.freq-anual-topo'
+      );
+
+
+    if (
+      !topo
+    ) {
+
+      return;
+
+    }
+
+
+    if (
+      topo.querySelector(
+        '.btn-expandir-frequencia'
+      )
+    ) {
+
+      return;
+
+    }
+
+
+    painel.classList.add(
+      'frequencia-recolhida'
+    );
+
+
+    const botao =
+      document.createElement(
+        'button'
+      );
+
+
+    botao.type =
+      'button';
+
+
+    botao.className =
+      'btn-expandir-frequencia';
+
+
+    botao.setAttribute(
+      'aria-expanded',
+      'false'
+    );
+
+
+    botao.setAttribute(
+      'aria-label',
+      'Expandir frequência anual'
+    );
+
+
+    botao.title =
+      'Expandir frequência anual';
+
+
+    botao.innerHTML = `
+      <i class="fa-solid fa-chevron-down"></i>
+    `;
+
+
+    topo.appendChild(
+      botao
+    );
+
+
+    botao.addEventListener(
+      'click',
+      evento => {
+
+        evento.preventDefault();
+
+        evento.stopPropagation();
+
+
+        const vaiAbrir =
+          painel.classList.contains(
+            'frequencia-recolhida'
+          );
+
+
+        painel.classList.toggle(
+          'frequencia-recolhida'
+        );
+
+
+        botao.setAttribute(
+          'aria-expanded',
+          vaiAbrir
+            ? 'true'
+            : 'false'
+        );
+
+
+        botao.setAttribute(
+          'aria-label',
+          vaiAbrir
+            ? 'Recolher frequência anual'
+            : 'Expandir frequência anual'
+        );
+
+
+        botao.title =
+          vaiAbrir
+            ? 'Recolher frequência anual'
+            : 'Expandir frequência anual';
+
+      }
+    );
+
+  }
+
+
+  // =====================================================
+  // INICIALIZAÇÃO
+  // =====================================================
+
+  configurarPainelAnualExpansivel();
+
+
+  preencherConfigAno();
+
+
+  // APLICAR STATUS SALVOS
+
+  document
+    .querySelectorAll(
+      '.calendario .dia[data-date]'
+    )
+    .forEach(
+      dia => {
+
+        const iso =
+          dia.getAttribute(
+            'data-date'
+          );
+
+
+        const status =
+          calendData.dias[
+            iso
+          ];
+
+
+        if (
+          status
+        ) {
+
+          dia.classList.add(
+            status
+          );
+
+        }
+
+      }
+    );
+
+
+  // MARCAR TAREFAS
+
   marcarDiasComTarefa();
 
-  // 3) aplicar metas salvas e recalcular
-  document.querySelectorAll('.mes').forEach(mes => {
-    const ano = mes.dataset.ano;
-    const idx = mes.dataset.mes;
-    const key = `${ano}-${idx}`;
 
-    const metaSalva = calendData.metas?.[key];
-    const metaInput = mes.querySelector('.meta-presenca');
-    if (metaInput && metaSalva != null) {
-      metaInput.value = metaSalva;
-    }
+  // CARREGAR METAS MENSAIS
 
-    recalcularMetricasDoMes(mes);
+  document
+    .querySelectorAll(
+      '.mes'
+    )
+    .forEach(
+      mes => {
 
-    mes.addEventListener('click', () => {
-      setTimeout(() => {
-        if (mes.classList.contains('expanded')) {
-          verificarVisibilidadeMeta(mes);
+        const chave =
+          `${mes.dataset.ano}-` +
+          `${mes.dataset.mes}`;
+
+
+        const meta =
+          calendData.metas[
+            chave
+          ];
+
+
+        const input =
+          mes.querySelector(
+            '.meta-presenca'
+          );
+
+
+        if (
+          input &&
+          meta != null
+        ) {
+
+          input.value =
+            String(
+              meta
+            );
+
         }
-      }, 80);
-    });
-  });
+
+      }
+    );
 
 
-  // ========== ÍCONES HEADER (CONFIGURAÇÕES / PERFIL / LOGOUT) ==========
-const configuracoesIcon = document.getElementById('icon-configuracoes');
-const perfilIcon        = document.getElementById('icon-perfil');
-const logoutModal       = document.getElementById('logout-modal');
-const iconSair          = document.getElementById('icon-sair');
-const confirmLogout     = document.getElementById('confirm-logout');
-const cancelLogout      = document.getElementById('cancel-logout');
+  // CALCULAR TUDO
 
-// Configurações
-if (configuracoesIcon) {
-  configuracoesIcon.addEventListener('click', () => {
-    window.location.href = '../configuracoes/configuracoes.php';
-  });
-}
-
-// Perfil
-if (perfilIcon) {
-  perfilIcon.addEventListener('click', () => {
-    window.location.href = '../perfil/perfil.php';
-  });
-}
-
-// Abrir modal de logout
-if (iconSair && logoutModal) {
-  iconSair.addEventListener('click', () => {
-    logoutModal.style.display = 'flex';
-  });
-}
-
-// Confirmar logout
-if (confirmLogout) {
-  confirmLogout.addEventListener('click', () => {
-    window.location.href = '../login/index.php';
-  });
-}
-
-// Cancelar logout
-if (cancelLogout && logoutModal) {
-  cancelLogout.addEventListener('click', () => {
-    logoutModal.style.display = 'none';
-  });
-
-  logoutModal.addEventListener('click', e => {
-    if (e.target === logoutModal) {
-      logoutModal.style.display = 'none';
-    }
-  });
-}
+  atualizarTudo();
 
 });

@@ -1,0 +1,904 @@
+/* ==========================================
+   PAINEL ANUAL DE FREQUÊNCIA
+========================================== */
+
+.frequencia-anual {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto 28px;
+    padding: 24px;
+    box-sizing: border-box;
+
+    background: #ffffff;
+
+    border: 1px solid #e3e9f1;
+    border-radius: 18px;
+
+    box-shadow:
+        0 8px 24px
+        rgba(15, 23, 42, .06);
+
+    font-family:
+        'Poppins',
+        sans-serif;
+}
+
+.freq-anual-topo {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin-bottom: 20px;
+}
+
+.freq-eyebrow {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #168ee8;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.freq-anual-topo h1 {
+    margin: 0 0 5px;
+
+    color: #233044;
+
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.freq-anual-topo p {
+    margin: 0;
+
+    color: #69768a;
+
+    font-size: 12px;
+}
+
+.freq-risco {
+    flex-shrink: 0;
+
+    padding: 8px 12px;
+
+    background: #eef4f8;
+    color: #617083;
+
+    border: 1px solid #dbe5ec;
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.freq-risco.otima {
+    background: #eaf8f1;
+    color: #248456;
+    border-color: #ccebdc;
+}
+
+.freq-risco.atencao {
+    background: #fff7e5;
+    color: #a56a00;
+    border-color: #f2dfa9;
+}
+
+.freq-risco.risco {
+    background: #fff0f0;
+    color: #c44040;
+    border-color: #f1caca;
+}
+
+
+/* ==========================================
+   CONFIGURAÇÃO
+========================================== */
+
+.freq-config-card {
+    margin-bottom: 18px;
+    padding: 17px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e8edf3;
+    border-radius: 13px;
+}
+
+.freq-config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    margin-bottom: 14px;
+}
+
+.freq-config-header h2 {
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin: 0 0 3px;
+
+    color: #2e3b4f;
+
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.freq-config-header h2 i {
+    color: #38a5ff;
+}
+
+.freq-config-header p {
+    margin: 0;
+
+    color: #8a96a7;
+
+    font-size: 10px;
+}
+
+.freq-config-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 10px;
+}
+
+.freq-field {
+    min-width: 0;
+}
+
+.freq-field > span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #657287;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.freq-field input {
+    width: 100%;
+    height: 39px;
+
+    padding: 8px 10px;
+
+    background: #ffffff;
+    color: #334155;
+
+    border: 1px solid #dce4ed;
+    border-radius: 8px;
+
+    outline: none;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 11px;
+}
+
+.freq-field input:focus {
+    border-color: #38a5ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56, 165, 255, .10);
+}
+
+.freq-input-suffix {
+    position: relative;
+}
+
+.freq-input-suffix input {
+    padding-right: 34px;
+}
+
+.freq-input-suffix b {
+    position: absolute;
+
+    top: 50%;
+    right: 12px;
+
+    transform:
+        translateY(-50%);
+
+    color: #7d899a;
+
+    font-size: 11px;
+}
+
+.freq-config-erro {
+    min-height: 16px;
+
+    margin: 8px 0 0;
+
+    color: #c94040;
+
+    font-size: 10px;
+}
+
+
+/* ==========================================
+   RESUMO
+========================================== */
+
+.freq-resumo-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(5, minmax(0, 1fr));
+
+    gap: 10px;
+
+    margin-bottom: 18px;
+}
+
+.freq-stat {
+    min-width: 0;
+
+    padding: 14px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    background: #ffffff;
+
+    border: 1px solid #e7edf3;
+    border-radius: 11px;
+}
+
+.freq-stat-icon {
+    width: 36px;
+    height: 36px;
+
+    flex: 0 0 36px;
+
+    display: grid;
+    place-items: center;
+
+    background: #eaf5ff;
+    color: #168ee8;
+
+    border-radius: 9px;
+
+    font-size: 13px;
+}
+
+.freq-stat-icon.success {
+    background: #eaf8f1;
+    color: #2c9361;
+}
+
+.freq-stat-icon.warning {
+    background: #fff7e5;
+    color: #d08b08;
+}
+
+.freq-stat-icon.danger,
+.freq-stat-icon.danger-soft {
+    background: #fff0f0;
+    color: #cf4949;
+}
+
+.freq-stat-value {
+    display: block;
+
+    overflow: hidden;
+
+    color: #263547;
+
+    font-size: 19px;
+    font-weight: 700;
+
+    line-height: 1.15;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.freq-stat-value.freq-stat-text {
+    font-size: 12px;
+}
+
+.freq-stat-label {
+    display: block;
+
+    margin-top: 3px;
+
+    color: #8a96a7;
+
+    font-size: 9px;
+}
+
+
+/* ==========================================
+   META ANUAL
+========================================== */
+
+.freq-meta-card {
+    padding: 15px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #f6fbff,
+            #f9fcff
+        );
+
+    border: 1px solid #dfeef9;
+    border-radius: 12px;
+}
+
+.freq-meta-title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.freq-meta-title > div {
+    display: flex;
+    flex-direction: column;
+}
+
+.freq-meta-title strong {
+    color: #334155;
+
+    font-size: 12px;
+}
+
+.freq-meta-title span {
+    margin-top: 2px;
+
+    color: #7a8798;
+
+    font-size: 9px;
+}
+
+.freq-meta-percent {
+    color: #168ee8 !important;
+
+    font-size: 16px !important;
+}
+
+.freq-progress-track {
+    width: 100%;
+    height: 8px;
+
+    margin: 11px 0;
+
+    overflow: hidden;
+
+    background: #dfe8ef;
+
+    border-radius: 999px;
+}
+
+.freq-progress-fill {
+    width: 0;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            90deg,
+            #38a5ff,
+            #087edc
+        );
+
+    border-radius: inherit;
+
+    transition:
+        width .3s ease;
+}
+
+.freq-meta-mensagens {
+    display: flex;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+.freq-meta-mensagens p {
+    margin: 0;
+
+    color: #68768a;
+
+    font-size: 9px;
+    line-height: 1.45;
+}
+
+
+/* ==========================================
+   LEGENDA
+========================================== */
+
+.freq-legenda {
+    margin-top: 14px;
+
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+
+    gap: 7px 14px;
+
+    color: #738094;
+
+    font-size: 9px;
+}
+
+.freq-legenda strong {
+    color: #48566a;
+}
+
+.freq-legenda span {
+    display: inline-flex;
+    align-items: center;
+
+    gap: 5px;
+}
+
+.legenda-dot {
+    width: 8px;
+    height: 8px;
+
+    display: inline-block;
+
+    border-radius: 50%;
+}
+
+.legenda-dot.verde {
+    background: #34a853;
+}
+
+.legenda-dot.vermelho {
+    background: #e74c3c;
+}
+
+.legenda-dot.amarelo {
+    background: #f1c40f;
+}
+
+.legenda-dot.laranja {
+    background: #f39c12;
+}
+
+.legenda-dot.roxo {
+    background: #8e44ad;
+}
+
+.legenda-dot.azul {
+    background: #1f6fb2;
+}
+
+
+/* ==========================================
+   PRESENÇA AUTOMÁTICA / HOJE
+========================================== */
+
+.dot.presenca {
+    background: #34a853 !important;
+}
+
+.dia.presenca-automatica {
+    background-image:
+        linear-gradient(
+            rgba(52, 168, 83, .025),
+            rgba(52, 168, 83, .025)
+        );
+}
+
+.dia.dia-hoje {
+    position: relative;
+
+    outline:
+        2px solid #38a5ff;
+
+    outline-offset: -2px;
+
+    z-index: 2;
+}
+
+.hoje-badge {
+    position: absolute;
+
+    top: 2px;
+    right: 2px;
+
+    padding: 1px 4px;
+
+    background: #38a5ff;
+    color: #ffffff;
+
+    border-radius: 4px;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 6px;
+    font-weight: 600;
+
+    line-height: 1.4;
+}
+
+
+/* ==========================================
+   META MENSAL INTELIGENTE
+========================================== */
+
+.meta-status-mes,
+.faltas-restantes-mes {
+    width: 100%;
+
+    margin: 5px 0 0;
+
+    color: #64748b;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 9px;
+    line-height: 1.4;
+}
+
+.faltas-restantes-mes {
+    color: #3f6f93;
+}
+
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark-mode .frequencia-anual {
+    background: #1d2530;
+    border-color: #333e4b;
+}
+
+body.dark-mode .freq-anual-topo h1,
+body.dark-mode .freq-config-header h2,
+body.dark-mode .freq-stat-value,
+body.dark-mode .freq-meta-title strong {
+    color: #edf4fb;
+}
+
+body.dark-mode .freq-anual-topo p,
+body.dark-mode .freq-config-header p,
+body.dark-mode .freq-field > span,
+body.dark-mode .freq-stat-label,
+body.dark-mode .freq-meta-title span,
+body.dark-mode .freq-meta-mensagens p,
+body.dark-mode .freq-legenda,
+body.dark-mode .meta-status-mes,
+body.dark-mode .faltas-restantes-mes {
+    color: #aeb9c6;
+}
+
+body.dark-mode .freq-config-card,
+body.dark-mode .freq-stat,
+body.dark-mode .freq-meta-card {
+    background: #242e3a;
+    border-color: #364352;
+}
+
+body.dark-mode .freq-field input {
+    background: #1b232d;
+    color: #e8eef5;
+    border-color: #3a4654;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1150px) {
+
+    .freq-config-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .freq-resumo-grid {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 780px) {
+
+    .frequencia-anual {
+        padding: 17px;
+    }
+
+    .freq-anual-topo {
+        flex-direction: column;
+    }
+
+    .freq-config-grid,
+    .freq-resumo-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+    .freq-meta-mensagens {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .freq-config-grid,
+    .freq-resumo-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .freq-anual-topo h1 {
+        font-size: 20px;
+    }
+
+}
+
+
+/* ==========================================
+   PERÍODO LETIVO NO CALENDÁRIO
+========================================== */
+
+.dia.ferias-meio-ano {
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(56, 165, 255, .05),
+            rgba(56, 165, 255, .05) 5px,
+            rgba(56, 165, 255, .10) 5px,
+            rgba(56, 165, 255, .10) 10px
+        );
+}
+
+.dia.fora-periodo-letivo {
+    opacity: .5;
+}
+
+.periodo-badge {
+    position: absolute;
+
+    left: 2px;
+    bottom: 2px;
+
+    max-width: calc(100% - 4px);
+
+    padding: 1px 3px;
+
+    overflow: hidden;
+
+    background: #edf7ff;
+    color: #167fcf;
+
+    border: 1px solid #cde8fb;
+    border-radius: 4px;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 5.5px;
+    font-weight: 600;
+
+    line-height: 1.3;
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+
+    z-index: 3;
+}
+
+body.dark-mode .dia.ferias-meio-ano {
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(56, 165, 255, .08),
+            rgba(56, 165, 255, .08) 5px,
+            rgba(56, 165, 255, .15) 5px,
+            rgba(56, 165, 255, .15) 10px
+        );
+}
+
+body.dark-mode .periodo-badge {
+    background: #263a4b;
+    color: #8dccff;
+    border-color: #38556c;
+}
+
+/* ==========================================
+   PAINEL DE FREQUÊNCIA EXPANSÍVEL
+========================================== */
+
+.freq-anual-topo {
+    position: relative;
+    padding-right: 52px;
+}
+
+
+/* ==========================================
+   BOTÃO DA SETA
+========================================== */
+
+.btn-expandir-frequencia {
+    position: absolute;
+    top: 50%;
+    right: 0;
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    transform: translateY(-50%);
+
+    background: #f2f8fd;
+    color: #168ee8;
+
+    border: 1px solid #d8eaf7;
+    border-radius: 50%;
+
+    cursor: pointer;
+
+    font-size: 12px;
+
+    transition:
+        background .2s ease,
+        box-shadow .2s ease;
+}
+
+.btn-expandir-frequencia:hover {
+    background: #e5f3ff;
+
+    box-shadow:
+        0 4px 12px
+        rgba(56, 165, 255, .15);
+}
+
+.btn-expandir-frequencia:focus-visible {
+    outline:
+        3px solid
+        rgba(56, 165, 255, .22);
+
+    outline-offset: 2px;
+}
+
+.btn-expandir-frequencia i {
+    transition:
+        transform .25s ease;
+}
+
+
+/* ==========================================
+   SETA PARA CIMA QUANDO ABERTO
+========================================== */
+
+.frequencia-anual:not(.frequencia-recolhida)
+.btn-expandir-frequencia i {
+    transform: rotate(180deg);
+}
+
+
+/* ==========================================
+   PAINEL FECHADO
+========================================== */
+
+.frequencia-anual.frequencia-recolhida {
+    padding-top: 14px;
+    padding-bottom: 14px;
+    margin-bottom: 20px;
+}
+
+.frequencia-anual.frequencia-recolhida
+.freq-anual-topo {
+    margin-bottom: 0;
+}
+
+
+/* ESCONDE SOMENTE O CONTEÚDO DO DASHBOARD */
+
+.frequencia-anual.frequencia-recolhida
+> .freq-config-card,
+
+.frequencia-anual.frequencia-recolhida
+> .freq-resumo-grid,
+
+.frequencia-anual.frequencia-recolhida
+> .freq-meta-card,
+
+.frequencia-anual.frequencia-recolhida
+> .freq-legenda {
+    display: none;
+}
+
+
+/* CABEÇALHO COMPACTO */
+
+.frequencia-anual.frequencia-recolhida
+.freq-anual-topo h1 {
+    margin-bottom: 2px;
+    font-size: 20px;
+}
+
+.frequencia-anual.frequencia-recolhida
+.freq-anual-topo p {
+    font-size: 10px;
+}
+
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark-mode
+.btn-expandir-frequencia {
+    background: #263441;
+    color: #74c2ff;
+    border-color: #394a59;
+}
+
+body.dark-mode
+.btn-expandir-frequencia:hover {
+    background: #2d4050;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 780px) {
+
+    .freq-anual-topo {
+        padding-right: 48px;
+    }
+
+    .btn-expandir-frequencia {
+        top: 18px;
+        transform: none;
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .frequencia-anual.frequencia-recolhida {
+        padding: 12px 14px;
+    }
+
+    .frequencia-anual.frequencia-recolhida
+    .freq-anual-topo h1 {
+        font-size: 17px;
+    }
+
+}
