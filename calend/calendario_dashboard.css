@@ -837,6 +837,9 @@ body.dark-mode .periodo-badge {
 > .freq-meta-card,
 
 .frequencia-anual.frequencia-recolhida
+> .freq-projecao-card,
+
+.frequencia-anual.frequencia-recolhida
 > .freq-legenda {
     display: none;
 }
@@ -899,6 +902,257 @@ body.dark-mode
     .frequencia-anual.frequencia-recolhida
     .freq-anual-topo h1 {
         font-size: 17px;
+    }
+
+}
+
+
+/* ==========================================
+   PROJEÇÃO ANUAL
+========================================== */
+
+.freq-projecao-card {
+    margin-top: 14px;
+    padding: 16px;
+
+    background: #ffffff;
+
+    border: 1px solid #e4ebf2;
+    border-radius: 12px;
+}
+
+.freq-projecao-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 14px;
+
+    margin-bottom: 13px;
+}
+
+.freq-projecao-eyebrow {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #168ee8;
+
+    font-size: 9px;
+    font-weight: 700;
+
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.freq-projecao-header h3 {
+    margin: 0;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.freq-projecao-header > i {
+    width: 32px;
+    height: 32px;
+
+    display: grid;
+    place-items: center;
+
+    flex: 0 0 32px;
+
+    background: #eef7ff;
+    color: #168ee8;
+
+    border-radius: 8px;
+
+    font-size: 12px;
+}
+
+.freq-projecao-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, minmax(0, 1fr));
+
+    gap: 9px;
+}
+
+.freq-projecao-item {
+    min-width: 0;
+
+    padding: 11px 12px;
+
+    background: #f8fafc;
+
+    border: 1px solid #edf1f5;
+    border-radius: 9px;
+}
+
+.freq-projecao-item.destaque {
+    background: #f1f8fe;
+    border-color: #d7eaf8;
+}
+
+.freq-projecao-valor {
+    display: block;
+
+    color: #263547;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    line-height: 1.15;
+}
+
+.freq-projecao-item.destaque
+.freq-projecao-valor {
+    color: #168ee8;
+}
+
+.freq-projecao-label {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #8692a3;
+
+    font-size: 8.5px;
+    line-height: 1.35;
+}
+
+
+/* ==========================================
+   AVISO DA PROJEÇÃO
+========================================== */
+
+.freq-projecao-aviso {
+    margin-top: 11px;
+    padding: 10px 12px;
+
+    display: flex;
+    align-items: flex-start;
+
+    gap: 8px;
+
+    border: 1px solid;
+    border-radius: 9px;
+
+    font-size: 9px;
+    line-height: 1.5;
+}
+
+.freq-projecao-aviso > i {
+    margin-top: 2px;
+}
+
+.freq-projecao-aviso.neutro {
+    background: #f7f9fb;
+    color: #66758a;
+    border-color: #e2e8ef;
+}
+
+.freq-projecao-aviso.seguro {
+    background: #edf9f3;
+    color: #26784f;
+    border-color: #cfeadb;
+}
+
+.freq-projecao-aviso.atencao {
+    background: #fff8e8;
+    color: #99650b;
+    border-color: #efdca9;
+}
+
+.freq-projecao-aviso.critico {
+    background: #fff1f1;
+    color: #b63e3e;
+    border-color: #efcccc;
+}
+
+
+/* ==========================================
+   DARK MODE — PROJEÇÃO
+========================================== */
+
+body.dark-mode
+.freq-projecao-card {
+    background: #242e3a;
+    border-color: #364352;
+}
+
+body.dark-mode
+.freq-projecao-header h3,
+body.dark-mode
+.freq-projecao-valor {
+    color: #edf4fb;
+}
+
+body.dark-mode
+.freq-projecao-item {
+    background: #1f2833;
+    border-color: #35414e;
+}
+
+body.dark-mode
+.freq-projecao-item.destaque {
+    background: #223445;
+    border-color: #35536a;
+}
+
+body.dark-mode
+.freq-projecao-label {
+    color: #a8b4c2;
+}
+
+body.dark-mode
+.freq-projecao-aviso.neutro {
+    background: #202a35;
+    color: #b6c1cc;
+    border-color: #374451;
+}
+
+body.dark-mode
+.freq-projecao-aviso.seguro {
+    background: #20372d;
+    color: #a4dbc0;
+    border-color: #315444;
+}
+
+body.dark-mode
+.freq-projecao-aviso.atencao {
+    background: #3b3321;
+    color: #efd18a;
+    border-color: #5c4d2b;
+}
+
+body.dark-mode
+.freq-projecao-aviso.critico {
+    background: #3b2528;
+    color: #efb0b5;
+    border-color: #5d373c;
+}
+
+
+/* ==========================================
+   RESPONSIVO — PROJEÇÃO
+========================================== */
+
+@media (max-width: 900px) {
+
+    .freq-projecao-grid {
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 500px) {
+
+    .freq-projecao-grid {
+        grid-template-columns: 1fr;
     }
 
 }

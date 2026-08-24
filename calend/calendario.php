@@ -955,6 +955,115 @@ function gerarCalendario(
                 </div>
 
 
+                <!-- ======================================
+                     PROJEÇÃO ANUAL
+                ======================================= -->
+
+                <div class="freq-projecao-card">
+
+                    <div class="freq-projecao-header">
+
+                        <div>
+
+                            <span class="freq-projecao-eyebrow">
+                                Projeção
+                            </span>
+
+                            <h3>
+                                Até o fim do ano letivo
+                            </h3>
+
+                        </div>
+
+                        <i class="fa-solid fa-chart-line"></i>
+
+                    </div>
+
+
+                    <div class="freq-projecao-grid">
+
+                        <div class="freq-projecao-item">
+
+                            <span
+                                class="freq-projecao-valor"
+                                id="proj-dias-passados"
+                            >
+                                0
+                            </span>
+
+                            <span class="freq-projecao-label">
+                                Dias letivos já contabilizados
+                            </span>
+
+                        </div>
+
+
+                        <div class="freq-projecao-item">
+
+                            <span
+                                class="freq-projecao-valor"
+                                id="proj-dias-restantes"
+                            >
+                                0
+                            </span>
+
+                            <span class="freq-projecao-label">
+                                Dias letivos restantes
+                            </span>
+
+                        </div>
+
+
+                        <div class="freq-projecao-item">
+
+                            <span
+                                class="freq-projecao-valor"
+                                id="proj-presencas"
+                            >
+                                0
+                            </span>
+
+                            <span class="freq-projecao-label">
+                                Presenças até agora
+                            </span>
+
+                        </div>
+
+
+                        <div class="freq-projecao-item destaque">
+
+                            <span
+                                class="freq-projecao-valor"
+                                id="proj-final-sem-faltas"
+                            >
+                                0%
+                            </span>
+
+                            <span class="freq-projecao-label">
+                                Projeção sem novas faltas
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="freq-projecao-aviso neutro"
+                        id="freq-projecao-aviso"
+                    >
+
+                        <i class="fa-solid fa-circle-info"></i>
+
+                        <span>
+                            Configure o período letivo para gerar a projeção.
+                        </span>
+
+                    </div>
+
+                </div>
+
+
                 <!-- LEGENDA -->
 
                 <div class="freq-legenda">

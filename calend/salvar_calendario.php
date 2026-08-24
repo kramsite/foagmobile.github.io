@@ -1,305 +1,589 @@
 <?php
+
 session_start();
 
 header(
     'Content-Type: application/json; charset=utf-8'
 );
 
+
+// ==========================================
+// VERIFICAR LOGIN
+// ==========================================
+
 if (
     empty(
-        $_SESSION[
-            'codigo_usuario'
-        ]
+        $_SESSION['codigo_usuario']
     )
 ) {
+
     http_response_code(401);
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' =>
-                'Usuário não autenticado.'
+            'mensagem' => 'Usuário não autenticado.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
     exit;
+
 }
 
+
+$codigoUsuario =
+    $_SESSION['codigo_usuario'];
+
+
+// ==========================================
+// ACEITAR APENAS POST
+// ==========================================
+
 if (
-    $_SERVER[
-        'REQUEST_METHOD'
-    ] !== 'POST'
+    $_SERVER['REQUEST_METHOD'] !==
+    'POST'
 ) {
+
     http_response_code(405);
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' =>
-                'Método não permitido.'
+            'mensagem' => 'Método não permitido.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
     exit;
+
 }
 
-$entrada =
-    json_decode(
-        file_get_contents(
-            'php://input'
-        ),
-        true
-    );
 
-if (!is_array($entrada)) {
-    http_response_code(400);
-
-    echo json_encode(
-        [
-            'sucesso' => false,
-            'mensagem' =>
-                'Dados inválidos.'
-        ],
-        JSON_UNESCAPED_UNICODE
-    );
-
-    exit;
-}
-
-$codigoUsuario =
-    $_SESSION[
-        'codigo_usuario'
-    ];
+// ==========================================
+// PASTA DO USUÁRIO
+// ==========================================
 
 $pastaUsuario =
     __DIR__ .
     '/../json/usuarios/' .
     $codigoUsuario;
 
-if (!is_dir($pastaUsuario)) {
+
+if (
+    !is_dir(
+        $pastaUsuario
+    )
+) {
+
     http_response_code(404);
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' =>
-                'Pasta do usuário não encontrada.'
+            'mensagem' => 'Pasta do usuário não encontrada.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
     exit;
+
 }
 
-$diasPermitidos = [
-    'vermelho',
-    'amarelo',
-    'sem-aula',
-    'roxo'
-];
 
-$dias = [];
+$arquivoCalendario =
+    $pastaUsuario .
+    '/calendario.json';
+
+
+// ==========================================
+// RECEBER JSON
+// ==========================================
+
+$conteudo =
+    file_get_contents(
+        'php://input'
+    );
+
+
+$dadosRecebidos =
+    json_decode(
+        $conteudo ?: '',
+        true
+    );
+
 
 if (
-    isset($entrada['dias']) &&
-    is_array($entrada['dias'])
+    !is_array(
+        $dadosRecebidos
+    )
 ) {
+
+    http_response_code(400);
+
+    echo json_encode(
+        [
+            'sucesso' => false,
+            'mensagem' => 'JSON inválido.'
+        ],
+        JSON_UNESCAPED_UNICODE
+    );
+
+    exit;
+
+}
+
+
+// ==========================================
+// FUNÇÃO PARA VALIDAR DATA
+// ==========================================
+
+function dataCalendarioValida(
+    $data
+) {
+
+    if (
+        !is_string(
+            $data
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    if (
+        !preg_match(
+            '/^\d{4}-\d{2}-\d{2}$/',
+            $data
+        )
+    ) {
+
+        return false;
+
+    }
+
+
+    $objetoData =
+        DateTime::createFromFormat(
+            'Y-m-d',
+            $data
+        );
+
+
+    return (
+        $objetoData &&
+        $objetoData->format(
+            'Y-m-d'
+        ) === $data
+    );
+
+}
+
+
+// ==========================================
+// DADOS FINAIS
+// ==========================================
+
+$dadosSalvar = [
+
+    'dias' => [],
+
+    'metas' => [],
+
+    'configuracoes' => []
+
+];
+
+
+// ==========================================
+// SALVAR STATUS DOS DIAS
+// ==========================================
+
+$statusPermitidos = [
+
+    'vermelho',
+
+    'amarelo',
+
+    'sem-aula',
+
+    'roxo'
+
+];
+
+
+$diasRecebidos =
+    $dadosRecebidos['dias']
+        ?? [];
+
+
+if (
+    is_array(
+        $diasRecebidos
+    )
+) {
+
     foreach (
-        $entrada['dias']
+        $diasRecebidos
         as $data => $status
     ) {
+
         if (
-            !is_string($data) ||
-            !preg_match(
-                '/^\d{4}-\d{2}-\d{2}$/',
+            !dataCalendarioValida(
                 $data
-            ) ||
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        if (
             !in_array(
                 $status,
-                $diasPermitidos,
+                $statusPermitidos,
                 true
             )
         ) {
+
             continue;
+
         }
 
-        $dias[$data] =
-            $status;
+
+        $dadosSalvar['dias'][
+            $data
+        ] = $status;
+
     }
+
 }
 
-$metas = [];
+
+// ==========================================
+// SALVAR METAS MENSAIS
+// ==========================================
+
+$metasRecebidas =
+    $dadosRecebidos['metas']
+        ?? [];
+
 
 if (
-    isset($entrada['metas']) &&
-    is_array($entrada['metas'])
+    is_array(
+        $metasRecebidas
+    )
 ) {
+
     foreach (
-        $entrada['metas']
-        as $chave => $valor
+        $metasRecebidas
+        as $chave => $meta
     ) {
+
+        /*
+         Exemplos aceitos:
+
+         2026-1
+         2026-2
+         2026-12
+        */
+
         if (
-            !is_string($chave)
+            !preg_match(
+                '/^\d{4}-(?:[1-9]|1[0-2])$/',
+                (string)$chave
+            )
         ) {
+
             continue;
+
         }
+
+
+        if (
+            !is_numeric(
+                $meta
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        $meta =
+            (float)$meta;
+
 
         $meta =
             max(
                 0,
                 min(
                     100,
-                    (int)$valor
+                    $meta
                 )
             );
 
-        $metas[$chave] =
-            $meta;
+
+        $dadosSalvar['metas'][
+            $chave
+        ] = $meta;
+
     }
+
 }
 
-$configuracoes = [];
+
+// ==========================================
+// SALVAR CONFIGURAÇÕES ANUAIS
+// ==========================================
+
+$configuracoesRecebidas =
+    $dadosRecebidos[
+        'configuracoes'
+    ] ?? [];
+
 
 if (
-    isset(
-        $entrada[
-            'configuracoes'
-        ]
-    ) &&
     is_array(
-        $entrada[
-            'configuracoes'
-        ]
+        $configuracoesRecebidas
     )
 ) {
+
     foreach (
-        $entrada[
-            'configuracoes'
-        ]
+        $configuracoesRecebidas
         as $ano => $config
     ) {
+
         if (
             !preg_match(
                 '/^\d{4}$/',
                 (string)$ano
-            ) ||
-            !is_array($config)
+            )
         ) {
+
             continue;
+
         }
 
-        $validarData =
-            function ($valor) {
-                return (
-                    is_string($valor) &&
-                    preg_match(
-                        '/^\d{4}-\d{2}-\d{2}$/',
-                        $valor
-                    )
-                )
-                    ? $valor
-                    : '';
-            };
 
-        $configuracoes[
+        if (
+            !is_array(
+                $config
+            )
+        ) {
+
+            continue;
+
+        }
+
+
+        // ======================================
+        // META ANUAL
+        // ======================================
+
+        $metaAnual =
+            isset(
+                $config['meta_anual']
+            )
+                ? (float)$config[
+                    'meta_anual'
+                ]
+                : 80;
+
+
+        $metaAnual =
+            max(
+                0,
+                min(
+                    100,
+                    $metaAnual
+                )
+            );
+
+
+        // ======================================
+        // DATAS
+        // ======================================
+
+        $inicioAno =
+            $config[
+                'inicio_ano_letivo'
+            ] ?? '';
+
+
+        $fimAno =
+            $config[
+                'fim_ano_letivo'
+            ] ?? '';
+
+
+        $inicioFerias =
+            $config[
+                'inicio_ferias_meio'
+            ] ?? '';
+
+
+        $fimFerias =
+            $config[
+                'fim_ferias_meio'
+            ] ?? '';
+
+
+        if (
+            $inicioAno !== '' &&
+            !dataCalendarioValida(
+                $inicioAno
+            )
+        ) {
+
+            $inicioAno = '';
+
+        }
+
+
+        if (
+            $fimAno !== '' &&
+            !dataCalendarioValida(
+                $fimAno
+            )
+        ) {
+
+            $fimAno = '';
+
+        }
+
+
+        if (
+            $inicioFerias !== '' &&
+            !dataCalendarioValida(
+                $inicioFerias
+            )
+        ) {
+
+            $inicioFerias = '';
+
+        }
+
+
+        if (
+            $fimFerias !== '' &&
+            !dataCalendarioValida(
+                $fimFerias
+            )
+        ) {
+
+            $fimFerias = '';
+
+        }
+
+
+        // ======================================
+        // MONTAR CONFIGURAÇÃO DO ANO
+        // ======================================
+
+        $dadosSalvar[
+            'configuracoes'
+        ][
             (string)$ano
         ] = [
+
             'meta_anual' =>
-                max(
-                    0,
-                    min(
-                        100,
-                        (int)(
-                            $config[
-                                'meta_anual'
-                            ] ??
-                            80
-                        )
-                    )
-                ),
+                $metaAnual,
 
             'inicio_ano_letivo' =>
-                $validarData(
-                    $config[
-                        'inicio_ano_letivo'
-                    ] ??
-                    ''
-                ),
+                $inicioAno,
 
             'fim_ano_letivo' =>
-                $validarData(
-                    $config[
-                        'fim_ano_letivo'
-                    ] ??
-                    ''
-                ),
+                $fimAno,
 
             'inicio_ferias_meio' =>
-                $validarData(
-                    $config[
-                        'inicio_ferias_meio'
-                    ] ??
-                    ''
-                ),
+                $inicioFerias,
 
             'fim_ferias_meio' =>
-                $validarData(
-                    $config[
-                        'fim_ferias_meio'
-                    ] ??
-                    ''
-                )
+                $fimFerias
+
         ];
+
     }
+
 }
 
-$dados = [
-    'dias' =>
-        $dias,
 
-    'metas' =>
-        $metas,
+// ==========================================
+// TRANSFORMAR EM JSON
+// ==========================================
 
-    'configuracoes' =>
-        $configuracoes
-];
-
-$arquivo =
-    $pastaUsuario .
-    '/calendario.json';
-
-$salvou =
-    file_put_contents(
-        $arquivo,
-        json_encode(
-            $dados,
-            JSON_PRETTY_PRINT |
-            JSON_UNESCAPED_UNICODE |
-            JSON_UNESCAPED_SLASHES
-        ),
-        LOCK_EX
+$json =
+    json_encode(
+        $dadosSalvar,
+        JSON_PRETTY_PRINT |
+        JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES
     );
 
-if ($salvou === false) {
+
+if (
+    $json === false
+) {
+
     http_response_code(500);
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' =>
-                'Não foi possível salvar o calendário.'
+            'mensagem' => 'Erro ao gerar JSON.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
     exit;
+
 }
+
+
+// ==========================================
+// SALVAR ARQUIVO
+// ==========================================
+
+$resultado =
+    file_put_contents(
+        $arquivoCalendario,
+        $json,
+        LOCK_EX
+    );
+
+
+if (
+    $resultado === false
+) {
+
+    http_response_code(500);
+
+    echo json_encode(
+        [
+            'sucesso' => false,
+            'mensagem' => 'Não foi possível salvar o calendário.'
+        ],
+        JSON_UNESCAPED_UNICODE
+    );
+
+    exit;
+
+}
+
+
+// ==========================================
+// SUCESSO
+// ==========================================
 
 echo json_encode(
     [
-        'sucesso' => true
+        'sucesso' => true,
+        'mensagem' => 'Calendário salvo com sucesso.'
     ],
     JSON_UNESCAPED_UNICODE
 );

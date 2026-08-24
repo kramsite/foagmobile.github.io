@@ -1,5 +1,14 @@
 {
-    "dias": [],
+    "dias": {
+        "2026-08-10": "vermelho",
+        "2026-08-12": "vermelho",
+        "2026-08-13": "vermelho",
+        "2026-08-14": "vermelho",
+        "2026-08-19": "vermelho",
+        "2026-07-29": "vermelho",
+        "2026-07-30": "vermelho",
+        "2026-07-31": "vermelho"
+    },
     "metas": [],
     "configuracoes": {
         "2026": {

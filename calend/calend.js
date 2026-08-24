@@ -1,5 +1,5 @@
 // calend.js — FOAG
-// Calendário + Agenda + Frequência anual
+// Calendário + Agenda + Frequência + Projeção anual
 
 document.addEventListener('DOMContentLoaded', () => {
 
@@ -17,25 +17,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const rawCalendData =
     window.CAL_CALEND_DATA || {};
 
+
+  // =====================================================
+  // GARANTIR QUE O JSON VIRE OBJETO E NÃO ARRAY
+  // =====================================================
+
+  function garantirObjeto(valor) {
+
+    if (
+      valor &&
+      typeof valor === 'object' &&
+      !Array.isArray(valor)
+    ) {
+      return valor;
+    }
+
+    return {};
+  }
+
+
   const calendData = {
+
     dias:
-      rawCalendData.dias &&
-      typeof rawCalendData.dias === 'object'
-        ? rawCalendData.dias
-        : {},
+      garantirObjeto(
+        rawCalendData.dias
+      ),
 
     metas:
-      rawCalendData.metas &&
-      typeof rawCalendData.metas === 'object'
-        ? rawCalendData.metas
-        : {},
+      garantirObjeto(
+        rawCalendData.metas
+      ),
 
     configuracoes:
-      rawCalendData.configuracoes &&
-      typeof rawCalendData.configuracoes === 'object'
-        ? rawCalendData.configuracoes
-        : {}
+      garantirObjeto(
+        rawCalendData.configuracoes
+      )
+
   };
+
 
   const AGENDA_SAVE_URL =
     window.CAL_AGENDA_SAVE_URL ||
@@ -72,8 +91,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // DATA
+  // UTILIDADES
   // =====================================================
+
+  function clamp(
+    numero,
+    minimo,
+    maximo
+  ) {
+
+    return Math.max(
+      minimo,
+      Math.min(
+        maximo,
+        numero
+      )
+    );
+
+  }
+
 
   function hojeIso() {
 
@@ -93,23 +129,17 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function dataIsoValida(
-    valor
-  ) {
+  function dataIsoValida(valor) {
 
     return (
       typeof valor === 'string' &&
-      /^\d{4}-\d{2}-\d{2}$/.test(
-        valor
-      )
+      /^\d{4}-\d{2}-\d{2}$/.test(valor)
     );
 
   }
 
 
-  function diaSemanaIso(
-    iso
-  ) {
+  function diaSemanaIso(iso) {
 
     return new Date(
       iso + 'T00:00:00'
@@ -118,18 +148,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function ehFimDeSemana(
-    iso
-  ) {
+  function ehFimDeSemana(iso) {
 
-    const diaSemana =
-      diaSemanaIso(
-        iso
-      );
+    const dia =
+      diaSemanaIso(iso);
 
     return (
-      diaSemana === 0 ||
-      diaSemana === 6
+      dia === 0 ||
+      dia === 6
     );
 
   }
@@ -151,8 +177,41 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
+  function escapeHtml(valor) {
+
+    const div =
+      document.createElement('div');
+
+    div.textContent =
+      String(valor ?? '');
+
+    return div.innerHTML;
+
+  }
+
+
+  function formataDataBR(iso) {
+
+    const [
+      ano,
+      mes,
+      dia
+    ] =
+      iso
+        .split('-')
+        .map(Number);
+
+    return (
+      `${String(dia).padStart(2, '0')}/` +
+      `${String(mes).padStart(2, '0')}/` +
+      `${ano}`
+    );
+
+  }
+
+
   // =====================================================
-  // CONFIGURAÇÃO DO ANO
+  // CONFIGURAÇÃO ANUAL
   // =====================================================
 
   function obterConfigAno(
@@ -160,32 +219,37 @@ document.addEventListener('DOMContentLoaded', () => {
   ) {
 
     const chave =
-      String(
-        ano
-      );
+      String(ano);
 
 
     if (
-      !calendData.configuracoes[
-        chave
-      ] ||
-      typeof calendData
-        .configuracoes[
-          chave
-        ] !== 'object'
+      !calendData.configuracoes ||
+      typeof calendData.configuracoes !== 'object' ||
+      Array.isArray(
+        calendData.configuracoes
+      )
     ) {
 
-      calendData.configuracoes[
-        chave
-      ] = {};
+      calendData.configuracoes = {};
+
+    }
+
+
+    if (
+      !calendData.configuracoes[chave] ||
+      typeof calendData.configuracoes[chave] !== 'object' ||
+      Array.isArray(
+        calendData.configuracoes[chave]
+      )
+    ) {
+
+      calendData.configuracoes[chave] = {};
 
     }
 
 
     const config =
-      calendData.configuracoes[
-        chave
-      ];
+      calendData.configuracoes[chave];
 
 
     if (
@@ -246,23 +310,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (
       config.inicio_ano_letivo &&
-      iso <
-        config.inicio_ano_letivo
+      iso < config.inicio_ano_letivo
     ) {
-
       return false;
-
     }
 
 
     if (
       config.fim_ano_letivo &&
-      iso >
-        config.fim_ano_letivo
+      iso > config.fim_ano_letivo
     ) {
-
       return false;
-
     }
 
 
@@ -273,9 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         config.fim_ferias_meio
       )
     ) {
-
       return false;
-
     }
 
 
@@ -284,9 +340,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function validarConfigAno(
-    config
-  ) {
+  function validarConfigAno(config) {
 
     if (
       config.inicio_ano_letivo &&
@@ -322,19 +376,32 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // SALVAR CALENDÁRIO
+  // SALVAR CALENDÁRIO NO JSON
   // =====================================================
 
   async function salvarCalendarioServidor() {
 
     try {
 
+      console.log(
+        'Enviando calendário:',
+        calendData
+      );
+
+
+      console.log(
+        'JSON enviado:',
+        JSON.stringify(
+          calendData
+        )
+      );
+
+
       const resposta =
         await fetch(
           CALEND_SAVE_URL,
           {
-            method:
-              'POST',
+            method: 'POST',
 
             credentials:
               'same-origin',
@@ -352,24 +419,24 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
 
-      if (
-        !resposta.ok
-      ) {
-
-        throw new Error(
-          'HTTP ' +
-          resposta.status
-        );
-
-      }
-
-
       const retorno =
         await resposta
           .json()
           .catch(
             () => null
           );
+
+
+      if (
+        !resposta.ok
+      ) {
+
+        throw new Error(
+          retorno?.mensagem ||
+          `HTTP ${resposta.status}`
+        );
+
+      }
 
 
       if (
@@ -383,6 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
         );
 
       }
+
+
+      console.log(
+        'Calendário salvo com sucesso.'
+      );
 
 
       return true;
@@ -414,8 +486,7 @@ document.addEventListener('DOMContentLoaded', () => {
       await fetch(
         AGENDA_SAVE_URL,
         {
-          method:
-            'POST',
+          method: 'POST',
 
           credentials:
             'same-origin',
@@ -490,9 +561,7 @@ document.addEventListener('DOMContentLoaded', () => {
       obterConfigAno();
 
 
-    if (
-      inputMetaAnual
-    ) {
+    if (inputMetaAnual) {
 
       inputMetaAnual.value =
         String(
@@ -508,9 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      inputInicioAno
-    ) {
+    if (inputInicioAno) {
 
       inputInicioAno.value =
         config.inicio_ano_letivo;
@@ -518,9 +585,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      inputFimAno
-    ) {
+    if (inputFimAno) {
 
       inputFimAno.value =
         config.fim_ano_letivo;
@@ -528,9 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      inputInicioFerias
-    ) {
+    if (inputInicioFerias) {
 
       inputInicioFerias.value =
         config.inicio_ferias_meio;
@@ -538,9 +601,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      inputFimFerias
-    ) {
+    if (inputFimFerias) {
 
       inputFimFerias.value =
         config.fim_ferias_meio;
@@ -597,9 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      erroConfig
-    ) {
+    if (erroConfig) {
 
       erroConfig.textContent =
         erro;
@@ -607,16 +666,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      erro
-    ) {
+    if (erro) {
+      return;
+    }
+
+
+    const salvou =
+      await salvarCalendarioServidor();
+
+
+    if (!salvou) {
+
+      alert(
+        'Não foi possível salvar as configurações do calendário.'
+      );
 
       return;
 
     }
-
-
-    await salvarCalendarioServidor();
 
 
     atualizarTudo();
@@ -643,12 +710,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // TAREFAS DO DIA
+  // TAREFAS
   // =====================================================
 
-  function tarefasDoDia(
-    iso
-  ) {
+  function tarefasDoDia(iso) {
 
     const lista =
       Array.isArray(
@@ -668,10 +733,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // =====================================================
-  // MARCAR DIAS COM TAREFA
-  // =====================================================
-
   function marcarDiasComTarefa() {
 
     if (
@@ -679,9 +740,7 @@ document.addEventListener('DOMContentLoaded', () => {
         agendaData.tarefas
       )
     ) {
-
       return;
-
     }
 
 
@@ -692,12 +751,8 @@ document.addEventListener('DOMContentLoaded', () => {
           tarefa.data;
 
 
-        if (
-          !iso
-        ) {
-
+        if (!iso) {
           return;
-
         }
 
 
@@ -707,9 +762,7 @@ document.addEventListener('DOMContentLoaded', () => {
           );
 
 
-        if (
-          dia
-        ) {
+        if (dia) {
 
           dia.classList.add(
             'has-tarefa'
@@ -723,10 +776,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  // =====================================================
-  // SALVAR TAREFA DO CALENDÁRIO
-  // =====================================================
-
   function salvarTextoDoDiaNaAgenda(
     iso,
     texto
@@ -738,8 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
       )
     ) {
 
-      agendaData.tarefas =
-        [];
+      agendaData.tarefas = [];
 
     }
 
@@ -756,13 +804,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const textoLimpo =
-      (texto || '')
-        .trim();
+      String(
+        texto || ''
+      ).trim();
 
 
-    if (
-      textoLimpo
-    ) {
+    if (textoLimpo) {
 
       agendaData.tarefas.push({
         texto:
@@ -784,9 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      dia
-    ) {
+    if (dia) {
 
       dia.classList.toggle(
         'has-tarefa',
@@ -812,41 +857,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // BUSCAR HORÁRIOS
   // =====================================================
 
-  async function buscarHorarios(
-    iso
-  ) {
+  async function buscarHorarios(iso) {
 
-    if (
-      !HORARIO_API_URL
-    ) {
-
+    if (!HORARIO_API_URL) {
       return [];
-
     }
 
 
     try {
 
-      const url =
-        `${HORARIO_API_URL}` +
-        `?data=${encodeURIComponent(
-          iso
-        )}`;
-
-
       const resposta =
         await fetch(
-          url
+          `${HORARIO_API_URL}?data=${encodeURIComponent(iso)}`
         );
 
 
-      if (
-        !resposta.ok
-      ) {
+      if (!resposta.ok) {
 
         throw new Error(
-          'HTTP ' +
-          resposta.status
+          `HTTP ${resposta.status}`
         );
 
       }
@@ -887,12 +916,8 @@ document.addEventListener('DOMContentLoaded', () => {
         ];
 
 
-      if (
-        !coluna
-      ) {
-
+      if (!coluna) {
         return [];
-
       }
 
 
@@ -912,9 +937,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
       documento
-        .querySelectorAll(
-          'tr'
-        )
+        .querySelectorAll('tr')
         .forEach(
           linha => {
 
@@ -932,14 +955,10 @@ document.addEventListener('DOMContentLoaded', () => {
               const texto =
                 colunas[
                   coluna
-                ]
-                  .textContent
-                  .trim();
+                ].textContent.trim();
 
 
-              if (
-                texto
-              ) {
+              if (texto) {
 
                 materias.add(
                   texto
@@ -977,18 +996,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // STATUS DO DIA
   // =====================================================
 
-  function statusDia(
-    dia
-  ) {
+  function statusDia(dia) {
 
     if (
       dia.classList.contains(
         'vermelho'
       )
     ) {
-
       return 'vermelho';
-
     }
 
 
@@ -997,9 +1012,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'amarelo'
       )
     ) {
-
       return 'amarelo';
-
     }
 
 
@@ -1008,9 +1021,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'sem-aula'
       )
     ) {
-
       return 'sem-aula';
-
     }
 
 
@@ -1019,9 +1030,7 @@ document.addEventListener('DOMContentLoaded', () => {
         'roxo'
       )
     ) {
-
       return 'roxo';
-
     }
 
 
@@ -1031,7 +1040,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // VERIFICAR DIA LETIVO
+  // DIA LETIVO
   // =====================================================
 
   function diaContaComoLetivo(
@@ -1046,19 +1055,13 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      !iso
-    ) {
-
+    if (!iso) {
       return false;
-
     }
 
 
     if (
-      ehFimDeSemana(
-        iso
-      ) ||
+      ehFimDeSemana(iso) ||
       dia.classList.contains(
         'feriado'
       ) ||
@@ -1105,12 +1108,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      !mes
-    ) {
-
+    if (!mes) {
       return false;
-
     }
 
 
@@ -1148,7 +1147,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // MARCAÇÕES DO PERÍODO LETIVO
+  // PERÍODO LETIVO
   // =====================================================
 
   function aplicarMarcacoesPeriodo() {
@@ -1181,11 +1180,8 @@ document.addEventListener('DOMContentLoaded', () => {
               '.periodo-badge'
             )
             .forEach(
-              badge => {
-
-                badge.remove();
-
-              }
+              badge =>
+                badge.remove()
             );
 
 
@@ -1231,7 +1227,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
           const marcacoes = [
-
             {
               data:
                 config.inicio_ano_letivo,
@@ -1263,7 +1258,6 @@ document.addEventListener('DOMContentLoaded', () => {
               texto:
                 'Fim férias'
             }
-
           ];
 
 
@@ -1308,28 +1302,22 @@ document.addEventListener('DOMContentLoaded', () => {
   // DOTS
   // =====================================================
 
-  function criaDot(
-    tipo
-  ) {
+  function criaDot(tipo) {
 
     const dot =
       document.createElement(
         'span'
       );
 
-
     dot.className =
       `dot ${tipo}`;
-
 
     return dot;
 
   }
 
 
-  function atualizarDots(
-    dia
-  ) {
+  function atualizarDots(dia) {
 
     const dots =
       dia.querySelector(
@@ -1337,12 +1325,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      !dots
-    ) {
-
+    if (!dots) {
       return;
-
     }
 
 
@@ -1475,50 +1459,54 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
+          const ehHoje =
+            iso === hoje;
+
+
           dia.classList.toggle(
             'dia-hoje',
-            iso === hoje
+            ehHoje
           );
 
 
-          const existente =
+          const badge =
             dia.querySelector(
               '.hoje-badge'
             );
 
 
           if (
-            iso === hoje &&
-            !existente
+            ehHoje &&
+            !badge
           ) {
 
-            const badge =
+            const novo =
               document.createElement(
                 'span'
               );
 
 
-            badge.className =
+            novo.className =
               'hoje-badge';
 
 
-            badge.textContent =
+            novo.textContent =
               'Hoje';
 
 
             dia.appendChild(
-              badge
+              novo
             );
 
           }
 
 
           if (
-            iso !== hoje &&
-            existente
+            !ehHoje &&
+            badge
           ) {
 
-            existente.remove();
+            badge.remove();
 
           }
 
@@ -1529,7 +1517,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // DIAS RESTANTES DO PERÍODO
+  // DIAS RESTANTES
   // =====================================================
 
   function diasRestantesPeriodo(
@@ -1567,7 +1555,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // QUANTAS FALTAS AINDA PODE TER
+  // FALTAS QUE AINDA PODE TER
   // =====================================================
 
   function calcularFaltasPossiveis(
@@ -1579,20 +1567,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const alvo =
       clamp(
-        Number(
-          meta
-        ),
+        Number(meta),
         0,
         100
       ) / 100;
 
 
-    if (
-      alvo <= 0
-    ) {
-
+    if (alvo <= 0) {
       return null;
-
     }
 
 
@@ -1601,14 +1583,14 @@ document.addEventListener('DOMContentLoaded', () => {
       diasRestantes;
 
 
-    const presencasSeForTodos =
+    const presencasFinais =
       presencas +
       diasRestantes;
 
 
     const maxFaltas =
       Math.floor(
-        presencasSeForTodos -
+        presencasFinais -
         alvo *
         totalFinal +
         0.000000001
@@ -1624,7 +1606,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // CALCULAR MÉTRICAS DO MÊS
+  // MÉTRICAS DO MÊS
   // =====================================================
 
   function calcularMetricasMesDados(
@@ -1646,51 +1628,23 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
 
-    let presencas =
-      0;
-
-    let faltas =
-      0;
-
-    let atestados =
-      0;
-
-    let semAula =
-      0;
-
-    let provas =
-      0;
-
-    let totalDiasLetivos =
-      0;
+    let presencas = 0;
+    let faltas = 0;
+    let atestados = 0;
+    let semAula = 0;
+    let provas = 0;
+    let totalDiasLetivos = 0;
 
 
     dias.forEach(
       dia => {
-
-        const iso =
-          dia.getAttribute(
-            'data-date'
-          );
-
-
-        if (
-          !iso
-        ) {
-
-          return;
-
-        }
-
 
         if (
           dia.classList.contains(
             'sem-aula'
           )
         ) {
-
           semAula++;
-
         }
 
 
@@ -1699,9 +1653,7 @@ document.addEventListener('DOMContentLoaded', () => {
             'roxo'
           )
         ) {
-
           provas++;
-
         }
 
 
@@ -1712,9 +1664,7 @@ document.addEventListener('DOMContentLoaded', () => {
             false
           )
         ) {
-
           return;
-
         }
 
 
@@ -1728,7 +1678,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
 
           faltas++;
-
           return;
 
         }
@@ -1741,7 +1690,6 @@ document.addEventListener('DOMContentLoaded', () => {
         ) {
 
           atestados++;
-
           return;
 
         }
@@ -1755,7 +1703,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const percentual =
       totalDiasLetivos > 0
-
         ? Math.round(
             (
               presencas /
@@ -1763,7 +1710,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ) *
             100
           )
-
         : 0;
 
 
@@ -1807,27 +1753,19 @@ document.addEventListener('DOMContentLoaded', () => {
       ) / 10;
 
 
-    if (
-      diferenca > 0
-    ) {
+    if (diferenca > 0) {
 
       return (
-        `Você está ${Math.abs(
-          diferenca
-        )} pontos percentuais acima da meta.`
+        `Você está ${diferenca} pontos percentuais acima da meta.`
       );
 
     }
 
 
-    if (
-      diferenca < 0
-    ) {
+    if (diferenca < 0) {
 
       return (
-        `Você está ${Math.abs(
-          diferenca
-        )} pontos percentuais abaixo da meta.`
+        `Você está ${Math.abs(diferenca)} pontos percentuais abaixo da meta.`
       );
 
     }
@@ -1872,7 +1810,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const campos = {
-
       '.count-presenca':
         dados.presencas,
 
@@ -1887,7 +1824,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
       '.count-prova':
         dados.provas
-
     };
 
 
@@ -1902,14 +1838,10 @@ document.addEventListener('DOMContentLoaded', () => {
           );
 
 
-        if (
-          elemento
-        ) {
+        if (elemento) {
 
           elemento.textContent =
-            String(
-              valor
-            );
+            String(valor);
 
         }
 
@@ -1923,15 +1855,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    const label =
-      mes.querySelector(
-        '.label-presenca'
-      );
-
-
-    if (
-      barra
-    ) {
+    if (barra) {
 
       barra.style.width =
         `${Math.min(
@@ -1942,9 +1866,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    if (
-      label
-    ) {
+    const label =
+      mes.querySelector(
+        '.label-presenca'
+      );
+
+
+    if (label) {
 
       label.textContent =
         `${dados.percentual}%`;
@@ -1958,9 +1886,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      statusMeta
-    ) {
+    if (statusMeta) {
 
       statusMeta.textContent =
         (
@@ -1981,9 +1907,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      faltasRestantes
-    ) {
+    if (faltasRestantes) {
 
       const quantidade =
         calcularFaltasPossiveis(
@@ -1996,19 +1920,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
       faltasRestantes.textContent =
         quantidade === null
-
-          ? (
-              'Meta 0%: não há limite calculado de faltas.'
-            )
-
+          ? 'Meta 0%: não há limite calculado de faltas.'
           : (
-              `Você ainda pode ter até ` +
-              `${quantidade} ` +
-              `${quantidade === 1
-                ? 'falta'
-                : 'faltas'} ` +
-              `mantendo pelo menos ${meta}%, ` +
-              `considerando os dias letivos restantes do mês.`
+              `Você ainda pode ter até ${quantidade} ` +
+              `${quantidade === 1 ? 'falta' : 'faltas'} ` +
+              `mantendo pelo menos ${meta}%.`
             );
 
     }
@@ -2020,7 +1936,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // CLASSIFICAÇÃO DA FREQUÊNCIA
+  // CLASSIFICAÇÃO ANUAL
   // =====================================================
 
   function classificacaoRisco(
@@ -2069,7 +1985,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // RESUMO ANUAL
+  // RESUMO + PROJEÇÃO ANUAL
   // =====================================================
 
   function atualizarResumoAnual() {
@@ -2081,24 +1997,13 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
 
-    let presencas =
-      0;
+    let presencas = 0;
+    let faltas = 0;
+    let atestados = 0;
+    let totalDiasLetivos = 0;
+    let diasRestantes = 0;
 
-    let faltas =
-      0;
-
-    let atestados =
-      0;
-
-    let totalDiasLetivos =
-      0;
-
-    let diasRestantes =
-      0;
-
-
-    const porMes =
-      [];
+    const porMes = [];
 
 
     meses.forEach(
@@ -2113,32 +2018,26 @@ document.addEventListener('DOMContentLoaded', () => {
         presencas +=
           dados.presencas;
 
-
         faltas +=
           dados.faltas;
-
 
         atestados +=
           dados.atestados;
 
-
         totalDiasLetivos +=
           dados.totalDiasLetivos;
-
 
         diasRestantes +=
           dados.diasRestantes;
 
 
         porMes.push({
-
           mes:
             Number(
               mes.dataset.mes
             ),
 
           ...dados
-
         });
 
       }
@@ -2147,7 +2046,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const percentual =
       totalDiasLetivos > 0
-
         ? Math.round(
             (
               presencas /
@@ -2155,41 +2053,35 @@ document.addEventListener('DOMContentLoaded', () => {
             ) *
             100
           )
-
         : 0;
 
 
     const mesesComDados =
       porMes.filter(
         item =>
-          item.totalDiasLetivos >
-          0
+          item.totalDiasLetivos > 0
       );
 
 
     const melhorMes =
       mesesComDados.length
-
         ? [...mesesComDados]
             .sort(
               (a, b) =>
                 b.percentual -
                 a.percentual
             )[0]
-
         : null;
 
 
     const mesMaisFaltas =
       mesesComDados.length
-
         ? [...mesesComDados]
             .sort(
               (a, b) =>
                 b.faltas -
                 a.faltas
             )[0]
-
         : null;
 
 
@@ -2217,24 +2109,47 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const faltasPossiveis =
       periodoConfigurado
-
         ? calcularFaltasPossiveis(
             presencas,
             totalDiasLetivos,
             diasRestantes,
             meta
           )
-
         : null;
+
+
+    // =====================================================
+    // PROJEÇÃO FINAL SEM NOVAS FALTAS
+    // =====================================================
+
+    const totalFinalPrevisto =
+      totalDiasLetivos +
+      diasRestantes;
+
+
+    const presencasFinais =
+      presencas +
+      diasRestantes;
+
+
+    const projecaoFinal =
+      periodoConfigurado &&
+      totalFinalPrevisto > 0
+        ? Math.round(
+            (
+              presencasFinais /
+              totalFinalPrevisto
+            ) *
+            100
+          )
+        : 0;
 
 
     const risco =
       totalDiasLetivos > 0
-
         ? classificacaoRisco(
             percentual
           )
-
         : {
             texto:
               periodoConfigurado
@@ -2252,82 +2167,85 @@ document.addEventListener('DOMContentLoaded', () => {
         `${percentual}%`,
 
       'freq-anual-faltas':
-        String(
-          faltas
-        ),
+        String(faltas),
 
       'freq-anual-atestados':
-        String(
-          atestados
-        ),
+        String(atestados),
 
       'freq-melhor-mes':
         melhorMes
-
           ? (
               `${NOMES_MESES[
                 melhorMes.mes - 1
-              ]} · ` +
-              `${melhorMes.percentual}%`
+              ]} · ${melhorMes.percentual}%`
             )
-
           : '—',
 
       'freq-mes-mais-faltas':
         mesMaisFaltas
-
           ? (
               `${NOMES_MESES[
                 mesMaisFaltas.mes - 1
-              ]} · ` +
-              `${mesMaisFaltas.faltas}`
+              ]} · ${mesMaisFaltas.faltas}`
             )
-
           : '—',
 
       'freq-meta-resumo':
-        (
-          `Meta: ${meta}% · ` +
-          `Atual: ${percentual}%`
-        ),
+        `Meta: ${meta}% · Atual: ${percentual}%`,
 
       'freq-meta-percent':
         `${percentual}%`,
 
+      'proj-dias-passados':
+        periodoConfigurado
+          ? String(
+              totalDiasLetivos
+            )
+          : '—',
+
+      'proj-dias-restantes':
+        periodoConfigurado
+          ? String(
+              diasRestantes
+            )
+          : '—',
+
+      'proj-presencas':
+        periodoConfigurado
+          ? String(
+              presencas
+            )
+          : '—',
+
+      'proj-final-sem-faltas':
+        periodoConfigurado
+          ? `${projecaoFinal}%`
+          : '—',
+
       'freq-diferenca-meta':
         periodoConfigurado
-
           ? textoDiferencaMeta(
               percentual,
               meta
             )
-
           : (
               'Defina o início e o final do ano letivo para calcular a meta anual.'
             ),
 
       'freq-faltas-restantes':
         !periodoConfigurado
-
           ? (
               'As faltas restantes serão calculadas depois que o período letivo for definido.'
             )
-
           : (
               faltasPossiveis === null
-
                 ? (
                     'Meta 0%: não há limite calculado de faltas.'
                   )
-
                 : (
-                    `Você ainda pode ter até ` +
-                    `${faltasPossiveis} ` +
-                    `${faltasPossiveis === 1
-                      ? 'falta'
-                      : 'faltas'} ` +
-                    `mantendo pelo menos ${meta}%, ` +
-                    `considerando os dias letivos restantes do ano.`
+                    `Você ainda pode ter até ${faltasPossiveis} ` +
+                    `${faltasPossiveis === 1 ? 'falta' : 'faltas'} ` +
+                    `mantendo pelo menos ${meta}% de frequência.`
                   )
             )
 
@@ -2345,9 +2263,7 @@ document.addEventListener('DOMContentLoaded', () => {
           );
 
 
-        if (
-          elemento
-        ) {
+        if (elemento) {
 
           elemento.textContent =
             texto;
@@ -2364,9 +2280,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      barra
-    ) {
+    if (barra) {
 
       barra.style.width =
         `${Math.min(
@@ -2383,9 +2297,7 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      badge
-    ) {
+    if (badge) {
 
       badge.textContent =
         risco.texto;
@@ -2398,13 +2310,151 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-      if (
-        risco.classe
-      ) {
+      if (risco.classe) {
 
         badge.classList.add(
           risco.classe
         );
+
+      }
+
+    }
+
+
+    // =====================================================
+    // AVISO DA PROJEÇÃO
+    // =====================================================
+
+    const aviso =
+      document.getElementById(
+        'freq-projecao-aviso'
+      );
+
+
+    if (aviso) {
+
+      const texto =
+        aviso.querySelector(
+          'span'
+        );
+
+
+      aviso.classList.remove(
+        'neutro',
+        'seguro',
+        'atencao',
+        'critico'
+      );
+
+
+      let classe =
+        'neutro';
+
+      let mensagem =
+        'Configure o período letivo para gerar a projeção.';
+
+
+      if (periodoConfigurado) {
+
+        if (
+          totalDiasLetivos === 0
+        ) {
+
+          mensagem =
+            'O período letivo está configurado, mas ainda não há dias contabilizados.';
+
+        }
+
+        else if (
+          percentual < meta &&
+          projecaoFinal >= meta
+        ) {
+
+          classe =
+            'atencao';
+
+          mensagem =
+            (
+              `Sua frequência atual está abaixo da meta de ${meta}%, ` +
+              `mas ainda pode se recuperar. ` +
+              `Sem novas faltas, a projeção final é ${projecaoFinal}%.`
+            );
+
+        }
+
+        else if (
+          percentual < meta
+        ) {
+
+          classe =
+            'critico';
+
+          mensagem =
+            (
+              `Sua frequência está abaixo da meta de ${meta}%. ` +
+              `Mesmo sem novas faltas, a projeção final é ${projecaoFinal}%.`
+            );
+
+        }
+
+        else if (
+          faltasPossiveis === 0
+        ) {
+
+          classe =
+            'critico';
+
+          mensagem =
+            (
+              `Você está dentro da meta de ${meta}%, ` +
+              `mas não possui margem para novas faltas.`
+            );
+
+        }
+
+        else if (
+          faltasPossiveis !== null &&
+          faltasPossiveis <= 2
+        ) {
+
+          classe =
+            'atencao';
+
+          mensagem =
+            (
+              `Atenção: você só pode ter mais ${faltasPossiveis} ` +
+              `${faltasPossiveis === 1 ? 'falta' : 'faltas'} ` +
+              `e manter pelo menos ${meta}%.`
+            );
+
+        }
+
+        else {
+
+          classe =
+            'seguro';
+
+          mensagem =
+            (
+              `Você está dentro da meta. ` +
+              `Ainda pode ter até ${faltasPossiveis} faltas ` +
+              `e manter pelo menos ${meta}% de frequência.`
+            );
+
+        }
+
+      }
+
+
+      aviso.classList.add(
+        classe
+      );
+
+
+      if (texto) {
+
+        texto.textContent =
+          mensagem;
 
       }
 
@@ -2417,16 +2467,10 @@ document.addEventListener('DOMContentLoaded', () => {
   // FECHAR MÊS
   // =====================================================
 
-  function fecharMes(
-    mes
-  ) {
+  function fecharMes(mes) {
 
-    if (
-      !mes
-    ) {
-
+    if (!mes) {
       return;
-
     }
 
 
@@ -2444,17 +2488,15 @@ document.addEventListener('DOMContentLoaded', () => {
       ?.();
 
 
-    const botao =
+    const fechar =
       mes.querySelector(
         '.fechar-btn'
       );
 
 
-    if (
-      botao
-    ) {
+    if (fechar) {
 
-      botao.style.display =
+      fechar.style.display =
         'none';
 
     }
@@ -2512,9 +2554,7 @@ document.addEventListener('DOMContentLoaded', () => {
               aberto &&
               aberto !== mes
             ) {
-
               return;
-
             }
 
 
@@ -2523,9 +2563,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'expanded'
               )
             ) {
-
               return;
-
             }
 
 
@@ -2557,9 +2595,7 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
-            if (
-              !fechar
-            ) {
+            if (!fechar) {
 
               fechar =
                 document.createElement(
@@ -2686,7 +2722,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 mes.__corSelecionada =
                   mes.__corSelecionada ===
                   cor
-
                     ? null
                     : cor;
 
@@ -2704,7 +2739,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // MARCAR DIA
+  // MARCAR DIA + SALVAR NO JSON
   // =====================================================
 
   document
@@ -2724,9 +2759,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ) ||
               !mes.__corSelecionada
             ) {
-
               return;
-
             }
 
 
@@ -2745,9 +2778,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'data-date'
               )
             ) {
-
               return;
-
             }
 
 
@@ -2764,6 +2795,8 @@ document.addEventListener('DOMContentLoaded', () => {
               mes.__corSelecionada;
 
 
+            // FERIADO
+
             if (
               dia.classList.contains(
                 'feriado'
@@ -2774,11 +2807,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 'Este dia é feriado automático e não pode ser alterado.'
               );
 
-
               return;
 
             }
 
+
+            // NÃO PERMITE FALTA OU ATESTADO NO FUTURO
 
             if (
               iso > hojeIso() &&
@@ -2791,7 +2825,6 @@ document.addEventListener('DOMContentLoaded', () => {
               alert(
                 'Não é possível marcar falta ou atestado em uma data futura.'
               );
-
 
               return;
 
@@ -2823,9 +2856,28 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
+            // ==========================================
+            // GARANTIR QUE DIAS SEJA {}
+            // ==========================================
+
             if (
-              status
+              !calendData.dias ||
+              typeof calendData.dias !== 'object' ||
+              Array.isArray(
+                calendData.dias
+              )
             ) {
+
+              calendData.dias = {};
+
+            }
+
+
+            // ==========================================
+            // GRAVAR A DATA
+            // ==========================================
+
+            if (status) {
 
               calendData.dias[
                 iso
@@ -2840,7 +2892,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-            await salvarCalendarioServidor();
+            console.log(
+              'Data marcada:',
+              iso
+            );
+
+
+            console.log(
+              'Status:',
+              status
+            );
+
+
+            console.log(
+              'Dias que serão salvos:',
+              calendData.dias
+            );
+
+
+            const salvou =
+              await salvarCalendarioServidor();
+
+
+            if (!salvou) {
+
+              alert(
+                'Não foi possível salvar esta alteração no calendário.'
+              );
+
+              return;
+
+            }
 
 
             atualizarTudo();
@@ -2853,7 +2935,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // ALTERAR META MENSAL
+  // META MENSAL
   // =====================================================
 
   document
@@ -2873,9 +2955,26 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
+            if (!mes) {
+              return;
+            }
+
+
+            if (
+              !calendData.metas ||
+              typeof calendData.metas !== 'object' ||
+              Array.isArray(
+                calendData.metas
+              )
+            ) {
+
+              calendData.metas = {};
+
+            }
+
+
             const chave =
-              `${mes.dataset.ano}-` +
-              `${mes.dataset.mes}`;
+              `${mes.dataset.ano}-${mes.dataset.mes}`;
 
 
             calendData.metas[
@@ -2891,7 +2990,19 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
-            await salvarCalendarioServidor();
+            const salvou =
+              await salvarCalendarioServidor();
+
+
+            if (!salvou) {
+
+              alert(
+                'Não foi possível salvar a meta mensal.'
+              );
+
+              return;
+
+            }
 
 
             atualizarTudo();
@@ -2904,42 +3015,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // FORMATAR DATA
-  // =====================================================
-
-  function formataDataBR(
-    iso
-  ) {
-
-    const [
-      ano,
-      mes,
-      dia
-    ] =
-      iso
-        .split('-')
-        .map(
-          Number
-        );
-
-
-    return (
-      `${String(
-        dia
-      ).padStart(2, '0')}/` +
-
-      `${String(
-        mes
-      ).padStart(2, '0')}/` +
-
-      `${ano}`
-    );
-
-  }
-
-
-  // =====================================================
-  // DUPLO CLIQUE NO DIA
+  // MINI AGENDA — DUPLO CLIQUE
   // =====================================================
 
   document
@@ -2965,9 +3041,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 'expanded'
               )
             ) {
-
               return;
-
             }
 
 
@@ -2994,9 +3068,7 @@ document.addEventListener('DOMContentLoaded', () => {
               !dataEl ||
               !notasEl
             ) {
-
               return;
-
             }
 
 
@@ -3043,9 +3115,7 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
-            if (
-              resumo
-            ) {
+            if (resumo) {
 
               resumo.style.display =
                 'none';
@@ -3053,9 +3123,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-            if (
-              editor
-            ) {
+            if (editor) {
 
               editor.style.display =
                 'block';
@@ -3086,7 +3154,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document
     .querySelectorAll(
-      '.mes .agenda-fechar'
+      '.agenda-fechar'
     )
     .forEach(
       botao => {
@@ -3096,14 +3164,11 @@ document.addEventListener('DOMContentLoaded', () => {
           evento => {
 
             evento.preventDefault();
-
             evento.stopPropagation();
 
 
             botao
-              .closest(
-                '.mes'
-              )
+              .closest('.mes')
               ?.querySelector(
                 '.mini-agenda'
               )
@@ -3125,7 +3190,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document
     .querySelectorAll(
-      '.mes .agenda-salvar'
+      '.agenda-salvar'
     )
     .forEach(
       botao => {
@@ -3135,7 +3200,6 @@ document.addEventListener('DOMContentLoaded', () => {
           evento => {
 
             evento.preventDefault();
-
             evento.stopPropagation();
 
 
@@ -3165,9 +3229,7 @@ document.addEventListener('DOMContentLoaded', () => {
               !iso ||
               !textarea
             ) {
-
               return;
-
             }
 
 
@@ -3216,9 +3278,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ) ||
               mes.__corSelecionada
             ) {
-
               return;
-
             }
 
 
@@ -3289,9 +3349,7 @@ document.addEventListener('DOMContentLoaded', () => {
               !btnNova ||
               !btnHorarios
             ) {
-
               return;
-
             }
 
 
@@ -3304,6 +3362,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 iso
               );
 
+
+            // VER TAREFAS
 
             btnVer.onclick =
               () => {
@@ -3326,13 +3386,11 @@ document.addEventListener('DOMContentLoaded', () => {
                   !tarefas.length
                 ) {
 
-                  resumo.innerHTML =
-                    `
+                  resumo.innerHTML = `
                     <p class="agenda-resumo-vazio">
                       Nenhuma tarefa cadastrada para este dia.
                     </p>
-                    `;
-
+                  `;
 
                   return;
 
@@ -3347,7 +3405,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </strong>
 
                     <ul>
-
                       ${
                         tarefas
                           .map(
@@ -3358,7 +3415,6 @@ document.addEventListener('DOMContentLoaded', () => {
                           )
                           .join('')
                       }
-
                     </ul>
 
                   </div>
@@ -3366,6 +3422,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
               };
 
+
+            // NOVA TAREFA
 
             btnNova.onclick =
               () => {
@@ -3398,6 +3456,8 @@ document.addEventListener('DOMContentLoaded', () => {
               };
 
 
+            // HORÁRIOS
+
             btnHorarios.onclick =
               async () => {
 
@@ -3423,13 +3483,11 @@ document.addEventListener('DOMContentLoaded', () => {
                   !horarios.length
                 ) {
 
-                  resumo.innerHTML =
-                    `
+                  resumo.innerHTML = `
                     <p class="agenda-resumo-vazio">
                       Nenhum horário cadastrado para este dia.
                     </p>
-                    `;
-
+                  `;
 
                   return;
 
@@ -3444,7 +3502,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     </strong>
 
                     <p>
-
                       ${
                         horarios
                           .map(
@@ -3452,7 +3509,6 @@ document.addEventListener('DOMContentLoaded', () => {
                           )
                           .join(', ')
                       }
-
                     </p>
 
                   </div>
@@ -3493,7 +3549,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document
     .querySelectorAll(
-      '.mes .btn-imprimir'
+      '.btn-imprimir'
     )
     .forEach(
       botao => {
@@ -3503,9 +3559,7 @@ document.addEventListener('DOMContentLoaded', () => {
           evento => {
 
             evento.preventDefault();
-
             evento.stopPropagation();
-
 
             window.print();
 
@@ -3522,7 +3576,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document
     .querySelectorAll(
-      '.mes .btn-exportar-png'
+      '.btn-exportar-png'
     )
     .forEach(
       botao => {
@@ -3532,7 +3586,6 @@ document.addEventListener('DOMContentLoaded', () => {
           async evento => {
 
             evento.preventDefault();
-
             evento.stopPropagation();
 
 
@@ -3553,9 +3606,7 @@ document.addEventListener('DOMContentLoaded', () => {
               typeof html2canvas !==
                 'function'
             ) {
-
               return;
-
             }
 
 
@@ -3569,14 +3620,12 @@ document.addEventListener('DOMContentLoaded', () => {
               await html2canvas(
                 bloco,
                 {
-                  useCORS:
-                    true,
+                  useCORS: true,
 
                   backgroundColor:
                     '#ffffff',
 
-                  scale:
-                    2
+                  scale: 2
                 }
               );
 
@@ -3588,11 +3637,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             link.download =
-              `Calendario_` +
-              `${NOMES_MESES[
-                numeroMes - 1
-              ]}_` +
-              `${mes.dataset.ano}.png`;
+              (
+                `Calendario_` +
+                `${NOMES_MESES[
+                  numeroMes - 1
+                ]}_` +
+                `${mes.dataset.ano}.png`
+              );
 
 
             link.href =
@@ -3616,7 +3667,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document
     .querySelectorAll(
-      '.mes .anoSelect'
+      '.anoSelect'
     )
     .forEach(
       select => {
@@ -3638,15 +3689,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
           option.value =
-            String(
-              ano
-            );
+            String(ano);
 
 
           option.textContent =
-            String(
-              ano
-            );
+            String(ano);
 
 
           option.selected =
@@ -3696,24 +3743,20 @@ document.addEventListener('DOMContentLoaded', () => {
       'icon-perfil'
     );
 
-
   const logoutModal =
     document.getElementById(
       'logout-modal'
     );
-
 
   const iconSair =
     document.getElementById(
       'icon-sair'
     );
 
-
   const confirmLogout =
     document.getElementById(
       'confirm-logout'
     );
-
 
   const cancelLogout =
     document.getElementById(
@@ -3736,9 +3779,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'click',
     () => {
 
-      if (
-        logoutModal
-      ) {
+      if (logoutModal) {
 
         logoutModal.style.display =
           'flex';
@@ -3764,9 +3805,7 @@ document.addEventListener('DOMContentLoaded', () => {
     'click',
     () => {
 
-      if (
-        logoutModal
-      ) {
+      if (logoutModal) {
 
         logoutModal.style.display =
           'none';
@@ -3796,74 +3835,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // UTILIDADES
-  // =====================================================
-
-  function clamp(
-    numero,
-    minimo,
-    maximo
-  ) {
-
-    return Math.max(
-      minimo,
-      Math.min(
-        maximo,
-        numero
-      )
-    );
-
-  }
-
-
-  function escapeHtml(
-    valor
-  ) {
-
-    const div =
-      document.createElement(
-        'div'
-      );
-
-
-    div.textContent =
-      String(
-        valor ?? ''
-      );
-
-
-    return div.innerHTML;
-
-  }
-
-
-  // =====================================================
-  // ATUALIZAÇÃO GERAL
-  // =====================================================
-
-  function atualizarTudo() {
-
-    aplicarMarcacoesPeriodo();
-
-
-    destacarHoje();
-
-
-    document
-      .querySelectorAll(
-        '.calendario .dia[data-date]'
-      )
-      .forEach(
-        atualizarDots
-      );
-
-
-    atualizarResumoAnual();
-
-  }
-
-
-  // =====================================================
   // PAINEL ANUAL EXPANSÍVEL
   // =====================================================
 
@@ -3875,12 +3846,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      !painel
-    ) {
-
+    if (!painel) {
       return;
-
     }
 
 
@@ -3890,12 +3857,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    if (
-      !topo
-    ) {
-
+    if (!topo) {
       return;
-
     }
 
 
@@ -3904,9 +3867,7 @@ document.addEventListener('DOMContentLoaded', () => {
         '.btn-expandir-frequencia'
       )
     ) {
-
       return;
-
     }
 
 
@@ -3960,7 +3921,6 @@ document.addEventListener('DOMContentLoaded', () => {
       evento => {
 
         evento.preventDefault();
-
         evento.stopPropagation();
 
 
@@ -4003,6 +3963,31 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
+  // ATUALIZAÇÃO GERAL
+  // =====================================================
+
+  function atualizarTudo() {
+
+    aplicarMarcacoesPeriodo();
+
+    destacarHoje();
+
+
+    document
+      .querySelectorAll(
+        '.calendario .dia[data-date]'
+      )
+      .forEach(
+        atualizarDots
+      );
+
+
+    atualizarResumoAnual();
+
+  }
+
+
+  // =====================================================
   // INICIALIZAÇÃO
   // =====================================================
 
@@ -4012,7 +3997,9 @@ document.addEventListener('DOMContentLoaded', () => {
   preencherConfigAno();
 
 
-  // APLICAR STATUS SALVOS
+  // ==========================================
+  // CARREGAR FALTAS / ATESTADOS / ETC SALVOS
+  // ==========================================
 
   document
     .querySelectorAll(
@@ -4033,9 +4020,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ];
 
 
-        if (
-          status
-        ) {
+        if (status) {
 
           dia.classList.add(
             status
@@ -4047,12 +4032,16 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
-  // MARCAR TAREFAS
+  // ==========================================
+  // CARREGAR TAREFAS
+  // ==========================================
 
   marcarDiasComTarefa();
 
 
+  // ==========================================
   // CARREGAR METAS MENSAIS
+  // ==========================================
 
   document
     .querySelectorAll(
@@ -4062,8 +4051,7 @@ document.addEventListener('DOMContentLoaded', () => {
       mes => {
 
         const chave =
-          `${mes.dataset.ano}-` +
-          `${mes.dataset.mes}`;
+          `${mes.dataset.ano}-${mes.dataset.mes}`;
 
 
         const meta =
@@ -4094,7 +4082,9 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
+  // ==========================================
   // CALCULAR TUDO
+  // ==========================================
 
   atualizarTudo();
 
