@@ -1376,6 +1376,10 @@ $current =
   <link rel="stylesheet" href="boletim.css">
   <link rel="stylesheet" href="../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_notas.css">
+
+  <!-- ACESSIBILIDADE GLOBAL -->
+  <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+  <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>

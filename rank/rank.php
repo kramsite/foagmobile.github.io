@@ -959,6 +959,17 @@ foreach (
         href="dark_rank.css"
     >
 
+    <!-- ACESSIBILIDADE GLOBAL -->
+    <link
+        rel="stylesheet"
+        href="../acessibilidade/acessibilidade.css"
+    >
+
+    <script
+        src="../acessibilidade/acessibilidade.js?v=4"
+        defer
+    ></script>
+
     <link
         rel="preconnect"
         href="https://fonts.googleapis.com"
