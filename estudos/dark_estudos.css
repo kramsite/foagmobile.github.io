@@ -1,5 +1,5 @@
 /* ==========================================
-   MODO ESCURO — ESTUDOS
+   MODO ESCURO — ESTUDOS (COMPLETO)
 ========================================== */
 
 body.dark-mode {
@@ -8,6 +8,8 @@ body.dark-mode {
   --texto: #f1f5f9;
   --texto-suave: #94a3b8;
   --borda: #334155;
+  --azul: #38a5ff;
+  --azul-escuro: #1d4ed8;
 
   background: #0f172a !important;
   color: #f1f5f9 !important;
@@ -20,20 +22,44 @@ body.dark-mode {
 body.dark-mode header.cabecalho {
   background: #0b1a2e !important;
   border-bottom: 1px solid #334155;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode header.cabecalho .logo {
+  color: #ffffff !important;
+}
+
+body.dark-mode .header-icons i {
+  color: #ffffff !important;
+}
+
+body.dark-mode .header-icons i:hover {
+  color: #94a3b8 !important;
 }
 
 body.dark-mode nav.menu {
   background: #0b1a2e !important;
   border-right: 1px solid #334155;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
 }
 
 body.dark-mode nav.menu a {
   color: #cbd5e1;
+  transition: background 0.2s ease, color 0.2s ease;
 }
 
 body.dark-mode nav.menu a:hover,
 body.dark-mode nav.menu a.active {
-  background: rgba(96, 165, 250, 0.15);
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode nav.menu a i {
+  color: #cbd5e1;
+}
+
+body.dark-mode nav.menu a:hover i,
+body.dark-mode nav.menu a.active i {
   color: #60a5fa;
 }
 
@@ -43,18 +69,25 @@ body.dark-mode nav.menu a.active {
 
 body.dark-mode main.conteudo {
   background: #0f172a;
+  color: #f1f5f9;
 }
 
 body.dark-mode .page-eyebrow {
   color: #60a5fa;
 }
 
-body.dark-mode .page-header h1,
+body.dark-mode .page-header h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .page-header p {
+  color: #94a3b8;
+}
+
 body.dark-mode .section-heading h2 {
   color: #f1f5f9;
 }
 
-body.dark-mode .page-header p,
 body.dark-mode .section-heading p {
   color: #94a3b8;
 }
@@ -104,6 +137,7 @@ body.dark-mode .method-card {
   background: #172033;
   border-color: #334155;
   color: #f1f5f9;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 body.dark-mode .method-card:hover {
@@ -151,6 +185,15 @@ body.dark-mode .empty-state p {
   color: #94a3b8;
 }
 
+body.dark-mode .empty-state .btn {
+  background: #38a5ff;
+  color: #ffffff;
+}
+
+body.dark-mode .empty-state .btn:hover {
+  background: #2563eb;
+}
+
 /* ==========================================
    CARDS DAS MATÉRIAS
 ========================================== */
@@ -159,6 +202,16 @@ body.dark-mode .subject-card {
   background: #172033;
   border-color: #334155;
   box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+body.dark-mode .subject-card:hover {
+  background: #1e2940;
+  border-color: #3b82f6;
+}
+
+body.dark-mode .subject-card::before {
+  background: var(--subject-color, #38a5ff);
 }
 
 body.dark-mode .subject-card h3 {
@@ -170,24 +223,38 @@ body.dark-mode .subject-card-meta {
 }
 
 body.dark-mode .subject-card-icon {
-  background: color-mix(
-    in srgb,
-    var(--subject-color) 18%,
-    #172033
-  );
+  background: color-mix(in srgb, var(--subject-color, #38a5ff) 18%, #172033);
+  color: var(--subject-color, #38a5ff);
+}
+
+body.dark-mode .subject-card-meta i {
+  color: #60a5fa;
 }
 
 /* ==========================================
    BOTÕES
 ========================================== */
 
+body.dark-mode .btn {
+  background: #38a5ff;
+  color: #ffffff;
+  border: none;
+}
+
+body.dark-mode .btn:hover {
+  background: #2563eb;
+  box-shadow: 0 5px 12px rgba(56, 165, 255, 0.3);
+}
+
 body.dark-mode .btn.secondary {
   background: #334155;
   color: #e2e8f0;
+  border: 1px solid #475569;
 }
 
 body.dark-mode .btn.secondary:hover {
   background: #475569;
+  border-color: #60a5fa;
 }
 
 body.dark-mode .btn.secondary-outline {
@@ -240,14 +307,17 @@ body.dark-mode .color-picker {
   box-shadow: 0 0 0 1px #475569;
 }
 
+body.dark-mode .color-picker:hover {
+  border-color: #38a5ff;
+  box-shadow: 0 0 0 1px #38a5ff, 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
 body.dark-mode .color-option {
   box-shadow: 0 0 0 1px #475569;
 }
 
 body.dark-mode .color-option.active {
-  box-shadow:
-    0 0 0 3px #172033,
-    0 0 0 5px var(--subject-color);
+  box-shadow: 0 0 0 3px #172033, 0 0 0 5px var(--subject-color);
 }
 
 /* ==========================================
@@ -279,17 +349,19 @@ body.dark-mode .subject-card-actions .subject-delete-btn:hover {
 }
 
 /* ==========================================
-   MODAIS
+   MODAL NOVA MATÉRIA
 ========================================== */
 
 body.dark-mode .modal {
   background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(2px);
 }
 
 body.dark-mode .modal-content {
   background: #1e293b;
   color: #f1f5f9;
   border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
 }
 
 body.dark-mode .modal-close {
@@ -319,17 +391,12 @@ body.dark-mode .modal-content h4 {
   color: #94a3b8;
 }
 
-body.dark-mode #cancel-logout {
-  background: #334155;
-  color: #e2e8f0;
-}
-
 /* ==========================================
    MODAL EXCLUIR MATÉRIA
 ========================================== */
 
 body.dark-mode .delete-subject-icon {
-  background: rgba(220, 76, 76, 0.12);
+  background: rgba(220, 76, 76, 0.15);
   color: #f87171;
 }
 
@@ -355,6 +422,61 @@ body.dark-mode .delete-warning i {
   color: #f6ad55;
 }
 
+body.dark-mode .delete-confirm-btn {
+  background: #dc4c4c !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .delete-confirm-btn:hover {
+  background: #c83d3d !important;
+  box-shadow: 0 5px 14px rgba(220, 76, 76, 0.3) !important;
+}
+
+body.dark-mode #cancel-delete-subject {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode #cancel-delete-subject:hover {
+  background: #475569 !important;
+}
+
+/* ==========================================
+   MODAL LOGOUT
+========================================== */
+
+body.dark-mode #logout-modal .modal-content {
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+}
+
+body.dark-mode #logout-modal h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode #logout-modal h4 {
+  color: #94a3b8;
+}
+
+body.dark-mode #confirm-logout {
+  background: #38a5ff;
+  color: #ffffff;
+}
+
+body.dark-mode #confirm-logout:hover {
+  background: #2563eb;
+}
+
+body.dark-mode #cancel-logout {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode #cancel-logout:hover {
+  background: #475569;
+}
+
 /* ==========================================
    TOAST
 ========================================== */
@@ -363,6 +485,7 @@ body.dark-mode .toast {
   background: #020617;
   color: #f1f5f9;
   border: 1px solid #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
 }
 
 /* ==========================================
@@ -373,4 +496,188 @@ body.dark-mode footer {
   background: #020617;
   color: #94a3b8;
   border-top: 1px solid #334155;
+}
+
+/* ==========================================
+   RESPONSIVIDADE MODO ESCURO
+========================================== */
+
+@media (max-width: 768px) {
+  body.dark-mode .container {
+    flex-direction: column;
+  }
+
+  body.dark-mode nav.menu {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #334155;
+  }
+
+  body.dark-mode .subject-card-actions .subject-edit-btn,
+  body.dark-mode .subject-card-actions .subject-delete-btn {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (max-width: 600px) {
+  body.dark-mode header.cabecalho {
+    padding: 10px 15px;
+    font-size: 21px;
+  }
+
+  body.dark-mode .header-icons {
+    right: 15px;
+    gap: 11px;
+    font-size: 1.1rem;
+  }
+
+  body.dark-mode main.conteudo {
+    padding: 18px 12px;
+  }
+
+  body.dark-mode .content-section {
+    padding: 18px;
+    border-radius: 13px;
+  }
+
+  body.dark-mode .modal-content {
+    padding: 24px 18px;
+  }
+
+  body.dark-mode .subject-modal-content {
+    padding-top: 26px;
+  }
+
+  body.dark-mode .modal-buttons {
+    flex-direction: column-reverse;
+  }
+
+  body.dark-mode .modal-buttons .btn {
+    width: 100%;
+  }
+
+  body.dark-mode .delete-subject-content {
+    padding: 26px 18px;
+  }
+
+  body.dark-mode .delete-subject-actions {
+    flex-direction: column-reverse;
+  }
+
+  body.dark-mode .delete-subject-actions .btn {
+    width: 100%;
+  }
+}
+
+/* ==========================================
+   CORREÇÃO PARA O DARK_BASEE.CSS
+========================================== */
+
+/* Garantir que os elementos específicos do FOAG
+   não sejam sobrescritos pelo dark_basee.css */
+
+body.dark-mode header.cabecalho {
+  background: #0b1a2e !important;
+}
+
+body.dark-mode nav.menu {
+  background: #0b1a2e !important;
+}
+
+body.dark-mode nav.menu a {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background: rgba(56, 165, 255, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .btn {
+  background: #38a5ff !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn:hover {
+  background: #2563eb !important;
+}
+
+body.dark-mode .btn.secondary {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .btn.secondary:hover {
+  background: #475569 !important;
+}
+
+body.dark-mode .btn.secondary-outline {
+  background: #172033 !important;
+  color: #60a5fa !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .btn.secondary-outline:hover {
+  background: #1e293b !important;
+  border-color: #60a5fa !important;
+}
+
+/* ==========================================
+   FILTRO DE MATÉRIA (se houver)
+========================================== */
+
+body.dark-mode .filter-area {
+  background: #172033;
+  border-color: #334155;
+}
+
+/* ==========================================
+   FLASHCARDS (se houver na página)
+========================================== */
+
+body.dark-mode .flash-card-item {
+  background: #172033;
+  border-color: #334155;
+}
+
+body.dark-mode .flash-card-item:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode .card-block + .card-block {
+  border-top-color: #334155;
+}
+
+body.dark-mode .card-text {
+  color: #e2e8f0;
+}
+
+body.dark-mode .card-created {
+  color: #64748b;
+}
+
+body.dark-mode .card-action-btn {
+  background: #334155;
+  color: #94a3b8;
+  border-color: #475569;
+}
+
+body.dark-mode .card-action-btn:hover {
+  background: #475569;
+  color: #e2e8f0;
+}
+
+body.dark-mode .card-action-btn.edit:hover {
+  background: rgba(56, 165, 255, 0.2);
+  color: #60a5fa;
+  border-color: #60a5fa;
+}
+
+body.dark-mode .card-action-btn.delete:hover {
+  background: rgba(220, 76, 76, 0.2);
+  color: #f87171;
+  border-color: #f87171;
 }

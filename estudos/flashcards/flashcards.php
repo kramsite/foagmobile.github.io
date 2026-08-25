@@ -132,6 +132,7 @@ if (
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"> 
     <link  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">  
     <link rel="stylesheet" href="flashcards.css">
+        <link rel="stylesheet" href="dark_flash.css">
     <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
     <script src=".././m.escuro/dark-mode.js"></script>
 
