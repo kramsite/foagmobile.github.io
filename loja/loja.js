@@ -513,3 +513,98 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Loja pronta ✅');
     console.log('🔮 Botão secreto ativado! Clique 5x rápido para ganhar estrelas!');
 });
+
+// =================================================
+// GANHAR ESTRELAS POR ESTUDO
+// =================================================
+
+async function ganharEstrelasPorEstudo(minutos, disciplina) {
+    try {
+        console.log('⭐ Estudou', minutos, 'minutos de', disciplina);
+        
+        const resposta = await fetch('salvar_estrelas.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                minutos: minutos,
+                disciplina: disciplina
+            })
+        });
+
+        const texto = await resposta.text();
+        console.log('📥 Resposta estrelas:', texto);
+        
+        try {
+            const dados = JSON.parse(texto);
+            if (dados.sucesso && dados.estrelas > 0) {
+                // Atualizar lojaData
+                lojaData.estrelas = dados.total_estrelas;
+                atualizarSaldo();
+                
+                // Mostrar notificação
+                mostrarNotificacaoEstrelas(dados.estrelas, dados.total_estrelas);
+                
+                // Atualizar perfil
+                setTimeout(atualizarPerfilComItens, 100);
+                setTimeout(notificarPerfilAtualizado, 200);
+            }
+            return dados;
+        } catch (e) {
+            console.log('Resposta não é JSON:', texto);
+        }
+    } catch (erro) {
+        console.error('❌ Erro ao ganhar estrelas:', erro);
+    }
+}
+
+function mostrarNotificacaoEstrelas(ganhas, total) {
+    // Criar notificação temporária
+    const notificacao = document.createElement('div');
+    notificacao.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 99999;
+        background: linear-gradient(135deg, #ffd700, #f9a825);
+        color: #1a2a3a;
+        padding: 15px 25px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        animation: slideInRight 0.5s ease;
+        max-width: 320px;
+    `;
+    
+    notificacao.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:32px;">⭐</span>
+            <div>
+                <div style="font-size:18px;">+${ganhas} estrelas!</div>
+                <div style="font-size:13px;opacity:0.8;">Total: ${total} ⭐</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notificacao);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        notificacao.style.opacity = '0';
+        notificacao.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => notificacao.remove(), 500);
+    }, 3000);
+}
+
+// Adicionar CSS para animação
+const styleNotif = document.createElement('style');
+styleNotif.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(styleNotif);
