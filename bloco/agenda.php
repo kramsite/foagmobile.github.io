@@ -132,7 +132,7 @@ if (!isset($horarioData['html'])) {
 
     <!-- ACESSIBILIDADE GLOBAL -->
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-    <script src="../acessibilidade/acessibilidade.js" defer></script>
+    <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
 
     <?php
 require_once $_SERVER['DOCUMENT_ROOT']

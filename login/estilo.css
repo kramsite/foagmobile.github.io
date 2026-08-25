@@ -5,238 +5,619 @@
   font-family: 'Poppins', sans-serif;
 }
 
+html,
 body {
-  background-color: #ffffff;
-  /* Removido o overflow: hidden para permitir scroll no mobile */
+  width: 100%;
+  height: 100%;
 }
 
-/* Cabeçalho */
+body {
+  background-color: #ffffff;
+  overflow: hidden;
+}
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
 .logo {
-  font-family: 'Snap ITC', sans-serif;
-  background-color: #38a5ff;
-  color: white;
-  font-size: 2.2em;
-  padding: 15px 20px;
   width: 100%;
-  text-align: left;
+  height: 68px;
+
   position: fixed;
   top: 0;
   left: 0;
   z-index: 10;
+
   display: flex;
   align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  height: 68px; /* Altura definida para o cálculo do calc() */
+
+  padding: 0 20px;
+
+  background-color: #38a5ff;
+  color: #ffffff;
+
+  font-family: 'Snap ITC', sans-serif;
+  font-size: 2.2rem;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
 }
+
+/* ==========================================
+   PÁGINA DE LOGIN
+========================================== */
 
 .login-page {
   width: 100%;
-  min-height: calc(100vh - 68px); 
-  display: flex;
-  margin-top: 68px; 
-}
+  height: calc(100vh - 68px);
 
-.left-section {
-  width: 50%;
-  position: relative;
+  margin-top: 68px;
+
+  display: flex;
+
   overflow: hidden;
 }
 
-/* Efeito de fade lateral (só aparece no desktop) */
+/* ==========================================
+   LADO ESQUERDO
+========================================== */
+
+.left-section {
+  width: 50%;
+  height: 100%;
+
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  background-color: #ffffff;
+}
+
+.left-section img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+  object-position: center;
+}
+
+/* ==========================================
+   FADE DA IMAGEM
+========================================== */
+
 .left-section::after {
   content: '';
+
   position: absolute;
+
   top: 0;
   right: 0;
-  width: 100px;
+
+  width: 90px;
   height: 100%;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0),
+    #ffffff
+  );
+
+  pointer-events: none;
 }
+
+/* ==========================================
+   LADO DIREITO
+========================================== */
 
 .right-section {
   width: 50%;
-  background-color: #ffffff;
+  height: 100%;
+
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: center;
-  padding: 60px 40px;
-  min-height: calc(100vh - 68px);
+
+  padding: 30px 40px;
+
+  background-color: #ffffff;
+
+  overflow: hidden;
 }
 
-/* Mantenha seus estilos de H1, FORM, INPUT e BUTTON aqui normalmente... */
+/* ==========================================
+   TÍTULO
+========================================== */
 
 h1 {
-  font-size: 3em;
-  color: #007bff;
-  margin-bottom: 0.2em;
+  width: 100%;
+  max-width: 420px;
+
+  margin-bottom: 24px;
+
+  color: #0783f7;
+
+  font-size: 2.8rem;
+  font-weight: 600;
+
+  line-height: 1;
+
   text-align: center;
 }
 
+/* ==========================================
+   FORMULÁRIO
+========================================== */
+
 form {
-  max-width: 400px;
   width: 100%;
-  margin: 0 auto;
-  padding: 0 20px;
+  max-width: 420px;
+
+  display: flex;
+  flex-direction: column;
+
+  padding: 0;
+
+  margin: 0;
 }
 
-/* Campos de entrada fixos para não "pular" */
+/* ==========================================
+   LABELS
+========================================== */
+
+label {
+  display: block;
+
+  margin: 0 0 6px 0;
+
+  color: #161616;
+
+  font-size: 1rem;
+  font-weight: 400;
+}
+
+/* Espaço antes do próximo campo */
+
+input + label,
+.password-wrapper + label {
+  margin-top: 18px;
+}
+
+/* ==========================================
+   INPUTS
+========================================== */
+
 input[type="email"],
 input[type="password"],
 input[type="text"] {
   width: 100%;
-  padding: 15px 18px;
-  border: 2px solid #ddd;
+  height: 50px;
+
+  padding: 0 15px;
+
+  margin: 0;
+
+  border: 2px solid #dddddd;
+  border-radius: 6px;
+
+  background-color: #ffffff;
+
+  color: #222222;
+
   font-size: 1rem;
-  line-height: 1.2rem;
-  margin-bottom: 0.5em;
-  border-radius: 5px;
-  transition: border-color 0.3s ease;
-  font-family: inherit;
-  height: 50px; /* altura fixa */
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="text"]:focus {
   border-color: #38a5ff;
+
+  box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.12);
 }
 
-/* Macaquinho (ícone de visibilidade) */
+/* ==========================================
+   SENHA
+========================================== */
+
 .password-wrapper {
+  width: 100%;
+
   position: relative;
+
   display: flex;
   align-items: center;
 }
+
 .password-wrapper input {
-  flex: 1;
-  padding-right: 40px;
-}
-.toggle-visibility {
-  position: absolute;
-  right: 10px;
-  cursor: pointer;
-  user-select: none;
-  font-size: 1.5rem;
-  line-height: 1;
+  width: 100%;
+
+  padding-right: 50px;
 }
 
-/* Botões e links */
-a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: 500;
+.toggle-visibility {
+  position: absolute;
+
+  top: 50%;
+  right: 14px;
+
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 1.4rem;
+
+  cursor: pointer;
+  user-select: none;
 }
-a:hover {
+
+/* ==========================================
+   LINK CADASTRE-SE
+========================================== */
+
+form a {
+  width: fit-content;
+
+  display: inline-block;
+
+  margin-top: 18px;
+  margin-bottom: 8px;
+
+  color: #0783f7;
+
+  font-size: 0.95rem;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+form a:hover {
   text-decoration: underline;
 }
 
+/* ==========================================
+   BOTÃO
+========================================== */
+
 button {
-  background-color: #38a5ff;
-  color: white;
-  border: none;
-  padding: 14px;
-  font-size: 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
   width: 100%;
-  transition: background-color 0.3s ease, transform 0.2s ease-in-out;
+  height: 52px;
+
+  margin: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  background-color: #38a5ff;
+  color: #ffffff;
+
+  font-size: 1.1rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 }
+
 button:hover {
-  background-color: #3099ef;
-  transform: translateY(-2px);
+  background-color: #2398f8;
 }
+
 button:active {
-  transform: translateY(1px);
+  transform: scale(0.99);
 }
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
 
 @media (max-width: 768px) {
-  body, html {
-    overflow: hidden; 
+
+  html,
+  body {
+    width: 100%;
     height: 100%;
+
+    overflow: hidden;
   }
+
+  body {
+    background: linear-gradient(
+      180deg,
+      #eaf6ff 0%,
+      #ffffff 100%
+    );
+  }
+
+  /* ==========================================
+     LOGO MOBILE
+  ========================================== */
+
+  .logo {
+    height: 55px;
+
+    justify-content: center;
+
+    padding: 0 15px;
+
+    font-size: 1.6rem;
+  }
+
+  /* ==========================================
+     LOGIN MOBILE
+  ========================================== */
 
   .login-page {
-    flex-direction: column;
-    margin-top: 0;
-    height: 100vh;
-    width: 100vw;
+    width: 100%;
+    height: calc(100vh - 55px);
+
+    margin-top: 55px;
+
     display: flex;
-    justify-content: center;
     align-items: center;
-    background: linear-gradient(to bottom, #e3f2ff 0%, #ffffff 100%);
+    justify-content: center;
+
+    overflow: hidden;
   }
 
+  /* Esconde imagem */
+
   .left-section {
-    display: none; 
+    display: none;
   }
+
+  /* ==========================================
+     LADO DIREITO MOBILE
+  ========================================== */
 
   .right-section {
     width: 100%;
-    display: flex;
+    height: 100%;
+
     justify-content: center;
-    align-items: center;
-    padding: 15px;
+
+    padding: 20px;
+
     background: transparent;
+
+    overflow: hidden;
   }
 
-  /* Container Menor */
-  form {
-    background-color: #ffffff;
-    padding: 25px 20px; /* Reduzi o preenchimento interno */
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
-    max-width: 320px; /* Reduzido de 380px para 320px */
-    width: 85%;
-    margin: 0;
-  }
+  /* ==========================================
+     TÍTULO MOBILE
+  ========================================== */
 
-  /* Título menor */
   h1 {
-    font-size: 1.6rem; /* Reduzido de 2.2rem */
-    color: #38a5ff;
-    margin-bottom: 20px;
-    text-align: center;
+    max-width: 340px;
+
+    margin-bottom: 18px;
+
+    font-size: 2rem;
   }
 
-  /* Labels menores */
+  /* ==========================================
+     FORMULÁRIO MOBILE
+  ========================================== */
+
+  form {
+    width: 100%;
+    max-width: 340px;
+
+    padding: 24px 22px;
+
+    border-radius: 14px;
+
+    background-color: #ffffff;
+
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.07);
+  }
+
+  /* ==========================================
+     LABEL MOBILE
+  ========================================== */
+
   label {
-    font-size: 0.85rem;
-    color: #555;
+    margin-bottom: 5px;
+
+    font-size: 0.9rem;
   }
 
-  /* Inputs menores */
+  input + label,
+  .password-wrapper + label {
+    margin-top: 14px;
+  }
+
+  /* ==========================================
+     INPUT MOBILE
+  ========================================== */
+
   input[type="email"],
   input[type="password"],
   input[type="text"] {
-    height: 40px; /* Reduzido de 50px */
-    padding: 10px 12px;
-    font-size: 0.9rem; /* Fonte menor interna */
-    margin-bottom: 0.3em;
+    height: 44px;
+
+    padding: 0 12px;
+
+    font-size: 0.9rem;
   }
 
-  /* Botão menor */
+  .password-wrapper input {
+    padding-right: 42px;
+  }
+
+  .toggle-visibility {
+    right: 12px;
+
+    font-size: 1.2rem;
+  }
+
+  /* ==========================================
+     LINK MOBILE
+  ========================================== */
+
+  form a {
+    margin-top: 14px;
+    margin-bottom: 8px;
+
+    font-size: 0.82rem;
+  }
+
+  /* ==========================================
+     BOTÃO MOBILE
+  ========================================== */
+
   button {
-    padding: 10px; /* Reduzido de 14px */
-    font-size: 1rem; /* Reduzido de 1.2rem */
+    height: 44px;
+
+    font-size: 1rem;
+  }
+}
+
+/* ==========================================
+   TELAS MUITO PEQUENAS
+========================================== */
+
+@media (max-height: 600px) {
+
+  .right-section {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  h1 {
+    margin-bottom: 12px;
+
+    font-size: 1.8rem;
+  }
+
+  form {
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  form a {
     margin-top: 10px;
   }
+}
 
-  /* Link menor */
-  form a {
-    font-size: 0.8rem;
-    margin: 10px 0 15px 0;
-  }
+/* ==========================================
+   LOGIN - ESPAÇAMENTO COMPACTO
+========================================== */
 
-  /* Ícone do macaquinho ajustado para o novo tamanho */
-  .toggle-visibility {
-    font-size: 1.2rem;
-    right: 8px;
-  }
+.right-section h1 {
+  margin: 0 0 22px 0;
+}
 
-  /* Ajuste do Logo para não ocupar muito espaço visual */
-  .logo {
-    height: 55px;
-    font-size: 1.5em;
-    justify-content: center;
-  }
+form {
+  width: 100%;
+  max-width: 420px;
+  display: block;
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Remove espaços causados por <br> no HTML */
+form br {
+  display: none;
+}
+
+form label {
+  display: block;
+  margin: 0 0 6px 0;
+  padding: 0;
+
+  font-size: 1rem;
+  color: #111;
+}
+
+/* Espaço somente antes da label de senha */
+form label:not(:first-of-type) {
+  margin-top: 16px;
+}
+
+/* Inputs */
+form input[type="email"],
+form input[type="password"],
+form input[type="text"] {
+  width: 100%;
+  height: 50px;
+
+  margin: 0;
+  padding: 0 15px;
+
+  border: 2px solid #ddd;
+  border-radius: 6px;
+
+  font-size: 1rem;
+
+  outline: none;
+}
+
+/* Campo senha */
+.password-wrapper {
+  width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 50px;
+}
+
+/* Macaquinho */
+.toggle-visibility {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+
+  transform: translateY(-50%);
+
+  font-size: 1.4rem;
+  cursor: pointer;
+}
+
+/* Cadastre-se */
+form a {
+  display: inline-block;
+
+  margin: 16px 0 8px 0;
+
+  font-size: 0.95rem;
+
+  color: #0783f7;
+  text-decoration: none;
+}
+
+/* Botão */
+form button {
+  width: 100%;
+  height: 50px;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 6px;
+
+  background: #38a5ff;
+  color: white;
+
+  font-size: 1.1rem;
+
+  cursor: pointer;
 }
