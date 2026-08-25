@@ -1,7 +1,21 @@
 {
     "disciplines": [
-        "Geral"
+        "Geral",
+        "cu"
     ],
-    "sessions": [],
-    "goals": []
+    "sessions": [
+        {
+            "ts": 1787665421121,
+            "minutes": 70,
+            "mode": "focus",
+            "discipline": "Geral"
+        },
+        {
+            "ts": 1787665587418,
+            "minutes": 1,
+            "mode": "focus",
+            "discipline": "cu"
+        }
+    ],
+    "goals": {}
 }

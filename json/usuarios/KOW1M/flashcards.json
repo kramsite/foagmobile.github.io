@@ -1,0 +1,34 @@
+{
+    "baralhos": [
+        {
+            "id": "BAR_C4301DA9",
+            "nome": "furico",
+            "materia": "cu",
+            "descricao": "",
+            "cor": "#38a5ff",
+            "icone": "fa-calculator",
+            "cartoes": [
+                {
+                    "id": "CARD_31C84D9F",
+                    "pergunta": "onde fica o cu",
+                    "resposta": "na bunda",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1787662927325,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-08-25 15:01:25"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 1,
+                "erros": 0,
+                "revisoes": 1
+            },
+            "criado_em": "2026-08-25 15:01:01"
+        }
+    ]
+}

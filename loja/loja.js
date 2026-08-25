@@ -171,6 +171,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        console.log('🛒 Comprando:', itemSelecionado.nome, 'Preço:', preco);
+        console.log('⭐ Estrelas antes:', estrelas);
+
         // Descontar estrelas
         lojaData.estrelas = estrelas - preco;
 
@@ -179,6 +182,9 @@ document.addEventListener('DOMContentLoaded', function() {
             lojaData.itens_comprados = [];
         }
         lojaData.itens_comprados.push(itemSelecionado.id);
+
+        console.log('⭐ Estrelas depois:', lojaData.estrelas);
+        console.log('📦 Itens comprados:', lojaData.itens_comprados);
 
         // Salvar no servidor
         salvarLoja();
@@ -236,23 +242,50 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // =================================================
-    // SALVAR DADOS
+    // SALVAR DADOS (VERSÃO CORRIGIDA)
     // =================================================
 
     async function salvarLoja() {
         try {
+            // Criar uma cópia limpa dos dados para enviar
+            const dadosParaEnviar = {
+                estrelas: lojaData.estrelas || 0,
+                total_estudado: lojaData.total_estudado || 0,
+                itens_comprados: lojaData.itens_comprados || []
+            };
+            
+            console.log('📤 Salvando dados:', dadosParaEnviar);
+            
             const resposta = await fetch(LOJA_SAVE_URL, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(lojaData)
+                body: JSON.stringify(dadosParaEnviar)
             });
 
             const textoResposta = await resposta.text();
-            console.log('Loja salva:', resposta.status, textoResposta);
+            console.log('📥 Resposta do servidor:', textoResposta);
+            
+            // Tentar parsear como JSON
+            try {
+                const jsonResposta = JSON.parse(textoResposta);
+                if (jsonResposta.ok) {
+                    console.log('✅ Dados salvos com sucesso!');
+                    // Atualizar a interface com os dados salvos
+                    if (jsonResposta.dados) {
+                        lojaData.estrelas = jsonResposta.dados.estrelas || lojaData.estrelas;
+                        lojaData.itens_comprados = jsonResposta.dados.itens_comprados || lojaData.itens_comprados;
+                        atualizarSaldo();
+                    }
+                } else {
+                    console.error('❌ Erro no servidor:', jsonResposta.mensagem);
+                }
+            } catch (e) {
+                console.log('📝 Resposta não é JSON:', textoResposta);
+            }
         } catch (erro) {
-            console.error('Erro ao salvar loja:', erro);
+            console.error('❌ Erro ao salvar loja:', erro);
         }
     }
 
@@ -372,12 +405,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function ganharEstrelas(quantidade) {
         console.log('⭐ Ganhando', quantidade, 'estrelas');
+        console.log('⭐ Antes:', lojaData.estrelas);
         
         // Atualizar estrelas
         lojaData.estrelas = (lojaData.estrelas || 0) + quantidade;
         
-        // Salvar no servidor
-        salvarLoja();
+        console.log('⭐ Depois:', lojaData.estrelas);
         
         // Mostrar modal
         if (mensagemEstrelas) {
@@ -387,8 +420,10 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modalEstrelas) {
             modalEstrelas.style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            console.log('📢 Modal de estrelas aberto');
         }
+        
+        // Salvar no servidor
+        salvarLoja();
         
         // Atualizar interface
         atualizarSaldo();
@@ -478,3 +513,98 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('Loja pronta ✅');
     console.log('🔮 Botão secreto ativado! Clique 5x rápido para ganhar estrelas!');
 });
+
+// =================================================
+// GANHAR ESTRELAS POR ESTUDO
+// =================================================
+
+async function ganharEstrelasPorEstudo(minutos, disciplina) {
+    try {
+        console.log('⭐ Estudou', minutos, 'minutos de', disciplina);
+        
+        const resposta = await fetch('salvar_estrelas.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                minutos: minutos,
+                disciplina: disciplina
+            })
+        });
+
+        const texto = await resposta.text();
+        console.log('📥 Resposta estrelas:', texto);
+        
+        try {
+            const dados = JSON.parse(texto);
+            if (dados.sucesso && dados.estrelas > 0) {
+                // Atualizar lojaData
+                lojaData.estrelas = dados.total_estrelas;
+                atualizarSaldo();
+                
+                // Mostrar notificação
+                mostrarNotificacaoEstrelas(dados.estrelas, dados.total_estrelas);
+                
+                // Atualizar perfil
+                setTimeout(atualizarPerfilComItens, 100);
+                setTimeout(notificarPerfilAtualizado, 200);
+            }
+            return dados;
+        } catch (e) {
+            console.log('Resposta não é JSON:', texto);
+        }
+    } catch (erro) {
+        console.error('❌ Erro ao ganhar estrelas:', erro);
+    }
+}
+
+function mostrarNotificacaoEstrelas(ganhas, total) {
+    // Criar notificação temporária
+    const notificacao = document.createElement('div');
+    notificacao.style.cssText = `
+        position: fixed;
+        top: 80px;
+        right: 20px;
+        z-index: 99999;
+        background: linear-gradient(135deg, #ffd700, #f9a825);
+        color: #1a2a3a;
+        padding: 15px 25px;
+        border-radius: 16px;
+        box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        font-size: 16px;
+        animation: slideInRight 0.5s ease;
+        max-width: 320px;
+    `;
+    
+    notificacao.innerHTML = `
+        <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:32px;">⭐</span>
+            <div>
+                <div style="font-size:18px;">+${ganhas} estrelas!</div>
+                <div style="font-size:13px;opacity:0.8;">Total: ${total} ⭐</div>
+            </div>
+        </div>
+    `;
+    
+    document.body.appendChild(notificacao);
+    
+    // Remover após 3 segundos
+    setTimeout(() => {
+        notificacao.style.opacity = '0';
+        notificacao.style.transition = 'opacity 0.5s ease';
+        setTimeout(() => notificacao.remove(), 500);
+    }, 3000);
+}
+
+// Adicionar CSS para animação
+const styleNotif = document.createElement('style');
+styleNotif.textContent = `
+    @keyframes slideInRight {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+    }
+`;
+document.head.appendChild(styleNotif);

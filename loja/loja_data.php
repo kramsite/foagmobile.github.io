@@ -2,42 +2,60 @@
 session_start();
 
 // ======================================
-// VERIFICAR LOGIN
+// VERIFICAR LOGIN - USANDO codigo_usuario
 // ======================================
 
-if (!isset($_SESSION['user_id'])) {
+if (!isset($_SESSION['codigo_usuario'])) {
     http_response_code(401);
     echo json_encode(['ok' => false, 'mensagem' => 'Não autenticado']);
     exit;
 }
 
-$userId = $_SESSION['user_id'];
+$codigoUsuario = $_SESSION['codigo_usuario'];
 
 // ======================================
 // PASTA DO USUÁRIO
 // ======================================
 
 $baseJsonDir = __DIR__ . '/../json/usuarios';
-$pastaUsuario = $baseJsonDir . '/' . $userId;
-$arquivoLoja = $pastaUsuario . '/loja.json';
+$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 
 // ======================================
-// CARREGAR DADOS
+// FUNÇÃO PARA LER JSON (IGUAL AO RANKING)
 // ======================================
+
+function lerJson($arquivo) {
+    if (!file_exists($arquivo)) {
+        return [];
+    }
+    $conteudo = file_get_contents($arquivo);
+    if ($conteudo === false) {
+        return [];
+    }
+    $dados = json_decode($conteudo, true);
+    return is_array($dados) ? $dados : [];
+}
+
+// ======================================
+// CARREGAR DADOS DA LOJA
+// ======================================
+
+$arquivoLoja = $pastaUsuario . '/loja.json';
 
 if (!file_exists($arquivoLoja)) {
     echo json_encode([
         'estrelas' => 0,
+        'total_estudado' => 0,
         'itens_comprados' => [],
         'itens' => []
     ]);
     exit;
 }
 
-$dados = json_decode(file_get_contents($arquivoLoja), true);
+$dados = lerJson($arquivoLoja);
 
-if (!is_array($dados)) {
-    $dados = ['estrelas' => 0, 'itens_comprados' => [], 'itens' => []];
+if (empty($dados)) {
+    $dados = ['estrelas' => 0, 'total_estudado' => 0, 'itens_comprados' => [], 'itens' => []];
 }
 
 echo json_encode($dados);

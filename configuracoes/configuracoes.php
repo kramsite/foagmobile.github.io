@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             <a href="../inicioo/inicio.php"><i class="fa-solid fa-house" aria-hidden="true"></i> Início</a>
             <a href="../calend/calendario.php"><i class="fa-solid fa-calendar-days" aria-hidden="true"></i> Calendário</a>
             <a href="../bloco/agenda.php"><i class="fa-solid fa-book" aria-hidden="true"></i> Agenda</a>
-            <a href="../estudos/pomodoro/pomodoro.php"><i class="fa-solid fa-stopwatch" aria-hidden="true"></i> Pomodoro</a>
+            <a href="../estudos/estudos.php"><i class="fa-solid fa-graduation-cap" aria-hidden="true"></i> Estudos</a>
             <a href="../notas/notas.php"><i class="fa-solid fa-check-double" aria-hidden="true"></i> Boletim</a>
             <a href="../loja/loja.php"><i class="fa-solid fa-store" aria-hidden="true"></i> Loja</a>
             <a href="../rank/rank.php"><i class="fa-solid fa-trophy" aria-hidden="true"></i> Ranking</a>
@@ -929,6 +929,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
+
+                // ===== GARANTIR TEMA SALVO =====
+                const temaEscolhido =
+                    document.getElementById('tema')?.value || 'claro';
+
+                aplicarTema(temaEscolhido);
                     // ===== SALVAR ACESSIBILIDADE NO LOCALSTORAGE =====
                     const configAcessibilidade = {
                         tamanho_fonte: document.querySelector('[name="tamanho_fonte"]')?.value || 'media',
@@ -1160,46 +1166,117 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             }
         });
 
-        // ============================================
+       // ============================================
         // 12. MODO ESCURO
         // ============================================
         const themeToggle = document.getElementById('themeToggle');
-        let darkMode = localStorage.getItem('darkMode') === 'true';
-        
-        function toggleDarkMode() {
-            darkMode = !darkMode;
-            document.body.classList.toggle('dark-mode', darkMode);
-            localStorage.setItem('darkMode', darkMode);
-            if (themeToggle) {
-                themeToggle.className = darkMode ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
-                themeToggle.setAttribute('aria-label', darkMode ? 'Alternar para tema claro' : 'Alternar para tema escuro');
+        const temaSelect = document.getElementById('tema');
+
+        // Aplica o tema sem ficar invertendo valores
+        function aplicarTema(tema) {
+            let usarEscuro = false;
+
+            if (tema === 'escuro') {
+                usarEscuro = true;
             }
-            const temaSelect = document.getElementById('tema');
-            if (temaSelect) temaSelect.value = darkMode ? 'escuro' : 'claro';
-        }
-        
-        if (darkMode) {
-            document.body.classList.add('dark-mode');
+
+            if (tema === 'claro') {
+                usarEscuro = false;
+            }
+
+            if (tema === 'sistema') {
+                usarEscuro = window.matchMedia(
+                    '(prefers-color-scheme: dark)'
+                ).matches;
+            }
+
+            // Aplica ou REMOVE corretamente o modo escuro
+            document.body.classList.toggle('dark-mode', usarEscuro);
+
+            // Mantém compatibilidade com as outras páginas do FOAG
+            localStorage.setItem(
+                'darkMode',
+                usarEscuro ? 'true' : 'false'
+            );
+
+            // Guarda também qual opção foi escolhida
+            localStorage.setItem('foagTema', tema);
+
+            // Troca o ícone
             if (themeToggle) {
-                themeToggle.className = 'fa-solid fa-sun';
-                themeToggle.setAttribute('aria-label', 'Alternar para tema claro');
+                if (usarEscuro) {
+                    themeToggle.className = 'fa-solid fa-sun';
+                    themeToggle.setAttribute(
+                        'aria-label',
+                        'Alternar para tema claro'
+                    );
+                } else {
+                    themeToggle.className = 'fa-solid fa-moon';
+                    themeToggle.setAttribute(
+                        'aria-label',
+                        'Alternar para tema escuro'
+                    );
+                }
             }
         }
-        
+
+
+        // ============================================
+        // CARREGAR TEMA SALVO
+        // ============================================
+
+        // O PHP já coloca no select o tema salvo.
+        // Portanto usamos o próprio select como fonte principal.
+        let temaInicial = temaSelect
+            ? temaSelect.value
+            : 'claro';
+
+        aplicarTema(temaInicial);
+
+
+        // ============================================
+        // BOTÃO LUA / SOL
+        // ============================================
         if (themeToggle) {
             themeToggle.addEventListener('click', function(e) {
                 e.stopPropagation();
-                toggleDarkMode();
+
+                const estaEscuro =
+                    document.body.classList.contains('dark-mode');
+
+                const novoTema = estaEscuro
+                    ? 'claro'
+                    : 'escuro';
+
+                if (temaSelect) {
+                    temaSelect.value = novoTema;
+                }
+
+                aplicarTema(novoTema);
             });
         }
-        
-        document.getElementById('tema')?.addEventListener('change', function() {
-            const valor = this.value;
-            if (valor === 'escuro' && !darkMode) toggleDarkMode();
-            else if (valor === 'claro' && darkMode) toggleDarkMode();
-            else if (valor === 'sistema') {
-                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-                if (prefersDark !== darkMode) toggleDarkMode();
+
+
+        // ============================================
+        // SELECT CLARO / ESCURO / SISTEMA
+        // ============================================
+        if (temaSelect) {
+            temaSelect.addEventListener('change', function() {
+                aplicarTema(this.value);
+            });
+        }
+
+
+        // ============================================
+        // ALTERAÇÃO DO TEMA DO DISPOSITIVO
+        // ============================================
+        const mediaTema = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+        );
+
+        mediaTema.addEventListener('change', function() {
+            if (temaSelect && temaSelect.value === 'sistema') {
+                aplicarTema('sistema');
             }
         });
 
