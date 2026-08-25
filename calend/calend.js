@@ -17,45 +17,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const rawCalendData =
     window.CAL_CALEND_DATA || {};
 
-
-  // =====================================================
-  // GARANTIR QUE O JSON VIRE OBJETO E NÃO ARRAY
-  // =====================================================
-
-  function garantirObjeto(valor) {
-
-    if (
-      valor &&
-      typeof valor === 'object' &&
-      !Array.isArray(valor)
-    ) {
-      return valor;
-    }
-
-    return {};
-  }
-
-
-  const calendData = {
-
-    dias:
-      garantirObjeto(
-        rawCalendData.dias
-      ),
-
-    metas:
-      garantirObjeto(
-        rawCalendData.metas
-      ),
-
-    configuracoes:
-      garantirObjeto(
-        rawCalendData.configuracoes
-      )
-
-  };
-
-
   const AGENDA_SAVE_URL =
     window.CAL_AGENDA_SAVE_URL ||
     '../bloco/salvar_agenda.php';
@@ -88,6 +49,47 @@ document.addEventListener('DOMContentLoaded', () => {
     'Novembro',
     'Dezembro'
   ];
+
+
+  // =====================================================
+  // GARANTIR OBJETOS
+  // =====================================================
+
+  function garantirObjeto(valor) {
+
+    if (
+      valor &&
+      typeof valor === 'object' &&
+      !Array.isArray(valor)
+    ) {
+      return valor;
+    }
+
+    return {};
+
+  }
+
+
+  const calendData = {
+
+    dias:
+      garantirObjeto(
+        rawCalendData.dias
+      ),
+
+    // Mantido como "metas" internamente
+    // para continuar compatível com o JSON existente.
+    metas:
+      garantirObjeto(
+        rawCalendData.metas
+      ),
+
+    configuracoes:
+      garantirObjeto(
+        rawCalendData.configuracoes
+      )
+
+  };
 
 
   // =====================================================
@@ -142,7 +144,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function diaSemanaIso(iso) {
 
     return new Date(
-      iso + 'T00:00:00'
+      `${iso}T00:00:00`
     ).getDay();
 
   }
@@ -252,6 +254,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calendData.configuracoes[chave];
 
 
+    // Nome interno mantido para compatibilidade.
     if (
       !Number.isFinite(
         Number(
@@ -376,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // SALVAR CALENDÁRIO NO JSON
+  // SALVAR CALENDÁRIO
   // =====================================================
 
   async function salvarCalendarioServidor() {
@@ -386,14 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log(
         'Enviando calendário:',
         calendData
-      );
-
-
-      console.log(
-        'JSON enviado:',
-        JSON.stringify(
-          calendData
-        )
       );
 
 
@@ -427,9 +422,7 @@ document.addEventListener('DOMContentLoaded', () => {
           );
 
 
-      if (
-        !resposta.ok
-      ) {
+      if (!resposta.ok) {
 
         throw new Error(
           retorno?.mensagem ||
@@ -459,14 +452,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
       return true;
 
-
     } catch (erro) {
 
       console.error(
         'Erro ao salvar calendário:',
         erro
       );
-
 
       return false;
 
@@ -503,7 +494,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       );
 
-
     } catch (erro) {
 
       console.error(
@@ -517,7 +507,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // ELEMENTOS DO PAINEL ANUAL
+  // ELEMENTOS DA CONFIGURAÇÃO ANUAL
   // =====================================================
 
   const inputMetaAnual =
@@ -552,7 +542,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // PREENCHER CONFIGURAÇÃO
+  // PREENCHER CONFIGURAÇÃO ANUAL
   // =====================================================
 
   function preencherConfigAno() {
@@ -612,7 +602,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // ATUALIZAR CONFIGURAÇÃO
+  // ATUALIZAR CONFIGURAÇÃO ANUAL
   // =====================================================
 
   async function atualizarConfigAno() {
@@ -889,9 +879,7 @@ document.addEventListener('DOMContentLoaded', () => {
         !json ||
         !json.html
       ) {
-
         return [];
-
       }
 
 
@@ -976,14 +964,12 @@ document.addEventListener('DOMContentLoaded', () => {
         materias
       );
 
-
     } catch (erro) {
 
       console.error(
         'Erro ao buscar horários:',
         erro
       );
-
 
       return [];
 
@@ -1040,7 +1026,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // DIA LETIVO
+  // VERIFICAR SE DIA CONTA COMO LETIVO
   // =====================================================
 
   function diaContaComoLetivo(
@@ -1098,9 +1084,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // PRESENÇA AUTOMÁTICA
   // =====================================================
 
-  function ehPresencaAutomatica(
-    dia
-  ) {
+  function ehPresencaAutomatica(dia) {
 
     const mes =
       dia.closest(
@@ -1147,7 +1131,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // PERÍODO LETIVO
+  // MARCAÇÕES DO PERÍODO LETIVO
   // =====================================================
 
   function aplicarMarcacoesPeriodo() {
@@ -1230,31 +1214,24 @@ document.addEventListener('DOMContentLoaded', () => {
             {
               data:
                 config.inicio_ano_letivo,
-
               texto:
                 'Início'
             },
-
             {
               data:
                 config.fim_ano_letivo,
-
               texto:
                 'Fim'
             },
-
             {
               data:
                 config.inicio_ferias_meio,
-
               texto:
                 'Férias'
             },
-
             {
               data:
                 config.fim_ferias_meio,
-
               texto:
                 'Fim férias'
             }
@@ -1517,7 +1494,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // DIAS RESTANTES
+  // DIAS LETIVOS RESTANTES
   // =====================================================
 
   function diasRestantesPeriodo(
@@ -1555,25 +1532,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // FALTAS QUE AINDA PODE TER
+  // LIMITE DE FALTAS
   // =====================================================
 
   function calcularFaltasPossiveis(
     presencas,
     totalAtual,
     diasRestantes,
-    meta
+    frequenciaMinima
   ) {
 
-    const alvo =
+    const minimo =
       clamp(
-        Number(meta),
+        Number(
+          frequenciaMinima
+        ),
         0,
         100
       ) / 100;
 
 
-    if (alvo <= 0) {
+    if (minimo <= 0) {
       return null;
     }
 
@@ -1591,7 +1570,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const maxFaltas =
       Math.floor(
         presencasFinais -
-        alvo *
+        minimo *
         totalFinal +
         0.000000001
       );
@@ -1735,19 +1714,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // TEXTO DA META
+  // TEXTO DA FREQUÊNCIA MÍNIMA
   // =====================================================
 
-  function textoDiferencaMeta(
+  function textoDiferencaFrequencia(
     atual,
-    meta
+    frequenciaMinima
   ) {
 
     const diferenca =
       Math.round(
         (
           atual -
-          meta
+          frequenciaMinima
         ) *
         10
       ) / 10;
@@ -1756,7 +1735,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (diferenca > 0) {
 
       return (
-        `Você está ${diferenca} pontos percentuais acima da meta.`
+        `Você está ${diferenca} pontos percentuais acima da frequência mínima exigida.`
       );
 
     }
@@ -1765,21 +1744,21 @@ document.addEventListener('DOMContentLoaded', () => {
     if (diferenca < 0) {
 
       return (
-        `Você está ${Math.abs(diferenca)} pontos percentuais abaixo da meta.`
+        `Você está ${Math.abs(diferenca)} pontos percentuais abaixo da frequência mínima exigida.`
       );
 
     }
 
 
     return (
-      'Você está exatamente na meta.'
+      'Você está exatamente na frequência mínima exigida.'
     );
 
   }
 
 
   // =====================================================
-  // RECALCULAR MÊS
+  // RECALCULAR MÉTRICAS DO MÊS
   // =====================================================
 
   function recalcularMetricasDoMes(
@@ -1792,16 +1771,16 @@ document.addEventListener('DOMContentLoaded', () => {
       );
 
 
-    const metaInput =
+    const inputFrequencia =
       mes.querySelector(
         '.meta-presenca'
       );
 
 
-    const meta =
+    const frequenciaMinima =
       clamp(
         Number(
-          metaInput?.value ||
+          inputFrequencia?.value ||
           80
         ),
         0,
@@ -1810,6 +1789,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     const campos = {
+
       '.count-presenca':
         dados.presencas,
 
@@ -1824,6 +1804,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       '.count-prova':
         dados.provas
+
     };
 
 
@@ -1880,21 +1861,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    const statusMeta =
+    const status =
       mes.querySelector(
         '.meta-status-mes'
       );
 
 
-    if (statusMeta) {
+    if (status) {
 
-      statusMeta.textContent =
+      status.textContent =
         (
-          `Meta: ${meta}% · ` +
-          `Atual: ${dados.percentual}% · ` +
-          textoDiferencaMeta(
+          `Mínimo exigido: ${frequenciaMinima}% · ` +
+          `Frequência atual: ${dados.percentual}% · ` +
+          textoDiferencaFrequencia(
             dados.percentual,
-            meta
+            frequenciaMinima
           )
         );
 
@@ -1914,17 +1895,19 @@ document.addEventListener('DOMContentLoaded', () => {
           dados.presencas,
           dados.totalDiasLetivos,
           dados.diasRestantes,
-          meta
+          frequenciaMinima
         );
 
 
       faltasRestantes.textContent =
         quantidade === null
-          ? 'Meta 0%: não há limite calculado de faltas.'
+          ? (
+              'Com frequência mínima de 0%, não há limite calculado de faltas.'
+            )
           : (
               `Você ainda pode ter até ${quantidade} ` +
               `${quantidade === 1 ? 'falta' : 'faltas'} ` +
-              `mantendo pelo menos ${meta}%.`
+              `sem ficar abaixo da frequência mínima de ${frequenciaMinima}%.`
             );
 
     }
@@ -1985,7 +1968,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // RESUMO + PROJEÇÃO ANUAL
+  // RESUMO E PROJEÇÃO ANUAL
   // =====================================================
 
   function atualizarResumoAnual() {
@@ -2089,7 +2072,7 @@ document.addEventListener('DOMContentLoaded', () => {
       obterConfigAno();
 
 
-    const meta =
+    const frequenciaMinima =
       clamp(
         Number(
           config.meta_anual ||
@@ -2113,7 +2096,7 @@ document.addEventListener('DOMContentLoaded', () => {
             presencas,
             totalDiasLetivos,
             diasRestantes,
-            meta
+            frequenciaMinima
           )
         : null;
 
@@ -2161,16 +2144,24 @@ document.addEventListener('DOMContentLoaded', () => {
           };
 
 
+    // =====================================================
+    // TEXTOS DO PAINEL
+    // =====================================================
+
     const mapaTexto = {
 
       'freq-anual-percentual':
         `${percentual}%`,
 
       'freq-anual-faltas':
-        String(faltas),
+        String(
+          faltas
+        ),
 
       'freq-anual-atestados':
-        String(atestados),
+        String(
+          atestados
+        ),
 
       'freq-melhor-mes':
         melhorMes
@@ -2191,7 +2182,10 @@ document.addEventListener('DOMContentLoaded', () => {
           : '—',
 
       'freq-meta-resumo':
-        `Meta: ${meta}% · Atual: ${percentual}%`,
+        (
+          `Mínimo exigido: ${frequenciaMinima}% · ` +
+          `Frequência atual: ${percentual}%`
+        ),
 
       'freq-meta-percent':
         `${percentual}%`,
@@ -2224,28 +2218,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
       'freq-diferenca-meta':
         periodoConfigurado
-          ? textoDiferencaMeta(
+          ? textoDiferencaFrequencia(
               percentual,
-              meta
+              frequenciaMinima
             )
           : (
-              'Defina o início e o final do ano letivo para calcular a meta anual.'
+              'Defina o início e o final do ano letivo para acompanhar a frequência mínima exigida.'
             ),
 
       'freq-faltas-restantes':
         !periodoConfigurado
           ? (
-              'As faltas restantes serão calculadas depois que o período letivo for definido.'
+              'O limite de faltas será calculado depois que o período letivo for definido.'
             )
           : (
               faltasPossiveis === null
                 ? (
-                    'Meta 0%: não há limite calculado de faltas.'
+                    'Com frequência mínima de 0%, não há limite calculado de faltas.'
                   )
                 : (
                     `Você ainda pode ter até ${faltasPossiveis} ` +
                     `${faltasPossiveis === 1 ? 'falta' : 'faltas'} ` +
-                    `mantendo pelo menos ${meta}% de frequência.`
+                    `sem ficar abaixo da frequência mínima de ${frequenciaMinima}%.`
                   )
             )
 
@@ -2274,6 +2268,10 @@ document.addEventListener('DOMContentLoaded', () => {
     );
 
 
+    // =====================================================
+    // BARRA DE FREQUÊNCIA
+    // =====================================================
+
     const barra =
       document.getElementById(
         'freq-progress-fill'
@@ -2290,6 +2288,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
+
+    // =====================================================
+    // STATUS GERAL
+    // =====================================================
 
     const badge =
       document.getElementById(
@@ -2366,8 +2368,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         else if (
-          percentual < meta &&
-          projecaoFinal >= meta
+          percentual <
+            frequenciaMinima &&
+          projecaoFinal >=
+            frequenciaMinima
         ) {
 
           classe =
@@ -2375,7 +2379,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           mensagem =
             (
-              `Sua frequência atual está abaixo da meta de ${meta}%, ` +
+              `Sua frequência atual está abaixo do mínimo exigido de ${frequenciaMinima}%, ` +
               `mas ainda pode se recuperar. ` +
               `Sem novas faltas, a projeção final é ${projecaoFinal}%.`
             );
@@ -2383,7 +2387,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         else if (
-          percentual < meta
+          percentual <
+            frequenciaMinima
         ) {
 
           classe =
@@ -2391,7 +2396,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
           mensagem =
             (
-              `Sua frequência está abaixo da meta de ${meta}%. ` +
+              `Sua frequência está abaixo do mínimo exigido de ${frequenciaMinima}%. ` +
               `Mesmo sem novas faltas, a projeção final é ${projecaoFinal}%.`
             );
 
@@ -2406,8 +2411,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
           mensagem =
             (
-              `Você está dentro da meta de ${meta}%, ` +
-              `mas não possui margem para novas faltas.`
+              `Sua frequência está dentro do mínimo exigido de ${frequenciaMinima}%, ` +
+              `mas você não possui margem para novas faltas.`
             );
 
         }
@@ -2424,7 +2429,7 @@ document.addEventListener('DOMContentLoaded', () => {
             (
               `Atenção: você só pode ter mais ${faltasPossiveis} ` +
               `${faltasPossiveis === 1 ? 'falta' : 'faltas'} ` +
-              `e manter pelo menos ${meta}%.`
+              `sem ficar abaixo da frequência mínima de ${frequenciaMinima}%.`
             );
 
         }
@@ -2436,9 +2441,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
           mensagem =
             (
-              `Você está dentro da meta. ` +
-              `Ainda pode ter até ${faltasPossiveis} faltas ` +
-              `e manter pelo menos ${meta}% de frequência.`
+              `Sua frequência está dentro do mínimo exigido. ` +
+              `Você ainda pode ter até ${faltasPossiveis} ` +
+              `${faltasPossiveis === 1 ? 'falta' : 'faltas'} ` +
+              `sem ficar abaixo da frequência mínima de ${frequenciaMinima}%.`
             );
 
         }
@@ -2606,10 +2612,8 @@ document.addEventListener('DOMContentLoaded', () => {
               fechar.type =
                 'button';
 
-
               fechar.textContent =
                 '×';
-
 
               fechar.className =
                 'fechar-btn';
@@ -2620,7 +2624,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 evento => {
 
                   evento.stopPropagation();
-
 
                   fecharMes(
                     mes
@@ -2721,7 +2724,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 mes.__corSelecionada =
                   mes.__corSelecionada ===
-                  cor
+                    cor
                     ? null
                     : cor;
 
@@ -2739,7 +2742,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // MARCAR DIA + SALVAR NO JSON
+  // MARCAR DIA E SALVAR
   // =====================================================
 
   document
@@ -2795,7 +2798,9 @@ document.addEventListener('DOMContentLoaded', () => {
               mes.__corSelecionada;
 
 
+            // ==========================================
             // FERIADO
+            // ==========================================
 
             if (
               dia.classList.contains(
@@ -2812,7 +2817,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
 
-            // NÃO PERMITE FALTA OU ATESTADO NO FUTURO
+            // ==========================================
+            // NÃO PERMITE FALTA/ATESTADO NO FUTURO
+            // ==========================================
 
             if (
               iso > hojeIso() &&
@@ -2856,10 +2863,6 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
-            // ==========================================
-            // GARANTIR QUE DIAS SEJA {}
-            // ==========================================
-
             if (
               !calendData.dias ||
               typeof calendData.dias !== 'object' ||
@@ -2872,10 +2875,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             }
 
-
-            // ==========================================
-            // GRAVAR A DATA
-            // ==========================================
 
             if (status) {
 
@@ -2897,16 +2896,9 @@ document.addEventListener('DOMContentLoaded', () => {
               iso
             );
 
-
             console.log(
               'Status:',
               status
-            );
-
-
-            console.log(
-              'Dias que serão salvos:',
-              calendData.dias
             );
 
 
@@ -2935,7 +2927,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // =====================================================
-  // META MENSAL
+  // FREQUÊNCIA MÍNIMA MENSAL
   // =====================================================
 
   document
@@ -2990,6 +2982,14 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
+            evento.target.value =
+              String(
+                calendData.metas[
+                  chave
+                ]
+              );
+
+
             const salvou =
               await salvarCalendarioServidor();
 
@@ -2997,7 +2997,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!salvou) {
 
               alert(
-                'Não foi possível salvar a meta mensal.'
+                'Não foi possível salvar a frequência mínima mensal.'
               );
 
               return;
@@ -3094,7 +3094,7 @@ document.addEventListener('DOMContentLoaded', () => {
               ).find(
                 item =>
                   item.origem ===
-                  'calendario'
+                    'calendario'
               );
 
 
@@ -3168,7 +3168,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
             botao
-              .closest('.mes')
+              .closest(
+                '.mes'
+              )
               ?.querySelector(
                 '.mini-agenda'
               )
@@ -3363,7 +3365,9 @@ document.addEventListener('DOMContentLoaded', () => {
               );
 
 
+            // ==========================================
             // VER TAREFAS
+            // ==========================================
 
             btnVer.onclick =
               () => {
@@ -3423,7 +3427,9 @@ document.addEventListener('DOMContentLoaded', () => {
               };
 
 
+            // ==========================================
             // NOVA TAREFA
+            // ==========================================
 
             btnNova.onclick =
               () => {
@@ -3434,7 +3440,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   ).find(
                     item =>
                       item.origem ===
-                      'calendario'
+                        'calendario'
                   );
 
 
@@ -3456,7 +3462,9 @@ document.addEventListener('DOMContentLoaded', () => {
               };
 
 
+            // ==========================================
             // HORÁRIOS
+            // ==========================================
 
             btnHorarios.onclick =
               async () => {
@@ -3689,11 +3697,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
           option.value =
-            String(ano);
+            String(
+              ano
+            );
 
 
           option.textContent =
-            String(ano);
+            String(
+              ano
+            );
 
 
           option.selected =
@@ -3993,7 +4005,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   configurarPainelAnualExpansivel();
 
-
   preencherConfigAno();
 
 
@@ -4040,7 +4051,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // ==========================================
-  // CARREGAR METAS MENSAIS
+  // CARREGAR FREQUÊNCIAS MÍNIMAS MENSAIS
   // ==========================================
 
   document
@@ -4054,7 +4065,9 @@ document.addEventListener('DOMContentLoaded', () => {
           `${mes.dataset.ano}-${mes.dataset.mes}`;
 
 
-        const meta =
+        // "metas" continua somente como nome interno
+        // para manter o JSON já existente.
+        const frequenciaMinima =
           calendData.metas[
             chave
           ];
@@ -4068,12 +4081,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (
           input &&
-          meta != null
+          frequenciaMinima != null
         ) {
 
           input.value =
             String(
-              meta
+              frequenciaMinima
             );
 
         }
