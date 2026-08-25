@@ -131,6 +131,11 @@ $current = basename($_SERVER['PHP_SELF']);
   window.POMODORO_SAVE_URL = "salvar_pomodoro.php";
 </script>
 </head>
+<!-- ==========================================
+     MODAL DE ESTRELAS
+========================================== -->
+
+
 <body>
   <!-- Cabeçalho -->
   <header class="cabecalho">
@@ -338,7 +343,54 @@ $current = basename($_SERVER['PHP_SELF']);
     </div>
   </div>
 
+  <!-- ==========================================
+     MODAL DE ESTRELAS
+========================================== -->
+
+<div
+  class="stars-feedback-modal"
+  id="stars-feedback-modal"
+>
+  <div class="stars-feedback-box">
+
+    <div class="stars-feedback-icon">
+      <i
+        class="fa-solid fa-star"
+        id="stars-feedback-icon"
+      ></i>
+    </div>
+
+    <h3 id="stars-feedback-title">
+      Estrelas
+    </h3>
+
+    <p id="stars-feedback-text"></p>
+
+    <label class="stars-feedback-hide">
+      <input
+        type="checkbox"
+        id="stars-feedback-dont-show"
+      >
+
+      <span>
+        Não mostrar novamente
+      </span>
+    </label>
+
+    <button
+      type="button"
+      id="stars-feedback-close"
+      class="stars-feedback-close"
+    >
+      Entendi
+    </button>
+
+  </div>
+</div>
+
   <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
+
+  
 
   <!-- Lógica do módulo -->
   <script defer src="pomodoro.js?v=<?= time() ?>"></script>

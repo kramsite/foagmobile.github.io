@@ -127,7 +127,7 @@ function save() {
         );
       }
 
-      return response;
+      return response.json();
 
     })
     .catch((error) => {
@@ -672,8 +672,6 @@ function updateRecentStudies() {
     getRecentStudies();
 
 
-  // NENHUMA SESSÃO AINDA
-
   if (
     recentes.length === 0
   ) {
@@ -723,8 +721,6 @@ function updateRecentStudies() {
   }
 
 
-  // CRIA OS CARDS
-
   recentes.forEach(
     (session) => {
 
@@ -742,10 +738,6 @@ function updateRecentStudies() {
           session.discipline
         );
 
-
-      // =====================
-      // ÍCONE
-      // =====================
 
       const iconBox =
         document.createElement(
@@ -776,10 +768,6 @@ function updateRecentStudies() {
         icon
       );
 
-
-      // =====================
-      // INFORMAÇÕES
-      // =====================
 
       const info =
         document.createElement(
@@ -825,10 +813,6 @@ function updateRecentStudies() {
       );
 
 
-      // =====================
-      // DURAÇÃO
-      // =====================
-
       const duration =
         document.createElement(
           'span'
@@ -840,10 +824,6 @@ function updateRecentStudies() {
       duration.textContent =
         `${session.minutes} min`;
 
-
-      // =====================
-      // MONTAR ITEM
-      // =====================
 
       item.appendChild(
         iconBox
@@ -867,6 +847,195 @@ function updateRecentStudies() {
 
 }
 
+
+// ==========================================
+// MENSAGENS DO SISTEMA DE ESTRELAS
+// ==========================================
+
+const starsFeedbackModal =
+  document.getElementById(
+    'stars-feedback-modal'
+  );
+
+const starsFeedbackTitle =
+  document.getElementById(
+    'stars-feedback-title'
+  );
+
+const starsFeedbackText =
+  document.getElementById(
+    'stars-feedback-text'
+  );
+
+const starsFeedbackIcon =
+  document.getElementById(
+    'stars-feedback-icon'
+  );
+
+const starsFeedbackDontShow =
+  document.getElementById(
+    'stars-feedback-dont-show'
+  );
+
+const starsFeedbackClose =
+  document.getElementById(
+    'stars-feedback-close'
+  );
+
+
+const STARS_MESSAGE_KEY =
+  'foag_ocultar_mensagens_estrelas';
+
+
+// ==========================================
+// VERIFICAR SE PODE MOSTRAR
+// ==========================================
+
+function podeMostrarMensagemEstrelas() {
+
+  return (
+    localStorage.getItem(
+      STARS_MESSAGE_KEY
+    ) !== '1'
+  );
+
+}
+
+
+// ==========================================
+// MOSTRAR MENSAGEM
+// ==========================================
+
+function mostrarMensagemEstrelas(
+  titulo,
+  mensagem,
+  ganhou = false
+) {
+
+  if (
+    !podeMostrarMensagemEstrelas()
+  ) {
+    return;
+  }
+
+
+  if (
+    !starsFeedbackModal
+  ) {
+    return;
+  }
+
+
+  if (starsFeedbackTitle) {
+
+    starsFeedbackTitle.textContent =
+      titulo;
+
+  }
+
+
+  if (starsFeedbackText) {
+
+    starsFeedbackText.textContent =
+      mensagem;
+
+  }
+
+
+  if (starsFeedbackDontShow) {
+
+    starsFeedbackDontShow.checked =
+      false;
+
+  }
+
+
+  if (starsFeedbackIcon) {
+
+    starsFeedbackIcon.className =
+      ganhou
+
+        ? 'fa-solid fa-star'
+
+        : 'fa-regular fa-clock';
+
+  }
+
+
+  starsFeedbackModal.classList.add(
+    'active'
+  );
+
+}
+
+
+// ==========================================
+// FECHAR MENSAGEM
+// ==========================================
+
+function fecharMensagemEstrelas() {
+
+  if (
+    starsFeedbackDontShow &&
+    starsFeedbackDontShow.checked
+  ) {
+
+    localStorage.setItem(
+      STARS_MESSAGE_KEY,
+      '1'
+    );
+
+  }
+
+
+  if (starsFeedbackModal) {
+
+    starsFeedbackModal.classList.remove(
+      'active'
+    );
+
+  }
+
+}
+
+
+// ==========================================
+// BOTÃO ENTENDI
+// ==========================================
+
+if (starsFeedbackClose) {
+
+  starsFeedbackClose.addEventListener(
+    'click',
+    fecharMensagemEstrelas
+  );
+
+}
+
+
+// ==========================================
+// CLICAR FORA
+// ==========================================
+
+if (starsFeedbackModal) {
+
+  starsFeedbackModal.addEventListener(
+    'click',
+    (event) => {
+
+      if (
+        event.target ===
+        starsFeedbackModal
+      ) {
+
+        fecharMensagemEstrelas();
+
+      }
+
+    }
+  );
+
+}
 
 // ==========================================
 // POMODORO
@@ -1254,7 +1423,14 @@ function completeCycle() {
       : 'Geral';
 
 
+  // ========================================
+  // SALVAR SESSÃO COM ID E ORIGEM
+  // ========================================
+
   state.sessions.push({
+
+    id:
+      crypto.randomUUID(),
 
     ts:
       Date.now(),
@@ -1265,6 +1441,9 @@ function completeCycle() {
     mode:
       mode,
 
+    source:
+      'pomodoro',
+
     discipline:
       discipline
 
@@ -1272,6 +1451,14 @@ function completeCycle() {
 
 
   save()
+    .then((resultado) => {
+
+      console.log(
+        'Pomodoro salvo:',
+        resultado
+      );
+
+    })
     .catch(() => {});
 
 
@@ -1792,8 +1979,13 @@ if (swSaveBtn) {
       }
 
 
+      // ====================================
+      // MINUTOS COMPLETOS
+      // 29:59 CONTINUA SENDO 29
+      // ====================================
+
       const minutes =
-        Math.round(
+        Math.floor(
           swElapsed /
           60000
         );
@@ -1821,7 +2013,14 @@ if (swSaveBtn) {
           : 'Geral';
 
 
+      // ====================================
+      // SALVAR SESSÃO COM ID E ORIGEM
+      // ====================================
+
       state.sessions.push({
+
+        id:
+          crypto.randomUUID(),
 
         ts:
           Date.now(),
@@ -1832,6 +2031,9 @@ if (swSaveBtn) {
         mode:
           'focus',
 
+        source:
+          'cronometro',
+
         discipline:
           discipline
 
@@ -1839,7 +2041,103 @@ if (swSaveBtn) {
 
 
       save()
-        .catch(() => {});
+      .then((resultado) => {
+
+        console.log(
+          'Sessão salva:',
+          resultado
+        );
+
+
+        // ======================================
+// MENSAGEM DAS ESTRELAS
+// ======================================
+
+if (
+  minutes < 30
+) {
+
+  const faltam =
+    30 - minutes;
+
+
+  mostrarMensagemEstrelas(
+
+    'Continue estudando!',
+
+    `Sua sessão foi salva, mas você precisa estudar mais ${faltam} minuto${faltam === 1 ? '' : 's'} para acumular estrelas pelo cronômetro.`,
+
+    false
+
+  );
+
+}
+
+else if (
+  resultado.limite_diario_atingido
+) {
+
+  mostrarMensagemEstrelas(
+
+    'Sessão salva! 📚',
+
+    'Você já recebeu estrelas pelas 3 sessões permitidas hoje. Continue estudando: seu tempo ainda conta para os bônus de 2h e 4h.',
+
+    false
+
+  );
+
+}
+
+else if (
+  Number(
+    resultado.estrelas_sessoes || 0
+  ) > 0
+) {
+
+  mostrarMensagemEstrelas(
+
+    'Você ganhou estrelas! ⭐',
+
+    `Sessão concluída! Você ganhou +${resultado.estrelas_sessoes} estrelas.`,
+
+    true
+
+  );
+
+}
+
+
+        // ======================================
+        // ZERAR CRONÔMETRO APÓS SALVAR
+        // ======================================
+
+        swRunning = false;
+
+        clearInterval(
+          swTimer
+        );
+
+        swTimer = null;
+
+        swElapsed = 0;
+
+        swStartAt = null;
+
+        swLaps.length = 0;
+
+        renderStopwatch();
+
+        renderLaps();
+
+      })
+        .catch(() => {
+
+          alert(
+            'Não foi possível salvar a sessão.'
+          );
+
+        });
 
 
       updateHistory();
@@ -1849,11 +2147,6 @@ if (swSaveBtn) {
       updateGoalsView();
 
       updateRecentStudies();
-
-
-      alert(
-        'Sessão salva no histórico!'
-      );
 
     }
   );

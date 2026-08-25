@@ -1606,6 +1606,198 @@ footer {
 
 }
 
+/* ==========================================
+   MODAL DE ESTRELAS
+========================================== */
+
+.stars-feedback-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.stars-feedback-modal.active {
+  display: flex;
+}
+
+.stars-feedback-box {
+  width: 100%;
+  max-width: 390px;
+
+  padding: 28px;
+
+  background: #ffffff;
+
+  border-radius: 20px;
+
+  text-align: center;
+
+  box-shadow:
+    0 20px 60px
+    rgba(0, 0, 0, 0.2);
+
+  animation:
+    starsModalOpen
+    0.2s ease;
+}
+
+@keyframes starsModalOpen {
+
+  from {
+    opacity: 0;
+
+    transform:
+      translateY(12px)
+      scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+
+    transform:
+      translateY(0)
+      scale(1);
+  }
+
+}
+
+
+/* ==========================================
+   ÍCONE
+========================================== */
+
+.stars-feedback-icon {
+  width: 64px;
+  height: 64px;
+
+  margin:
+    0 auto
+    15px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 193, 7, 0.15);
+
+  color: #f4b400;
+
+  font-size: 28px;
+}
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.stars-feedback-box h3 {
+  margin:
+    0 0
+    9px;
+
+  color: #222;
+
+  font-size: 21px;
+  font-weight: 700;
+}
+
+
+/* ==========================================
+   TEXTO
+========================================== */
+
+.stars-feedback-box p {
+  margin: 0;
+
+  color: #666;
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+
+/* ==========================================
+   NÃO MOSTRAR NOVAMENTE
+========================================== */
+
+.stars-feedback-hide {
+  margin-top: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 8px;
+
+  color: #666;
+
+  font-size: 13px;
+
+  cursor: pointer;
+}
+
+.stars-feedback-hide input {
+  width: 16px;
+  height: 16px;
+
+  margin: 0;
+
+  accent-color: #38a5ff;
+
+  cursor: pointer;
+}
+
+
+/* ==========================================
+   BOTÃO
+========================================== */
+
+.stars-feedback-close {
+  width: 100%;
+
+  margin-top: 18px;
+
+  padding:
+    12px
+    18px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #38a5ff;
+
+  color: #fff;
+
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    filter 0.2s ease;
+}
+
+.stars-feedback-close:hover {
+  filter: brightness(0.95);
+
+  transform:
+    translateY(-1px);
+}
+
 @media (max-width: 420px) {
   header.cabecalho {
     padding: 10px;

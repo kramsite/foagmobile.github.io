@@ -201,15 +201,11 @@ $icone =
         rel="stylesheet"
     >
 
-    <link
-        rel="stylesheet"
-        href="estudar.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../../m.escuro/dark_basee.css"
-    >
+<!-- Ordem correta para estudar.php -->
+<link rel="stylesheet" href="estudar.css">
+<link rel="stylesheet" href="dark_estudar.css">  <!-- Adicione esta linha -->
+<link rel="stylesheet" href="../../m.escuro/dark_basee.css">
+<script src="../../m.escuro/dark-mode.js"></script>
 
     <script>
 

@@ -134,10 +134,6 @@ if (!isset($horarioData['html'])) {
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
     <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
 
-    <?php
-require_once $_SERVER['DOCUMENT_ROOT']
-    . '/foagmobile.github.io/acessibilidade/carregar_acessibilidade.php';
-?>
 
     <script src="../m.escuro/dark-mode.js"></script>
 
@@ -455,9 +451,7 @@ require_once $_SERVER['DOCUMENT_ROOT']
 
 <body>
 
-<?php
-require_once __DIR__ . '/../acessibilidade/menu_acessibilidade.php';
-?>
+
 
 
     <!-- ======================================

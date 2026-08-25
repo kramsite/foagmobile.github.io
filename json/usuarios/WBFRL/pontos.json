@@ -1,0 +1,34 @@
+{
+    "estrelas": 0,
+    "historico": [
+        
+    ],
+    "controle": {
+        "pomodoro": {
+            "bonus_diarios": []
+        },
+        "flashcards": {
+            "ultimo_dia": null,
+            "estrelas_dia": 0
+        },
+        "frequencia": {
+            "meses_processados": [],
+            "sequencia_presenca": {
+                "dias": 0,
+                "ultima_data": null,
+                "marcos_recebidos": []
+            }
+        },
+        "notas": {
+            "recompensas": []
+        },
+        "sequencia_estudo": {
+            "dias": 0,
+            "ultima_data_estudo": null,
+            "marcos_recebidos": []
+        },
+        "recompensas_recebidas": [
+           
+        ]
+    }
+}
