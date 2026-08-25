@@ -1,0 +1,432 @@
+/* dark_flash_correcao.css - Correções para modo escuro nos flashcards */
+
+/* ==========================================
+   GARANTIR QUE O MODO ESCURO FUNCIONE
+   ========================================== */
+
+body.dark-mode {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* ==========================================
+   CORREÇÃO PARA BARALHO.PHP
+   ========================================== */
+
+body.dark-mode .baralho-wrapper {
+  background: transparent !important;
+}
+
+body.dark-mode .deck-header {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .deck-header::before {
+  background: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .deck-header-info h1 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .deck-header-info p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .deck-big-icon {
+  background: color-mix(in srgb, var(--deck-color, #38a5ff) 18%, #1e293b) !important;
+  color: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .deck-subject {
+  background: rgba(56, 165, 255, 0.12) !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .cards-total {
+  background: #0f172a !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .cards-total strong {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .cards-total span {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .cards-section {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .cards-section .section-header h2 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .cards-section .section-header p {
+  color: #94a3b8 !important;
+}
+
+/* ==========================================
+   FLASH CARD ITEM - BARALHO.PHP
+   ========================================== */
+
+body.dark-mode .flash-card-item {
+  background: #172033 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .flash-card-item::before {
+  background: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .flash-card-item:hover {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .card-label {
+  color: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .card-text {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .card-block + .card-block {
+  border-top-color: #334155 !important;
+}
+
+body.dark-mode .card-created {
+  color: #64748b !important;
+}
+
+body.dark-mode .card-action-btn {
+  background: #2d3a4f !important;
+  color: #94a3b8 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode .card-action-btn:hover {
+  background: #3d4a5f !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .card-action-btn.edit:hover {
+  background: rgba(56, 165, 255, 0.2) !important;
+  color: #60a5fa !important;
+  border-color: #60a5fa !important;
+}
+
+body.dark-mode .card-action-btn.delete:hover {
+  background: rgba(220, 76, 76, 0.2) !important;
+  color: #f87171 !important;
+  border-color: #f87171 !important;
+}
+
+/* ==========================================
+   ESTADO VAZIO - BARALHO.PHP
+   ========================================== */
+
+body.dark-mode .cards-empty {
+  background: #172033 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode .cards-empty h3 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .cards-empty p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .cards-empty .empty-icon {
+  background: rgba(56, 165, 255, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+/* ==========================================
+   MODAL CARTÃO - BARALHO.PHP
+   ========================================== */
+
+body.dark-mode #card-modal .modal-content {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode #card-modal .modal-title h3 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode #card-modal .modal-title p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode #card-modal .modal-title-icon {
+  background: rgba(56, 165, 255, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode #card-modal .lbl {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode #card-modal .input {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode #card-modal .input:focus {
+  border-color: #38a5ff !important;
+  box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.15) !important;
+}
+
+body.dark-mode #card-modal .modal-actions .btn {
+  background: #38a5ff !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode #card-modal .modal-actions .btn:hover {
+  background: #2563eb !important;
+}
+
+body.dark-mode #card-modal .modal-actions .btn.secondary {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode #card-modal .modal-actions .btn.secondary:hover {
+  background: #475569 !important;
+}
+
+/* ==========================================
+   ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .study-wrapper {
+  background: transparent !important;
+}
+
+body.dark-mode .study-header {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .study-icon {
+  background: color-mix(in srgb, var(--deck-color, #38a5ff) 18%, #172033) !important;
+  color: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .study-subject {
+  color: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .study-header h1 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .study-header p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .session-stats > div {
+  background: #172033 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .session-stats strong {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .session-stats span {
+  color: #94a3b8 !important;
+}
+
+/* ==========================================
+   ÁREA DE ESTUDO - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .study-area {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .study-progress-header span {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .study-progress-header strong {
+  color: #cbd5e1 !important;
+}
+
+body.dark-mode .study-progress {
+  background: #0f172a !important;
+}
+
+body.dark-mode .study-progress span {
+  background: var(--deck-color, #38a5ff) !important;
+}
+
+/* ==========================================
+   FLASHCARD - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .study-card-face {
+  background: #172033 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .study-card-face::before {
+  background: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .study-card-back {
+  background: color-mix(in srgb, var(--deck-color, #38a5ff) 8%, #172033) !important;
+}
+
+body.dark-mode .face-label {
+  color: var(--deck-color, #38a5ff) !important;
+}
+
+body.dark-mode .study-card-text {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .flip-hint {
+  color: #64748b !important;
+}
+
+/* ==========================================
+   BOTÕES - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .btn {
+  background: #38a5ff !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn:hover {
+  background: #2563eb !important;
+}
+
+body.dark-mode .btn.secondary {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .btn.secondary:hover {
+  background: #475569 !important;
+}
+
+body.dark-mode .reveal-btn {
+  background: var(--deck-color, #38a5ff) !important;
+}
+
+/* ==========================================
+   RESPOSTA - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .answer-actions p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .answer-btn.wrong {
+  background: rgba(220, 76, 76, 0.12) !important;
+  color: #f87171 !important;
+  border-color: rgba(248, 113, 113, 0.35) !important;
+}
+
+body.dark-mode .answer-btn.wrong:hover {
+  background: rgba(220, 76, 76, 0.2) !important;
+}
+
+body.dark-mode .answer-btn.correct {
+  background: rgba(52, 211, 153, 0.12) !important;
+  color: #34d399 !important;
+  border-color: rgba(52, 211, 153, 0.35) !important;
+}
+
+body.dark-mode .answer-btn.correct:hover {
+  background: rgba(52, 211, 153, 0.2) !important;
+}
+
+/* ==========================================
+   TELA FINAL - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .finish-screen {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .finish-icon {
+  background: rgba(230, 162, 60, 0.15) !important;
+  color: #f6ad55 !important;
+}
+
+body.dark-mode .finish-screen h2 {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .finish-screen > p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .finish-stat {
+  background: #172033 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .finish-stat strong {
+  color: #f1f5f9 !important;
+}
+
+body.dark-mode .finish-stat span {
+  color: #94a3b8 !important;
+}
+
+/* ==========================================
+   BOTÕES VOLTAR E EMBARALHAR
+   ========================================== */
+
+body.dark-mode .back-button,
+body.dark-mode .shuffle-button {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .shuffle-button {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .back-button:hover,
+body.dark-mode .shuffle-button:hover {
+  background: #263447 !important;
+  border-color: #3b82f6 !important;
+}
+
+/* ==========================================
+   ESTADO VAZIO - ESTUDAR.PHP
+   ========================================== */
+
+body.dark-mode .empty-study {
+  background: #172033 !important;
+  border-color: #475569 !important;
+}
+
+body.dark-mode .empty-study-icon {
+  background: rgba(56, 165, 255, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .empty-study p {
+  color: #94a3b8 !important;
+}
