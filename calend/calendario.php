@@ -573,12 +573,8 @@ function gerarCalendario(
                 Agenda
             </a>
 
-            <a
-                href="../pomodoro/pomodoro.php"
-                class="<?= $current === 'pomodoro.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-stopwatch"></i>
-                Pomodoro
+            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-graduation-cap"></i> Estudos
             </a>
 
             <a
