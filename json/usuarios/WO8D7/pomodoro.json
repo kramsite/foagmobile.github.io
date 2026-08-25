@@ -1,1 +1,14 @@
-[]
+{
+    "disciplines": [
+        "Geral"
+    ],
+    "sessions": [
+        {
+            "ts": 1787665411002,
+            "minutes": 28,
+            "mode": "focus",
+            "discipline": "Geral"
+        }
+    ],
+    "goals": {}
+}

@@ -2,7 +2,17 @@
     "disciplines": [
         "Geral",
         "matematica",
-        "portugues"
+        "biologia",
+        "geografia",
+        "Quimica",
+        "Filosofia",
+        "Ed. fisica",
+        "Fisica",
+        "Português",
+        "Sociologia",
+        "Artes",
+        "Inglês",
+        "Historia"
     ],
     "sessions": [
         {
@@ -15,7 +25,7 @@
             "ts": 1787066843511,
             "minutes": 1,
             "mode": "focus",
-            "discipline": "portugues"
+            "discipline": "Geral"
         },
         {
             "ts": 1787066899656,
@@ -28,6 +38,50 @@
             "minutes": 2,
             "mode": "focus",
             "discipline": "matematica"
+        },
+        {
+            "ts": 1787665330705,
+            "minutes": 37,
+            "mode": "focus",
+            "discipline": "Filosofia"
+        },
+        {
+            "ts": 1787665335984,
+            "minutes": 37,
+            "mode": "focus",
+            "discipline": "Historia"
+        },
+        {
+            "id": "e1b31ce9-166d-4481-a9b1-4e9f3a2ddf0f",
+            "ts": 1787665926857,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "biologia"
+        },
+        {
+            "id": "3a82057a-a937-4307-ad09-3ef2cf914388",
+            "ts": 1787666340840,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Quimica"
+        },
+        {
+            "id": "b5adaf1e-6846-4852-85db-27e4e114570d",
+            "ts": 1787666349640,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Quimica"
+        },
+        {
+            "id": "f63c0a53-3225-4a85-9497-93779e785ca3",
+            "ts": 1787666503848,
+            "minutes": 3,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Inglês"
         }
     ],
     "goals": {

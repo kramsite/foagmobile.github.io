@@ -1,0 +1,62 @@
+{
+    "estrelas": 6,
+    "historico": [
+        {
+            "id": "estrela_6c1ab46fc5c1",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 15:59:00",
+            "timestamp": 1787666340,
+            "chave": "cronometro_3a82057a-a937-4307-ad09-3ef2cf914388"
+        },
+        {
+            "id": "estrela_6f6c16738ec2",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 15:59:09",
+            "timestamp": 1787666349,
+            "chave": "cronometro_b5adaf1e-6846-4852-85db-27e4e114570d"
+        },
+        {
+            "id": "estrela_db7d1edb337b",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 16:01:43",
+            "timestamp": 1787666503,
+            "chave": "cronometro_f63c0a53-3225-4a85-9497-93779e785ca3"
+        }
+    ],
+    "controle": {
+        "pomodoro": {
+            "bonus_diarios": []
+        },
+        "flashcards": {
+            "ultimo_dia": null,
+            "estrelas_dia": 0
+        },
+        "frequencia": {
+            "meses_processados": [],
+            "sequencia_presenca": {
+                "dias": 0,
+                "ultima_data": null,
+                "marcos_recebidos": []
+            }
+        },
+        "notas": {
+            "recompensas": []
+        },
+        "sequencia_estudo": {
+            "dias": 0,
+            "ultima_data_estudo": null,
+            "marcos_recebidos": []
+        },
+        "recompensas_recebidas": [
+            "cronometro_3a82057a-a937-4307-ad09-3ef2cf914388",
+            "cronometro_b5adaf1e-6846-4852-85db-27e4e114570d",
+            "cronometro_f63c0a53-3225-4a85-9497-93779e785ca3"
+        ]
+    }
+}
