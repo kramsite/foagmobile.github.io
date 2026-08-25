@@ -1,0 +1,17 @@
+{
+    "materias": [
+        {
+            "id": "MAT_73E4E44C",
+            "nome": "matematica",
+            "cor": "#38a5ff",
+            "icone": "fa-calculator",
+            "criado_em": "2026-08-25 14:32:47"
+        },
+        {
+            "id": "mat_f72a1e7ee2ae",
+            "nome": "Portugues",
+            "cor": "#8f0000",
+            "icone": "fa-book"
+        }
+    ]
+}
