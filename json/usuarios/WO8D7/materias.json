@@ -1,3 +1,76 @@
 {
-    "materias": []
+    "materias": [
+        {
+            "id": "mat_3ebdcf3b5479",
+            "nome": "matemática",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_1cd14341cdec",
+            "nome": "filosofia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_769102f57b96",
+            "nome": "geografia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_3570acc2e1af",
+            "nome": "historia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_3ca26f7bb48c",
+            "nome": "sociologia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_d2721051a127",
+            "nome": "arte",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_92417f8507e8",
+            "nome": "ed fisica",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_d17b23f7234e",
+            "nome": "ingles",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_6cf6e603b9b9",
+            "nome": "portugues",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_56d0bc5e1f21",
+            "nome": "biologia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_eeaf8102da37",
+            "nome": "fisica",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_db7e0525160e",
+            "nome": "quimica",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        }
+    ]
 }

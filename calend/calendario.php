@@ -464,7 +464,7 @@ function gerarCalendario(
     >
 
     <script
-        src="../acessibilidade/acessibilidade.js?v=4"
+        src="../acessibilidade/acessibilidade.js?v=6"
         defer
     ></script>
 

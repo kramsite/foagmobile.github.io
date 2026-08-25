@@ -134,9 +134,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <link rel="stylesheet" href="configuracoes.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ACESSIBILIDADE GLOBAL -->
+    <!-- ======================================
+         ACESSIBILIDADE GLOBAL
+    ======================================= -->
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-    <script src="/foagmobile.github.io/acessibilidade/acessibilidade.js?v=3" defer></script>
+
+    <script
+        src="https://vlibras.gov.br/app/vlibras-plugin.js"
+        defer
+    ></script>
+
+    <script
+        src="../acessibilidade/acessibilidade.js?v=9"
+        defer
+    ></script>
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->

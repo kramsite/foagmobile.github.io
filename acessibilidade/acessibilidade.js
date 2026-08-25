@@ -4,79 +4,185 @@
 
 console.log('✅ acessibilidade.js carregou');
 
-document.addEventListener('DOMContentLoaded', function () {
+
+// ==========================================
+// CONSTANTES
+// ==========================================
+
+const FOAG_ACESSIBILIDADE_CHAVE =
+    'foag_acessibilidade';
+
+const FOAG_VLIBRAS_BASE =
+    'https://vlibras.gov.br/app';
+
+
+// ==========================================
+// CONFIGURAÇÃO PADRÃO
+// ==========================================
+
+const FOAG_ACESSIBILIDADE_PADRAO = {
+    libras: false
+};
+
+
+// ==========================================
+// CONTROLE INTERNO
+// ==========================================
+
+let vlibrasInicializado = false;
+
+let tentativasVLibras = 0;
+
+const MAX_TENTATIVAS_VLIBRAS = 30;
+
+
+// ==========================================
+// CONVERTER PARA BOOLEANO
+// ==========================================
+
+function valorBooleano(valor) {
+
+    return (
+        valor === true ||
+        valor === 1 ||
+        valor === '1' ||
+        valor === 'true'
+    );
+
+}
+
+
+// ==========================================
+// CARREGAR CONFIGURAÇÕES SALVAS
+// ==========================================
+
+function carregarAcessibilidadeSalva() {
+
+    let configuracoes = {
+        ...FOAG_ACESSIBILIDADE_PADRAO
+    };
+
 
     const salvo =
         localStorage.getItem(
-            'foag_acessibilidade'
+            FOAG_ACESSIBILIDADE_CHAVE
         );
 
-    let configuracoes = {
-        libras: false
-    };
 
-    if (salvo) {
+    if (!salvo) {
 
-        try {
+        return configuracoes;
+
+    }
+
+
+    try {
+
+        const dadosSalvos =
+            JSON.parse(salvo);
+
+
+        if (
+            dadosSalvos &&
+            typeof dadosSalvos === 'object'
+        ) {
 
             configuracoes = {
                 ...configuracoes,
-                ...JSON.parse(salvo)
+                ...dadosSalvos
             };
 
-        } catch (erro) {
-
-            console.error(
-                'Erro ao carregar acessibilidade:',
-                erro
-            );
-
         }
-    }
 
+    } catch (erro) {
 
-    // ==========================================
-    // LIBRAS
-    // ==========================================
-
-    if (configuracoes.libras) {
-
-        ativarVLibras();
+        console.error(
+            '❌ Erro ao carregar acessibilidade:',
+            erro
+        );
 
     }
 
-});
+
+    configuracoes.libras =
+        valorBooleano(
+            configuracoes.libras
+        );
+
+
+    return configuracoes;
+
+}
 
 
 // ==========================================
-// ATIVAR VLIBRAS
+// SALVAR CONFIGURAÇÕES
 // ==========================================
 
-function ativarVLibras() {
+function salvarAcessibilidade(
+    novasConfiguracoes
+) {
 
-    // Evita adicionar duas vezes
+    const atuais =
+        carregarAcessibilidadeSalva();
+
+
+    const configuracoes = {
+        ...atuais,
+        ...novasConfiguracoes
+    };
+
+
+    configuracoes.libras =
+        valorBooleano(
+            configuracoes.libras
+        );
+
+
+    localStorage.setItem(
+        FOAG_ACESSIBILIDADE_CHAVE,
+        JSON.stringify(
+            configuracoes
+        )
+    );
+
+
+    return configuracoes;
+
+}
+
+
+// ==========================================
+// CRIAR ESTRUTURA DO VLIBRAS
+// ==========================================
+
+function criarEstruturaVLibras() {
+
     if (
         document.querySelector('[vw]')
     ) {
+
         return;
+
     }
 
 
-    // ======================================
-    // CONTAINER
-    // ======================================
-
     const container =
-        document.createElement('div');
+        document.createElement(
+            'div'
+        );
+
 
     container.setAttribute(
         'vw',
         ''
     );
 
+
     container.classList.add(
         'enabled'
     );
+
 
     container.innerHTML = `
         <div
@@ -89,66 +195,140 @@ function ativarVLibras() {
         </div>
     `;
 
+
     document.body.appendChild(
         container
-    );
-
-
-    // ======================================
-    // SCRIPT DO VLIBRAS
-    // ======================================
-
-    const scriptExistente =
-        document.querySelector(
-            'script[src*="vlibras-plugin.js"]'
-        );
-
-    if (scriptExistente) {
-
-        iniciarWidgetVLibras();
-        return;
-
-    }
-
-
-    const script =
-        document.createElement(
-            'script'
-        );
-
-    script.src =
-        'https://vlibras.gov.br/app/vlibras-plugin.js';
-
-    script.onload =
-        function () {
-
-            iniciarWidgetVLibras();
-
-        };
-
-    document.body.appendChild(
-        script
     );
 
 }
 
 
 // ==========================================
-// INICIAR WIDGET
+// INICIAR WIDGET DO VLIBRAS
 // ==========================================
 
 function iniciarWidgetVLibras() {
 
     if (
-        window.VLibras &&
-        window.VLibras.Widget
+        vlibrasInicializado ||
+        window.__foagVLibrasInicializado
     ) {
 
-        new window.VLibras.Widget(
-            'https://vlibras.gov.br/app'
-        );
+        return true;
 
     }
+
+
+    if (
+        !window.VLibras ||
+        !window.VLibras.Widget
+    ) {
+
+        return false;
+
+    }
+
+
+    try {
+
+        new window.VLibras.Widget(
+            FOAG_VLIBRAS_BASE
+        );
+
+
+        vlibrasInicializado =
+            true;
+
+
+        window.__foagVLibrasInicializado =
+            true;
+
+
+        tentativasVLibras =
+            0;
+
+
+        console.log(
+            '✅ VLibras inicializado'
+        );
+
+
+        return true;
+
+    } catch (erro) {
+
+        console.error(
+            '❌ Erro ao iniciar VLibras:',
+            erro
+        );
+
+
+        return false;
+
+    }
+
+}
+
+
+// ==========================================
+// AGUARDAR SCRIPT OFICIAL DO VLIBRAS
+// ==========================================
+
+function aguardarVLibras() {
+
+    if (
+        iniciarWidgetVLibras()
+    ) {
+
+        return;
+
+    }
+
+
+    tentativasVLibras++;
+
+
+    if (
+        tentativasVLibras >=
+        MAX_TENTATIVAS_VLIBRAS
+    ) {
+
+        console.error(
+            '❌ O script oficial do VLibras não ficou disponível.'
+        );
+
+
+        tentativasVLibras =
+            0;
+
+
+        return;
+
+    }
+
+
+    setTimeout(
+        aguardarVLibras,
+        200
+    );
+
+}
+
+
+// ==========================================
+// ATIVAR VLIBRAS
+// ==========================================
+
+function ativarVLibras() {
+
+    criarEstruturaVLibras();
+
+
+    tentativasVLibras =
+        0;
+
+
+    aguardarVLibras();
 
 }
 
@@ -160,12 +340,9 @@ function iniciarWidgetVLibras() {
 function desativarVLibras() {
 
     const estavaAtivo =
-        document.querySelector('[vw]') !== null;
+        document.querySelector('[vw]')
+        !== null;
 
-
-    // ======================================
-    // REMOVE ELEMENTOS
-    // ======================================
 
     document
         .querySelectorAll('[vw]')
@@ -178,26 +355,17 @@ function desativarVLibras() {
         );
 
 
-    // ======================================
-    // REMOVE SCRIPT
-    // ======================================
-
-    document
-        .querySelectorAll(
-            'script[src*="vlibras.gov.br"]'
-        )
-        .forEach(
-            function (script) {
-
-                script.remove();
-
-            }
-        );
+    vlibrasInicializado =
+        false;
 
 
-    // ======================================
-    // RECARREGA A PÁGINA
-    // ======================================
+    window.__foagVLibrasInicializado =
+        false;
+
+
+    tentativasVLibras =
+        0;
+
 
     if (estavaAtivo) {
 
@@ -207,8 +375,29 @@ function desativarVLibras() {
                 window.location.reload();
 
             },
-            200
+            150
         );
+
+    }
+
+}
+
+
+// ==========================================
+// APLICAR CONFIGURAÇÃO SALVA
+// ==========================================
+
+function aplicarAcessibilidadeSalva() {
+
+    const configuracoes =
+        carregarAcessibilidadeSalva();
+
+
+    if (
+        configuracoes.libras === true
+    ) {
+
+        ativarVLibras();
 
     }
 
@@ -222,24 +411,112 @@ function desativarVLibras() {
 window.atualizarAcessibilidade =
     function (configuracoes) {
 
-        // ======================================
-        // ATIVAR
-        // ======================================
-
         if (
-            configuracoes.libras
+            !configuracoes ||
+            typeof configuracoes !==
+                'object'
         ) {
 
-            ativarVLibras();
             return;
 
         }
 
 
-        // ======================================
-        // DESATIVAR
-        // ======================================
+        const configuracoesSalvas =
+            salvarAcessibilidade(
+                configuracoes
+            );
 
-        desativarVLibras();
+
+        if (
+            configuracoesSalvas.libras
+            === true
+        ) {
+
+            ativarVLibras();
+
+        } else {
+
+            desativarVLibras();
+
+        }
 
     };
+
+
+// ==========================================
+// AO CARREGAR A PÁGINA
+// ==========================================
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        aplicarAcessibilidadeSalva();
+
+    }
+);
+
+
+// ==========================================
+// AO VOLTAR PARA A PÁGINA
+// ==========================================
+
+window.addEventListener(
+    'pageshow',
+    function () {
+
+        const configuracoes =
+            carregarAcessibilidadeSalva();
+
+
+        if (
+            configuracoes.libras
+                === true &&
+            !document.querySelector('[vw]')
+        ) {
+
+            ativarVLibras();
+
+        }
+
+    }
+);
+
+
+// ==========================================
+// SINCRONIZAR ENTRE ABAS
+// ==========================================
+
+window.addEventListener(
+    'storage',
+    function (evento) {
+
+        if (
+            evento.key !==
+            FOAG_ACESSIBILIDADE_CHAVE
+        ) {
+
+            return;
+
+        }
+
+
+        const configuracoes =
+            carregarAcessibilidadeSalva();
+
+
+        if (
+            configuracoes.libras === true
+        ) {
+
+            ativarVLibras();
+
+        } else {
+
+            desativarVLibras();
+
+        }
+
+    }
+);
