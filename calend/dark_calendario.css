@@ -1,289 +1,1411 @@
-/* =====================
-   DARK MODE — CALENDÁRIO
-   =====================*/
+/* ==========================================
+   FOAG — DARK MODE DO CALENDÁRIO
+========================================== */
 
-/* Fundo geral */
-.dark-mode .calendario-container {
-  background-color: var(--dark-bg) !important;
+body.dark-mode {
+    --cal-dark-bg: #111827;
+    --cal-dark-page: #182231;
+    --cal-dark-surface: #1e2938;
+    --cal-dark-surface-2: #243141;
+    --cal-dark-surface-3: #293747;
+
+    --cal-dark-border: #354458;
+    --cal-dark-border-soft: #2c3949;
+
+    --cal-dark-text: #edf4fb;
+    --cal-dark-text-soft: #b5c0cd;
+    --cal-dark-text-muted: #8492a4;
+
+    --cal-dark-blue: #38a5ff;
+    --cal-dark-blue-hover: #168ee8;
+    --cal-dark-blue-soft: #213c53;
+
+    --cal-dark-input: #101a2e;
 }
 
-.dark-mode .calendario {
-  background: transparent !important;
+
+/* ==========================================
+   FUNDO DA PÁGINA
+========================================== */
+
+body.dark-mode {
+    background: var(--cal-dark-bg) !important;
+    color: var(--cal-dark-text);
 }
 
-/* ======= CARD DO MÊS ======= */
-.dark-mode .mes {
-  background: var(--dark-surface) !important;
-  border: 1px solid var(--dark-border) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .conteudo {
+    background: var(--cal-dark-bg);
 }
 
-.dark-mode .mes.expanded {
-  background: var(--dark-surface) !important;
-  border: 2px solid var(--dark-primary) !important;
-  box-shadow: 0 0 25px rgba(56,165,255,0.35) !important;
+body.dark-mode .calendario-area {
+    background: transparent;
 }
 
-/* Título do mês */
-.dark-mode .header-mes {
-  background: var(--dark-primary) !important;
-  color: #fff !important;
-  border-radius: 5px;
+body.dark-mode .calendario-container {
+    background: transparent !important;
 }
 
-/* ======== DIAS DO MÊS ======== */
-.dark-mode .dia {
-  background: #1e293b !important;
-  border: 1px solid var(--dark-border) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .calendario {
+    background: transparent !important;
 }
 
-.dark-mode .mes.expanded .dia {
-  background: #1e293b !important;
+
+/* ==========================================
+   CARDS DOS MESES
+========================================== */
+
+body.dark-mode .mes {
+    background: var(--cal-dark-surface) !important;
+    color: var(--cal-dark-text) !important;
+
+    border-color: var(--cal-dark-border) !important;
+
+    box-shadow:
+        0 5px 16px
+        rgba(0, 0, 0, .22);
 }
 
-/* Cabeçalho dos dias */
-.dark-mode .dia.header-dia {
-  background: transparent !important;
-  color: var(--dark-text) !important;
+body.dark-mode .header-mes {
+    background: #3489ed !important;
+    color: #ffffff !important;
 }
 
-/* Fim de semana */
-.dark-mode .dia.fim-de-semana {
-  background: #232a3a !important;
+
+/* ==========================================
+   DIAS DO CALENDÁRIO
+========================================== */
+
+body.dark-mode .dia {
+    background: #202c3d !important;
+    color: #cbd5e1 !important;
+
+    border: 1px solid #2f3e52;
 }
 
-/* ======= CORES DOS STATUS ======== */
-.dark-mode .dia.vermelho {
-  background: #e74c3c !important;
-  color: #fff !important;
+body.dark-mode .dia.header-dia {
+    background: transparent !important;
+    color: #edf4fb !important;
+
+    border-color: transparent !important;
 }
 
-.dark-mode .dia.amarelo {
-  background: #f1c40f !important;
-  color: #000 !important;
+body.dark-mode .mes:not(.expanded) .dia {
+    opacity: .72;
 }
 
-.dark-mode .dia.sem-aula {
-  background: #f39c12 !important;
-  color: #000 !important;
+body.dark-mode
+.mes.expanded
+.dia:not(.header-dia):hover {
+    background: #314158 !important;
+    color: #ffffff !important;
 }
 
-.dark-mode .dia.roxo {
-  background: #8e44ad !important;
-  color: #fff !important;
+
+/* ==========================================
+   DIAS VAZIOS
+========================================== */
+
+body.dark-mode
+.dia:not([data-date]):not(.header-dia) {
+    background: transparent !important;
+    border-color: transparent !important;
 }
 
-/* ======== FERIADOS ======== */
-.dark-mode .dia.feriado {
-  background: rgba(56,165,255,0.25) !important;
-  color: #cce4ff !important;
-  border: 1px solid rgba(56,165,255,0.35) !important;
+
+/* ==========================================
+   MÊS EXPANDIDO
+========================================== */
+
+body.dark-mode .mes.expanded {
+    background: #1d293a !important;
+
+    border-color: #398cff !important;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(56, 165, 255, .25),
+        0 18px 50px
+        rgba(0, 0, 0, .55) !important;
 }
 
-.dark-mode .dia.feriado:hover::after {
-  background: #0f172a !important;
+body.dark-mode
+.mes.expanded
+.calendario-mes {
+    background: transparent;
 }
 
-/* ===== Dots ===== */
-.dark-mode .dot.tarefa { background: #60a5fa !important; }
-.dark-mode .dot.vermelho { background: #e74c3c !important; }
-.dark-mode .dot.amarelo { background: #f1c40f !important; }
-.dark-mode .dot.semaula { background: #f39c12 !important; }
-.dark-mode .dot.roxo    { background: #8e44ad !important; }
 
-/* ===========================
-   COLUNA DIREITA – INFO MÊS
-   =========================== */
-.dark-mode .mes.expanded .info-mes {
-  background: var(--dark-surface) !important;
-  border-left: 2px solid var(--dark-border) !important;
-  color: var(--dark-text) !important;
+/* ==========================================
+   CALENDÁRIO DA ESQUERDA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.dia {
+    background: #202c3d !important;
+    color: #aeb9c7 !important;
+
+    border: 1px solid #304056 !important;
 }
 
-/* Toolbar */
-.dark-mode .mes.expanded .info-mes .toolbar-cal {
-  background: var(--dark-surface) !important;
-  border: 1px solid var(--dark-border) !important;
+body.dark-mode
+.mes.expanded
+.dia.header-dia {
+    background: transparent !important;
+    color: #f2f6fb !important;
+
+    border-color: transparent !important;
 }
 
-.dark-mode .mes.expanded .info-mes .toolbar-cal label {
-  color: var(--dark-text) !important;
+body.dark-mode
+.mes.expanded
+.dia:not(.header-dia):hover {
+    background: #2e4056 !important;
+    color: #ffffff !important;
 }
 
-.dark-mode .mes.expanded .info-mes .toolbar-cal .anoSelect {
-  background: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-  border: 1px solid var(--dark-border) !important;
+
+/* ==========================================
+   HOJE
+========================================== */
+
+body.dark-mode .dia.dia-hoje {
+    outline-color: #55b2ff !important;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(56, 165, 255, .25);
 }
 
-/* ===== Paleta de cores ===== */
-.dark-mode .mes.expanded .info-mes .bloco-cores {
-  background: var(--dark-surface) !important;
-  border: 1px solid var(--dark-border) !important;
+body.dark-mode .hoje-badge {
+    background: #38a5ff;
+    color: #ffffff;
 }
 
-.dark-mode .mes.expanded .info-mes .texto-cores {
-  color: var(--dark-text) !important;
+
+/* ==========================================
+   PRESENÇA AUTOMÁTICA
+========================================== */
+
+body.dark-mode .dia.presenca-automatica {
+    background-image:
+        linear-gradient(
+            rgba(52, 168, 83, .05),
+            rgba(52, 168, 83, .05)
+        ) !important;
 }
 
-.dark-mode .mes.expanded .info-mes .cor-item span {
-  color: var(--dark-text) !important;
+body.dark-mode .dot.presenca {
+    background: #48c477 !important;
 }
 
-.dark-mode .btn-cor {
-  border: 2px solid rgba(255,255,255,0.2) !important;
+
+/* ==========================================
+   FALTAS / ATESTADOS / PROVAS
+========================================== */
+
+body.dark-mode .dia.vermelho,
+body.dark-mode
+.mes.expanded
+.dia.vermelho {
+    background: #c94b4b !important;
+    color: #ffffff !important;
+
+    border-color: #df6767 !important;
 }
 
-/* ===== Painel de metas ===== */
-.dark-mode .mes.expanded .info-mes .painel-metas {
-  background: var(--dark-surface) !important;
-  border: 1px solid var(--dark-border) !important;
+body.dark-mode .dia.amarelo,
+body.dark-mode
+.mes.expanded
+.dia.amarelo {
+    background: #d6ad21 !important;
+    color: #172033 !important;
+
+    border-color: #e8c444 !important;
 }
 
-.dark-mode .mes.expanded .info-mes .progress-wrap {
-  background: var(--dark-bg) !important;
+body.dark-mode .dia.sem-aula,
+body.dark-mode
+.mes.expanded
+.dia.sem-aula {
+    background: #d9851c !important;
+    color: #172033 !important;
+
+    border-color: #ef9f3c !important;
 }
 
-.dark-mode .mes.expanded .info-mes .progress-bar {
-  background: var(--dark-primary) !important;
+body.dark-mode .dia.roxo,
+body.dark-mode
+.mes.expanded
+.dia.roxo {
+    background: #8749a8 !important;
+    color: #ffffff !important;
+
+    border-color: #a86cca !important;
 }
 
-.dark-mode .mes.expanded .info-mes .label-presenca {
-  color: var(--dark-text) !important;
+
+/* ==========================================
+   FERIADOS
+========================================== */
+
+body.dark-mode .dia.feriado {
+    background: #233e55 !important;
+    color: #b8deff !important;
+
+    border-color:
+        rgba(
+            56,
+            165,
+            255,
+            .38
+        ) !important;
 }
 
-/* ===== Mini-agenda ===== */
-.dark-mode .mes.expanded .info-mes .mini-agenda {
-  background: var(--dark-surface) !important;
-  border: 1px solid var(--dark-border) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .dia.feriado:hover::after {
+    background: #0b1220 !important;
+    color: #ffffff;
 }
 
-.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-data {
-  color: var(--dark-text) !important;
+body.dark-mode .dia.feriado:hover::before {
+    border-top-color: #0b1220 !important;
 }
 
-.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-notas {
-  background: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-  border: 1px solid var(--dark-border) !important;
+
+/* ==========================================
+   PERÍODO LETIVO
+========================================== */
+
+body.dark-mode .dia.ferias-meio-ano {
+    background:
+        repeating-linear-gradient(
+            135deg,
+            rgba(56, 165, 255, .08),
+            rgba(56, 165, 255, .08) 5px,
+            rgba(56, 165, 255, .14) 5px,
+            rgba(56, 165, 255, .14) 10px
+        ) !important;
 }
 
-.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-opcoes button {
-  background: #4b5563 !important;
-  color: #e5e7eb !important;
+body.dark-mode .dia.fora-periodo-letivo {
+    opacity: .42;
 }
 
-.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-salvar {
-  background: var(--dark-primary) !important;
-  color: #fff !important;
+body.dark-mode .periodo-badge {
+    background: #273d50;
+    color: #9bd2ff;
+
+    border-color: #3d5f78;
 }
 
-.dark-mode .mes.expanded .info-mes .mini-agenda .agenda-fechar {
-  background: #374151 !important;
-  color: #e5e7eb !important;
+
+/* ==========================================
+   DOTS
+========================================== */
+
+body.dark-mode .dot.tarefa {
+    background: #48a9ef !important;
 }
 
-/* ===== Botão fechar ===== */
-.dark-mode .mes.expanded .fechar-btn {
-  background: var(--dark-primary) !important;
-  color: white !important;
+body.dark-mode .dot.vermelho {
+    background: #ff665b !important;
 }
 
-/* ===== Backdrop do mês ===== */
-.dark-mode #cal-backdrop {
-  background: rgba(0,0,0,0.55) !important;
+body.dark-mode .dot.amarelo {
+    background: #ffd02a !important;
 }
 
-/* ======= AJUSTES QUE FALTAVAM ======= */
-
-/* Texto de resumos */
-.dark-mode .mes.expanded .info-mes .resumos {
-  color: var(--dark-text) !important;
+body.dark-mode .dot.semaula {
+    background: #ff9f20 !important;
 }
 
-/* Texto dentro dos spans */
-.dark-mode .mes.expanded .info-mes .resumos span {
-  color: var(--dark-text) !important;
+body.dark-mode .dot.roxo {
+    background: #ad64cf !important;
 }
 
-/* Dias vazios */
-.dark-mode .dia:not([data-date]) {
-  background: #0f172a !important;
-  border: 1px solid #1e293b !important;
+
+/* ==========================================
+   PAINEL DIREITO DO MÊS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.info-mes {
+    background: #1b2737 !important;
+    color: var(--cal-dark-text) !important;
+
+    border-left-color:
+        var(--cal-dark-border) !important;
+
+    scrollbar-color:
+        #536f91
+        transparent;
 }
 
-/* Hover dia (não pintado) */
-.dark-mode .mes.expanded .dia:not(.header-dia):hover {
-  background-color: #334155 !important;
-  color: #e2e8f0 !important;
+body.dark-mode
+.mes.expanded
+.info-mes::-webkit-scrollbar-track {
+    background: transparent;
 }
 
-/* Barra de progresso — fundo */
-.dark-mode .mes.expanded .info-mes .progress-wrap {
-  background: #0f172a !important;
-  border: 1px solid #1e293b !important;
+body.dark-mode
+.mes.expanded
+.info-mes::-webkit-scrollbar-thumb {
+    background: #536f91;
 }
 
-/* Mini agenda — texto */
-.dark-mode .mes.expanded .info-mes .mini-agenda,
-.dark-mode .mes.expanded .info-mes .agenda-resumo,
-.dark-mode .mes.expanded .info-mes .agenda-bloco,
-.dark-mode .mes.expanded .info-mes .agenda-bloco ul li {
-  color: var(--dark-text) !important;
+body.dark-mode
+.mes.expanded
+.info-mes::-webkit-scrollbar-thumb:hover {
+    background: #6888ad;
 }
 
-/* Cards de horários dentro da mini-agenda */
-.dark-mode .mes.expanded .info-mes .agenda-bloco {
-  background: var(--dark-bg) !important;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--dark-border);
+
+/* ==========================================
+   TOOLBAR — ANO / PNG / IMPRIMIR
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.toolbar-cal {
+    background: transparent !important;
+
+    border-bottom-color:
+        #344355 !important;
 }
 
-/* Texto "Horários do dia" */
-.dark-mode .mes.expanded .info-mes .agenda-bloco strong {
-  color: var(--dark-text) !important;
+body.dark-mode
+.mes.expanded
+.toolbar-label {
+    color: #9eacbd;
 }
 
-/* Botões dentro da mini-agenda */
-.dark-mode .mes.expanded .info-mes .agenda-opcoes button {
-  background: #374151 !important;
-  color: #e5e7eb !important;
+body.dark-mode
+.mes.expanded
+.anoSelect {
+    background: #101a2e !important;
+    color: #edf4fb !important;
+
+    border-color: #36475d !important;
+
+    color-scheme: dark;
 }
 
-.dark-mode .mes.expanded .info-mes .agenda-opcoes button:hover {
-  background: #4b5563 !important;
+body.dark-mode
+.mes.expanded
+.btn-exportar-png,
+
+body.dark-mode
+.mes.expanded
+.btn-imprimir {
+    background: #3198ed !important;
+    color: #ffffff !important;
+
+    border-color: #3198ed !important;
 }
 
-/* ==== FORÇAR CORES DOS DIAS NO MODO ESCURO ==== */
+body.dark-mode
+.mes.expanded
+.btn-exportar-png:hover,
 
-/* Faltou */
-.dark-mode .dia.vermelho,
-.dark-mode .mes.expanded .dia.vermelho {
-  background-color: #e74c3c !important;
-  color: #ffffff !important;
+body.dark-mode
+.mes.expanded
+.btn-imprimir:hover {
+    background: #1985dc !important;
 }
 
-/* Atestado */
-.dark-mode .dia.amarelo,
-.dark-mode .mes.expanded .dia.amarelo {
-  background-color: #f1c40f !important;
-  color: #000000 !important;
+
+/* ==========================================
+   CARDS DA COLUNA DIREITA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.modal-mes-card {
+    background: #202c3a !important;
+
+    border-color:
+        #37475a !important;
 }
 
-/* Sem aula */
-.dark-mode .dia.sem-aula,
-.dark-mode .mes.expanded .dia.sem-aula {
-  background-color: #f39c12 !important;
-  color: #000000 !important;
+body.dark-mode
+.mes.expanded
+.modal-mes-card-header
+div > span {
+    color: #43aaff;
 }
 
-/* Prova */
-.dark-mode .dia.roxo,
-.dark-mode .mes.expanded .dia.roxo {
-  background-color: #8e44ad !important;
-  color: #ffffff !important;
+body.dark-mode
+.mes.expanded
+.modal-mes-card-header h3 {
+    color: #f1f6fb !important;
 }
 
+body.dark-mode
+.mes.expanded
+.modal-mes-card-header > i {
+    background: #273e53;
+    color: #55b6ff;
+}
+
+
+/* ==========================================
+   REGISTRO / PALETA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.bloco-cores {
+    background: transparent !important;
+}
+
+body.dark-mode
+.mes.expanded
+.texto-cores {
+    color: #bdc7d3 !important;
+}
+
+body.dark-mode
+.mes.expanded
+.cor-item {
+    background: #192534 !important;
+
+    border-color:
+        #35465a !important;
+}
+
+body.dark-mode
+.mes.expanded
+.cor-item span {
+    color: #d3dce6 !important;
+}
+
+body.dark-mode
+.mes.expanded
+.btn-cor {
+    border-color:
+        rgba(
+            255,
+            255,
+            255,
+            .28
+        ) !important;
+
+    box-shadow:
+        0 0 0 1px
+        rgba(
+            255,
+            255,
+            255,
+            .08
+        );
+}
+
+
+/* ==========================================
+   FREQUÊNCIA DO MÊS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.painel-metas {
+    background: transparent !important;
+}
+
+body.dark-mode
+.mes.expanded
+.linha-meta label {
+    color: #b9c4d1 !important;
+}
+
+body.dark-mode
+.mes.expanded
+.meta-input-wrap input {
+    background: #101a2e !important;
+    color: #ffffff !important;
+
+    border-color:
+        #374960 !important;
+
+    color-scheme: dark;
+}
+
+body.dark-mode
+.mes.expanded
+.meta-input-wrap span {
+    color: #91a0b2;
+}
+
+
+/* ==========================================
+   BARRA DE FREQUÊNCIA MENSAL
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.progress-wrap {
+    background: #0f1929 !important;
+
+    border:
+        1px solid
+        #29384c;
+}
+
+body.dark-mode
+.mes.expanded
+.progress-bar {
+    background:
+        linear-gradient(
+            90deg,
+            #3eabff,
+            #168ee8
+        ) !important;
+}
+
+body.dark-mode
+.mes.expanded
+.label-presenca {
+    color: #69bcff !important;
+}
+
+
+/* ==========================================
+   TEXTOS DE FREQUÊNCIA DO MÊS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.meta-status-mes {
+    color: #b8c4d0 !important;
+}
+
+body.dark-mode
+.mes.expanded
+.faltas-restantes-mes {
+    color: #9bc9ee !important;
+}
+
+
+/* ==========================================
+   RESUMOS MENSAIS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.resumos > span {
+    background: #182433 !important;
+
+    border-color:
+        #35465a !important;
+}
+
+body.dark-mode
+.mes.expanded
+.resumos b {
+    color: #99a8b9 !important;
+}
+
+body.dark-mode
+.mes.expanded
+.resumos em {
+    color: #ffffff !important;
+}
+
+
+/* ==========================================
+   MINI AGENDA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.mini-agenda {
+    background: #202c3a !important;
+    color: #edf4fb !important;
+
+    border-color:
+        #37485b !important;
+}
+
+body.dark-mode
+.mes.expanded
+.mini-agenda
+.agenda-data {
+    color: #ffffff !important;
+}
+
+body.dark-mode
+.mes.expanded
+.mini-agenda
+.agenda-fechar {
+    background: #35445a !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode
+.mes.expanded
+.mini-agenda
+.agenda-fechar:hover {
+    background: #45566d !important;
+}
+
+
+/* ==========================================
+   BOTÕES DA MINI AGENDA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.agenda-opcoes button {
+    background: #3b4a5d !important;
+    color: #edf4fb !important;
+}
+
+body.dark-mode
+.mes.expanded
+.agenda-opcoes button:hover {
+    background: #4b5e75 !important;
+}
+
+
+/* ==========================================
+   CAMPO DE TEXTO DA AGENDA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.agenda-notas {
+    background: #10192b !important;
+    color: #edf4fb !important;
+
+    border-color:
+        #37485e !important;
+
+    color-scheme: dark;
+}
+
+body.dark-mode
+.mes.expanded
+.agenda-notas::placeholder {
+    color: #768599;
+}
+
+
+/* ==========================================
+   BOTÃO SALVAR
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.agenda-salvar {
+    background: #348ff1 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode
+.mes.expanded
+.agenda-salvar:hover {
+    background: #1b7edb !important;
+}
+
+
+/* ==========================================
+   RESUMO DA AGENDA
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.agenda-resumo,
+
+body.dark-mode
+.mes.expanded
+.agenda-bloco,
+
+body.dark-mode
+.mes.expanded
+.agenda-bloco p,
+
+body.dark-mode
+.mes.expanded
+.agenda-bloco li {
+    color: #d9e2ec !important;
+}
+
+body.dark-mode
+.mes.expanded
+.agenda-bloco {
+    background: #152131 !important;
+
+    border:
+        1px solid
+        #324257 !important;
+
+    border-radius: 10px;
+}
+
+body.dark-mode
+.mes.expanded
+.agenda-bloco strong {
+    color: #ffffff !important;
+}
+
+body.dark-mode
+.agenda-resumo-vazio {
+    color: #8f9cad !important;
+}
+
+
+/* ==========================================
+   BOTÃO FECHAR O MÊS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.fechar-btn {
+    background: #348ff1 !important;
+    color: #ffffff !important;
+
+    box-shadow:
+        0 7px 18px
+        rgba(
+            56,
+            165,
+            255,
+            .28
+        );
+}
+
+body.dark-mode
+.mes.expanded
+.fechar-btn:hover {
+    background: #197cd9 !important;
+}
+
+
+/* ==========================================
+   BACKDROP
+========================================== */
+
+body.dark-mode #cal-backdrop {
+    background:
+        rgba(
+            2,
+            7,
+            14,
+            .72
+        ) !important;
+
+    backdrop-filter:
+        blur(3px);
+}
+
+
+/* ==========================================
+   PAINEL ANUAL
+========================================== */
+
+body.dark-mode
+.frequencia-anual {
+    background: #1b2634 !important;
+
+    border-color:
+        #344355 !important;
+
+    box-shadow:
+        0 8px 28px
+        rgba(
+            0,
+            0,
+            0,
+            .25
+        );
+}
+
+
+/* ==========================================
+   CABEÇALHO DO PAINEL ANUAL
+========================================== */
+
+body.dark-mode
+.freq-eyebrow {
+    color: #3daaff;
+}
+
+body.dark-mode
+.freq-anual-topo h1 {
+    color: #f4f8fc !important;
+}
+
+body.dark-mode
+.freq-anual-topo p {
+    color: #b7c2cf !important;
+}
+
+
+/* ==========================================
+   STATUS DE FREQUÊNCIA
+========================================== */
+
+body.dark-mode
+.freq-risco {
+    background: #273545;
+    color: #c5d0db;
+
+    border-color:
+        #3b4b5d;
+}
+
+body.dark-mode
+.freq-risco.otima {
+    background: #1d3d31;
+    color: #9de0bc;
+
+    border-color:
+        #315b49;
+}
+
+body.dark-mode
+.freq-risco.atencao {
+    background: #3d3521;
+    color: #efd08b;
+
+    border-color:
+        #5b4c2c;
+}
+
+body.dark-mode
+.freq-risco.risco {
+    background: #43292d;
+    color: #f1aeb5;
+
+    border-color:
+        #643940;
+}
+
+
+/* ==========================================
+   CONFIGURAÇÃO DO PERÍODO LETIVO
+========================================== */
+
+body.dark-mode
+.freq-config-card {
+    background: #212e3d !important;
+
+    border-color:
+        #37475a !important;
+}
+
+body.dark-mode
+.freq-config-header h2 {
+    color: #f1f6fb !important;
+}
+
+body.dark-mode
+.freq-config-header h2 i {
+    color: #43aaff;
+}
+
+body.dark-mode
+.freq-config-header p {
+    color: #98a7b8 !important;
+}
+
+body.dark-mode
+.freq-field > span {
+    color: #b8c4d1 !important;
+}
+
+
+/* ==========================================
+   INPUTS DO PERÍODO LETIVO
+========================================== */
+
+body.dark-mode
+.freq-field input {
+    background: #101a2e !important;
+    color: #ffffff !important;
+
+    border-color:
+        #37495f !important;
+
+    color-scheme: dark;
+}
+
+body.dark-mode
+.freq-field input:focus {
+    border-color:
+        #3faaff !important;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(
+            56,
+            165,
+            255,
+            .14
+        );
+}
+
+body.dark-mode
+.freq-input-suffix b {
+    color: #8495aa;
+}
+
+
+/* ==========================================
+   CARDS DE RESUMO ANUAL
+========================================== */
+
+body.dark-mode
+.freq-stat {
+    background: #212e3d !important;
+
+    border-color:
+        #37475a !important;
+}
+
+body.dark-mode
+.freq-stat-value {
+    color: #f5f8fb !important;
+}
+
+body.dark-mode
+.freq-stat-label {
+    color: #98a8ba !important;
+}
+
+
+/* ÍCONE AZUL */
+
+body.dark-mode
+.freq-stat-icon {
+    background: #243e55;
+    color: #68bdff;
+}
+
+
+/* ÍCONE VERDE */
+
+body.dark-mode
+.freq-stat-icon.success {
+    background: #213d33;
+    color: #84d8ae;
+}
+
+
+/* ÍCONE AMARELO */
+
+body.dark-mode
+.freq-stat-icon.warning {
+    background: #3c3523;
+    color: #efcb74;
+}
+
+
+/* ÍCONE VERMELHO */
+
+body.dark-mode
+.freq-stat-icon.danger,
+
+body.dark-mode
+.freq-stat-icon.danger-soft {
+    background: #432a2e;
+    color: #f2a4ab;
+}
+
+
+/* ==========================================
+   FREQUÊNCIA MÍNIMA ANUAL
+========================================== */
+
+body.dark-mode
+.freq-meta-card {
+    background:
+        linear-gradient(
+            135deg,
+            #213447,
+            #202e3d
+        ) !important;
+
+    border-color:
+        #35516a !important;
+}
+
+body.dark-mode
+.freq-meta-title strong {
+    color: #f1f6fb !important;
+}
+
+body.dark-mode
+.freq-meta-title span {
+    color: #a9b7c7 !important;
+}
+
+body.dark-mode
+.freq-meta-percent {
+    color: #43aaff !important;
+}
+
+body.dark-mode
+.freq-progress-track {
+    background: #111c2b;
+}
+
+body.dark-mode
+.freq-progress-fill {
+    background:
+        linear-gradient(
+            90deg,
+            #3eadff,
+            #168ee8
+        );
+}
+
+body.dark-mode
+.freq-meta-mensagens p {
+    color: #b9c5d1 !important;
+}
+
+
+/* ==========================================
+   PROJEÇÃO ANUAL
+========================================== */
+
+body.dark-mode
+.freq-projecao-card {
+    background: #212e3d !important;
+
+    border-color:
+        #37475a !important;
+}
+
+body.dark-mode
+.freq-projecao-eyebrow {
+    color: #43aaff;
+}
+
+body.dark-mode
+.freq-projecao-header h3 {
+    color: #f2f6fb !important;
+}
+
+body.dark-mode
+.freq-projecao-header > i {
+    background: #263e53;
+    color: #5db8ff;
+}
+
+
+/* ==========================================
+   CARDS DA PROJEÇÃO
+========================================== */
+
+body.dark-mode
+.freq-projecao-item {
+    background: #192534 !important;
+
+    border-color:
+        #324255 !important;
+}
+
+body.dark-mode
+.freq-projecao-item.destaque {
+    background: #203a50 !important;
+
+    border-color:
+        #3c6684 !important;
+
+    box-shadow:
+        inset 0 0 0 1px
+        rgba(
+            56,
+            165,
+            255,
+            .12
+        );
+}
+
+body.dark-mode
+.freq-projecao-valor {
+    color: #f1f6fb !important;
+}
+
+body.dark-mode
+.freq-projecao-item.destaque
+.freq-projecao-valor {
+    color: #3baaff !important;
+}
+
+body.dark-mode
+.freq-projecao-label {
+    color: #9eacbc !important;
+}
+
+
+/* ==========================================
+   AVISOS DA PROJEÇÃO
+========================================== */
+
+body.dark-mode
+.freq-projecao-aviso.neutro {
+    background: #192534;
+    color: #b5c1ce;
+
+    border-color:
+        #334356;
+}
+
+body.dark-mode
+.freq-projecao-aviso.seguro {
+    background: #1c392e;
+    color: #9bddba;
+
+    border-color:
+        #305543;
+}
+
+body.dark-mode
+.freq-projecao-aviso.atencao {
+    background: #3b3220;
+    color: #efd18d;
+
+    border-color:
+        #5c4b2a;
+}
+
+body.dark-mode
+.freq-projecao-aviso.critico {
+    background: #40272b;
+    color: #efadb4;
+
+    border-color:
+        #60383e;
+}
+
+
+/* ==========================================
+   LEGENDA ANUAL
+========================================== */
+
+body.dark-mode
+.freq-legenda {
+    color: #a8b5c5 !important;
+}
+
+body.dark-mode
+.freq-legenda strong {
+    color: #d6dfe8 !important;
+}
+
+
+/* ==========================================
+   BOTÃO EXPANDIR FREQUÊNCIA
+========================================== */
+
+body.dark-mode
+.btn-expandir-frequencia {
+    background: #25384a !important;
+    color: #6cc1ff !important;
+
+    border-color:
+        #3d5368 !important;
+}
+
+body.dark-mode
+.btn-expandir-frequencia:hover {
+    background: #2c4357 !important;
+
+    box-shadow:
+        0 5px 15px
+        rgba(
+            56,
+            165,
+            255,
+            .13
+        );
+}
+
+
+/* ==========================================
+   MODAL DE LOGOUT
+========================================== */
+
+body.dark-mode
+.modal {
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .7
+        );
+}
+
+body.dark-mode
+.modal-content {
+    background: #202c3b;
+    color: #edf4fb;
+
+    border:
+        1px solid
+        #37475a;
+}
+
+body.dark-mode
+.modal-content h3,
+
+body.dark-mode
+.modal-content h4 {
+    color: #edf4fb;
+}
+
+body.dark-mode
+#cancel-logout {
+    background: #354456;
+    color: #edf4fb;
+}
+
+body.dark-mode
+#cancel-logout:hover {
+    background: #46586d;
+}
+
+
+/* ==========================================
+   MODAL FOGI
+========================================== */
+
+body.dark-mode
+#fogi-modal {
+    background:
+        rgba(
+            0,
+            0,
+            0,
+            .72
+        );
+}
+
+body.dark-mode
+#fogi-modal
+.fogi-container {
+    background: #1d2938;
+
+    border:
+        1px solid
+        #35475b;
+}
+
+body.dark-mode
+#fogi-close {
+    background: #253448;
+    color: #edf4fb;
+}
+
+body.dark-mode
+#fogi-close:hover {
+    background: #33455b;
+}
+
+/* ==========================================
+   FÉRIAS DO MEIO DO ANO — MÊS EXPANDIDO
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.dia.ferias-meio-ano {
+    position: relative;
+
+    background:
+        repeating-linear-gradient(
+            135deg,
+            #202c3d,
+            #202c3d 8px,
+            #263c52 8px,
+            #263c52 16px
+        ) !important;
+
+    border-color: #36556f !important;
+
+    color: #b9c9d8 !important;
+}
+
+
+/* HOVER SEM PERDER AS LISTRAS */
+
+body.dark-mode
+.mes.expanded
+.dia.ferias-meio-ano:not(.header-dia):hover {
+    background:
+        repeating-linear-gradient(
+            135deg,
+            #29394d,
+            #29394d 8px,
+            #31506b 8px,
+            #31506b 16px
+        ) !important;
+
+    color: #ffffff !important;
+}
+
+
+/* ==========================================
+   ETIQUETA INÍCIO / FIM DAS FÉRIAS
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.periodo-badge {
+    position: absolute;
+
+    left: 5px;
+    bottom: 5px;
+
+    max-width: calc(100% - 10px);
+
+    padding: 2px 5px;
+
+    background: #263f55 !important;
+    color: #9fd6ff !important;
+
+    border: 1px solid #416987 !important;
+    border-radius: 4px;
+
+    font-size: 7px;
+    font-weight: 600;
+
+    line-height: 1.25;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    z-index: 5;
+}
+
+
+/* NO CALENDÁRIO GRANDE PODE FICAR UM POUCO MAIS LEGÍVEL */
+
+body.dark-mode
+.mes.expanded
+.dia {
+    position: relative;
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 768px) {
+
+    body.dark-mode
+    .mes.expanded
+    .info-mes {
+        border-left: 0 !important;
+
+        border-top:
+            1px solid
+            #36465a !important;
+    }
+
+}
