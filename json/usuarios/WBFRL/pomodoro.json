@@ -54,6 +54,38 @@
             "mode": "focus",
             "source": "cronometro",
             "discipline": "Quimica"
+        },
+        {
+            "id": "d49d4859-28ec-4ab7-8f2d-d1be701372ca",
+            "ts": 1787669808235,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "matematica"
+        },
+        {
+            "id": "93afd090-bece-40bd-b495-27c099431fb4",
+            "ts": 1787669892330,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "biologia"
+        },
+        {
+            "id": "a3a7e974-a6c7-4a13-ba46-aaa392a5e25b",
+            "ts": 1787669974834,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Historia"
+        },
+        {
+            "id": "40524c37-85d0-4eb9-8407-9153ba2d3e4d",
+            "ts": 1787670041698,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Quimica"
         }
     ],
     "goals": {

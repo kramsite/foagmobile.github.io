@@ -1,7 +1,33 @@
 {
-    "estrelas": 0,
+    "estrelas": 6,
     "historico": [
-        
+        {
+            "id": "estrela_d63d0474bd6e",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 16:56:48",
+            "timestamp": 1787669808,
+            "chave": "cronometro_d49d4859-28ec-4ab7-8f2d-d1be701372ca"
+        },
+        {
+            "id": "estrela_8955f738e41b",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 16:58:12",
+            "timestamp": 1787669892,
+            "chave": "cronometro_93afd090-bece-40bd-b495-27c099431fb4"
+        },
+        {
+            "id": "estrela_5a39b03826ab",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-25 16:59:34",
+            "timestamp": 1787669974,
+            "chave": "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
+        }
     ],
     "controle": {
         "pomodoro": {
@@ -28,7 +54,9 @@
             "marcos_recebidos": []
         },
         "recompensas_recebidas": [
-           
+            "cronometro_d49d4859-28ec-4ab7-8f2d-d1be701372ca",
+            "cronometro_93afd090-bece-40bd-b495-27c099431fb4",
+            "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
         ]
     }
 }
