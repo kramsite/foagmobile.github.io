@@ -11,15 +11,103 @@
     "periodos": {
         "Padrão": {
             "materias": [
-                "cu"
+                "matematica",
+                "portugues",
+                "historia",
+                "fisica",
+                "filosofia",
+                "sociologia",
+                "biologia",
+                "quimica",
+                "educação fisica",
+                "arte",
+                "geografia",
+                "ingles"
             ],
             "materia_ids": [
-                "MAT_B3D137FB"
+                "mat_113c476ac5d5",
+                "mat_8b6d656e92ff",
+                "mat_c4ccc5413ab8",
+                "mat_b078633eafa6",
+                "mat_b211bae6ae72",
+                "mat_f1f7447b9acb",
+                "mat_f5c5a1273a96",
+                "mat_d75034b55ff0",
+                "mat_15f334618ddc",
+                "mat_6c712226cb5c",
+                "mat_158ddfa09c10",
+                "mat_55ae68d141ac"
             ],
             "notas": [
                 {
-                    "1": null,
-                    "2": null,
+                    "1": 7,
+                    "2": 6,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7,
+                    "2": 7.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7,
+                    "2": 7,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 10,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 7.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 6,
+                    "2": 9.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 10,
+                    "2": 9.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 10,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 10,
+                    "2": 10,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9,
+                    "2": 9,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8.9,
+                    "2": 8.5,
                     "3": null,
                     "4": null
                 }

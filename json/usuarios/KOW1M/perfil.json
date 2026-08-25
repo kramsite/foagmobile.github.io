@@ -1,11 +1,14 @@
 {
     "codigo_usuario": "KOW1M",
-    "nome": "aaaa",
+    "nome": "fica esperto",
     "email": "aaaacara@gmail.com",
     "nascimento": "2006-05-02",
-    "telefone": "",
-    "serie": "",
-    "escola": "",
+    "telefone": "(65) 9944-4322",
+    "serie": "3º ano do Ensino Médio",
+    "escola": "Escola Estadual Militar Dom Pedro II",
     "termos_aceitos": true,
-    "cadastrado_em": "2026-08-18 15:55:19"
+    "cadastrado_em": "2026-08-18 15:55:19",
+    "cidade": "Cuiabá",
+    "estado": "MT",
+    "foto": "perfil_KOW1M_75649c7e.jpg"
 }
