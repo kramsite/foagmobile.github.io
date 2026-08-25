@@ -135,8 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- ACESSIBILIDADE GLOBAL -->
-    <link rel="stylesheet" href="acessibilidade/acessibilidade.css">
-    <script src="acessibilidade/acessibilidade.js" defer></script>
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <script src="/foagmobile.github.io/acessibilidade/acessibilidade.js?v=3" defer></script>
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->
@@ -456,12 +456,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                                     <strong>Importar backup</strong>
                                     <small>Restaure informações usando um arquivo JSON.</small>
                                 </div>
-                                <form id="form-importar" method="POST" enctype="multipart/form-data" style="display:flex;gap:10px;align-items:center;">
+                                <div id="form-importar" style="display:flex;gap:10px;align-items:center;">
                                     <input type="file" name="backup" accept=".json,application/json" style="display:none;" id="arquivo-backup" aria-label="Selecionar arquivo de backup JSON">
                                     <button type="button" class="btn-secundario" id="btn-importar" aria-label="Importar backup">
                                         <i class="fa-solid fa-upload" aria-hidden="true"></i> Importar
                                     </button>
-                                </form>
+                                </div>
                             </div>
 
                             <div class="configuracao-item">
