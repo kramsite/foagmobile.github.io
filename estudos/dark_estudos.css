@@ -1,0 +1,376 @@
+/* ==========================================
+   MODO ESCURO — ESTUDOS
+========================================== */
+
+body.dark-mode {
+  --fundo: #0f172a;
+  --branco: #1e293b;
+  --texto: #f1f5f9;
+  --texto-suave: #94a3b8;
+  --borda: #334155;
+
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* ==========================================
+   CABEÇALHO E MENU
+========================================== */
+
+body.dark-mode header.cabecalho {
+  background: #0b1a2e !important;
+  border-bottom: 1px solid #334155;
+}
+
+body.dark-mode nav.menu {
+  background: #0b1a2e !important;
+  border-right: 1px solid #334155;
+}
+
+body.dark-mode nav.menu a {
+  color: #cbd5e1;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background: rgba(96, 165, 250, 0.15);
+  color: #60a5fa;
+}
+
+/* ==========================================
+   CONTEÚDO PRINCIPAL
+========================================== */
+
+body.dark-mode main.conteudo {
+  background: #0f172a;
+}
+
+body.dark-mode .page-eyebrow {
+  color: #60a5fa;
+}
+
+body.dark-mode .page-header h1,
+body.dark-mode .section-heading h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .page-header p,
+body.dark-mode .section-heading p {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   CARDS DE ESTATÍSTICA
+========================================== */
+
+body.dark-mode .stat-card {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+body.dark-mode .stat-icon {
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode .stat-label {
+  color: #94a3b8;
+}
+
+body.dark-mode .stat-card strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .stat-card small {
+  color: #64748b;
+}
+
+/* ==========================================
+   SEÇÕES
+========================================== */
+
+body.dark-mode .content-section {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ==========================================
+   MÉTODOS DE ESTUDO
+========================================== */
+
+body.dark-mode .method-card {
+  background: #172033;
+  border-color: #334155;
+  color: #f1f5f9;
+}
+
+body.dark-mode .method-card:hover {
+  background: #1b2940;
+  border-color: #3b82f6;
+  box-shadow: 0 10px 20px rgba(56, 165, 255, 0.12);
+}
+
+body.dark-mode .method-icon {
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode .method-info h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .method-info p {
+  color: #94a3b8;
+}
+
+body.dark-mode .method-link {
+  color: #60a5fa;
+}
+
+/* ==========================================
+   ESTADO VAZIO
+========================================== */
+
+body.dark-mode .empty-state {
+  background: #172033;
+  border-color: #475569;
+}
+
+body.dark-mode .empty-icon {
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode .empty-state h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .empty-state p {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   CARDS DAS MATÉRIAS
+========================================== */
+
+body.dark-mode .subject-card {
+  background: #172033;
+  border-color: #334155;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.18);
+}
+
+body.dark-mode .subject-card h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .subject-card-meta {
+  color: #94a3b8;
+}
+
+body.dark-mode .subject-card-icon {
+  background: color-mix(
+    in srgb,
+    var(--subject-color) 18%,
+    #172033
+  );
+}
+
+/* ==========================================
+   BOTÕES
+========================================== */
+
+body.dark-mode .btn.secondary {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+body.dark-mode .btn.secondary:hover {
+  background: #475569;
+}
+
+body.dark-mode .btn.secondary-outline {
+  background: #172033;
+  color: #60a5fa;
+  border-color: #334155;
+}
+
+body.dark-mode .btn.secondary-outline:hover {
+  background: #1e293b;
+  border-color: #60a5fa;
+}
+
+/* ==========================================
+   CAMPOS / SELECTS
+========================================== */
+
+body.dark-mode .input,
+body.dark-mode .select {
+  background: #0f172a;
+  color: #f1f5f9;
+  border-color: #334155;
+}
+
+body.dark-mode .input::placeholder {
+  color: #64748b;
+}
+
+body.dark-mode .input:focus,
+body.dark-mode .select:focus {
+  background: #111c30;
+  border-color: #38a5ff;
+  box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.15);
+}
+
+body.dark-mode .lbl {
+  color: #cbd5e1;
+}
+
+/* ==========================================
+   SELETOR DE COR
+========================================== */
+
+body.dark-mode .color-picker-area span {
+  color: #94a3b8;
+}
+
+body.dark-mode .color-picker {
+  border-color: #334155;
+  box-shadow: 0 0 0 1px #475569;
+}
+
+body.dark-mode .color-option {
+  box-shadow: 0 0 0 1px #475569;
+}
+
+body.dark-mode .color-option.active {
+  box-shadow:
+    0 0 0 3px #172033,
+    0 0 0 5px var(--subject-color);
+}
+
+/* ==========================================
+   BOTÕES EDITAR / EXCLUIR MATÉRIA
+========================================== */
+
+body.dark-mode .subject-edit-btn {
+  background: rgba(56, 165, 255, 0.12);
+  color: #60a5fa;
+  border-color: rgba(96, 165, 250, 0.25);
+}
+
+body.dark-mode .subject-edit-btn:hover {
+  background: rgba(56, 165, 255, 0.22);
+  color: #93c5fd;
+  border-color: #60a5fa;
+}
+
+body.dark-mode .subject-card-actions .subject-delete-btn {
+  background: rgba(220, 76, 76, 0.12);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.25);
+}
+
+body.dark-mode .subject-card-actions .subject-delete-btn:hover {
+  background: rgba(220, 76, 76, 0.22);
+  border-color: #f87171;
+  color: #fca5a5;
+}
+
+/* ==========================================
+   MODAIS
+========================================== */
+
+body.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .modal-content {
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+}
+
+body.dark-mode .modal-close {
+  background: #334155;
+  color: #cbd5e1;
+}
+
+body.dark-mode .modal-close:hover {
+  background: #475569;
+  color: #ffffff;
+}
+
+body.dark-mode .modal-title-icon {
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode .modal-title h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .modal-title p {
+  color: #94a3b8;
+}
+
+body.dark-mode .modal-content h4 {
+  color: #94a3b8;
+}
+
+body.dark-mode #cancel-logout {
+  background: #334155;
+  color: #e2e8f0;
+}
+
+/* ==========================================
+   MODAL EXCLUIR MATÉRIA
+========================================== */
+
+body.dark-mode .delete-subject-icon {
+  background: rgba(220, 76, 76, 0.12);
+  color: #f87171;
+}
+
+body.dark-mode .delete-subject-content h3 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .delete-subject-content > p {
+  color: #94a3b8;
+}
+
+body.dark-mode .delete-subject-content > p strong {
+  color: #e2e8f0;
+}
+
+body.dark-mode .delete-warning {
+  background: rgba(230, 162, 60, 0.08);
+  border-color: rgba(230, 162, 60, 0.28);
+  color: #f6c66b;
+}
+
+body.dark-mode .delete-warning i {
+  color: #f6ad55;
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+
+body.dark-mode .toast {
+  background: #020617;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+}
+
+/* ==========================================
+   RODAPÉ
+========================================== */
+
+body.dark-mode footer {
+  background: #020617;
+  color: #94a3b8;
+  border-top: 1px solid #334155;
+}
