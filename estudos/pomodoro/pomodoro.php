@@ -343,9 +343,11 @@ $current = basename($_SERVER['PHP_SELF']);
     </div>
   </div>
 
-  <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
+  <!-- ==========================================
+     MODAL DE ESTRELAS
+========================================== -->
 
-  <div
+<div
   class="stars-feedback-modal"
   id="stars-feedback-modal"
 >
@@ -385,6 +387,10 @@ $current = basename($_SERVER['PHP_SELF']);
 
   </div>
 </div>
+
+  <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
+
+  
 
   <!-- Lógica do módulo -->
   <script defer src="pomodoro.js?v=<?= time() ?>"></script>

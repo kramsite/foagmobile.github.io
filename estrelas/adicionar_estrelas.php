@@ -68,7 +68,8 @@ function caminhoArquivoPontos($codigoUsuario)
 
 function carregarPontos($codigoUsuario)
 {
-    $estrutura = estruturaPadraoPontos();
+    $estrutura =
+        estruturaPadraoPontos();
 
     $arquivo =
         caminhoArquivoPontos(
@@ -295,14 +296,115 @@ function identificarSessaoPomodoro(
     ];
 
 
-    return
-        hash(
-            'sha256',
-            implode(
-                '|',
-                $dados
-            )
+    return hash(
+        'sha256',
+        implode(
+            '|',
+            $dados
+        )
+    );
+}
+
+
+// ==========================================
+// CONTAR SESSÕES PREMIADAS NO DIA
+// ==========================================
+
+function contarSessoesPremiadasNoDia(
+    $codigoUsuario,
+    $data
+) {
+
+    $pontos =
+        carregarPontos(
+            $codigoUsuario
         );
+
+
+    $historico =
+        $pontos['historico']
+        ?? [];
+
+
+    $total = 0;
+
+
+    foreach ($historico as $item) {
+
+        if (!is_array($item)) {
+            continue;
+        }
+
+
+        $tipo =
+            $item['tipo']
+            ?? '';
+
+        $dataHistorico =
+            $item['data']
+            ?? '';
+
+        $chave =
+            $item['chave']
+            ?? '';
+
+
+        // ==================================
+        // SOMENTE POMODORO OU CRONÔMETRO
+        // ==================================
+
+        if (
+            $tipo !== 'pomodoro' &&
+            $tipo !== 'cronometro'
+        ) {
+            continue;
+        }
+
+
+        // ==================================
+        // SOMENTE NA DATA INFORMADA
+        // ==================================
+
+        if (
+            substr(
+                $dataHistorico,
+                0,
+                10
+            ) !== $data
+        ) {
+            continue;
+        }
+
+
+        // ==================================
+        // NÃO CONTAR BÔNUS DE 2H / 4H
+        // ==================================
+
+        $ehSessaoPomodoro =
+            strpos(
+                $chave,
+                'pomodoro_'
+            ) === 0;
+
+
+        $ehSessaoCronometro =
+            strpos(
+                $chave,
+                'cronometro_'
+            ) === 0;
+
+
+        if (
+            $ehSessaoPomodoro ||
+            $ehSessaoCronometro
+        ) {
+
+            $total++;
+        }
+    }
+
+
+    return $total;
 }
 
 
@@ -315,6 +417,18 @@ function processarEstrelasPomodoro(
     $dadosAnteriores,
     $dadosNovos
 ) {
+
+    $resultado = [
+
+        'estrelas_sessoes' => 0,
+
+        'estrelas_bonus' => 0,
+
+        'limite_diario_atingido' => false,
+
+        'sessoes_premiadas_hoje' => 0
+    ];
+
 
     $sessoesAntigas =
         $dadosAnteriores['sessions']
@@ -329,12 +443,33 @@ function processarEstrelasPomodoro(
         !is_array($sessoesAntigas) ||
         !is_array($sessoesNovas)
     ) {
-        return;
+
+        return $resultado;
     }
 
 
     // ======================================
-    // LISTAR SESSÕES ANTIGAS
+    // CONFIGURAÇÕES
+    // ======================================
+
+    $limiteDiario =
+        3;
+
+    $hoje =
+        date(
+            'Y-m-d'
+        );
+
+
+    $premiadasHoje =
+        contarSessoesPremiadasNoDia(
+            $codigoUsuario,
+            $hoje
+        );
+
+
+    // ======================================
+    // IDENTIFICAR SESSÕES QUE JÁ EXISTIAM
     // ======================================
 
     $idsAntigos = [];
@@ -363,7 +498,7 @@ function processarEstrelasPomodoro(
 
 
     // ======================================
-    // ANALISAR SESSÕES NOVAS
+    // VERIFICAR AS NOVAS SESSÕES
     // ======================================
 
     foreach (
@@ -383,7 +518,7 @@ function processarEstrelasPomodoro(
             );
 
 
-        // Sessão já existia
+        // Já estava salvo antes
         if (
             isset(
                 $idsAntigos[$idSessao]
@@ -408,8 +543,21 @@ function processarEstrelasPomodoro(
             );
 
 
+        $sessaoValida =
+            false;
+
+        $tipo =
+            '';
+
+        $descricao =
+            '';
+
+        $chave =
+            '';
+
+
         // ==================================
-        // POMODORO
+        // POMODORO CONCLUÍDO
         // ==================================
 
         if (
@@ -417,46 +565,122 @@ function processarEstrelasPomodoro(
             $modo === 'focus'
         ) {
 
-            adicionarEstrelas(
-                $codigoUsuario,
-                'pomodoro',
-                'Sessão de Pomodoro concluída',
-                2,
-                'pomodoro_' . $idSessao
-            );
+            $sessaoValida =
+                true;
+
+            $tipo =
+                'pomodoro';
+
+            $descricao =
+                'Sessão de Pomodoro concluída';
+
+            $chave =
+                'pomodoro_' .
+                $idSessao;
         }
 
 
         // ==================================
         // CRONÔMETRO
-        // MÍNIMO DE 30 MINUTOS
+        // MÍNIMO 30 MINUTOS
         // ==================================
 
-        if (
+        elseif (
             $origem === 'cronometro' &&
             $modo === 'focus' &&
             $minutos >= 1
         ) {
 
+            $sessaoValida =
+                true;
+
+            $tipo =
+                'cronometro';
+
+            $descricao =
+                'Sessão de 30 minutos ou mais no cronômetro';
+
+            $chave =
+                'cronometro_' .
+                $idSessao;
+        }
+
+
+        // ==================================
+        // NÃO GERA ESTRELAS
+        // ==================================
+
+        if (!$sessaoValida) {
+            continue;
+        }
+
+
+        // ==================================
+        // LIMITE DE 3 SESSÕES NO DIA
+        // ==================================
+
+        if (
+            $premiadasHoje >=
+            $limiteDiario
+        ) {
+
+            $resultado[
+                'limite_diario_atingido'
+            ] = true;
+
+            continue;
+        }
+
+
+        // ==================================
+        // ADICIONAR +2 ESTRELAS
+        // ==================================
+
+        $adicionou =
             adicionarEstrelas(
                 $codigoUsuario,
-                'cronometro',
-                'Sessão de 30 minutos ou mais no cronômetro',
+                $tipo,
+                $descricao,
                 2,
-                'cronometro_' . $idSessao
+                $chave
             );
+
+
+        if ($adicionou) {
+
+            $premiadasHoje++;
+
+            $resultado[
+                'estrelas_sessoes'
+            ] += 2;
         }
     }
 
 
     // ======================================
-    // BÔNUS DE TEMPO DO DIA
+    // PROCESSAR BÔNUS DE 2H / 4H
     // ======================================
 
-    processarBonusTempoDia(
-        $codigoUsuario,
-        $sessoesNovas
-    );
+    $bonus =
+        processarBonusTempoDia(
+            $codigoUsuario,
+            $sessoesNovas
+        );
+
+
+    $resultado[
+        'estrelas_bonus'
+    ] =
+        $bonus;
+
+
+    $resultado[
+        'sessoes_premiadas_hoje'
+    ] =
+        $premiadasHoje;
+
+
+    return $resultado;
 }
 
 
@@ -489,7 +713,11 @@ function processarBonusTempoDia(
         ) * 1000;
 
 
-    $totalMinutos = 0;
+    $totalMinutos =
+        0;
+
+    $estrelasBonus =
+        0;
 
 
     foreach (
@@ -533,20 +761,24 @@ function processarBonusTempoDia(
 
 
         // ==================================
-        // SOMENTE FOCO
+        // SOMENTE SESSÕES DE FOCO
         // ==================================
 
-        if ($modo !== 'focus') {
+        if (
+            $modo !==
+            'focus'
+        ) {
             continue;
         }
 
 
         // ==================================
-        // POMODORO
+        // POMODORO CONCLUÍDO
         // ==================================
 
         if (
-            $origem === 'pomodoro'
+            $origem ===
+            'pomodoro'
         ) {
 
             $totalMinutos +=
@@ -555,12 +787,12 @@ function processarBonusTempoDia(
 
 
         // ==================================
-        // CRONÔMETRO
+        // CRONÔMETRO VÁLIDO
         // ==================================
 
-        if (
+        elseif (
             $origem === 'cronometro' &&
-            $minutos >= 30
+            $minutos >= 1
         ) {
 
             $totalMinutos +=
@@ -570,33 +802,58 @@ function processarBonusTempoDia(
 
 
     // ======================================
-    // 2 HORAS
+    // BÔNUS DE 2 HORAS
     // ======================================
 
-    if ($totalMinutos >= 120) {
+    if (
+        $totalMinutos >= 120
+    ) {
 
-        adicionarEstrelas(
-            $codigoUsuario,
-            'pomodoro',
-            '2 horas estudadas no dia',
-            3,
-            'bonus_estudo_2h_' . $hoje
-        );
+        $adicionou =
+            adicionarEstrelas(
+                $codigoUsuario,
+                'pomodoro',
+                '2 horas estudadas no dia',
+                3,
+                'bonus_estudo_2h_' .
+                $hoje
+            );
+
+
+        if ($adicionou) {
+
+            $estrelasBonus +=
+                3;
+        }
     }
 
 
     // ======================================
-    // 4 HORAS
+    // BÔNUS DE 4 HORAS
     // ======================================
 
-    if ($totalMinutos >= 240) {
+    if (
+        $totalMinutos >= 240
+    ) {
 
-        adicionarEstrelas(
-            $codigoUsuario,
-            'pomodoro',
-            '4 horas estudadas no dia',
-            5,
-            'bonus_estudo_4h_' . $hoje
-        );
+        $adicionou =
+            adicionarEstrelas(
+                $codigoUsuario,
+                'pomodoro',
+                '4 horas estudadas no dia',
+                5,
+                'bonus_estudo_4h_' .
+                $hoje
+            );
+
+
+        if ($adicionou) {
+
+            $estrelasBonus +=
+                5;
+        }
     }
+
+
+    return $estrelasBonus;
 }
