@@ -328,7 +328,7 @@
 
 
 /* ==========================================
-   META ANUAL
+   FREQUÊNCIA MÍNIMA ANUAL
 ========================================== */
 
 .freq-meta-card {
@@ -540,7 +540,7 @@
 
 
 /* ==========================================
-   META MENSAL INTELIGENTE
+   FREQUÊNCIA MÍNIMA MENSAL
 ========================================== */
 
 .meta-status-mes,
@@ -1153,6 +1153,1152 @@ body.dark-mode
 
     .freq-projecao-grid {
         grid-template-columns: 1fr;
+    }
+
+}
+
+/* ==========================================
+   MODAL DO MÊS — MAIS LIMPO
+========================================== */
+
+.mes.expanded .info-mes {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #fff;
+}
+
+.mes.expanded .toolbar-cal {
+    margin: 0;
+    padding: 0 0 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    border-bottom: 1px solid #edf1f5;
+}
+
+.mes.expanded .toolbar-cal .lado-a,
+.mes.expanded .toolbar-cal .lado-b {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mes.expanded .toolbar-label {
+    color: #7b8796;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.mes.expanded .anoSelect,
+.mes.expanded .btn-exportar-png,
+.mes.expanded .btn-imprimir {
+    height: 32px;
+    border: 1px solid #e1e8ef;
+    border-radius: 8px;
+    background: #f8fafc;
+    color: #536174;
+    font-family: 'Poppins', sans-serif;
+    font-size: 9px;
+}
+
+.mes.expanded .anoSelect {
+    padding: 0 9px;
+}
+
+.mes.expanded .btn-exportar-png,
+.mes.expanded .btn-imprimir {
+    padding: 0 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.mes.expanded .modal-mes-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.25fr);
+    gap: 12px;
+}
+
+.mes.expanded .modal-mes-card {
+    min-width: 0;
+    padding: 14px;
+    background: #f9fbfd;
+    border: 1px solid #e8edf3;
+    border-radius: 12px;
+}
+
+.mes.expanded .modal-mes-card-header {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.mes.expanded .modal-mes-card-header div > span {
+    display: block;
+    margin-bottom: 2px;
+    color: #168ee8;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.mes.expanded .modal-mes-card-header h3 {
+    margin: 0;
+    color: #334155;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mes.expanded .modal-mes-card-header > i {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    background: #edf7ff;
+    color: #168ee8;
+    border-radius: 8px;
+    font-size: 12px;
+}
+
+.mes.expanded .bloco-cores,
+.mes.expanded .painel-metas {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: 0;
+}
+
+.mes.expanded .texto-cores {
+    margin: 0 0 10px;
+    color: #7d8998;
+    font-size: 9px;
+}
+
+.mes.expanded .botoes-cores {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 7px;
+}
+
+.mes.expanded .cor-item {
+    padding: 8px 5px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    background: #fff;
+    border: 1px solid #e7edf3;
+    border-radius: 9px;
+}
+
+.mes.expanded .cor-item span {
+    color: #657287;
+    font-size: 8px;
+    white-space: nowrap;
+}
+
+.mes.expanded .btn-cor {
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1px rgba(15,23,42,.10);
+    cursor: pointer;
+}
+
+.mes.expanded .linha-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.mes.expanded .linha-meta label {
+    color: #657287;
+    font-size: 9px;
+    font-weight: 600;
+}
+
+.mes.expanded .meta-input-wrap {
+    position: relative;
+    width: 72px;
+}
+
+.mes.expanded .meta-input-wrap input {
+    width: 100%;
+    height: 32px;
+    padding: 0 25px 0 9px;
+    background: #fff;
+    color: #334155;
+    border: 1px solid #dde6ee;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 10px;
+}
+
+.mes.expanded .meta-input-wrap span {
+    position: absolute;
+    top: 50%;
+    right: 9px;
+    transform: translateY(-50%);
+    color: #8995a5;
+    font-size: 9px;
+}
+
+.mes.expanded .linha-progress {
+    margin-top: 10px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.mes.expanded .progress-wrap {
+    height: 7px;
+    overflow: hidden;
+    background: #e6edf3;
+    border-radius: 999px;
+}
+
+.mes.expanded .progress-bar {
+    height: 100%;
+    border-radius: inherit;
+    background: linear-gradient(90deg,#38a5ff,#168ee8);
+}
+
+.mes.expanded .label-presenca {
+    color: #168ee8;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.mes.expanded .resumos {
+    margin-top: 11px;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+}
+
+.mes.expanded .resumos > span {
+    padding: 8px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    background: #fff;
+    border: 1px solid #e8edf3;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.mes.expanded .resumos b {
+    color: #8490a0;
+    font-size: 7px;
+    font-weight: 600;
+}
+
+.mes.expanded .resumos em {
+    color: #334155;
+    font-size: 12px;
+    font-weight: 700;
+    font-style: normal;
+}
+
+body.dark-mode .mes.expanded .info-mes {
+    background: #1d2530;
+}
+
+body.dark-mode .mes.expanded .modal-mes-card {
+    background: #232d38;
+    border-color: #35414e;
+}
+
+body.dark-mode .mes.expanded .modal-mes-card-header h3,
+body.dark-mode .mes.expanded .resumos em {
+    color: #edf4fb;
+}
+
+body.dark-mode .mes.expanded .cor-item,
+body.dark-mode .mes.expanded .resumos > span {
+    background: #1d2530;
+    border-color: #35414e;
+}
+
+@media (max-width: 850px) {
+    .mes.expanded .modal-mes-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 620px) {
+    .mes.expanded .botoes-cores {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .mes.expanded .resumos {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+
+/* ==========================================
+   FREQUÊNCIA MÍNIMA — AJUSTE DE TEXTO
+========================================== */
+
+.mes.expanded .linha-meta label {
+    max-width: 170px;
+    line-height: 1.35;
+}
+
+.freq-field > span {
+    line-height: 1.35;
+}
+
+.freq-meta-title strong {
+    line-height: 1.3;
+}
+
+/* ==========================================
+   MODAL DO MÊS — LEITURA + SCROLL LATERAL
+========================================== */
+
+/*
+   O modal inteiro não rola.
+   Somente a área direita (.info-mes).
+*/
+.mes.expanded {
+    overflow: hidden !important;
+}
+
+
+/* ==========================================
+   CALENDÁRIO DA ESQUERDA
+========================================== */
+
+.mes.expanded .calendario-mes {
+    height: 100%;
+    overflow: hidden !important;
+}
+
+
+/* ==========================================
+   PAINEL DA DIREITA COM SCROLL
+========================================== */
+
+.mes.expanded .info-mes {
+    height: 100%;
+    max-height: calc(100vh - 32px);
+
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+
+    padding: 18px 20px 28px;
+
+    box-sizing: border-box;
+
+    scrollbar-width: thin;
+    scrollbar-color: #4b6f98 transparent;
+}
+
+
+/* SCROLL CHROME / EDGE / OPERA */
+
+.mes.expanded .info-mes::-webkit-scrollbar {
+    width: 7px;
+}
+
+.mes.expanded .info-mes::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.mes.expanded .info-mes::-webkit-scrollbar-thumb {
+    background: #4b6f98;
+    border-radius: 999px;
+}
+
+.mes.expanded .info-mes::-webkit-scrollbar-thumb:hover {
+    background: #5e85b2;
+}
+
+
+/* ==========================================
+   BARRA SUPERIOR
+========================================== */
+
+.mes.expanded .toolbar-cal {
+    padding-bottom: 14px;
+}
+
+.mes.expanded .toolbar-label {
+    font-size: 11px;
+}
+
+.mes.expanded .anoSelect,
+.mes.expanded .btn-exportar-png,
+.mes.expanded .btn-imprimir {
+    height: 36px;
+
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.mes.expanded .anoSelect {
+    padding: 0 11px;
+}
+
+.mes.expanded .btn-exportar-png,
+.mes.expanded .btn-imprimir {
+    padding: 0 13px;
+}
+
+
+/* ==========================================
+   CARDS DA DIREITA
+========================================== */
+
+.mes.expanded .modal-mes-grid {
+    gap: 15px;
+}
+
+.mes.expanded .modal-mes-card {
+    padding: 17px;
+}
+
+
+/* ==========================================
+   CABEÇALHO DOS CARDS
+========================================== */
+
+.mes.expanded .modal-mes-card-header {
+    margin-bottom: 15px;
+}
+
+.mes.expanded .modal-mes-card-header div > span {
+    font-size: 9px;
+
+    letter-spacing: .07em;
+}
+
+.mes.expanded .modal-mes-card-header h3 {
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.mes.expanded .modal-mes-card-header > i {
+    width: 38px;
+    height: 38px;
+
+    flex: 0 0 38px;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   TEXTO "ESCOLHA UMA OPÇÃO..."
+========================================== */
+
+.mes.expanded .texto-cores {
+    margin-bottom: 14px;
+
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+
+/* ==========================================
+   BOTÕES DE REGISTRO
+========================================== */
+
+.mes.expanded .botoes-cores {
+    gap: 9px;
+}
+
+.mes.expanded .cor-item {
+    min-height: 66px;
+
+    padding: 9px 5px;
+
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.mes.expanded .cor-item span {
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.mes.expanded .btn-cor {
+    width: 26px;
+    height: 26px;
+}
+
+
+/* ==========================================
+   FREQUÊNCIA MÍNIMA
+========================================== */
+
+.mes.expanded .linha-meta {
+    gap: 15px;
+}
+
+.mes.expanded .linha-meta label {
+    max-width: none;
+
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.mes.expanded .meta-input-wrap {
+    width: 90px;
+    flex-shrink: 0;
+}
+
+.mes.expanded .meta-input-wrap input {
+    height: 38px;
+
+    padding-left: 11px;
+    padding-right: 28px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.mes.expanded .meta-input-wrap span {
+    right: 11px;
+
+    font-size: 10px;
+}
+
+
+/* ==========================================
+   BARRA DE FREQUÊNCIA
+========================================== */
+
+.mes.expanded .linha-progress {
+    margin-top: 15px;
+
+    gap: 12px;
+}
+
+.mes.expanded .progress-wrap {
+    height: 9px;
+}
+
+.mes.expanded .label-presenca {
+    min-width: 40px;
+
+    text-align: right;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   TEXTOS DE FREQUÊNCIA
+========================================== */
+
+.mes.expanded .meta-status-mes,
+.mes.expanded .faltas-restantes-mes {
+    margin-top: 13px;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.mes.expanded .faltas-restantes-mes {
+    margin-top: 12px;
+}
+
+
+/* ==========================================
+   RESUMOS
+========================================== */
+
+.mes.expanded .resumos {
+    margin-top: 16px;
+
+    gap: 8px;
+}
+
+.mes.expanded .resumos > span {
+    min-height: 55px;
+
+    padding: 9px 6px;
+
+    justify-content: center;
+}
+
+.mes.expanded .resumos b {
+    font-size: 8px;
+    line-height: 1.3;
+}
+
+.mes.expanded .resumos em {
+    font-size: 15px;
+}
+
+
+/* ==========================================
+   MINI AGENDA DO DIA
+========================================== */
+
+.mes.expanded .mini-agenda {
+    margin-top: 18px;
+    margin-bottom: 10px;
+}
+
+.mes.expanded .mini-agenda .agenda-data {
+    font-size: 17px;
+}
+
+.mes.expanded .agenda-opcoes {
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.mes.expanded .agenda-opcoes button {
+    min-height: 36px;
+
+    padding: 8px 13px;
+
+    font-size: 11px;
+}
+
+.mes.expanded .agenda-notas {
+    min-height: 135px;
+
+    padding: 13px;
+
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.mes.expanded .agenda-salvar {
+    min-height: 38px;
+
+    padding: 8px 15px;
+
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ==========================================
+   DARK MODE
+========================================== */
+
+body.dark-mode
+.mes.expanded
+.info-mes {
+    scrollbar-color: #4f739d transparent;
+}
+
+body.dark-mode
+.mes.expanded
+.info-mes::-webkit-scrollbar-thumb {
+    background: #4f739d;
+}
+
+body.dark-mode
+.mes.expanded
+.info-mes::-webkit-scrollbar-thumb:hover {
+    background: #648ab5;
+}
+
+
+/* ==========================================
+   TELAS MENORES
+========================================== */
+
+@media (max-width: 1100px) {
+
+    .mes.expanded .info-mes {
+        padding:
+            16px 16px 28px;
+    }
+
+    .mes.expanded .modal-mes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .mes.expanded .botoes-cores {
+        grid-template-columns:
+            repeat(5, minmax(0, 1fr));
+    }
+
+}
+
+
+@media (max-width: 850px) {
+
+    .mes.expanded .info-mes {
+        max-height:
+            calc(100vh - 20px);
+    }
+
+    .mes.expanded .meta-status-mes,
+    .mes.expanded .faltas-restantes-mes {
+        font-size: 11px;
+    }
+
+}
+
+/* ==========================================
+   MODAL DO MÊS — PAINÉIS UM EMBAIXO DO OUTRO
+========================================== */
+
+.mes.expanded .modal-mes-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+}
+
+
+/* ==========================================
+   REGISTRO / SELETOR DE CORES
+========================================== */
+
+.mes.expanded .botoes-cores {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.mes.expanded .cor-item {
+    min-height: 68px;
+    padding: 10px 6px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+}
+
+.mes.expanded .btn-cor {
+    width: 28px;
+    height: 28px;
+}
+
+.mes.expanded .cor-item span {
+    font-size: 10px;
+    font-weight: 500;
+}
+
+
+/* ==========================================
+   RESUMO DE FREQUÊNCIA
+========================================== */
+
+.mes.expanded .painel-metas {
+    width: 100%;
+}
+
+.mes.expanded .linha-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 16px;
+}
+
+.mes.expanded .linha-meta label {
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.mes.expanded .meta-input-wrap {
+    width: 90px;
+    flex-shrink: 0;
+}
+
+.mes.expanded .linha-progress {
+    margin-top: 14px;
+}
+
+.mes.expanded .meta-status-mes,
+.mes.expanded .faltas-restantes-mes {
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   CARDS DO RESUMO
+========================================== */
+
+.mes.expanded .resumos {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    gap: 9px;
+    margin-top: 16px;
+}
+
+.mes.expanded .resumos > span {
+    min-height: 58px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+/* ==========================================
+   TELAS MENORES
+========================================== */
+
+@media (max-width: 650px) {
+
+    .mes.expanded .botoes-cores {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+    .mes.expanded .resumos {
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+}
+
+/* ==========================================
+   FREQUÊNCIA ANUAL — VISUAL MAIS LIMPO
+========================================== */
+
+.frequencia-anual {
+    max-width: 1320px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.freq-anual-topo {
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.freq-eyebrow {
+    margin-bottom: 4px;
+    font-size: 10px;
+    letter-spacing: .08em;
+}
+
+.freq-anual-topo h1 {
+    margin: 0 0 4px;
+    font-size: 22px;
+    line-height: 1.2;
+}
+
+.freq-anual-topo p {
+    font-size: 13px;
+    line-height: 1.45;
+    max-width: 620px;
+}
+
+.freq-risco {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+
+/* ==========================================
+   CONFIGURAÇÃO MAIS ENXUTA
+========================================== */
+
+.freq-config-card {
+    padding: 18px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+}
+
+.freq-config-header {
+    margin-bottom: 12px;
+}
+
+.freq-config-header h2 {
+    font-size: 15px;
+    margin: 0 0 2px;
+}
+
+.freq-config-header p {
+    font-size: 11px;
+}
+
+.freq-config-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.freq-field > span {
+    margin-bottom: 5px;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.freq-field input {
+    height: 42px;
+    padding: 9px 11px;
+    font-size: 12px;
+    border-radius: 10px;
+}
+
+.freq-input-suffix b {
+    font-size: 12px;
+}
+
+.freq-config-erro {
+    margin-top: 10px;
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   RESUMO MAIS LIMPO
+========================================== */
+
+.freq-resumo-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.freq-stat {
+    padding: 14px 15px;
+    gap: 12px;
+    border-radius: 12px;
+}
+
+.freq-stat-icon {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 40px;
+    border-radius: 10px;
+    font-size: 14px;
+}
+
+.freq-stat-value {
+    font-size: 18px;
+    line-height: 1.1;
+}
+
+.freq-stat-value.freq-stat-text {
+    font-size: 13px;
+    line-height: 1.35;
+    white-space: normal;
+}
+
+.freq-stat-label {
+    margin-top: 4px;
+    font-size: 10px;
+    line-height: 1.35;
+}
+
+
+/* ==========================================
+   BLOCO DE FREQUÊNCIA MÍNIMA
+========================================== */
+
+.freq-meta-card {
+    padding: 16px;
+    margin-bottom: 16px;
+    border-radius: 14px;
+}
+
+.freq-meta-title {
+    align-items: flex-start;
+    gap: 16px;
+}
+
+.freq-meta-title strong {
+    font-size: 14px;
+    line-height: 1.35;
+}
+
+.freq-meta-title span {
+    margin-top: 3px;
+    font-size: 11px;
+    line-height: 1.45;
+}
+
+.freq-meta-percent {
+    font-size: 17px !important;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.freq-progress-track {
+    height: 10px;
+    margin: 12px 0;
+    border-radius: 999px;
+}
+
+.freq-meta-mensagens {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.freq-meta-mensagens p {
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* ==========================================
+   PROJEÇÃO MAIS ORGANIZADA
+========================================== */
+
+.freq-projecao-card {
+    margin-top: 0;
+    padding: 16px;
+    border-radius: 14px;
+}
+
+.freq-projecao-header {
+    margin-bottom: 14px;
+}
+
+.freq-projecao-eyebrow {
+    font-size: 10px;
+    margin-bottom: 3px;
+}
+
+.freq-projecao-header h3 {
+    font-size: 15px;
+    line-height: 1.35;
+}
+
+.freq-projecao-header > i {
+    width: 36px;
+    height: 36px;
+    flex: 0 0 36px;
+    font-size: 13px;
+    border-radius: 10px;
+}
+
+.freq-projecao-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 12px;
+}
+
+.freq-projecao-item {
+    padding: 13px 14px;
+    border-radius: 10px;
+}
+
+.freq-projecao-valor {
+    font-size: 17px;
+    line-height: 1.1;
+}
+
+.freq-projecao-label {
+    margin-top: 5px;
+    font-size: 10px;
+    line-height: 1.45;
+}
+
+.freq-projecao-aviso {
+    margin-top: 13px;
+    padding: 11px 13px;
+    gap: 9px;
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+
+/* ==========================================
+   LEGENDA MAIS DISCRETA
+========================================== */
+
+.freq-legenda {
+    margin-top: 12px;
+    gap: 8px 12px;
+    font-size: 10px;
+    opacity: .92;
+}
+
+.freq-legenda strong {
+    font-size: 10px;
+}
+
+.legenda-dot {
+    width: 7px;
+    height: 7px;
+}
+
+
+/* ==========================================
+   HIERARQUIA VISUAL
+========================================== */
+
+.freq-config-card,
+.freq-projecao-card {
+    background: rgba(255, 255, 255, .03);
+}
+
+.freq-meta-card {
+    background: linear-gradient(
+        135deg,
+        rgba(56, 165, 255, .08),
+        rgba(56, 165, 255, .03)
+    );
+}
+
+.freq-projecao-item.destaque {
+    box-shadow: inset 0 0 0 1px rgba(56, 165, 255, .20);
+}
+
+
+/* ==========================================
+   RESPONSIVO
+========================================== */
+
+@media (max-width: 1200px) {
+
+    .freq-config-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .freq-resumo-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .freq-projecao-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+}
+
+@media (max-width: 780px) {
+
+    .frequencia-anual {
+        padding: 16px;
+    }
+
+    .freq-anual-topo {
+        align-items: flex-start;
+    }
+
+    .freq-config-grid,
+    .freq-resumo-grid,
+    .freq-projecao-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .freq-meta-title {
+        flex-direction: column;
+        align-items: flex-start;
     }
 
 }

@@ -339,47 +339,62 @@ function gerarCalendario(
 
         echo "    <div class='toolbar-cal'>";
         echo "      <div class='lado-a'>";
-        echo "        <label>Ano:</label>";
+        echo "        <span class='toolbar-label'>Ano</span>";
         echo "        <select class='anoSelect'></select>";
         echo "      </div>";
         echo "      <div class='lado-b'>";
-        echo "        <button class='btn-exportar-png' title='Exportar PNG'>Exportar PNG</button>";
-        echo "        <button class='btn-imprimir' title='Imprimir mês'>Imprimir</button>";
+        echo "        <button class='btn-exportar-png' title='Exportar PNG'><i class='fa-regular fa-image'></i><span>PNG</span></button>";
+        echo "        <button class='btn-imprimir' title='Imprimir mês'><i class='fa-solid fa-print'></i><span>Imprimir</span></button>";
         echo "      </div>";
         echo "    </div>";
 
-        echo "    <div class='bloco-cores'>";
-        echo "      <p class='texto-cores'>Selecione uma opção e depois clique no dia:</p>";
-        echo "      <div class='botoes-cores'>";
-        echo "        <div class='cor-item'><button class='btn-cor' data-cor='vermelho' style='background:#e74c3c'></button><span>Faltou</span></div>";
-        echo "        <div class='cor-item'><button class='btn-cor' data-cor='amarelo' style='background:#f1c40f'></button><span>Atestado</span></div>";
-        echo "        <div class='cor-item'><button class='btn-cor' data-cor='sem-aula' style='background:#f39c12'></button><span>Sem aula</span></div>";
-        echo "        <div class='cor-item'><button class='btn-cor' data-cor='roxo' style='background:#8e44ad'></button><span>Prova</span></div>";
-        echo "        <div class='cor-item'><button class='btn-cor limpar' data-cor='limpar' style='background:#bdc3c7'></button><span>Limpar</span></div>";
-        echo "      </div>";
-        echo "    </div>";
+        echo "    <div class='modal-mes-grid'>";
 
-        echo "    <div class='painel-metas'>";
-        echo "      <div class='linha'>";
-        echo "        <label>Meta de presença do mês (%):</label>";
-        echo "        <input class='meta-presenca' type='number' min='0' max='100' value='80'>";
-        echo "      </div>";
+        echo "      <section class='modal-mes-card'>";
+        echo "        <div class='modal-mes-card-header'>";
+        echo "          <div><span>Registro</span><h3>Marcar no calendário</h3></div>";
+        echo "          <i class='fa-solid fa-calendar-check'></i>";
+        echo "        </div>";
 
-        echo "      <div class='linha linha-progress'>";
-        echo "        <div class='progress-wrap'><div class='progress-bar'></div></div>";
-        echo "        <span class='label-presenca'>0%</span>";
-        echo "      </div>";
+        echo "        <div class='bloco-cores'>";
+        echo "          <p class='texto-cores'>Escolha uma opção e depois clique no dia desejado.</p>";
+        echo "          <div class='botoes-cores'>";
+        echo "            <div class='cor-item'><button class='btn-cor' data-cor='vermelho' style='background:#e74c3c'></button><span>Faltou</span></div>";
+        echo "            <div class='cor-item'><button class='btn-cor' data-cor='amarelo' style='background:#f1c40f'></button><span>Atestado</span></div>";
+        echo "            <div class='cor-item'><button class='btn-cor' data-cor='sem-aula' style='background:#f39c12'></button><span>Sem aula</span></div>";
+        echo "            <div class='cor-item'><button class='btn-cor' data-cor='roxo' style='background:#8e44ad'></button><span>Prova</span></div>";
+        echo "            <div class='cor-item'><button class='btn-cor limpar' data-cor='limpar' style='background:#bdc3c7'></button><span>Limpar</span></div>";
+        echo "          </div>";
+        echo "        </div>";
+        echo "      </section>";
 
-        echo "      <p class='meta-status-mes'></p>";
-        echo "      <p class='faltas-restantes-mes'></p>";
+        echo "      <section class='modal-mes-card'>";
+        echo "        <div class='modal-mes-card-header'>";
+        echo "          <div><span>Resumo</span><h3>Frequência do mês</h3></div>";
+        echo "          <i class='fa-solid fa-chart-simple'></i>";
+        echo "        </div>";
 
-        echo "      <div class='resumos'>";
-        echo "        <span><b>Presenças</b>: <span class='count-presenca'>0</span></span>";
-        echo "        <span><b>Faltas</b>: <span class='count-falta'>0</span></span>";
-        echo "        <span><b>Atestados</b>: <span class='count-atestado'>0</span></span>";
-        echo "        <span><b>Sem aula</b>: <span class='count-semaula'>0</span></span>";
-        echo "        <span><b>Provas</b>: <span class='count-prova'>0</span></span>";
-        echo "      </div>";
+        echo "        <div class='painel-metas'>";
+        echo "          <div class='linha linha-meta'>";
+        echo "            <label>Frequência mínima exigida</label>";
+        echo "            <div class='meta-input-wrap'><input class='meta-presenca' type='number' min='0' max='100' value='80'><span>%</span></div>";
+        echo "          </div>";
+        echo "          <div class='linha linha-progress'>";
+        echo "            <div class='progress-wrap'><div class='progress-bar'></div></div>";
+        echo "            <span class='label-presenca'>0%</span>";
+        echo "          </div>";
+        echo "          <p class='meta-status-mes'></p>";
+        echo "          <p class='faltas-restantes-mes'></p>";
+        echo "          <div class='resumos'>";
+        echo "            <span><b>Presenças</b><em class='count-presenca'>0</em></span>";
+        echo "            <span><b>Faltas</b><em class='count-falta'>0</em></span>";
+        echo "            <span><b>Atestados</b><em class='count-atestado'>0</em></span>";
+        echo "            <span><b>Sem aula</b><em class='count-semaula'>0</em></span>";
+        echo "            <span><b>Provas</b><em class='count-prova'>0</em></span>";
+        echo "          </div>";
+        echo "        </div>";
+        echo "      </section>";
+
         echo "    </div>";
 
         echo "    <div class='mini-agenda'>";
@@ -676,7 +691,7 @@ function gerarCalendario(
                         <label class="freq-field">
 
                             <span>
-                                Meta anual de presença
+                                Frequência mínima exigida
                             </span>
 
                             <div class="freq-input-suffix">
@@ -897,7 +912,7 @@ function gerarCalendario(
                 </div>
 
 
-                <!-- META ANUAL -->
+                <!-- FREQUÊNCIA MÍNIMA ANUAL -->
 
                 <div class="freq-meta-card">
 
@@ -906,11 +921,11 @@ function gerarCalendario(
                         <div>
 
                             <strong>
-                                Meta anual
+                                Frequência mínima exigida no ano
                             </strong>
 
                             <span id="freq-meta-resumo">
-                                Meta: 80% · Atual: 0%
+                                Mínimo exigido: 80% · Frequência atual: 0%
                             </span>
 
                         </div>
@@ -939,7 +954,7 @@ function gerarCalendario(
                     <div class="freq-meta-mensagens">
 
                         <p id="freq-diferenca-meta">
-                            Configure o período letivo para acompanhar a meta.
+                            Configure o período letivo para acompanhar a frequência mínima.
                         </p>
 
                         <p id="freq-faltas-restantes">
