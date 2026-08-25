@@ -1,37 +1,77 @@
 /* =====================================================
-   dark_notas.css
-   Modo escuro harmonizado com Calendário e Pomodoro
+   dark_notas.css - CORREÇÃO COMPLETA
 ===================================================== */
-
-/* Header, menu, footer e estrutura geral
-   continuam sendo controlados pelo dark_base.css */
 
 :root {
   --dark-bg: #0f172a;
   --dark-surface: #1e293b;
+  --dark-surface-card: #1e293b;
   --dark-primary: #669ada;
   --dark-primary-hover: #7aa9df;
   --dark-text: #e2e8f0;
   --dark-text-soft: #94a3b8;
   --dark-border: #334155;
-  --dark-hover: #334155;
+  --dark-hover: #2a3a4f;
 }
 
 /* =========================
    FUNDO PRINCIPAL
 ========================= */
 
-body.dark-mode {
+body.dark-mode,
+body.dark-mode .main-content,
+body.dark-mode .container {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
 }
 
-body.dark-mode .main-content {
+/* =========================
+   CABEÇALHO DO BOLETIM
+========================= */
+
+body.dark-mode .boletim-topo {
+  background: transparent !important;
+}
+
+body.dark-mode .boletim-titulo h1 {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .boletim-titulo p {
+  color: var(--dark-text-soft) !important;
+}
+
+body.dark-mode .boletim-eyebrow {
+  color: var(--dark-primary) !important;
+}
+
+/* =========================
+   SELETOR RÁPIDO DE PERÍODO
+========================= */
+
+body.dark-mode .periodo-rapido {
+  background: var(--dark-surface) !important;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .periodo-rapido label {
+  color: var(--dark-text-soft) !important;
+}
+
+body.dark-mode .periodo-rapido select {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
-  transition:
-    background-color 0.2s ease,
-    color 0.2s ease;
+  border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .periodo-rapido select:focus {
+  border-color: var(--dark-primary) !important;
+  box-shadow: 0 0 0 3px rgba(102, 154, 218, 0.2) !important;
+}
+
+body.dark-mode .periodo-rapido select option {
+  background: var(--dark-bg) !important;
+  color: var(--dark-text) !important;
 }
 
 /* =========================
@@ -45,20 +85,11 @@ body.dark-mode .card-notas {
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Barra decorativa do primeiro card */
 body.dark-mode .card-notas:first-of-type::before {
   background: var(--dark-primary) !important;
 }
 
-/* =========================
-   TÍTULOS E TEXTOS
-========================= */
-
-body.dark-mode .titulo-tabela,
-body.dark-mode .card-notas h1,
-body.dark-mode .card-notas h2,
-body.dark-mode .card-notas h3,
-body.dark-mode .card-notas h4 {
+body.dark-mode .titulo-tabela {
   color: var(--dark-text) !important;
 }
 
@@ -66,29 +97,38 @@ body.dark-mode .sub-notas {
   color: var(--dark-text-soft) !important;
 }
 
-body.dark-mode .main-content p,
-body.dark-mode .main-content span,
-body.dark-mode .main-content label,
-body.dark-mode .main-content small,
-body.dark-mode .main-content strong,
-body.dark-mode .main-content b {
+body.dark-mode .pill-tipo {
+  background: rgba(102, 154, 218, 0.2) !important;
+  color: var(--dark-primary) !important;
+  border: 1px solid rgba(102, 154, 218, 0.3) !important;
+}
+
+/* =========================
+   CONFIGURAÇÕES
+========================= */
+
+body.dark-mode .config-header {
+  border-bottom: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .config-form {
+  background: transparent !important;
+}
+
+/* Grupo de tipo de curso */
+body.dark-mode .tipo-curso-group {
   color: var(--dark-text) !important;
 }
 
-/* =========================
-   PÍLULA DO TIPO DE CURSO
-========================= */
-
-body.dark-mode .pill-tipo {
-  background: rgba(102, 154, 218, 0.22) !important;
-  color: #dbeafe !important;
-  border: 1px solid rgba(102, 154, 218, 0.5) !important;
+body.dark-mode .tipo-curso-group label {
+  color: var(--dark-text) !important;
 }
 
-/* =========================
-   CAMPOS DE CONFIGURAÇÃO
-========================= */
+body.dark-mode .tipo-curso-group input[type="radio"] {
+  accent-color: var(--dark-primary) !important;
+}
 
+/* Campos de configuração */
 body.dark-mode .config-field label,
 body.dark-mode .config-field-periodo label {
   color: var(--dark-text) !important;
@@ -96,36 +136,24 @@ body.dark-mode .config-field-periodo label {
 
 body.dark-mode .config-field input,
 body.dark-mode .config-field-periodo select,
-body.dark-mode .config-field-periodo input,
-body.dark-mode .main-content input[type="text"],
-body.dark-mode .main-content input[type="number"],
-body.dark-mode .main-content select {
+body.dark-mode .config-field-periodo input {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
   border: 1px solid var(--dark-border) !important;
 }
 
-body.dark-mode .config-field input::placeholder,
-body.dark-mode .config-field-periodo input::placeholder,
-body.dark-mode .main-content input::placeholder {
-  color: var(--dark-text-soft) !important;
-}
-
 body.dark-mode .config-field input:focus,
 body.dark-mode .config-field-periodo select:focus,
-body.dark-mode .config-field-periodo input:focus,
-body.dark-mode .main-content input[type="text"]:focus,
-body.dark-mode .main-content input[type="number"]:focus,
-body.dark-mode .main-content select:focus {
+body.dark-mode .config-field-periodo input:focus {
   background: var(--dark-bg) !important;
   border-color: var(--dark-primary) !important;
   box-shadow: 0 0 0 3px rgba(102, 154, 218, 0.2) !important;
   outline: none !important;
 }
 
-body.dark-mode select option {
-  background: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .config-field input::placeholder,
+body.dark-mode .config-field-periodo input::placeholder {
+  color: var(--dark-text-soft) !important;
 }
 
 /* =========================
@@ -142,68 +170,20 @@ body.dark-mode .btn-config {
 body.dark-mode .btn-config:hover {
   background: var(--dark-primary-hover) !important;
   color: #ffffff !important;
-  filter: none !important;
   transform: translateY(-1px);
 }
 
-/* =========================
-   BOTÕES DA ÁREA DE NOTAS
-========================= */
-
-body.dark-mode
-.buttons-notas
-button:not(.btn-destaque):not([name="limpar_tudo"]) {
-  background: var(--dark-primary) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 5px 14px rgba(102, 154, 218, 0.25) !important;
-}
-
-body.dark-mode
-.buttons-notas
-button:not(.btn-destaque):not([name="limpar_tudo"]):hover {
-  background: var(--dark-primary-hover) !important;
-  filter: none !important;
-}
-
-/* Botão principal */
-body.dark-mode .btn-destaque {
-  background: var(--dark-primary) !important;
-  color: #ffffff !important;
-  border: none !important;
-  box-shadow: 0 5px 14px rgba(102, 154, 218, 0.3) !important;
-}
-
-body.dark-mode .btn-destaque:hover {
-  background: var(--dark-primary-hover) !important;
-}
-
-/* Botão limpar tudo */
-body.dark-mode .buttons-notas button[name="limpar_tudo"] {
-  background: #7f1d1d !important;
-  color: #fee2e2 !important;
-  border: 1px solid #991b1b !important;
-  box-shadow: none !important;
-}
-
-body.dark-mode .buttons-notas button[name="limpar_tudo"]:hover {
-  background: #991b1b !important;
-}
-
-/* Botão limpar linha */
-body.dark-mode .btn-linha {
-  background: #374151 !important;
-  color: var(--dark-text) !important;
-  border: 1px solid var(--dark-border) !important;
-}
-
-body.dark-mode .btn-linha:hover {
-  background: #4b5563 !important;
+body.dark-mode .btn-config:active {
+  transform: scale(0.97);
 }
 
 /* =========================
    TABELA DE NOTAS
 ========================= */
+
+body.dark-mode .table-scroll {
+  border-color: var(--dark-border) !important;
+}
 
 body.dark-mode .tabela-notas {
   background: var(--dark-surface) !important;
@@ -211,23 +191,32 @@ body.dark-mode .tabela-notas {
   border-collapse: collapse;
 }
 
-body.dark-mode .tabela-notas th,
-body.dark-mode .tabela-notas td {
+body.dark-mode .tabela-notas thead th {
+  background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
   border-color: var(--dark-border) !important;
 }
 
-body.dark-mode .tabela-notas th {
-  background: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-}
-
-body.dark-mode .tabela-notas td {
+body.dark-mode .tabela-notas tbody td {
   background: var(--dark-surface) !important;
+  color: var(--dark-text) !important;
+  border-bottom: 1px solid var(--dark-border) !important;
+  border-color: var(--dark-border) !important;
 }
 
 body.dark-mode .tabela-notas tbody tr:hover td {
   background: var(--dark-hover) !important;
+}
+
+body.dark-mode .tabela-notas tbody tr:last-child td {
+  border-bottom: none !important;
+}
+
+/* Linha vazia */
+body.dark-mode .linha-vazia td {
+  color: var(--dark-text-soft) !important;
+  background: var(--dark-surface) !important;
 }
 
 /* =========================
@@ -241,17 +230,17 @@ body.dark-mode .tabela-notas td input[type="number"] {
   border: 1px solid var(--dark-border) !important;
 }
 
-body.dark-mode .tabela-notas td input[type="text"]::placeholder,
-body.dark-mode .tabela-notas td input[type="number"]::placeholder {
-  color: var(--dark-text-soft) !important;
-}
-
 body.dark-mode .tabela-notas td input[type="text"]:focus,
 body.dark-mode .tabela-notas td input[type="number"]:focus {
   background: var(--dark-bg) !important;
   border-color: var(--dark-primary) !important;
   box-shadow: 0 0 0 3px rgba(102, 154, 218, 0.18) !important;
   outline: none !important;
+}
+
+body.dark-mode .tabela-notas td input[type="text"]::placeholder,
+body.dark-mode .tabela-notas td input[type="number"]::placeholder {
+  color: var(--dark-text-soft) !important;
 }
 
 /* Nota inválida */
@@ -266,22 +255,44 @@ body.dark-mode .input-nota.nota-invalida {
 ========================= */
 
 body.dark-mode .celula-media {
-  color: var(--dark-text) !important;
+  color: var(--dark-primary) !important;
+  background: rgba(102, 154, 218, 0.1) !important;
+}
+
+body.dark-mode .celula-status {
+  background: transparent !important;
+}
+
+body.dark-mode .badge-status {
+  padding: 6px 12px !important;
+  border-radius: 20px !important;
+  font-weight: 600 !important;
 }
 
 body.dark-mode .status-aprovado {
   background: #166534 !important;
   color: #dcfce7 !important;
+  border: 1px solid #15803d !important;
 }
 
 body.dark-mode .status-recuperacao {
   background: #854d0e !important;
   color: #fef9c3 !important;
+  border: 1px solid #a16207 !important;
 }
 
 body.dark-mode .status-reprovado {
   background: #991b1b !important;
   color: #fee2e2 !important;
+  border: 1px solid #b91c1c !important;
+}
+
+/* =========================
+   QUANTO PRECISA
+========================= */
+
+body.dark-mode .celula-precisa {
+  color: var(--dark-text) !important;
 }
 
 body.dark-mode .badge-precisa {
@@ -291,16 +302,116 @@ body.dark-mode .badge-precisa {
 body.dark-mode .badge-precisa.impossivel {
   background: #7f1d1d !important;
   color: #fee2e2 !important;
+  border: 1px solid #991b1b !important;
+  border-radius: 8px !important;
+  padding: 4px 10px !important;
+}
+
+/* =========================
+   BOTÃO LIMPAR LINHA
+========================= */
+
+body.dark-mode .btn-linha {
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+  border-radius: 8px !important;
+  padding: 8px 12px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+body.dark-mode .btn-linha:hover {
+  background: #4b5563 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+/* =========================
+   BOTÕES ABAIXO DA TABELA
+========================= */
+
+body.dark-mode .buttons-notas {
+  border-top: 1px solid var(--dark-border) !important;
+  padding-top: 18px !important;
+}
+
+body.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]) {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  padding: 10px 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 5px 14px rgba(102, 154, 218, 0.25) !important;
+}
+
+body.dark-mode .buttons-notas button:not(.btn-destaque):not([name="limpar_tudo"]):hover {
+  background: var(--dark-primary-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Botão principal Salvar */
+body.dark-mode .btn-destaque {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 9px !important;
+  padding: 10px 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  box-shadow: 0 5px 14px rgba(102, 154, 218, 0.3) !important;
+}
+
+body.dark-mode .btn-destaque:hover {
+  background: var(--dark-primary-hover) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Botão limpar tudo */
+body.dark-mode .buttons-notas button[name="limpar_tudo"] {
+  background: #7f1d1d !important;
+  color: #fee2e2 !important;
+  border: 1px solid #991b1b !important;
+  border-radius: 9px !important;
+  padding: 10px 16px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+body.dark-mode .buttons-notas button[name="limpar_tudo"]:hover {
+  background: #991b1b !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Botão remover linha vazia */
+body.dark-mode .buttons-notas button[name="remover_linha"] {
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .buttons-notas button[name="remover_linha"]:hover {
+  background: #4b5563 !important;
+  color: #ffffff !important;
 }
 
 /* =========================
    RESUMO GERAL
 ========================= */
 
+body.dark-mode .resumo-grid {
+  gap: 12px !important;
+}
+
 body.dark-mode .resumo-card {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
   border: 1px solid var(--dark-border) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
 }
 
 body.dark-mode .resumo-label {
@@ -317,10 +428,26 @@ body.dark-mode .resumo-card.aprovado {
   border-color: #15803d !important;
 }
 
+body.dark-mode .resumo-card.aprovado .resumo-label {
+  color: #bbf7d0 !important;
+}
+
+body.dark-mode .resumo-card.aprovado .resumo-valor {
+  color: #dcfce7 !important;
+}
+
 body.dark-mode .resumo-card.recuperacao {
   background: #854d0e !important;
   color: #fef9c3 !important;
   border-color: #a16207 !important;
+}
+
+body.dark-mode .resumo-card.recuperacao .resumo-label {
+  color: #fde68a !important;
+}
+
+body.dark-mode .resumo-card.recuperacao .resumo-valor {
+  color: #fef9c3 !important;
 }
 
 body.dark-mode .resumo-card.reprovado {
@@ -329,27 +456,54 @@ body.dark-mode .resumo-card.reprovado {
   border-color: #991b1b !important;
 }
 
+body.dark-mode .resumo-card.reprovado .resumo-label {
+  color: #fca5a5 !important;
+}
+
+body.dark-mode .resumo-card.reprovado .resumo-valor {
+  color: #fee2e2 !important;
+}
+
 body.dark-mode .resumo-card.geral {
-  background: rgba(102, 154, 218, 0.25) !important;
+  background: rgba(102, 154, 218, 0.2) !important;
   color: #dbeafe !important;
   border-color: var(--dark-primary) !important;
 }
 
-body.dark-mode .resumo-card.aprovado span,
-body.dark-mode .resumo-card.recuperacao span,
-body.dark-mode .resumo-card.reprovado span,
-body.dark-mode .resumo-card.geral span {
-  color: inherit !important;
+body.dark-mode .resumo-card.geral .resumo-label {
+  color: #bfdbfe !important;
+}
+
+body.dark-mode .resumo-card.geral .resumo-valor {
+  color: #dbeafe !important;
 }
 
 /* =========================
-   DICA FOAG
+   RESUMO EXTRA E DICA
 ========================= */
+
+body.dark-mode .resumo-extra {
+  color: var(--dark-text) !important;
+  border-top: 1px solid var(--dark-border) !important;
+  padding-top: 16px !important;
+  margin-top: 16px !important;
+}
+
+body.dark-mode .resumo-extra p {
+  color: var(--dark-text) !important;
+}
+
+body.dark-mode .resumo-extra strong {
+  color: var(--dark-primary) !important;
+}
 
 body.dark-mode .dica-foag {
   background: var(--dark-bg) !important;
   color: var(--dark-text) !important;
   border: 1px solid var(--dark-primary) !important;
+  border-radius: 12px !important;
+  padding: 16px !important;
+  margin-top: 16px !important;
 }
 
 body.dark-mode .dica-foag strong,
@@ -363,7 +517,7 @@ body.dark-mode .dica-foag span {
 ========================= */
 
 body.dark-mode .modal {
-  background: rgba(0, 0, 0, 0.55) !important;
+  background: rgba(0, 0, 0, 0.6) !important;
 }
 
 body.dark-mode .modal-content {
@@ -371,9 +525,9 @@ body.dark-mode .modal-content {
   color: var(--dark-text) !important;
   border: 1px solid var(--dark-border) !important;
   box-shadow: 0 18px 45px rgba(0, 0, 0, 0.65) !important;
+  border-radius: 12px !important;
 }
 
-body.dark-mode .modal-content h2,
 body.dark-mode .modal-content h3,
 body.dark-mode .modal-content h4,
 body.dark-mode .modal-content p {
@@ -381,7 +535,41 @@ body.dark-mode .modal-content p {
 }
 
 body.dark-mode .modal-content button {
-  color: #ffffff;
+  border-radius: 8px !important;
+  padding: 10px 17px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+body.dark-mode #confirm-logout {
+  background: var(--dark-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+}
+
+body.dark-mode #confirm-logout:hover {
+  background: var(--dark-primary-hover) !important;
+}
+
+body.dark-mode #cancel-logout {
+  background: #374151 !important;
+  color: var(--dark-text) !important;
+  border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+  background: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+body.dark-mode footer {
+  background: #020617 !important;
+  color: var(--dark-text-soft) !important;
+  border-top: 1px solid var(--dark-border) !important;
 }
 
 /* =========================
@@ -404,152 +592,4 @@ body.dark-mode ::-webkit-scrollbar-thumb {
 
 body.dark-mode ::-webkit-scrollbar-thumb:hover {
   background: #475569;
-}
-
-/* =====================================================
-   BOTÕES — MODO ESCURO PADRONIZADO
-===================================================== */
-
-/* Botões azuis principais */
-body.dark-mode .btn-config,
-body.dark-mode .btn-destaque,
-body.dark-mode .buttons-notas button:not(.btn-linha):not([name="limpar_tudo"]),
-body.dark-mode button[type="submit"]:not([name="limpar_tudo"]) {
-  background: #669ada !important;
-  color: #ffffff !important;
-  border: 1px solid #669ada !important;
-  border-radius: 9px !important;
-  padding: 10px 16px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  box-shadow: 0 5px 14px rgba(102, 154, 218, 0.25) !important;
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease !important;
-}
-
-/* Hover dos botões principais */
-body.dark-mode .btn-config:hover,
-body.dark-mode .btn-destaque:hover,
-body.dark-mode .buttons-notas button:not(.btn-linha):not([name="limpar_tudo"]):hover,
-body.dark-mode button[type="submit"]:not([name="limpar_tudo"]):hover {
-  background: #7aa9df !important;
-  border-color: #7aa9df !important;
-  color: #ffffff !important;
-  filter: none !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 7px 17px rgba(102, 154, 218, 0.32) !important;
-}
-
-/* Clique */
-body.dark-mode .btn-config:active,
-body.dark-mode .btn-destaque:active,
-body.dark-mode .buttons-notas button:not(.btn-linha):not([name="limpar_tudo"]):active {
-  transform: translateY(0) !important;
-  box-shadow: 0 3px 8px rgba(102, 154, 218, 0.22) !important;
-}
-
-/* Botão limpar linha */
-body.dark-mode .btn-linha {
-  background: #374151 !important;
-  color: #e2e8f0 !important;
-  border: 1px solid #475569 !important;
-  border-radius: 8px !important;
-  padding: 8px 12px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  box-shadow: none !important;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease !important;
-}
-
-body.dark-mode .btn-linha:hover {
-  background: #4b5563 !important;
-  color: #ffffff !important;
-  transform: translateY(-1px) !important;
-}
-
-/* Botão limpar tudo */
-body.dark-mode .buttons-notas button[name="limpar_tudo"] {
-  background: #7f1d1d !important;
-  color: #fee2e2 !important;
-  border: 1px solid #991b1b !important;
-  border-radius: 9px !important;
-  padding: 10px 16px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-  box-shadow: none !important;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.2s ease !important;
-}
-
-body.dark-mode .buttons-notas button[name="limpar_tudo"]:hover {
-  background: #991b1b !important;
-  color: #ffffff !important;
-  transform: translateY(-1px) !important;
-}
-
-/* Botões do modal */
-body.dark-mode .modal-content button {
-  min-width: 100px !important;
-  padding: 10px 17px !important;
-  border-radius: 8px !important;
-  font-weight: 600 !important;
-  cursor: pointer !important;
-}
-
-/* Confirmar */
-body.dark-mode .modal-content #confirm-logout,
-body.dark-mode .modal-content .btn-confirmar,
-body.dark-mode .modal-content button[type="submit"] {
-  background: #669ada !important;
-  color: #ffffff !important;
-  border: 1px solid #669ada !important;
-}
-
-body.dark-mode .modal-content #confirm-logout:hover,
-body.dark-mode .modal-content .btn-confirmar:hover,
-body.dark-mode .modal-content button[type="submit"]:hover {
-  background: #7aa9df !important;
-  border-color: #7aa9df !important;
-}
-
-/* Cancelar */
-body.dark-mode .modal-content #cancel-logout,
-body.dark-mode .modal-content .btn-cancelar,
-body.dark-mode .modal-content button[type="button"] {
-  background: #374151 !important;
-  color: #e2e8f0 !important;
-  border: 1px solid #475569 !important;
-}
-
-body.dark-mode .modal-content #cancel-logout:hover,
-body.dark-mode .modal-content .btn-cancelar:hover,
-body.dark-mode .modal-content button[type="button"]:hover {
-  background: #4b5563 !important;
-  color: #ffffff !important;
-}
-
-/* Botões desabilitados */
-body.dark-mode button:disabled {
-  background: #334155 !important;
-  color: #94a3b8 !important;
-  border-color: #475569 !important;
-  cursor: not-allowed !important;
-  box-shadow: none !important;
-  transform: none !important;
-  opacity: 0.7 !important;
-}
-
-/* Foco pelo teclado */
-body.dark-mode button:focus-visible {
-  outline: 3px solid rgba(102, 154, 218, 0.35) !important;
-  outline-offset: 2px !important;
 }
