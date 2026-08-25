@@ -870,7 +870,7 @@ nav.menu a:hover {
 }
 
 /* =====================================================
-   BOTÃO SECRETO (TESTE) — CORRIGIDO!
+   BOTÃO SECRETO (TESTE)
 ===================================================== */
 
 .botao-secreto-container {
@@ -1187,32 +1187,4 @@ footer {
     .item-card .preco {
         font-size: 14px;
     }
-}
-
-/* ============= CORREÇÃO DOS ÍCONES DO HEADER ============= */
-.header-icons {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    font-size: 22px;
-    color: #ffffff;
-    cursor: pointer;
-    user-select: none;
-}
-
-.header-icons a {
-    display: flex;
-    align-items: center;
-    color: #ffffff !important;
-    text-decoration: none;
-}
-
-.header-icons a i {
-    color: inherit !important;
-}
-
-.header-icons a:hover i,
-.header-icons i:hover {
-    color: #006cc5 !important;
-    transform: translateY(-13%) scale(1.1);
 }
