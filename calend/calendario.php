@@ -454,6 +454,20 @@ function gerarCalendario(
         href="calendario_dashboard.css"
     >
 
+    <!-- ======================================
+         ACESSIBILIDADE GLOBAL
+    ======================================= -->
+
+    <link
+        rel="stylesheet"
+        href="../acessibilidade/acessibilidade.css"
+    >
+
+    <script
+        src="../acessibilidade/acessibilidade.js?v=4"
+        defer
+    ></script>
+
     <style>
         /* Mantém o painel anual acima dos meses sem alterar o grid original */
         .calendario-area {
