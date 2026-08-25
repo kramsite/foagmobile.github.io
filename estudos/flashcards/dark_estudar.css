@@ -1,0 +1,392 @@
+/* ==========================================
+   MODO ESCURO — ESTUDAR FLASHCARD (COMPLETO)
+========================================== */
+
+body.dark-mode {
+  --fundo: #0f172a;
+  --branco: #1e293b;
+  --texto: #f1f5f9;
+  --texto-suave: #94a3b8;
+  --borda: #334155;
+  --azul: #38a5ff;
+  --azul-escuro: #1d4ed8;
+
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+
+/* ==========================================
+   CABEÇALHO E MENU
+========================================== */
+
+body.dark-mode header.cabecalho {
+  background: #0b1a2e !important;
+  border-bottom: 1px solid #334155;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.4) !important;
+}
+
+body.dark-mode .header-icons i {
+  color: #ffffff !important;
+}
+
+body.dark-mode .header-icons i:hover {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode nav.menu {
+  background: #0b1a2e !important;
+  border-right: 1px solid #334155;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode nav.menu a {
+  color: #cbd5e1 !important;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background: rgba(56, 165, 255, 0.15) !important;
+  color: #60a5fa !important;
+}
+
+/* ==========================================
+   CONTEÚDO PRINCIPAL
+========================================== */
+
+body.dark-mode main.conteudo {
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+/* ==========================================
+   NAVEGAÇÃO DO TOPO (voltar / embaralhar)
+========================================== */
+
+body.dark-mode .back-button,
+body.dark-mode .shuffle-button {
+  background: #1e293b;
+  border-color: #334155;
+  color: #60a5fa;
+}
+
+body.dark-mode .shuffle-button {
+  color: #94a3b8;
+}
+
+body.dark-mode .back-button:hover,
+body.dark-mode .shuffle-button:hover {
+  background: #263447;
+  border-color: #3b82f6;
+}
+
+/* ==========================================
+   CABEÇALHO DO BARALHO (study-header)
+========================================== */
+
+body.dark-mode .study-header {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.22);
+}
+
+body.dark-mode .study-icon {
+  background: color-mix(in srgb, var(--deck-color) 18%, #172033);
+  color: var(--deck-color);
+}
+
+body.dark-mode .study-subject {
+  color: var(--deck-color);
+}
+
+body.dark-mode .study-header h1 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .study-header p {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   ESTATÍSTICAS DA SESSÃO
+========================================== */
+
+body.dark-mode .session-stats > div {
+  background: #172033;
+  border-color: #334155;
+}
+
+body.dark-mode .session-stats strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .session-stats span {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   ÁREA DE ESTUDO / PROGRESSO
+========================================== */
+
+body.dark-mode .study-area {
+  background: #1e293b;
+  border-color: #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-mode .study-progress-header span {
+  color: #94a3b8;
+}
+
+body.dark-mode .study-progress-header strong {
+  color: #cbd5e1;
+}
+
+body.dark-mode .study-progress {
+  background: #0f172a;
+}
+
+body.dark-mode .study-progress span {
+  background: var(--deck-color);
+}
+
+/* ==========================================
+   FLASHCARD (frente / verso)
+========================================== */
+
+body.dark-mode .study-card-face {
+  background: #172033;
+  border-color: #334155;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+}
+
+body.dark-mode .study-card-face::before {
+  background: var(--deck-color);
+}
+
+body.dark-mode .study-card-back {
+  background: color-mix(in srgb, var(--deck-color) 8%, #172033);
+}
+
+body.dark-mode .face-label {
+  color: var(--deck-color);
+}
+
+body.dark-mode .study-card-text {
+  color: #e2e8f0;
+}
+
+body.dark-mode .flip-hint {
+  color: #64748b;
+}
+
+/* ==========================================
+   BOTÕES
+========================================== */
+
+body.dark-mode .btn {
+  background: #38a5ff !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode .btn:hover {
+  background: #2563eb !important;
+}
+
+body.dark-mode .btn.secondary {
+  background: #334155 !important;
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .btn.secondary:hover {
+  background: #475569 !important;
+}
+
+body.dark-mode .reveal-btn {
+  background: var(--deck-color) !important;
+}
+
+/* ==========================================
+   RESPOSTA (acertei / errei)
+========================================== */
+
+body.dark-mode .answer-actions p {
+  color: #94a3b8;
+}
+
+body.dark-mode .answer-btn.wrong {
+  background: rgba(220, 76, 76, 0.12);
+  color: #f87171;
+  border-color: rgba(248, 113, 113, 0.35);
+}
+
+body.dark-mode .answer-btn.wrong:hover {
+  background: rgba(220, 76, 76, 0.2);
+}
+
+body.dark-mode .answer-btn.correct {
+  background: rgba(52, 211, 153, 0.12);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+body.dark-mode .answer-btn.correct:hover {
+  background: rgba(52, 211, 153, 0.2);
+}
+
+/* ==========================================
+   TELA FINAL
+========================================== */
+
+body.dark-mode .finish-screen {
+  background: #1e293b;
+  border-color: #334155;
+}
+
+body.dark-mode .finish-icon {
+  background: rgba(230, 162, 60, 0.15);
+  color: #f6ad55;
+}
+
+body.dark-mode .finish-screen h2 {
+  color: #f1f5f9;
+}
+
+body.dark-mode .finish-screen > p {
+  color: #94a3b8;
+}
+
+body.dark-mode .finish-stat {
+  background: #172033;
+  border-color: #334155;
+}
+
+body.dark-mode .finish-stat strong {
+  color: #f1f5f9;
+}
+
+body.dark-mode .finish-stat span {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   ESTADO VAZIO
+========================================== */
+
+body.dark-mode .empty-study {
+  background: #172033;
+  border-color: #475569;
+}
+
+body.dark-mode .empty-study-icon {
+  background: rgba(56, 165, 255, 0.15);
+  color: #60a5fa;
+}
+
+body.dark-mode .empty-study p {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   MODAL (logout)
+========================================== */
+
+body.dark-mode .modal {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+body.dark-mode .modal-content {
+  background: #1e293b;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .modal-content p {
+  color: #94a3b8;
+}
+
+/* ==========================================
+   TOAST
+========================================== */
+
+body.dark-mode .toast {
+  background: #020617;
+  color: #f1f5f9;
+  border: 1px solid #334155;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* ==========================================
+   RODAPÉ
+========================================== */
+
+body.dark-mode footer {
+  background: #020617;
+  color: #94a3b8;
+  border-top: 1px solid #334155;
+}
+
+/* ==========================================
+   RESPONSIVIDADE
+========================================== */
+
+@media (max-width: 800px) {
+
+  body.dark-mode nav.menu {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid #334155;
+  }
+
+}
+
+/* ==========================================
+   CORREÇÕES ADICIONAIS - ESTUDAR.PHP
+   ========================================== */
+
+/* Garantir que o fundo seja escuro */
+body.dark-mode .study-wrapper {
+  background: transparent !important;
+}
+
+/* Botão Voltar */
+body.dark-mode .back-button {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  color: #60a5fa !important;
+}
+
+body.dark-mode .back-button:hover {
+  background: #263447 !important;
+  border-color: #3b82f6 !important;
+}
+
+/* Área de estudo */
+body.dark-mode .study-area {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Flashcard */
+body.dark-mode .study-card-face {
+  background: #172033 !important;
+  border-color: #334155 !important;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35) !important;
+}
+
+body.dark-mode .study-card-back {
+  background: color-mix(in srgb, var(--deck-color) 8%, #172033) !important;
+}
+
+/* Tela final */
+body.dark-mode .finish-screen {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode .finish-stat {
+  background: #172033 !important;
+  border-color: #334155 !important;
+}

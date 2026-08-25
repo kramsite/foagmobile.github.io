@@ -284,16 +284,11 @@ $icone =
         href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
         rel="stylesheet"
     >
-
-    <link
-        rel="stylesheet"
-        href="baralho.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../../m.escuro/dark_basee.css"
-    >
+<!-- Ordem correta para baralho.php -->
+<link rel="stylesheet" href="baralho.css">
+<link rel="stylesheet" href="dark_flash.css">  <!-- Adicione esta linha -->
+<link rel="stylesheet" href="../../m.escuro/dark_basee.css">
+<script src="../../m.escuro/dark-mode.js"></script>
 
 
     <script>
