@@ -138,16 +138,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
          ACESSIBILIDADE GLOBAL
     ======================================= -->
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-
-    <script
-        src="https://vlibras.gov.br/app/vlibras-plugin.js"
-        defer
-    ></script>
-
-    <script
-        src="../acessibilidade/acessibilidade.js?v=9"
-        defer
-    ></script>
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->
@@ -1725,5 +1715,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             border: 0 !important;
         }
     </style>
+
+    <!-- ======================================
+         VLIBRAS OFICIAL
+    ======================================= -->
+
+    <div vw class="enabled">
+
+        <div
+            vw-access-button
+            class="active">
+        </div>
+
+        <div vw-plugin-wrapper>
+
+            <div
+                class="vw-plugin-top-wrapper">
+            </div>
+
+        </div>
+
+    </div>
+
+    <script
+        src="https://vlibras.gov.br/app/vlibras-plugin.js">
+    </script>
+
+    <script>
+        new window.VLibras.Widget(
+            'https://vlibras.gov.br/app'
+        );
+    </script>
+
+
+    <!-- ======================================
+         ACESSIBILIDADE FOAG
+    ======================================= -->
+
+    <script
+        src="../acessibilidade/acessibilidade.js?v=13">
+    </script>
+
 </body>
 </html>

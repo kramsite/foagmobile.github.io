@@ -2,45 +2,60 @@
 // FOAG - ACESSIBILIDADE GLOBAL
 // ==========================================
 
-console.log('✅ acessibilidade.js carregou');
-
-
-// ==========================================
-// CONSTANTES
-// ==========================================
+console.log('✅ acessibilidade.js v13 carregou');
 
 const FOAG_ACESSIBILIDADE_CHAVE =
     'foag_acessibilidade';
 
-const FOAG_VLIBRAS_BASE =
-    'https://vlibras.gov.br/app';
+
+// ==========================================
+// CARREGAR CONFIGURAÇÕES
+// ==========================================
+
+function carregarAcessibilidade() {
+
+    const padrao = {
+        libras: false
+    };
+
+    const salvo =
+        localStorage.getItem(
+            FOAG_ACESSIBILIDADE_CHAVE
+        );
+
+    if (!salvo) {
+        return padrao;
+    }
+
+    try {
+
+        const dados =
+            JSON.parse(salvo);
+
+        return {
+            ...padrao,
+            ...dados
+        };
+
+    } catch (erro) {
+
+        console.error(
+            '❌ Erro ao carregar acessibilidade:',
+            erro
+        );
+
+        return padrao;
+
+    }
+
+}
 
 
 // ==========================================
-// CONFIGURAÇÃO PADRÃO
+// CONVERTER LIBRAS PARA BOOLEANO
 // ==========================================
 
-const FOAG_ACESSIBILIDADE_PADRAO = {
-    libras: false
-};
-
-
-// ==========================================
-// CONTROLE INTERNO
-// ==========================================
-
-let vlibrasInicializado = false;
-
-let tentativasVLibras = 0;
-
-const MAX_TENTATIVAS_VLIBRAS = 30;
-
-
-// ==========================================
-// CONVERTER PARA BOOLEANO
-// ==========================================
-
-function valorBooleano(valor) {
+function librasEstaAtivo(valor) {
 
     return (
         valor === true ||
@@ -53,353 +68,93 @@ function valorBooleano(valor) {
 
 
 // ==========================================
-// CARREGAR CONFIGURAÇÕES SALVAS
+// MOSTRAR / ESCONDER VLIBRAS
 // ==========================================
 
-function carregarAcessibilidadeSalva() {
+function aplicarEstadoVLibras(
+    configuracoes
+) {
 
-    let configuracoes = {
-        ...FOAG_ACESSIBILIDADE_PADRAO
-    };
-
-
-    const salvo =
-        localStorage.getItem(
-            FOAG_ACESSIBILIDADE_CHAVE
+    const ativo =
+        librasEstaAtivo(
+            configuracoes.libras
         );
 
 
-    if (!salvo) {
-
-        return configuracoes;
-
-    }
+    const widget =
+        document.querySelector('[vw]');
 
 
-    try {
+    // ======================================
+    // CONTAINER PRINCIPAL
+    // ======================================
 
-        const dadosSalvos =
-            JSON.parse(salvo);
+    if (widget) {
 
+        if (ativo) {
 
-        if (
-            dadosSalvos &&
-            typeof dadosSalvos === 'object'
-        ) {
+            widget.style.removeProperty(
+                'display'
+            );
 
-            configuracoes = {
-                ...configuracoes,
-                ...dadosSalvos
-            };
+            widget.removeAttribute(
+                'aria-hidden'
+            );
+
+        } else {
+
+            widget.style.setProperty(
+                'display',
+                'none',
+                'important'
+            );
+
+            widget.setAttribute(
+                'aria-hidden',
+                'true'
+            );
 
         }
 
-    } catch (erro) {
-
-        console.error(
-            '❌ Erro ao carregar acessibilidade:',
-            erro
-        );
-
     }
 
 
-    configuracoes.libras =
-        valorBooleano(
-            configuracoes.libras
-        );
-
-
-    return configuracoes;
-
-}
-
-
-// ==========================================
-// SALVAR CONFIGURAÇÕES
-// ==========================================
-
-function salvarAcessibilidade(
-    novasConfiguracoes
-) {
-
-    const atuais =
-        carregarAcessibilidadeSalva();
-
-
-    const configuracoes = {
-        ...atuais,
-        ...novasConfiguracoes
-    };
-
-
-    configuracoes.libras =
-        valorBooleano(
-            configuracoes.libras
-        );
-
-
-    localStorage.setItem(
-        FOAG_ACESSIBILIDADE_CHAVE,
-        JSON.stringify(
-            configuracoes
-        )
-    );
-
-
-    return configuracoes;
-
-}
-
-
-// ==========================================
-// CRIAR ESTRUTURA DO VLIBRAS
-// ==========================================
-
-function criarEstruturaVLibras() {
-
-    if (
-        document.querySelector('[vw]')
-    ) {
-
-        return;
-
-    }
-
-
-    const container =
-        document.createElement(
-            'div'
-        );
-
-
-    container.setAttribute(
-        'vw',
-        ''
-    );
-
-
-    container.classList.add(
-        'enabled'
-    );
-
-
-    container.innerHTML = `
-        <div
-            vw-access-button
-            class="active">
-        </div>
-
-        <div vw-plugin-wrapper>
-            <div class="vw-plugin-top-wrapper"></div>
-        </div>
-    `;
-
-
-    document.body.appendChild(
-        container
-    );
-
-}
-
-
-// ==========================================
-// INICIAR WIDGET DO VLIBRAS
-// ==========================================
-
-function iniciarWidgetVLibras() {
-
-    if (
-        vlibrasInicializado ||
-        window.__foagVLibrasInicializado
-    ) {
-
-        return true;
-
-    }
-
-
-    if (
-        !window.VLibras ||
-        !window.VLibras.Widget
-    ) {
-
-        return false;
-
-    }
-
-
-    try {
-
-        new window.VLibras.Widget(
-            FOAG_VLIBRAS_BASE
-        );
-
-
-        vlibrasInicializado =
-            true;
-
-
-        window.__foagVLibrasInicializado =
-            true;
-
-
-        tentativasVLibras =
-            0;
-
-
-        console.log(
-            '✅ VLibras inicializado'
-        );
-
-
-        return true;
-
-    } catch (erro) {
-
-        console.error(
-            '❌ Erro ao iniciar VLibras:',
-            erro
-        );
-
-
-        return false;
-
-    }
-
-}
-
-
-// ==========================================
-// AGUARDAR SCRIPT OFICIAL DO VLIBRAS
-// ==========================================
-
-function aguardarVLibras() {
-
-    if (
-        iniciarWidgetVLibras()
-    ) {
-
-        return;
-
-    }
-
-
-    tentativasVLibras++;
-
-
-    if (
-        tentativasVLibras >=
-        MAX_TENTATIVAS_VLIBRAS
-    ) {
-
-        console.error(
-            '❌ O script oficial do VLibras não ficou disponível.'
-        );
-
-
-        tentativasVLibras =
-            0;
-
-
-        return;
-
-    }
-
-
-    setTimeout(
-        aguardarVLibras,
-        200
-    );
-
-}
-
-
-// ==========================================
-// ATIVAR VLIBRAS
-// ==========================================
-
-function ativarVLibras() {
-
-    criarEstruturaVLibras();
-
-
-    tentativasVLibras =
-        0;
-
-
-    aguardarVLibras();
-
-}
-
-
-// ==========================================
-// DESATIVAR VLIBRAS
-// ==========================================
-
-function desativarVLibras() {
-
-    const estavaAtivo =
-        document.querySelector('[vw]')
-        !== null;
-
+    // ======================================
+    // ELEMENTOS AUXILIARES
+    // ======================================
 
     document
-        .querySelectorAll('[vw]')
+        .querySelectorAll('.vw-links')
         .forEach(
             function (elemento) {
 
-                elemento.remove();
+                if (ativo) {
+
+                    elemento.style
+                        .removeProperty(
+                            'display'
+                        );
+
+                } else {
+
+                    elemento.style
+                        .setProperty(
+                            'display',
+                            'none',
+                            'important'
+                        );
+
+                }
 
             }
         );
 
 
-    vlibrasInicializado =
-        false;
-
-
-    window.__foagVLibrasInicializado =
-        false;
-
-
-    tentativasVLibras =
-        0;
-
-
-    if (estavaAtivo) {
-
-        setTimeout(
-            function () {
-
-                window.location.reload();
-
-            },
-            150
-        );
-
-    }
-
-}
-
-
-// ==========================================
-// APLICAR CONFIGURAÇÃO SALVA
-// ==========================================
-
-function aplicarAcessibilidadeSalva() {
-
-    const configuracoes =
-        carregarAcessibilidadeSalva();
-
-
-    if (
-        configuracoes.libras === true
-    ) {
-
-        ativarVLibras();
-
-    }
+    console.log(
+        ativo
+            ? '✅ VLibras visível'
+            : '✅ VLibras oculto'
+    );
 
 }
 
@@ -409,12 +164,14 @@ function aplicarAcessibilidadeSalva() {
 // ==========================================
 
 window.atualizarAcessibilidade =
-    function (configuracoes) {
+    function (
+        novasConfiguracoes
+    ) {
 
         if (
-            !configuracoes ||
-            typeof configuracoes !==
-                'object'
+            !novasConfiguracoes ||
+            typeof novasConfiguracoes
+                !== 'object'
         ) {
 
             return;
@@ -422,63 +179,142 @@ window.atualizarAcessibilidade =
         }
 
 
-        const configuracoesSalvas =
-            salvarAcessibilidade(
-                configuracoes
+        const atuais =
+            carregarAcessibilidade();
+
+
+        const configuracoes = {
+            ...atuais,
+            ...novasConfiguracoes
+        };
+
+
+        configuracoes.libras =
+            librasEstaAtivo(
+                configuracoes.libras
             );
 
 
-        if (
-            configuracoesSalvas.libras
-            === true
-        ) {
+        // ======================================
+        // SALVAR
+        // ======================================
 
-            ativarVLibras();
+        localStorage.setItem(
+            FOAG_ACESSIBILIDADE_CHAVE,
+            JSON.stringify(
+                configuracoes
+            )
+        );
 
-        } else {
 
-            desativarVLibras();
+        // ======================================
+        // APLICAR
+        // ======================================
 
-        }
+        aplicarEstadoVLibras(
+            configuracoes
+        );
 
     };
 
 
 // ==========================================
-// AO CARREGAR A PÁGINA
+// APLICAR ESTADO SALVO
+// ==========================================
+
+function aplicarAcessibilidadeInicial() {
+
+    aplicarEstadoVLibras(
+        carregarAcessibilidade()
+    );
+
+}
+
+
+// ==========================================
+// DOM CARREGADO
 // ==========================================
 
 document.addEventListener(
     'DOMContentLoaded',
     function () {
 
-        aplicarAcessibilidadeSalva();
+        aplicarAcessibilidadeInicial();
 
     }
 );
 
 
 // ==========================================
-// AO VOLTAR PARA A PÁGINA
+// PÁGINA COMPLETAMENTE CARREGADA
+// ==========================================
+//
+// O VLibras termina a montagem no load.
+// Aplicamos novamente depois.
 // ==========================================
 
 window.addEventListener(
-    'pageshow',
+    'load',
     function () {
 
-        const configuracoes =
-            carregarAcessibilidadeSalva();
+        setTimeout(
+            function () {
+
+                aplicarAcessibilidadeInicial();
+
+            },
+            100
+        );
+
+    }
+);
 
 
-        if (
-            configuracoes.libras
-                === true &&
-            !document.querySelector('[vw]')
-        ) {
+// ==========================================
+// VLIBRAS CRIOU ELEMENTOS DEPOIS
+// ==========================================
 
-            ativarVLibras();
+const observerVLibras =
+    new MutationObserver(
+        function (mutacoes) {
+
+            const criouElemento =
+                mutacoes.some(
+                    function (mutacao) {
+
+                        return (
+                            mutacao.addedNodes &&
+                            mutacao.addedNodes
+                                .length > 0
+                        );
+
+                    }
+                );
+
+
+            if (criouElemento) {
+
+                aplicarEstadoVLibras(
+                    carregarAcessibilidade()
+                );
+
+            }
 
         }
+    );
+
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function () {
+
+        observerVLibras.observe(
+            document.body,
+            {
+                childList: true,
+                subtree: true
+            }
+        );
 
     }
 );
@@ -493,28 +329,11 @@ window.addEventListener(
     function (evento) {
 
         if (
-            evento.key !==
+            evento.key ===
             FOAG_ACESSIBILIDADE_CHAVE
         ) {
 
-            return;
-
-        }
-
-
-        const configuracoes =
-            carregarAcessibilidadeSalva();
-
-
-        if (
-            configuracoes.libras === true
-        ) {
-
-            ativarVLibras();
-
-        } else {
-
-            desativarVLibras();
+            aplicarAcessibilidadeInicial();
 
         }
 
