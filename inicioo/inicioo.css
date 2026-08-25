@@ -1470,3 +1470,155 @@ footer {
     }
 
 }
+
+/* ==========================================
+   AJUSTE FINAL DE LEGIBILIDADE
+   Mantido no final para sobrescrever os tamanhos antigos
+========================================== */
+
+/* Cabeçalho */
+.logo {
+    font-size: 30px !important;
+}
+
+.top-menu a {
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+.header-icons .link-configuracoes i,
+.header-icons .header-icon-btn i {
+    font-size: 21px !important;
+}
+
+/* Boas-vindas */
+.welcome-header h1 {
+    font-size: 34px !important;
+    line-height: 1.25 !important;
+}
+
+.subtitle {
+    font-size: 16px !important;
+}
+
+/* Estatísticas */
+.stat-number-large {
+    font-size: 28px !important;
+}
+
+.stat-label-large {
+    font-size: 14px !important;
+}
+
+.stat-icon-large {
+    font-size: 22px !important;
+}
+
+/* Motivação e dicas */
+.motivational-quote-large p {
+    font-size: 15px !important;
+}
+
+.quick-tips h3 {
+    font-size: 16px !important;
+}
+
+.quick-tips li {
+    font-size: 13px !important;
+}
+
+/* Cards da direita */
+.card-header h2 {
+    font-size: 18px !important;
+}
+
+.card-header h2 i {
+    font-size: 16px !important;
+}
+
+.metric-value {
+    font-size: 25px !important;
+}
+
+.metric-label {
+    font-size: 13px !important;
+}
+
+.progress-text {
+    font-size: 13px !important;
+}
+
+/* Anotações e lembretes */
+.note-text {
+    font-size: 14px !important;
+}
+
+.note-date {
+    font-size: 12px !important;
+}
+
+.empty-notes p,
+.empty-reminders p {
+    font-size: 14px !important;
+}
+
+.reminder-text {
+    font-size: 14px !important;
+}
+
+.reminder-time {
+    font-size: 12px !important;
+}
+
+/* Botões */
+.btn-primary,
+.btn-secondary,
+.modal-buttons button {
+    font-size: 14px !important;
+}
+
+/* Modal */
+.modal-header h3 {
+    font-size: 19px !important;
+}
+
+.modal-content h4 {
+    font-size: 15px !important;
+}
+
+#note-text {
+    font-size: 15px !important;
+}
+
+/* Responsivo */
+@media (max-width: 1050px) {
+    .top-menu a {
+        font-size: 14px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .welcome-header h1 {
+        font-size: 29px !important;
+    }
+
+    .subtitle {
+        font-size: 15px !important;
+    }
+}
+
+@media (max-width: 600px) {
+    .logo {
+        font-size: 25px !important;
+    }
+}
+
+@media (max-width: 430px) {
+    .welcome-header h1 {
+        font-size: 26px !important;
+    }
+
+    .subtitle {
+        font-size: 14px !important;
+    }
+}

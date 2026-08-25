@@ -2041,47 +2041,96 @@ if (swSaveBtn) {
 
 
       save()
-        .then((resultado) => {
+      .then((resultado) => {
 
-          console.log(
-            'Sessão salva:',
-            resultado
-          );
-
-
-          if (
-            minutes >= 1
-          ) {
-
-            mostrarMensagemEstrelas(
-
-              'Você ganhou estrelas! ⭐',
-
-              'Sessão concluída com pelo menos 30 minutos. Você ganhou +2 estrelas.',
-
-              true
-
-            );
-
-          } else {
-
-            const faltam =
-              30 - minutes;
+        console.log(
+          'Sessão salva:',
+          resultado
+        );
 
 
-            mostrarMensagemEstrelas(
+        // ======================================
+// MENSAGEM DAS ESTRELAS
+// ======================================
 
-              'Continue estudando!',
+if (
+  minutes < 30
+) {
 
-              `Sua sessão foi salva, mas você precisa estudar mais ${faltam} minuto${faltam === 1 ? '' : 's'} para acumular estrelas pelo cronômetro.`,
+  const faltam =
+    30 - minutes;
 
-              false
 
-            );
+  mostrarMensagemEstrelas(
 
-          }
+    'Continue estudando!',
 
-        })
+    `Sua sessão foi salva, mas você precisa estudar mais ${faltam} minuto${faltam === 1 ? '' : 's'} para acumular estrelas pelo cronômetro.`,
+
+    false
+
+  );
+
+}
+
+else if (
+  resultado.limite_diario_atingido
+) {
+
+  mostrarMensagemEstrelas(
+
+    'Sessão salva! 📚',
+
+    'Você já recebeu estrelas pelas 3 sessões permitidas hoje. Continue estudando: seu tempo ainda conta para os bônus de 2h e 4h.',
+
+    false
+
+  );
+
+}
+
+else if (
+  Number(
+    resultado.estrelas_sessoes || 0
+  ) > 0
+) {
+
+  mostrarMensagemEstrelas(
+
+    'Você ganhou estrelas! ⭐',
+
+    `Sessão concluída! Você ganhou +${resultado.estrelas_sessoes} estrelas.`,
+
+    true
+
+  );
+
+}
+
+
+        // ======================================
+        // ZERAR CRONÔMETRO APÓS SALVAR
+        // ======================================
+
+        swRunning = false;
+
+        clearInterval(
+          swTimer
+        );
+
+        swTimer = null;
+
+        swElapsed = 0;
+
+        swStartAt = null;
+
+        swLaps.length = 0;
+
+        renderStopwatch();
+
+        renderLaps();
+
+      })
         .catch(() => {
 
           alert(

@@ -228,11 +228,12 @@ require_once(
 // PROCESSAR ESTRELAS
 // ==========================================
 
-processarEstrelasPomodoro(
-    $codigoUsuario,
-    $dadosAnteriores,
-    $entrada
-);
+$resultadoEstrelas =
+    processarEstrelasPomodoro(
+        $codigoUsuario,
+        $dadosAnteriores,
+        $entrada
+    );
 
 
 // ==========================================
@@ -258,6 +259,30 @@ echo json_encode(
 
         'estrelas' =>
             $pontos['estrelas']
+            ?? 0,
+
+        'estrelas_sessoes' =>
+            $resultadoEstrelas[
+                'estrelas_sessoes'
+            ]
+            ?? 0,
+
+        'estrelas_bonus' =>
+            $resultadoEstrelas[
+                'estrelas_bonus'
+            ]
+            ?? 0,
+
+        'limite_diario_atingido' =>
+            $resultadoEstrelas[
+                'limite_diario_atingido'
+            ]
+            ?? false,
+
+        'sessoes_premiadas_hoje' =>
+            $resultadoEstrelas[
+                'sessoes_premiadas_hoje'
+            ]
             ?? 0
     ],
 

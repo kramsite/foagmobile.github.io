@@ -2,31 +2,31 @@
     "estrelas": 6,
     "historico": [
         {
-            "id": "estrela_6c1ab46fc5c1",
+            "id": "estrela_d63d0474bd6e",
             "tipo": "cronometro",
             "descricao": "Sessão de 30 minutos ou mais no cronômetro",
             "estrelas": 2,
-            "data": "2026-08-25 15:59:00",
-            "timestamp": 1787666340,
-            "chave": "cronometro_3a82057a-a937-4307-ad09-3ef2cf914388"
+            "data": "2026-08-25 16:56:48",
+            "timestamp": 1787669808,
+            "chave": "cronometro_d49d4859-28ec-4ab7-8f2d-d1be701372ca"
         },
         {
-            "id": "estrela_6f6c16738ec2",
+            "id": "estrela_8955f738e41b",
             "tipo": "cronometro",
             "descricao": "Sessão de 30 minutos ou mais no cronômetro",
             "estrelas": 2,
-            "data": "2026-08-25 15:59:09",
-            "timestamp": 1787666349,
-            "chave": "cronometro_b5adaf1e-6846-4852-85db-27e4e114570d"
+            "data": "2026-08-25 16:58:12",
+            "timestamp": 1787669892,
+            "chave": "cronometro_93afd090-bece-40bd-b495-27c099431fb4"
         },
         {
-            "id": "estrela_db7d1edb337b",
+            "id": "estrela_5a39b03826ab",
             "tipo": "cronometro",
             "descricao": "Sessão de 30 minutos ou mais no cronômetro",
             "estrelas": 2,
-            "data": "2026-08-25 16:01:43",
-            "timestamp": 1787666503,
-            "chave": "cronometro_f63c0a53-3225-4a85-9497-93779e785ca3"
+            "data": "2026-08-25 16:59:34",
+            "timestamp": 1787669974,
+            "chave": "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
         }
     ],
     "controle": {
@@ -54,9 +54,9 @@
             "marcos_recebidos": []
         },
         "recompensas_recebidas": [
-            "cronometro_3a82057a-a937-4307-ad09-3ef2cf914388",
-            "cronometro_b5adaf1e-6846-4852-85db-27e4e114570d",
-            "cronometro_f63c0a53-3225-4a85-9497-93779e785ca3"
+            "cronometro_d49d4859-28ec-4ab7-8f2d-d1be701372ca",
+            "cronometro_93afd090-bece-40bd-b495-27c099431fb4",
+            "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
         ]
     }
 }

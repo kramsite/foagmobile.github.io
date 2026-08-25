@@ -16,18 +16,6 @@
     ],
     "sessions": [
         {
-            "ts": 1787066836648,
-            "minutes": 1,
-            "mode": "focus",
-            "discipline": "matematica"
-        },
-        {
-            "ts": 1787066843511,
-            "minutes": 1,
-            "mode": "focus",
-            "discipline": "Geral"
-        },
-        {
             "ts": 1787066899656,
             "minutes": 2,
             "mode": "focus",
@@ -68,20 +56,36 @@
             "discipline": "Quimica"
         },
         {
-            "id": "b5adaf1e-6846-4852-85db-27e4e114570d",
-            "ts": 1787666349640,
+            "id": "d49d4859-28ec-4ab7-8f2d-d1be701372ca",
+            "ts": 1787669808235,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "matematica"
+        },
+        {
+            "id": "93afd090-bece-40bd-b495-27c099431fb4",
+            "ts": 1787669892330,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "biologia"
+        },
+        {
+            "id": "a3a7e974-a6c7-4a13-ba46-aaa392a5e25b",
+            "ts": 1787669974834,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Historia"
+        },
+        {
+            "id": "40524c37-85d0-4eb9-8407-9153ba2d3e4d",
+            "ts": 1787670041698,
             "minutes": 1,
             "mode": "focus",
             "source": "cronometro",
             "discipline": "Quimica"
-        },
-        {
-            "id": "f63c0a53-3225-4a85-9497-93779e785ca3",
-            "ts": 1787666503848,
-            "minutes": 3,
-            "mode": "focus",
-            "source": "cronometro",
-            "discipline": "Inglês"
         }
     ],
     "goals": {
