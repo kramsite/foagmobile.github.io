@@ -1,0 +1,211 @@
+/* ==================== dark_comunidade.css ==================== */
+/* Estilos específicos para a página Comunidade no modo escuro */
+
+body.dark-mode .chat-card {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode .chat-header {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .chat-header h2 {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .chat-header p {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .chat-stats {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-form {
+    background: var(--dark-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-form textarea {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-form textarea:focus {
+    border-color: var(--dark-primary-light) !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+}
+
+body.dark-mode .pergunta-form textarea::placeholder {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-form .form-actions select {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-form .form-actions select:focus {
+    border-color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .btn-postar {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .btn-postar:hover {
+    background: #2563eb !important;
+}
+
+body.dark-mode .pergunta-item {
+    background: var(--dark-surface) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-autor .nome {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-autor .data {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-materia {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-texto {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes button {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes button:hover {
+    background: var(--dark-border) !important;
+    color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .respostas-container {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-item {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-item .resposta-autor .nome {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .resposta-item .resposta-autor .data {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .resposta-item .resposta-texto {
+    color: #cbd5e1 !important;
+}
+
+body.dark-mode .resposta-item .resposta-acoes button {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .resposta-item .resposta-acoes button:hover {
+    color: #f87171 !important;
+}
+
+body.dark-mode .resposta-form textarea {
+    background: var(--dark-bg) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-form textarea:focus {
+    border-color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .resposta-form .form-actions .btn-enviar-resposta {
+    background: var(--dark-primary) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .resposta-form .form-actions .btn-enviar-resposta:hover {
+    background: #2563eb !important;
+}
+
+body.dark-mode .resposta-form .form-actions .btn-cancelar-resposta {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .resposta-form .form-actions .btn-cancelar-resposta:hover {
+    background: #475569 !important;
+}
+
+body.dark-mode .sem-perguntas i {
+    color: var(--dark-border) !important;
+}
+
+body.dark-mode .sem-perguntas h3 {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .sem-perguntas p {
+    color: var(--dark-text-muted) !important;
+}
+
+/* Modo escuro - Modal */
+body.dark-mode .modal-content {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border: 1px solid var(--dark-border) !important;
+}
+
+body.dark-mode .modal-excluir .modal-content {
+    border-top: 5px solid #ff5c5c !important;
+}
+
+body.dark-mode .modal-excluir h3 {
+    color: #ff5c5c !important;
+}
+
+body.dark-mode .modal-excluir p {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .modal-excluir .btn-cancelar {
+    background: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-excluir .btn-cancelar:hover {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode #cancel-logout {
+    background: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .header-icons i {
+    color: #ffffff !important;
+}
+
+body.dark-mode .header-icons i:hover {
+    color: #006cc5 !important;
+}

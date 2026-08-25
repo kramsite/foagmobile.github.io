@@ -614,6 +614,10 @@ function gerarCalendario(
                 Boletim
             </a>
 
+                        <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-comments"></i> Comunidade
+            </a>
+
             <a
                 href="../loja/loja.php"
                 class="<?= $current === 'loja.php' ? 'active' : '' ?>"
