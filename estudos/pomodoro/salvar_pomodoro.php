@@ -2,446 +2,264 @@
 
 session_start();
 
-header('Content-Type: application/json; charset=utf-8');
+header(
+    'Content-Type: application/json; charset=utf-8'
+);
 
-// ======================================
+
+// ==========================================
 // VERIFICAR LOGIN
-// ======================================
+// ==========================================
 
-if (empty($_SESSION['codigo_usuario'])) {
+if (
+    empty(
+        $_SESSION['codigo_usuario']
+    )
+) {
+
     http_response_code(401);
 
     echo json_encode([
         'sucesso' => false,
-        'mensagem' => 'Usuário não autenticado.'
-    ], JSON_UNESCAPED_UNICODE);
+        'mensagem' =>
+            'Usuário não autenticado.'
+    ]);
 
     exit;
 }
 
-$codigoUsuario = $_SESSION['codigo_usuario'];
+
+$codigoUsuario =
+    $_SESSION['codigo_usuario'];
 
 
-// ======================================
-// ACEITAR SOMENTE POST
-// ======================================
+// ==========================================
+// RECEBER DADOS
+// ==========================================
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
+$entrada =
+    json_decode(
+        file_get_contents(
+            'php://input'
+        ),
+        true
+    );
+
+
+if (!is_array($entrada)) {
+
+    http_response_code(400);
 
     echo json_encode([
         'sucesso' => false,
-        'mensagem' => 'Método não permitido.'
-    ], JSON_UNESCAPED_UNICODE);
+        'mensagem' =>
+            'Dados inválidos.'
+    ]);
 
     exit;
 }
 
 
-// ======================================
+// ==========================================
 // PASTA DO USUÁRIO
-// ======================================
-
-$baseJsonDir = __DIR__ . '/../../json/usuarios';
+// ==========================================
 
 $pastaUsuario =
-    $baseJsonDir . '/' . $codigoUsuario;
+    __DIR__ .
+    '/../../json/usuarios/' .
+    $codigoUsuario;
 
-$arquivoPomodoro =
-    $pastaUsuario . '/pomodoro.json';
 
-
-// A pasta deve ter sido criada no cadastro
 if (!is_dir($pastaUsuario)) {
+
     http_response_code(404);
 
     echo json_encode([
         'sucesso' => false,
-        'mensagem' => 'Pasta do usuário não encontrada.'
-    ], JSON_UNESCAPED_UNICODE);
+        'mensagem' =>
+            'Pasta do usuário não encontrada.'
+    ]);
 
     exit;
 }
 
 
-// ======================================
-// RECEBER JSON
-// ======================================
-
-$input =
-    file_get_contents('php://input');
-
-if (
-    $input === false ||
-    trim($input) === ''
-) {
-    http_response_code(400);
-
-    echo json_encode([
-        'sucesso' => false,
-        'mensagem' => 'Nenhum dado foi recebido.'
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
-}
+$arquivoPomodoro =
+    $pastaUsuario .
+    '/pomodoro.json';
 
 
-$data =
-    json_decode($input, true);
+// ==========================================
+// DADOS ANTERIORES
+// ==========================================
 
-
-// Verifica erro real de JSON
-if (
-    json_last_error() !==
-    JSON_ERROR_NONE
-) {
-    http_response_code(400);
-
-    echo json_encode([
-        'sucesso' => false,
-        'mensagem' => 'JSON inválido.'
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
-}
-
-
-if (!is_array($data)) {
-    http_response_code(400);
-
-    echo json_encode([
-        'sucesso' => false,
-        'mensagem' => 'Formato de dados inválido.'
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
-}
-
-
-// ======================================
-// CARREGAR MATÉRIAS OFICIAIS
-// ======================================
-
-$arquivoMaterias =
-    $pastaUsuario . '/materias.json';
-
-$disciplinas = [
-    'Geral'
+$dadosAnteriores = [
+    'disciplines' => ['Geral'],
+    'sessions' => [],
+    'goals' => []
 ];
 
 
-if (file_exists($arquivoMaterias)) {
+if (
+    file_exists(
+        $arquivoPomodoro
+    )
+) {
 
-    $materiasData =
-        json_decode(
-            file_get_contents(
-                $arquivoMaterias
-            ),
-            true
+    $conteudoAnterior =
+        file_get_contents(
+            $arquivoPomodoro
         );
 
 
     if (
-        is_array($materiasData) &&
-        isset(
-            $materiasData['materias']
-        ) &&
-        is_array(
-            $materiasData['materias']
-        )
+        $conteudoAnterior !== false
     ) {
 
-        foreach (
-            $materiasData['materias']
-            as $materia
+        $jsonAnterior =
+            json_decode(
+                $conteudoAnterior,
+                true
+            );
+
+
+        if (
+            is_array(
+                $jsonAnterior
+            )
         ) {
 
-            $nome =
-                trim(
-                    $materia['nome']
-                    ?? ''
-                );
-
-
-            if (
-                $nome !== '' &&
-                $nome !== 'Geral' &&
-                !in_array(
-                    $nome,
-                    $disciplinas,
-                    true
-                )
-            ) {
-
-                $disciplinas[] =
-                    $nome;
-
-            }
-
+            $dadosAnteriores =
+                $jsonAnterior;
         }
-
     }
-
 }
 
 
-// ======================================
-// NORMALIZAR SESSÕES
-// ======================================
-
-$sessoesRecebidas =
-    $data['sessions'] ?? [];
-
-$sessoes = [];
-
+// ==========================================
+// NORMALIZAR DADOS
+// ==========================================
 
 if (
-    is_array(
-        $sessoesRecebidas
+    !isset(
+        $entrada['sessions']
+    ) ||
+    !is_array(
+        $entrada['sessions']
     )
 ) {
 
-    foreach (
-        $sessoesRecebidas
-        as $sessao
-    ) {
-
-        if (
-            !is_array($sessao)
-        ) {
-            continue;
-        }
-
-
-        $timestamp =
-            (int) (
-                $sessao['ts']
-                ?? 0
-            );
-
-
-        $minutos =
-            (int) (
-                $sessao['minutes']
-                ?? 0
-            );
-
-
-        $modo =
-            trim(
-                $sessao['mode']
-                ?? 'focus'
-            );
-
-
-        $disciplina =
-            trim(
-                $sessao['discipline']
-                ?? 'Geral'
-            );
-
-
-        // Sessão inválida
-        if (
-            $timestamp <= 0 ||
-            $minutos <= 0
-        ) {
-            continue;
-        }
-
-
-        // Modos permitidos
-        $modosPermitidos = [
-            'focus',
-            'short',
-            'long'
-        ];
-
-
-        if (
-            !in_array(
-                $modo,
-                $modosPermitidos,
-                true
-            )
-        ) {
-
-            $modo = 'focus';
-
-        }
-
-
-        // Se a matéria não existe mais,
-        // mantém como Geral
-        if (
-            !in_array(
-                $disciplina,
-                $disciplinas,
-                true
-            )
-        ) {
-
-            $disciplina =
-                'Geral';
-
-        }
-
-
-        $sessoes[] = [
-            'ts' =>
-                $timestamp,
-
-            'minutes' =>
-                $minutos,
-
-            'mode' =>
-                $modo,
-
-            'discipline' =>
-                $disciplina
-        ];
-
-    }
-
+    $entrada['sessions'] = [];
 }
-
-
-// ======================================
-// NORMALIZAR METAS
-// ======================================
-
-$metasRecebidas =
-    $data['goals'] ?? [];
-
-$metas = [];
 
 
 if (
-    is_array(
-        $metasRecebidas
+    !isset(
+        $entrada['disciplines']
+    ) ||
+    !is_array(
+        $entrada['disciplines']
     )
 ) {
 
-    foreach (
-        $metasRecebidas
-        as $disciplina => $horas
-    ) {
-
-        $disciplina =
-            trim(
-                (string)
-                $disciplina
-            );
-
-
-        $horas =
-            (float)
-            $horas;
-
-
-        if (
-            $disciplina === '' ||
-            $horas <= 0
-        ) {
-            continue;
-        }
-
-
-        // Só salva meta de matéria válida
-        if (
-            !in_array(
-                $disciplina,
-                $disciplinas,
-                true
-            )
-        ) {
-            continue;
-        }
-
-
-        $metas[
-            $disciplina
-        ] =
-            $horas;
-
-    }
-
+    $entrada['disciplines'] = [
+        'Geral'
+    ];
 }
 
 
-// ======================================
-// ESTRUTURA FINAL
-// ======================================
+if (
+    !isset(
+        $entrada['goals']
+    ) ||
+    !is_array(
+        $entrada['goals']
+    )
+) {
 
-$dadosPomodoro = [
-    'disciplines' =>
-        $disciplinas,
-
-    'sessions' =>
-        $sessoes,
-
-    // stdClass garante {} quando não há metas
-    'goals' =>
-        empty($metas)
-            ? new stdClass()
-            : $metas
-];
-
-
-// ======================================
-// CONVERTER PARA JSON
-// ======================================
-
-$json =
-    json_encode(
-        $dadosPomodoro,
-        JSON_PRETTY_PRINT |
-        JSON_UNESCAPED_UNICODE |
-        JSON_UNESCAPED_SLASHES
-    );
-
-
-if ($json === false) {
-    http_response_code(500);
-
-    echo json_encode([
-        'sucesso' => false,
-        'mensagem' => 'Erro ao gerar os dados do Pomodoro.'
-    ], JSON_UNESCAPED_UNICODE);
-
-    exit;
+    $entrada['goals'] = [];
 }
 
 
-// ======================================
-// SALVAR ARQUIVO
-// ======================================
+// ==========================================
+// SALVAR POMODORO
+// ==========================================
 
-$resultado =
+$salvou =
     file_put_contents(
         $arquivoPomodoro,
-        $json,
+
+        json_encode(
+            $entrada,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ),
+
         LOCK_EX
     );
 
 
-if ($resultado === false) {
+if ($salvou === false) {
+
     http_response_code(500);
 
     echo json_encode([
         'sucesso' => false,
-        'mensagem' => 'Não foi possível salvar o Pomodoro.'
-    ], JSON_UNESCAPED_UNICODE);
+        'mensagem' =>
+            'Não foi possível salvar o Pomodoro.'
+    ]);
 
     exit;
 }
 
 
-// ======================================
-// RESPOSTA
-// ======================================
+// ==========================================
+// CARREGAR SISTEMA DE ESTRELAS
+// ==========================================
 
-echo json_encode([
-    'sucesso' => true,
-    'mensagem' => 'Dados do Pomodoro salvos com sucesso.'
-], JSON_UNESCAPED_UNICODE);
+require_once(
+    __DIR__ .
+    '/../../estrelas/adicionar_estrelas.php'
+);
+
+
+// ==========================================
+// PROCESSAR ESTRELAS
+// ==========================================
+
+processarEstrelasPomodoro(
+    $codigoUsuario,
+    $dadosAnteriores,
+    $entrada
+);
+
+
+// ==========================================
+// PEGAR TOTAL DE ESTRELAS
+// ==========================================
+
+$pontos =
+    carregarPontos(
+        $codigoUsuario
+    );
+
+
+// ==========================================
+// RESPOSTA
+// ==========================================
+
+echo json_encode(
+    [
+        'sucesso' => true,
+
+        'mensagem' =>
+            'Pomodoro salvo com sucesso.',
+
+        'estrelas' =>
+            $pontos['estrelas']
+            ?? 0
+    ],
+
+    JSON_UNESCAPED_UNICODE
+);
