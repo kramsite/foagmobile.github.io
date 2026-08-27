@@ -73,21 +73,13 @@ $estruturaLojaPadrao = [
         // ===================================
 
         [
-            'id' => 'tema_azul',
-            'nome' => 'Tema Azul',
-            'descricao' => 'Mude o tema do perfil para azul',
-            'preco' => 50,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
-        ],
-
-        [
             'id' => 'tema_roxo',
             'nome' => 'Tema Roxo',
             'descricao' => 'Mude o tema do perfil para roxo',
             'preco' => 50,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/roxo.jpg'
         ],
 
         [
@@ -96,7 +88,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mude o tema do perfil para verde',
             'preco' => 50,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/verde.png'
         ],
 
         [
@@ -105,7 +98,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mude o tema do perfil para vermelho',
             'preco' => 55,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/vermelho.png'
         ],
 
         [
@@ -114,7 +108,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mude o tema do perfil para amarelo',
             'preco' => 55,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/amarelo.png'
         ],
 
         [
@@ -123,7 +118,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mude o tema do perfil para rosa',
             'preco' => 60,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/rosa.jpg'
         ],
 
         [
@@ -132,7 +128,29 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mude o tema do perfil para preto',
             'preco' => 65,
             'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas'
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/preto.jpg'
+        ],
+
+        [
+            'id' => 'tema_laranja',
+            'nome' => 'Tema Laranja',
+            'descricao' => 'Mude o tema do perfil para laranja',
+            'preco' => 55,
+            'icone' => 'fa-solid fa-palette',
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/laranja.png'
+        ],
+
+
+        [
+            'id' => 'tema_magenta',
+            'nome' => 'Tema Magenta',
+            'descricao' => 'Mude o tema do perfil para magenta',
+            'preco' => 65,
+            'icone' => 'fa-solid fa-palette',
+            'categoria' => 'temas',
+            'imagem' => '../img/loja/tema/magenta.jpg'
         ],
 
         // ===================================
@@ -145,7 +163,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Mostre que você é um estudante dedicado',
             'preco' => 30,
             'icone' => 'fa-solid fa-graduation-cap',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => '../img/loja/fundo/images.jpg'
         ],
 
         [
@@ -154,7 +173,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Para os mestres do estudo',
             'preco' => 80,
             'icone' => 'fa-solid fa-crown',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         [
@@ -163,7 +183,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Para quem estuda por longas horas',
             'preco' => 60,
             'icone' => 'fa-solid fa-running',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         [
@@ -172,7 +193,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Dedicação é a chave do sucesso',
             'preco' => 40,
             'icone' => 'fa-solid fa-heart',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         [
@@ -181,7 +203,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Você é um verdadeiro campeão',
             'preco' => 100,
             'icone' => 'fa-solid fa-trophy',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         [
@@ -190,7 +213,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Liderança e determinação',
             'preco' => 70,
             'icone' => 'fa-solid fa-flag',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         [
@@ -199,7 +223,38 @@ $estruturaLojaPadrao = [
             'descricao' => 'Nunca desista dos seus sonhos',
             'preco' => 50,
             'icone' => 'fa-solid fa-fire',
-            'categoria' => 'insignias'
+            'categoria' => 'insignias',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'badge_sabio',
+            'nome' => 'Insígnia Sábio',
+            'descricao' => 'A sabedoria é o seu maior dom',
+            'preco' => 90,
+            'icone' => 'fa-solid fa-owl',
+            'categoria' => 'insignias',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'badge_guerreiro',
+            'nome' => 'Insígnia Guerreiro',
+            'descricao' => 'Você enfrenta qualquer desafio',
+            'preco' => 75,
+            'icone' => 'fa-solid fa-shield-halved',
+            'categoria' => 'insignias',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'badge_lenda',
+            'nome' => 'Insígnia Lenda',
+            'descricao' => 'Você é uma lenda viva do estudo',
+            'preco' => 150,
+            'icone' => 'fa-solid fa-chess-queen',
+            'categoria' => 'insignias',
+            'imagem' => ''
         ],
 
         // ===================================
@@ -212,7 +267,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🚀 Mostre sua determinação',
             'preco' => 20,
             'icone' => 'fa-solid fa-rocket',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -221,7 +277,8 @@ $estruturaLojaPadrao = [
             'descricao' => '📚 Para os amantes da leitura',
             'preco' => 15,
             'icone' => 'fa-solid fa-book',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -230,7 +287,8 @@ $estruturaLojaPadrao = [
             'descricao' => '💡 Ideias brilhantes',
             'preco' => 25,
             'icone' => 'fa-solid fa-lightbulb',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -239,7 +297,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🎯 Foco no objetivo',
             'preco' => 22,
             'icone' => 'fa-solid fa-bullseye',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -248,7 +307,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🧠 Inteligência e raciocínio',
             'preco' => 28,
             'icone' => 'fa-solid fa-brain',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -257,7 +317,8 @@ $estruturaLojaPadrao = [
             'descricao' => '⚡ Energia e velocidade',
             'preco' => 20,
             'icone' => 'fa-solid fa-bolt',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -266,7 +327,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🌟 Você é uma estrela',
             'preco' => 30,
             'icone' => 'fa-solid fa-star',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         [
@@ -275,7 +337,48 @@ $estruturaLojaPadrao = [
             'descricao' => '🏆 Para os vencedores',
             'preco' => 35,
             'icone' => 'fa-solid fa-trophy',
-            'categoria' => 'emojis'
+            'categoria' => 'emojis',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'emoji_coracao',
+            'nome' => 'Emoji Coração',
+            'descricao' => '❤️ Amor e dedicação',
+            'preco' => 15,
+            'icone' => 'fa-solid fa-heart',
+            'categoria' => 'emojis',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'emoji_planeta',
+            'nome' => 'Emoji Planeta',
+            'descricao' => '🪐 Explore novos mundos',
+            'preco' => 25,
+            'icone' => 'fa-solid fa-globe',
+            'categoria' => 'emojis',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'emoji_nuvem',
+            'nome' => 'Emoji Nuvem',
+            'descricao' => '☁️ Sonhe alto',
+            'preco' => 18,
+            'icone' => 'fa-solid fa-cloud',
+            'categoria' => 'emojis',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'emoji_chave',
+            'nome' => 'Emoji Chave',
+            'descricao' => '🔑 A chave do sucesso',
+            'preco' => 22,
+            'icone' => 'fa-solid fa-key',
+            'categoria' => 'emojis',
+            'imagem' => ''
         ],
 
         // ===================================
@@ -288,7 +391,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Um fundo neon para seu perfil',
             'preco' => 100,
             'icone' => 'fa-solid fa-star',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         [
@@ -297,7 +401,8 @@ $estruturaLojaPadrao = [
             'descricao' => 'Viaje pelas estrelas',
             'preco' => 120,
             'icone' => 'fa-solid fa-star',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         [
@@ -306,7 +411,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🌅 Um pôr do sol relaxante',
             'preco' => 130,
             'icone' => 'fa-solid fa-sun',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         [
@@ -315,7 +421,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🌊 A calma do oceano',
             'preco' => 110,
             'icone' => 'fa-solid fa-water',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         [
@@ -324,7 +431,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🌌 Cores cósmicas',
             'preco' => 150,
             'icone' => 'fa-solid fa-cloud',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         [
@@ -333,7 +441,68 @@ $estruturaLojaPadrao = [
             'descricao' => '🏔️ Picos e natureza',
             'preco' => 100,
             'icone' => 'fa-solid fa-mountain',
-            'categoria' => 'fundos'
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_floresta',
+            'nome' => 'Fundo Floresta',
+            'descricao' => '🌲 Natureza exuberante',
+            'preco' => 110,
+            'icone' => 'fa-solid fa-tree',
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_cidade',
+            'nome' => 'Fundo Cidade',
+            'descricao' => '🏙️ A vida urbana',
+            'preco' => 105,
+            'icone' => 'fa-solid fa-city',
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_espaco',
+            'nome' => 'Fundo Espaço',
+            'descricao' => '🚀 O infinito universo',
+            'preco' => 140,
+            'icone' => 'fa-solid fa-rocket',
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_praia',
+            'nome' => 'Fundo Praia',
+            'descricao' => '🏖️ Areia e mar',
+            'preco' => 115,
+            'icone' => 'fa-solid fa-umbrella-beach',
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_castelo',
+            'nome' => 'Fundo Castelo',
+            'descricao' => '🏰 Um mundo de fantasia',
+            'preco' => 125,
+            'icone' => 'fa-solid fa-castle',
+            'categoria' => 'fundos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'fundo_jardim',
+            'nome' => 'Fundo Jardim',
+            'descricao' => '🌺 Flores e cores',
+            'preco' => 105,
+            'icone' => 'fa-solid fa-flower',
+            'categoria' => 'fundos',
+            'imagem' => ''
         ],
 
         // ===================================
@@ -346,7 +515,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🖼️ Uma moldura elegante e dourada',
             'preco' => 80,
             'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras'
+            'categoria' => 'molduras',
+            'imagem' => ''
         ],
 
         [
@@ -355,7 +525,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🖼️ Sofisticação em prata',
             'preco' => 60,
             'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras'
+            'categoria' => 'molduras',
+            'imagem' => ''
         ],
 
         [
@@ -364,7 +535,8 @@ $estruturaLojaPadrao = [
             'descricao' => '🖼️ Uma moldura neon vibrante',
             'preco' => 90,
             'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras'
+            'categoria' => 'molduras',
+            'imagem' => ''
         ],
 
         [
@@ -373,7 +545,48 @@ $estruturaLojaPadrao = [
             'descricao' => '🖼️ Simples e elegante',
             'preco' => 40,
             'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras'
+            'categoria' => 'molduras',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'moldura_vintage',
+            'nome' => 'Moldura Vintage',
+            'descricao' => '🖼️ Estilo retrô',
+            'preco' => 70,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'moldura_rustica',
+            'nome' => 'Moldura Rústica',
+            'descricao' => '🖼️ Madeira e natureza',
+            'preco' => 65,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'moldura_moderna',
+            'nome' => 'Moldura Moderna',
+            'descricao' => '🖼️ Design contemporâneo',
+            'preco' => 75,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'moldura_classica',
+            'nome' => 'Moldura Clássica',
+            'descricao' => '🖼️ Elegância atemporal',
+            'preco' => 85,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => ''
         ],
 
         // ===================================
@@ -386,7 +599,8 @@ $estruturaLojaPadrao = [
             'descricao' => '✨ Um brilho especial no perfil',
             'preco' => 70,
             'icone' => 'fa-solid fa-wand-magic-sparkles',
-            'categoria' => 'efeitos'
+            'categoria' => 'efeitos',
+            'imagem' => ''
         ],
 
         [
@@ -395,7 +609,8 @@ $estruturaLojaPadrao = [
             'descricao' => '✨ Partículas flutuantes',
             'preco' => 85,
             'icone' => 'fa-solid fa-wand-magic-sparkles',
-            'categoria' => 'efeitos'
+            'categoria' => 'efeitos',
+            'imagem' => ''
         ],
 
         [
@@ -404,7 +619,8 @@ $estruturaLojaPadrao = [
             'descricao' => '✨ Brilho neon no perfil',
             'preco' => 95,
             'icone' => 'fa-solid fa-lightbulb',
-            'categoria' => 'efeitos'
+            'categoria' => 'efeitos',
+            'imagem' => ''
         ],
 
         [
@@ -413,8 +629,49 @@ $estruturaLojaPadrao = [
             'descricao' => '✨ Sombras suaves e elegantes',
             'preco' => 55,
             'icone' => 'fa-solid fa-circle-half-stroke',
-            'categoria' => 'efeitos'
-        ]
+            'categoria' => 'efeitos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'efeito_arco_iris',
+            'nome' => 'Efeito Arco-Íris',
+            'descricao' => '🌈 Cores vibrantes no perfil',
+            'preco' => 100,
+            'icone' => 'fa-solid fa-rainbow',
+            'categoria' => 'efeitos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'efeito_estrelas',
+            'nome' => 'Efeito Estrelas Cadentes',
+            'descricao' => '⭐ Estrelas caindo no perfil',
+            'preco' => 110,
+            'icone' => 'fa-solid fa-star',
+            'categoria' => 'efeitos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'efeito_borboleta',
+            'nome' => 'Efeito Borboletas',
+            'descricao' => '🦋 Borboletas voando pelo perfil',
+            'preco' => 95,
+            'icone' => 'fa-solid fa-butterfly',
+            'categoria' => 'efeitos',
+            'imagem' => ''
+        ],
+
+        [
+            'id' => 'efeito_fogo',
+            'nome' => 'Efeito Fogo',
+            'descricao' => '🔥 Chamas de paixão',
+            'preco' => 105,
+            'icone' => 'fa-solid fa-fire',
+            'categoria' => 'efeitos',
+            'imagem' => ''
+        ],
     ]
 ];
 
