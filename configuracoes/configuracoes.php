@@ -192,9 +192,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                         <h1>⚙️ Configurações</h1>
                         <p>Personalize o funcionamento e a aparência do FOAG.</p>
                     </div>
-                    <button type="submit" form="form-configuracoes" class="btn-salvar-topo" aria-label="Salvar configurações">
-                        <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Salvar
-                    </button>
                 </div>
 
                 <form id="form-configuracoes" method="POST" aria-label="Formulário de configurações">

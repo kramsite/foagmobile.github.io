@@ -1,0 +1,430 @@
+{
+    "estrelas": 0,
+    "total_estudado": 0,
+    "itens_comprados": [],
+    "itens": [
+        {
+            "id": "tema_roxo",
+            "nome": "Tema Roxo",
+            "descricao": "Mude o tema do perfil para roxo",
+            "preco": 50,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/roxo.jpg"
+        },
+        {
+            "id": "tema_verde",
+            "nome": "Tema Verde",
+            "descricao": "Mude o tema do perfil para verde",
+            "preco": 50,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/verde.png"
+        },
+        {
+            "id": "tema_vermelho",
+            "nome": "Tema Vermelho",
+            "descricao": "Mude o tema do perfil para vermelho",
+            "preco": 55,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/vermelho.png"
+        },
+        {
+            "id": "tema_amarelo",
+            "nome": "Tema Amarelo",
+            "descricao": "Mude o tema do perfil para amarelo",
+            "preco": 55,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/amarelo.png"
+        },
+        {
+            "id": "tema_rosa",
+            "nome": "Tema Rosa",
+            "descricao": "Mude o tema do perfil para rosa",
+            "preco": 60,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/rosa.jpg"
+        },
+        {
+            "id": "tema_preto",
+            "nome": "Tema Preto",
+            "descricao": "Mude o tema do perfil para preto",
+            "preco": 65,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/preto.jpg"
+        },
+        {
+            "id": "tema_laranja",
+            "nome": "Tema Laranja",
+            "descricao": "Mude o tema do perfil para laranja",
+            "preco": 55,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/laranja.png"
+        },
+        {
+            "id": "tema_magenta",
+            "nome": "Tema Magenta",
+            "descricao": "Mude o tema do perfil para magenta",
+            "preco": 65,
+            "icone": "fa-solid fa-palette",
+            "categoria": "temas",
+            "imagem": "..\/img\/loja\/tema\/magenta.jpg"
+        },
+        {
+            "id": "emoji_foguete",
+            "nome": "Emoji Foguete",
+            "descricao": "🚀 Mostre sua determinação",
+            "preco": 20,
+            "icone": "fa-solid fa-rocket",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/aaa.jpg"
+        },
+        {
+            "id": "emoji_livro",
+            "nome": "Emoji Livro",
+            "descricao": "📚 Para os amantes da leitura",
+            "preco": 15,
+            "icone": "fa-solid fa-book",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/blom.jpg"
+        },
+        {
+            "id": "emoji_lampada",
+            "nome": "Emoji Lâmpada",
+            "descricao": "💡 Ideias brilhantes",
+            "preco": 25,
+            "icone": "fa-solid fa-lightbulb",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/coracao.jpg"
+        },
+        {
+            "id": "emoji_alvo",
+            "nome": "Emoji Alvo",
+            "descricao": "🎯 Foco no objetivo",
+            "preco": 22,
+            "icone": "fa-solid fa-bullseye",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/favor.jpg"
+        },
+        {
+            "id": "emoji_cerebro",
+            "nome": "Emoji Cérebro",
+            "descricao": "🧠 Inteligência e raciocínio",
+            "preco": 28,
+            "icone": "fa-solid fa-brain",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/flor.jpg"
+        },
+        {
+            "id": "emoji_raio",
+            "nome": "Emoji Raio",
+            "descricao": "⚡ Energia e velocidade",
+            "preco": 20,
+            "icone": "fa-solid fa-bolt",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/freddy.jpg"
+        },
+        {
+            "id": "emoji_estrela_brilhante",
+            "nome": "Emoji Estrela Brilhante",
+            "descricao": "🌟 Você é uma estrela",
+            "preco": 30,
+            "icone": "fa-solid fa-star",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/ha.jpg"
+        },
+        {
+            "id": "emoji_trofeu",
+            "nome": "Emoji Troféu",
+            "descricao": "🏆 Para os vencedores",
+            "preco": 35,
+            "icone": "fa-solid fa-trophy",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/nem.jpg"
+        },
+        {
+            "id": "emoji_coracao",
+            "nome": "Emoji Coração",
+            "descricao": "❤️ Amor e dedicação",
+            "preco": 15,
+            "icone": "fa-solid fa-heart",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/ouvindo.jpg"
+        },
+        {
+            "id": "emoji_planeta",
+            "nome": "Emoji Planeta",
+            "descricao": "🪐 Explore novos mundos",
+            "preco": 25,
+            "icone": "fa-solid fa-globe",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/sabia.jpg"
+        },
+        {
+            "id": "emoji_nuvem",
+            "nome": "Emoji Nuvem",
+            "descricao": "☁️ Sonhe alto",
+            "preco": 18,
+            "icone": "fa-solid fa-cloud",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/sem.jpg"
+        },
+        {
+            "id": "emoji_chave",
+            "nome": "Emoji Chave",
+            "descricao": "🔑 A chave do sucesso",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "..\/img\/loja\/emoji\/sorrindo.jpg"
+        },
+        {
+            "id": "fundo_neon",
+            "nome": "Fundo Neon",
+            "descricao": "Um fundo neon para seu perfil",
+            "preco": 100,
+            "icone": "fa-solid fa-star",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/neon.jpg"
+        },
+        {
+            "id": "fundo_galaxia",
+            "nome": "Fundo Galáxia",
+            "descricao": "Viaje pelas estrelas",
+            "preco": 120,
+            "icone": "fa-solid fa-star",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/galaxia.jpg"
+        },
+        {
+            "id": "fundo_por_do_sol",
+            "nome": "Fundo Pôr do Sol",
+            "descricao": "🌅 Um pôr do sol relaxante",
+            "preco": 130,
+            "icone": "fa-solid fa-sun",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/sol.jpg"
+        },
+        {
+            "id": "fundo_oceano",
+            "nome": "Fundo Oceano",
+            "descricao": "🌊 A calma do oceano",
+            "preco": 110,
+            "icone": "fa-solid fa-water",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/mar.jpg"
+        },
+        {
+            "id": "fundo_nebulosa",
+            "nome": "Fundo Nebulosa",
+            "descricao": "🌌 Cores cósmicas",
+            "preco": 150,
+            "icone": "fa-solid fa-cloud",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/nevoa.jpg"
+        },
+        {
+            "id": "fundo_montanha",
+            "nome": "Fundo Montanha",
+            "descricao": "🏔️ Picos e natureza",
+            "preco": 100,
+            "icone": "fa-solid fa-mountain",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/montanha.jpg"
+        },
+        {
+            "id": "fundo_floresta",
+            "nome": "Fundo Floresta",
+            "descricao": "🌲 Natureza exuberante",
+            "preco": 110,
+            "icone": "fa-solid fa-tree",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/floresta.jpg"
+        },
+        {
+            "id": "fundo_cidade",
+            "nome": "Fundo Cidade",
+            "descricao": "🏙️ A vida urbana",
+            "preco": 105,
+            "icone": "fa-solid fa-city",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/cidade.jpg"
+        },
+        {
+            "id": "fundo_praia",
+            "nome": "Fundo Praia",
+            "descricao": "🏖️ Areia e mar",
+            "preco": 115,
+            "icone": "fa-solid fa-umbrella-beach",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/praia.jpg"
+        },
+        {
+            "id": "fundo_castelo",
+            "nome": "Fundo Castelo",
+            "descricao": "🏰 Um mundo de fantasia",
+            "preco": 125,
+            "icone": "fa-solid fa-castle",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/castelo.jpg"
+        },
+        {
+            "id": "fundo_jardim",
+            "nome": "Fundo Jardim",
+            "descricao": "🌺 Flores e cores",
+            "preco": 105,
+            "icone": "fa-solid fa-flower",
+            "categoria": "fundos",
+            "imagem": "..\/img\/loja\/fundo\/jardim.jpg"
+        },
+        {
+            "id": "moldura_dourada",
+            "nome": "Moldura Dourada",
+            "descricao": "🖼️ Uma moldura elegante e dourada",
+            "preco": 80,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_prata",
+            "nome": "Moldura Prata",
+            "descricao": "🖼️ Sofisticação em prata",
+            "preco": 60,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_neon",
+            "nome": "Moldura Neon",
+            "descricao": "🖼️ Uma moldura neon vibrante",
+            "preco": 90,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_minimalista",
+            "nome": "Moldura Minimalista",
+            "descricao": "🖼️ Simples e elegante",
+            "preco": 40,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_vintage",
+            "nome": "Moldura Vintage",
+            "descricao": "🖼️ Estilo retrô",
+            "preco": 70,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_rustica",
+            "nome": "Moldura Rústica",
+            "descricao": "🖼️ Madeira e natureza",
+            "preco": 65,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_moderna",
+            "nome": "Moldura Moderna",
+            "descricao": "🖼️ Design contemporâneo",
+            "preco": 75,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "moldura_classica",
+            "nome": "Moldura Clássica",
+            "descricao": "🖼️ Elegância atemporal",
+            "preco": 85,
+            "icone": "fa-regular fa-image",
+            "categoria": "molduras",
+            "imagem": "..\/img\/loja\/moldura\/"
+        },
+        {
+            "id": "cursor_estrela",
+            "nome": "Cursor Estrela",
+            "descricao": "⭐ Um cursor em forma de estrela",
+            "preco": 40,
+            "icone": "fa-solid fa-star",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_foguete",
+            "nome": "Cursor Foguete",
+            "descricao": "🚀 Um cursor de foguete espacial",
+            "preco": 45,
+            "icone": "fa-solid fa-rocket",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_coracao",
+            "nome": "Cursor Coração",
+            "descricao": "❤️ Um cursor em formato de coração",
+            "preco": 35,
+            "icone": "fa-solid fa-heart",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_lampada",
+            "nome": "Cursor Lâmpada",
+            "descricao": "💡 Um cursor com uma lâmpada brilhante",
+            "preco": 40,
+            "icone": "fa-solid fa-lightbulb",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_raio",
+            "nome": "Cursor Raio",
+            "descricao": "⚡ Um cursor com um raio de energia",
+            "preco": 50,
+            "icone": "fa-solid fa-bolt",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_trofeu",
+            "nome": "Cursor Troféu",
+            "descricao": "🏆 Um cursor de vencedor",
+            "preco": 55,
+            "icone": "fa-solid fa-trophy",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_alvo",
+            "nome": "Cursor Alvo",
+            "descricao": "🎯 Um cursor preciso como um alvo",
+            "preco": 45,
+            "icone": "fa-solid fa-bullseye",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        },
+        {
+            "id": "cursor_flor",
+            "nome": "Cursor Flor",
+            "descricao": "🌸 Um cursor com uma flor delicada",
+            "preco": 35,
+            "icone": "fa-solid fa-flower",
+            "categoria": "especiais",
+            "imagem": "..\/img\/loja\/especial\/"
+        }
+    ]
+}
