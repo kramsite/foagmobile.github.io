@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (empty($_SESSION['codigo_usuario'])) {
@@ -7,11 +6,8 @@ if (empty($_SESSION['codigo_usuario'])) {
     exit;
 }
 
-$codigoUsuario =
-    $_SESSION['codigo_usuario'];
-
-$current =
-    basename($_SERVER['PHP_SELF']);
+$codigoUsuario = $_SESSION['codigo_usuario'];
+$current = basename($_SERVER['PHP_SELF']);
 
 $pastaUsuario =
     __DIR__ .
@@ -22,37 +18,50 @@ if (!is_dir($pastaUsuario)) {
     exit('Pasta do usuário não encontrada.');
 }
 
-
 // ==========================================
 // FUNÇÕES AUXILIARES
 // ==========================================
 
-function carregarJsonInicio(
-    $arquivo,
-    $padrao = []
-) {
+function carregarJsonInicio($arquivo, $padrao = [])
+{
     if (!file_exists($arquivo)) {
         return $padrao;
     }
 
-    $conteudo =
-        file_get_contents($arquivo);
-
-    if ($conteudo === false) {
-        return $padrao;
-    }
-
-    $dados =
-        json_decode(
-            $conteudo,
-            true
-        );
+    $dados = json_decode(
+        file_get_contents($arquivo),
+        true
+    );
 
     return is_array($dados)
         ? $dados
         : $padrao;
 }
 
+function normalizarListaTarefas($dados)
+{
+    if (!is_array($dados)) {
+        return [];
+    }
+
+    foreach (['tarefas', 'items', 'agenda', 'eventos'] as $chave) {
+        if (
+            isset($dados[$chave]) &&
+            is_array($dados[$chave])
+        ) {
+            return array_values($dados[$chave]);
+        }
+    }
+
+    $ehLista = array_keys($dados) === range(
+        0,
+        max(count($dados) - 1, 0)
+    );
+
+    return $ehLista
+        ? array_values($dados)
+        : [];
+}
 
 function tarefaConcluida($tarefa)
 {
@@ -63,7 +72,6 @@ function tarefaConcluida($tarefa)
         false
     );
 }
-
 
 function tarefaTexto($tarefa)
 {
@@ -78,7 +86,6 @@ function tarefaTexto($tarefa)
     );
 }
 
-
 function tarefaData($tarefa)
 {
     return trim(
@@ -91,11 +98,19 @@ function tarefaData($tarefa)
     );
 }
 
+function tarefaHora($tarefa)
+{
+    return trim(
+        (string)(
+            $tarefa['hora'] ??
+            $tarefa['time'] ??
+            ''
+        )
+    );
+}
 
-function calcularMediaLinhaInicio(
-    $notas,
-    $pesos
-) {
+function calcularMediaLinhaInicio($notas, $pesos)
+{
     if (!is_array($notas)) {
         return null;
     }
@@ -104,7 +119,6 @@ function calcularMediaLinhaInicio(
     $somaPesos = 0;
 
     for ($i = 1; $i <= 4; $i++) {
-
         $nota =
             $notas[$i] ??
             $notas[(string)$i] ??
@@ -136,12 +150,8 @@ function calcularMediaLinhaInicio(
         : null;
 }
 
-
-function coletarStatusFrequencia(
-    $dados,
-    &$presencas,
-    &$faltas
-) {
+function coletarStatusFrequencia($dados, &$presencas, &$faltas)
+{
     if (!is_array($dados)) {
         return;
     }
@@ -152,27 +162,18 @@ function coletarStatusFrequencia(
         null;
 
     if ($status !== null) {
-
         if (
             in_array(
                 $status,
-                [
-                    'presenca',
-                    'presença',
-                    'verde'
-                ],
+                ['presenca', 'presença', 'verde'],
                 true
             )
         ) {
             $presencas++;
-
         } elseif (
             in_array(
                 $status,
-                [
-                    'falta',
-                    'vermelho'
-                ],
+                ['falta', 'vermelho'],
                 true
             )
         ) {
@@ -181,9 +182,7 @@ function coletarStatusFrequencia(
     }
 
     foreach ($dados as $valor) {
-
         if (is_array($valor)) {
-
             coletarStatusFrequencia(
                 $valor,
                 $presencas,
@@ -193,37 +192,8 @@ function coletarStatusFrequencia(
     }
 }
 
-
-function formatarDataLembreteInicio(
-    $data
-) {
-    $data =
-        trim(
-            (string)$data
-        );
-
-    if ($data === '') {
-        return 'Sem data';
-    }
-
-    $objetoData =
-        DateTime::createFromFormat(
-            'Y-m-d',
-            $data
-        );
-
-    if (!$objetoData) {
-        return $data;
-    }
-
-    return $objetoData->format(
-        'd/m'
-    );
-}
-
-
 // ==========================================
-// ARQUIVOS
+// ARQUIVOS DO USUÁRIO
 // ==========================================
 
 $arquivoAgenda =
@@ -246,43 +216,37 @@ $arquivoCalendario =
     $pastaUsuario .
     '/calendario.json';
 
+$arquivoInicio =
+    $pastaUsuario .
+    '/inicio.json';
+
 $arquivoFreqMes =
     $pastaUsuario .
     '/frequencia_' .
     date('Y-m') .
     '.json';
 
-
 // ==========================================
-// CARREGAR DADOS
+// DADOS BASE
 // ==========================================
 
 $agendaData =
     carregarJsonInicio(
         $arquivoAgenda,
-        [
-            'notas' => [],
-            'tarefas' => [],
-            'nao_esquecer' => []
-        ]
+        []
     );
-
 
 $materiasData =
     carregarJsonInicio(
         $arquivoMaterias,
-        []
+        ['materias' => []]
     );
-
 
 $pomodoroData =
     carregarJsonInicio(
         $arquivoPomodoro,
-        [
-            'sessions' => []
-        ]
+        ['sessions' => []]
     );
-
 
 $notasData =
     carregarJsonInicio(
@@ -290,84 +254,35 @@ $notasData =
         []
     );
 
-
 $calendarioData =
     carregarJsonInicio(
         $arquivoCalendario,
         []
     );
 
-
-// ==========================================
-// AGENDA
-// ==========================================
-
-$tarefas =
-    isset($agendaData['tarefas']) &&
-    is_array($agendaData['tarefas'])
-        ? array_values(
-            $agendaData['tarefas']
-        )
-        : [];
-
-
-$lembretes =
-    isset($agendaData['nao_esquecer']) &&
-    is_array($agendaData['nao_esquecer'])
-        ? array_values(
-            $agendaData['nao_esquecer']
-        )
-        : [];
-
-
-$notasAgenda =
-    isset($agendaData['notas']) &&
-    is_array($agendaData['notas'])
-        ? array_values(
-            $agendaData['notas']
-        )
-        : [];
-
-
-// ==========================================
-// MATÉRIAS
-// aceita os dois formatos de materias.json
-// ==========================================
-
-$materias = [];
+$inicioData =
+    carregarJsonInicio(
+        $arquivoInicio,
+        ['anotacoes_importantes' => []]
+    );
 
 if (
-    isset($materiasData['materias']) &&
-    is_array($materiasData['materias'])
+    !isset($inicioData['anotacoes_importantes']) ||
+    !is_array($inicioData['anotacoes_importantes'])
 ) {
-
-    $materias =
-        array_values(
-            $materiasData['materias']
-        );
-
-} elseif (
-    is_array($materiasData) &&
-    array_keys($materiasData) ===
-    range(
-        0,
-        max(
-            count($materiasData) - 1,
-            0
-        )
-    )
-) {
-
-    $materias =
-        array_values(
-            $materiasData
-        );
+    $inicioData['anotacoes_importantes'] = [];
 }
 
+$tarefas =
+    normalizarListaTarefas(
+        $agendaData
+    );
 
-// ==========================================
-// POMODORO
-// ==========================================
+$materias =
+    isset($materiasData['materias']) &&
+    is_array($materiasData['materias'])
+        ? $materiasData['materias']
+        : [];
 
 $sessoes =
     isset($pomodoroData['sessions']) &&
@@ -375,9 +290,8 @@ $sessoes =
         ? $pomodoroData['sessions']
         : [];
 
-
 // ==========================================
-// TAREFAS / PRODUTIVIDADE
+// AGENDA / PRODUTIVIDADE
 // ==========================================
 
 $hoje =
@@ -389,66 +303,80 @@ $tarefasPendentes =
 $diasProdutivosMapa =
     [];
 
-
-// ==========================================
-// TAREFAS
-// ==========================================
+$proximosLembretes =
+    [];
 
 foreach ($tarefas as $tarefa) {
-
     if (!is_array($tarefa)) {
         continue;
     }
 
-    $texto =
-        tarefaTexto($tarefa);
-
     $data =
         tarefaData($tarefa);
+
+    $hora =
+        tarefaHora($tarefa);
+
+    $texto =
+        tarefaTexto($tarefa);
 
     $concluida =
         tarefaConcluida($tarefa);
 
-    if ($texto === '') {
-        continue;
-    }
-
-
-    /*
-     * Mostra como pendente:
-     *
-     * - sem data
-     * - de hoje
-     * - atrasada
-     *
-     * Tarefas futuras não entram.
-     */
     if (
-        !$concluida &&
-        (
-            $data === '' ||
-            $data <= $hoje
-        )
+        $data === $hoje &&
+        !$concluida
     ) {
         $tarefasPendentes++;
     }
-
 
     if (
         $concluida &&
         $data !== ''
     ) {
+        $diasProdutivosMapa[$data] = true;
+    }
 
-        $diasProdutivosMapa[
-            $data
-        ] = true;
+    if (
+        !$concluida &&
+        $texto !== '' &&
+        $data !== '' &&
+        $data >= $hoje
+    ) {
+        $proximosLembretes[] = [
+            'texto' => $texto,
+            'data'  => $data,
+            'hora'  => $hora
+        ];
     }
 }
 
+usort(
+    $proximosLembretes,
+    function ($a, $b) {
+        $dataA =
+            ($a['data'] ?? '') .
+            ' ' .
+            ($a['hora'] ?? '');
 
-// ==========================================
-// DIAS PRODUTIVOS CONSECUTIVOS
-// ==========================================
+        $dataB =
+            ($b['data'] ?? '') .
+            ' ' .
+            ($b['hora'] ?? '');
+
+        return strcmp(
+            $dataA,
+            $dataB
+        );
+    }
+);
+
+$proximosLembretes =
+    array_slice(
+        $proximosLembretes,
+        0,
+        4
+    );
 
 $diasConsecutivos =
     0;
@@ -456,9 +384,7 @@ $diasConsecutivos =
 $dataCursor =
     new DateTime($hoje);
 
-
 while (true) {
-
     $dataStr =
         $dataCursor->format(
             'Y-m-d'
@@ -466,9 +392,7 @@ while (true) {
 
     if (
         !isset(
-            $diasProdutivosMapa[
-                $dataStr
-            ]
+            $diasProdutivosMapa[$dataStr]
         )
     ) {
         break;
@@ -481,224 +405,6 @@ while (true) {
     );
 }
 
-
-// ==========================================
-// LEMBRETES
-// ==========================================
-
-$proximosLembretes =
-    [];
-
-
-foreach ($lembretes as $lembrete) {
-
-    if (!is_array($lembrete)) {
-        continue;
-    }
-
-    $texto =
-        trim(
-            (string)(
-                $lembrete['texto'] ??
-                $lembrete['titulo'] ??
-                ''
-            )
-        );
-
-    $data =
-        trim(
-            (string)(
-                $lembrete['data'] ??
-                $lembrete['date'] ??
-                ''
-            )
-        );
-
-    $hora =
-        trim(
-            (string)(
-                $lembrete['hora'] ??
-                $lembrete['time'] ??
-                ''
-            )
-        );
-
-
-    if ($texto === '') {
-        continue;
-    }
-
-
-    /*
-     * Lembrete antigo com data
-     * não aparece mais.
-     */
-    if (
-        $data !== '' &&
-        $data < $hoje
-    ) {
-        continue;
-    }
-
-
-    $proximosLembretes[] = [
-        'texto' =>
-            $texto,
-
-        'data' =>
-            $data,
-
-        'hora' =>
-            $hora
-    ];
-}
-
-
-// ==========================================
-// ORDENAR LEMBRETES
-// ==========================================
-
-usort(
-    $proximosLembretes,
-
-    function ($a, $b) {
-
-        $dataA =
-            $a['data'] !== ''
-                ? $a['data']
-                : '9999-12-31';
-
-        $dataB =
-            $b['data'] !== ''
-                ? $b['data']
-                : '9999-12-31';
-
-
-        $comparacao =
-            strcmp(
-                $dataA,
-                $dataB
-            );
-
-
-        if ($comparacao !== 0) {
-            return $comparacao;
-        }
-
-
-        return strcmp(
-            $a['hora'] ?? '',
-            $b['hora'] ?? ''
-        );
-    }
-);
-
-
-$proximosLembretes =
-    array_slice(
-        $proximosLembretes,
-        0,
-        4
-    );
-
-
-// ==========================================
-// ANOTAÇÕES IMPORTANTES
-// DIRETO DO agenda.json
-// ==========================================
-
-$anotacoesImportantes =
-    [];
-
-
-foreach ($notasAgenda as $nota) {
-
-    if (!is_array($nota)) {
-        continue;
-    }
-
-    $id =
-        $nota['id'] ??
-        0;
-
-    $titulo =
-        trim(
-            (string)(
-                $nota['titulo'] ??
-                ''
-            )
-        );
-
-    $texto =
-        trim(
-            (string)(
-                $nota['texto'] ??
-                $nota['text'] ??
-                ''
-            )
-        );
-
-    $data =
-        trim(
-            (string)(
-                $nota['data'] ??
-                $nota['date'] ??
-                ''
-            )
-        );
-
-
-    if (
-        $titulo === '' &&
-        $texto === ''
-    ) {
-        continue;
-    }
-
-
-    $anotacoesImportantes[] = [
-        'id' =>
-            $id,
-
-        'titulo' =>
-            $titulo,
-
-        'text' =>
-            $texto,
-
-        'date' =>
-            $data
-    ];
-}
-
-
-// Mais recentes primeiro
-
-usort(
-    $anotacoesImportantes,
-
-    function ($a, $b) {
-
-        return
-            (int)(
-                $b['id'] ?? 0
-            )
-            <=>
-            (int)(
-                $a['id'] ?? 0
-            );
-    }
-);
-
-
-$anotacoesImportantes =
-    array_slice(
-        $anotacoesImportantes,
-        0,
-        5
-    );
-
-
 // ==========================================
 // ESTUDOS / POMODORO
 // ==========================================
@@ -709,9 +415,7 @@ $totalMinutosEstudados =
 $totalSessoes =
     0;
 
-
 foreach ($sessoes as $sessao) {
-
     if (!is_array($sessao)) {
         continue;
     }
@@ -721,11 +425,9 @@ foreach ($sessoes as $sessao) {
         $sessao['modo'] ??
         'focus';
 
-
     if ($modo !== 'focus') {
         continue;
     }
-
 
     $minutos =
         (int)(
@@ -734,9 +436,7 @@ foreach ($sessoes as $sessao) {
             0
         );
 
-
     if ($minutos > 0) {
-
         $totalMinutosEstudados +=
             $minutos;
 
@@ -744,18 +444,14 @@ foreach ($sessoes as $sessao) {
     }
 }
 
-
 $horasEstudadas =
     intdiv(
         $totalMinutosEstudados,
         60
     );
 
-
 $minutosRestantes =
-    $totalMinutosEstudados %
-    60;
-
+    $totalMinutosEstudados % 60;
 
 $tempoEstudadoFormatado =
     $horasEstudadas > 0
@@ -771,7 +467,6 @@ $tempoEstudadoFormatado =
         : $minutosRestantes .
           'min';
 
-
 // ==========================================
 // BOLETIM
 // ==========================================
@@ -781,7 +476,6 @@ $notaMaxima =
         $notasData['nota_maxima'] ??
         10
     );
-
 
 $pesos =
     isset($notasData['pesos']) &&
@@ -794,13 +488,11 @@ $pesos =
             4 => 1
         ];
 
-
 $periodos =
     isset($notasData['periodos']) &&
     is_array($notasData['periodos'])
         ? $notasData['periodos']
         : [];
-
 
 $periodoAtual =
     (string)(
@@ -808,23 +500,11 @@ $periodoAtual =
         ''
     );
 
-
 $dadosPeriodo =
-    isset(
-        $periodos[
-            $periodoAtual
-        ]
-    ) &&
-    is_array(
-        $periodos[
-            $periodoAtual
-        ]
-    )
-        ? $periodos[
-            $periodoAtual
-        ]
+    isset($periodos[$periodoAtual]) &&
+    is_array($periodos[$periodoAtual])
+        ? $periodos[$periodoAtual]
         : [];
-
 
 $nomesPeriodo =
     isset($dadosPeriodo['materias']) &&
@@ -832,13 +512,11 @@ $nomesPeriodo =
         ? $dadosPeriodo['materias']
         : [];
 
-
 $notasPeriodo =
     isset($dadosPeriodo['notas']) &&
     is_array($dadosPeriodo['notas'])
         ? $dadosPeriodo['notas']
         : [];
-
 
 $somaMedias =
     0;
@@ -849,51 +527,33 @@ $totalMedias =
 $materiaAtencao =
     null;
 
-
-foreach (
-    $nomesPeriodo
-    as $indice =>
-       $nomeMateria
-) {
-
+foreach ($nomesPeriodo as $indice => $nomeMateria) {
     $media =
         calcularMediaLinhaInicio(
-            $notasPeriodo[$indice] ??
-            [],
+            $notasPeriodo[$indice] ?? [],
             $pesos
         );
-
 
     if ($media === null) {
         continue;
     }
-
 
     $somaMedias +=
         $media;
 
     $totalMedias++;
 
-
     if (
-        $materiaAtencao ===
-            null ||
+        $materiaAtencao === null ||
         $media <
-            $materiaAtencao[
-                'media'
-            ]
+        $materiaAtencao['media']
     ) {
-
         $materiaAtencao = [
-            'nome' =>
-                (string)$nomeMateria,
-
-            'media' =>
-                $media
+            'nome'  => (string)$nomeMateria,
+            'media' => $media
         ];
     }
 }
-
 
 $mediaGeral =
     $totalMedias > 0
@@ -901,26 +561,20 @@ $mediaGeral =
           $totalMedias
         : 0;
 
-
 $percentualMedia =
     $notaMaxima > 0
         ? (int)round(
             min(
                 100,
-
                 max(
                     0,
-
-                    (
-                        $mediaGeral /
-                        $notaMaxima
-                    ) *
+                    ($mediaGeral /
+                    $notaMaxima) *
                     100
                 )
             )
         )
         : 0;
-
 
 // ==========================================
 // FREQUÊNCIA
@@ -932,21 +586,13 @@ $totalPresencas =
 $totalFaltas =
     0;
 
-
 if (!empty($calendarioData)) {
-
     coletarStatusFrequencia(
         $calendarioData,
         $totalPresencas,
         $totalFaltas
     );
-
-} elseif (
-    file_exists(
-        $arquivoFreqMes
-    )
-) {
-
+} elseif (file_exists($arquivoFreqMes)) {
     $dadosFreqMes =
         carregarJsonInicio(
             $arquivoFreqMes,
@@ -960,54 +606,71 @@ if (!empty($calendarioData)) {
     );
 }
 
-
 $totalAulas =
     $totalPresencas +
     $totalFaltas;
 
-
 $percentualPresenca =
     $totalAulas > 0
         ? (int)round(
-            (
-                $totalPresencas /
-                $totalAulas
-            ) *
+            ($totalPresencas /
+            $totalAulas) *
             100
         )
         : 0;
 
+// ==========================================
+// ANOTAÇÕES IMPORTANTES
+// ==========================================
+
+$anotacoesImportantes =
+    $inicioData[
+        'anotacoes_importantes'
+    ];
+
+usort(
+    $anotacoesImportantes,
+    function ($a, $b) {
+        return (
+            (int)(
+                $b['timestamp'] ??
+                0
+            )
+        ) <=> (
+            (int)(
+                $a['timestamp'] ??
+                0
+            )
+        );
+    }
+);
+
+$anotacoesImportantes =
+    array_slice(
+        $anotacoesImportantes,
+        0,
+        5
+    );
+
 ?>
 <!DOCTYPE html>
-
 <html lang="pt-BR">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOAG - Início</title>
-    <link rel="stylesheet" href="inicioo.css">
-    <link rel="stylesheet" href="dark_ini.css">
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <link rel="stylesheet" href="inicioo.css?v=10">
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css?v=10">
+    <link rel="stylesheet" href="dark_ini.css?v=10">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../acessibilidade/acessibilidade.js" defer></script>
-
-          <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+    <script src="../acessibilidade/acessibilidade.js?v=5" defer></script>
 </head>
-
-
 <body>
 
 
-<div
-    id="mensagem-acessibilidade"
-    class="sr-only"
-    aria-live="polite"
-></div>
+<?php
+?>
 
 
 <!-- ===========================
@@ -1033,14 +696,12 @@ $percentualPresenca =
                 class="active"
                 aria-current="page"
             >
-
                 <i
                     class="fa-solid fa-house"
                     aria-hidden="true"
                 ></i>
 
                 Início
-
             </a>
 
 
@@ -1052,7 +713,6 @@ $percentualPresenca =
                 ></i>
 
                 Calendário
-
             </a>
 
 
@@ -1064,7 +724,6 @@ $percentualPresenca =
                 ></i>
 
                 Agenda
-
             </a>
 
 
@@ -1076,7 +735,6 @@ $percentualPresenca =
                 ></i>
 
                 Estudos
-
             </a>
 
 
@@ -1088,11 +746,15 @@ $percentualPresenca =
                 ></i>
 
                 Boletim
-
             </a>
 
 
-            <a href="../loja/loja.php">
+            <a
+                href="../loja/loja.php"
+                class="<?= $current === 'loja.php'
+                    ? 'active'
+                    : '' ?>"
+            >
 
                 <i
                     class="fa-solid fa-store"
@@ -1100,11 +762,15 @@ $percentualPresenca =
                 ></i>
 
                 Loja
-
             </a>
 
 
-            <a href="../rank/rank.php">
+            <a
+                href="../rank/rank.php"
+                class="<?= $current === 'rank.php'
+                    ? 'active'
+                    : '' ?>"
+            >
 
                 <i
                     class="fa-solid fa-trophy"
@@ -1112,7 +778,6 @@ $percentualPresenca =
                 ></i>
 
                 Ranking
-
             </a>
 
         </nav>
@@ -1120,7 +785,10 @@ $percentualPresenca =
     </div>
 
 
+    <!-- ÍCONES DO CABEÇALHO -->
+
     <div class="header-icons">
+
 
         <a
             href="../configuracoes/configuracoes.php"
@@ -1173,8 +841,9 @@ $percentualPresenca =
 </header>
 
 
+
 <!-- ===========================
-     CONTEÚDO
+     CONTEÚDO PRINCIPAL
 =========================== -->
 
 <main
@@ -1186,7 +855,7 @@ $percentualPresenca =
     <div class="welcome-container">
 
 
-        <!-- ESQUERDA -->
+        <!-- LADO ESQUERDO -->
 
         <div class="left-panel">
 
@@ -1205,6 +874,7 @@ $percentualPresenca =
             </div>
 
 
+
             <!-- ESTATÍSTICAS -->
 
             <div class="stats-grid-large">
@@ -1212,14 +882,17 @@ $percentualPresenca =
 
                 <div class="stat-card-large">
 
-                    <div class="stat-icon-large">
+                    <div
+                        class="stat-icon-large"
+                        aria-hidden="true"
+                    >
 
                         <i
                             class="fa-solid fa-calendar-check"
-                            aria-hidden="true"
                         ></i>
 
                     </div>
+
 
                     <div class="stat-info-large">
 
@@ -1230,7 +903,9 @@ $percentualPresenca =
                             <?= $diasConsecutivos ?>
                         </span>
 
-                        <span class="stat-label-large">
+                        <span
+                            class="stat-label-large"
+                        >
                             Dias produtivos consecutivos
                         </span>
 
@@ -1239,16 +914,20 @@ $percentualPresenca =
                 </div>
 
 
+
                 <div class="stat-card-large">
 
-                    <div class="stat-icon-large">
+                    <div
+                        class="stat-icon-large"
+                        aria-hidden="true"
+                    >
 
                         <i
-                            class="fa-solid fa-list-check"
-                            aria-hidden="true"
+                            class="fa-solid fa-tasks"
                         ></i>
 
                     </div>
+
 
                     <div class="stat-info-large">
 
@@ -1259,7 +938,9 @@ $percentualPresenca =
                             <?= $tarefasPendentes ?>
                         </span>
 
-                        <span class="stat-label-large">
+                        <span
+                            class="stat-label-large"
+                        >
                             Tarefas para hoje
                         </span>
 
@@ -1268,16 +949,20 @@ $percentualPresenca =
                 </div>
 
 
+
                 <div class="stat-card-large">
 
-                    <div class="stat-icon-large">
+                    <div
+                        class="stat-icon-large"
+                        aria-hidden="true"
+                    >
 
                         <i
                             class="fa-solid fa-stopwatch"
-                            aria-hidden="true"
                         ></i>
 
                     </div>
+
 
                     <div class="stat-info-large">
 
@@ -1285,14 +970,12 @@ $percentualPresenca =
                             class="stat-number-large"
                             id="tempo-estudado"
                         >
-                            <?= htmlspecialchars(
-                                $tempoEstudadoFormatado,
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ) ?>
+                            <?= htmlspecialchars($tempoEstudadoFormatado) ?>
                         </span>
 
-                        <span class="stat-label-large">
+                        <span
+                            class="stat-label-large"
+                        >
                             Tempo estudado
                         </span>
 
@@ -1303,9 +986,11 @@ $percentualPresenca =
             </div>
 
 
+
             <!-- MOTIVAÇÃO -->
 
             <div class="motivational-section">
+
 
                 <div class="motivational-quote-large">
 
@@ -1314,10 +999,15 @@ $percentualPresenca =
                         aria-hidden="true"
                     ></i>
 
+
                     <p id="quote-text">
+
                         Organizar é o primeiro passo
-                        para o sucesso!
+                        para o sucesso! Comece seu dia
+                        planejando suas atividades.
+
                     </p>
+
 
                     <i
                         class="fa-solid fa-quote-right"
@@ -1325,6 +1015,7 @@ $percentualPresenca =
                     ></i>
 
                 </div>
+
 
 
                 <div class="quick-tips">
@@ -1340,7 +1031,8 @@ $percentualPresenca =
                         </li>
 
                         <li>
-                            Estabeleça metas realistas para o dia
+                            Estabeleça metas realistas
+                            para o dia
                         </li>
 
                         <li>
@@ -1360,12 +1052,13 @@ $percentualPresenca =
         </div>
 
 
-        <!-- DIREITA -->
+
+        <!-- LADO DIREITO -->
 
         <div class="right-panel">
 
 
-            <!-- RESUMO -->
+            <!-- RESUMO DO MÊS -->
 
             <section
                 class="info-card"
@@ -1390,12 +1083,16 @@ $percentualPresenca =
 
                 <div class="card-content">
 
+
                     <div class="metric-row">
 
 
                         <div class="metric">
 
-                            <span class="metric-value">
+                            <span
+                                class="metric-value"
+                                id="total-presencas"
+                            >
                                 <?= count($materias) ?>
                             </span>
 
@@ -1406,9 +1103,13 @@ $percentualPresenca =
                         </div>
 
 
+
                         <div class="metric">
 
-                            <span class="metric-value">
+                            <span
+                                class="metric-value"
+                                id="total-faltas"
+                            >
                                 <?= $totalSessoes ?>
                             </span>
 
@@ -1419,17 +1120,14 @@ $percentualPresenca =
                         </div>
 
 
+
                         <div class="metric">
 
-                            <span class="metric-value">
-
-                                <?= number_format(
-                                    $mediaGeral,
-                                    2,
-                                    ',',
-                                    '.'
-                                ) ?>
-
+                            <span
+                                class="metric-value"
+                                id="percentual-presenca"
+                            >
+                                <?= number_format($mediaGeral, 2, ',', '.') ?>
                             </span>
 
                             <span class="metric-label">
@@ -1441,11 +1139,16 @@ $percentualPresenca =
                     </div>
 
 
+
+                    <!-- BARRA DE FREQUÊNCIA -->
+
                     <div class="progress-container">
+
 
                         <div
                             class="progress-bar"
                             role="progressbar"
+                            aria-label="Desempenho médio no boletim"
                             aria-valuemin="0"
                             aria-valuemax="100"
                             aria-valuenow="<?= $percentualMedia ?>"
@@ -1460,50 +1163,19 @@ $percentualPresenca =
 
 
                         <span class="progress-text">
-
                             <?php if ($totalMedias > 0): ?>
-
-                                Desempenho atual:
-                                <?= $percentualMedia ?>%
-
+                                Desempenho atual: <?= number_format($percentualMedia, 0, ',', '.') ?>%
                             <?php else: ?>
-
-                                Adicione notas no Boletim
-                                para acompanhar sua média.
-
+                                Adicione notas no Boletim para acompanhar sua média.
                             <?php endif; ?>
-
                         </span>
 
-
                         <?php if ($materiaAtencao): ?>
-
-                            <p
-                                class="progress-text"
-                                style="margin-top:8px;"
-                            >
-
-                                <strong>
-                                    Precisa de atenção:
-                                </strong>
-
-                                <?= htmlspecialchars(
-                                    $materiaAtencao['nome'],
-                                    ENT_QUOTES,
-                                    'UTF-8'
-                                ) ?>
-
-                                (
-                                <?= number_format(
-                                    $materiaAtencao['media'],
-                                    2,
-                                    ',',
-                                    '.'
-                                ) ?>
-                                )
-
+                            <p class="progress-text" style="margin-top:8px;">
+                                <strong>Precisa de atenção:</strong>
+                                <?= htmlspecialchars($materiaAtencao['nome']) ?>
+                                (<?= number_format($materiaAtencao['media'], 2, ',', '.') ?>)
                             </p>
-
                         <?php endif; ?>
 
                     </div>
@@ -1513,9 +1185,8 @@ $percentualPresenca =
             </section>
 
 
-            <!-- ===========================
-                 ANOTAÇÕES IMPORTANTES
-            ============================ -->
+
+            <!-- ANOTAÇÕES IMPORTANTES -->
 
             <section
                 class="info-card"
@@ -1523,6 +1194,7 @@ $percentualPresenca =
             >
 
                 <div class="card-header">
+
 
                     <h2 id="titulo-anotacoes">
 
@@ -1560,82 +1232,63 @@ $percentualPresenca =
                     <div
                         class="notes-list"
                         id="notes-list"
-                        style="<?= empty($anotacoesImportantes)
-                            ? 'display:none;'
-                            : 'display:flex;' ?>"
                     >
 
-                        <?php foreach (
-                            $anotacoesImportantes
-                            as $nota
+
+                        <?php if (
+                            !empty($anotacoesImportantes)
                         ): ?>
 
 
-                            <div class="note-item">
+                            <?php foreach (
+                                $anotacoesImportantes
+                                as $nota
+                            ): ?>
 
 
-                                <?php if (
-                                    !empty(
-                                        $nota['titulo']
-                                    )
-                                ): ?>
+                                <div class="note-item">
 
-                                    <strong class="note-title">
-
-                                        <?= htmlspecialchars(
-                                            $nota['titulo'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ) ?>
-
-                                    </strong>
-
-                                <?php endif; ?>
-
-
-                                <?php if (
-                                    !empty(
-                                        $nota['text']
-                                    )
-                                ): ?>
 
                                     <p class="note-text">
 
                                         <?= htmlspecialchars(
-                                            $nota['text'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
+                                            $nota['text']
                                         ) ?>
 
                                     </p>
 
-                                <?php endif; ?>
+
+                                    <?php if (
+                                        !empty($nota['date'])
+                                    ): ?>
 
 
-                                <?php if (
-                                    !empty(
-                                        $nota['date']
-                                    )
-                                ): ?>
+                                        <span class="note-date">
 
-                                    <span class="note-date">
+                                            <?= date(
+                                                'd/m/Y',
+                                                strtotime(
+                                                    $nota['date']
+                                                )
+                                            ) ?>
 
-                                        <?= htmlspecialchars(
-                                            $nota['date'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        ) ?>
-
-                                    </span>
-
-                                <?php endif; ?>
-
-                            </div>
+                                        </span>
 
 
-                        <?php endforeach; ?>
+                                    <?php endif; ?>
+
+
+                                </div>
+
+
+                            <?php endforeach; ?>
+
+
+                        <?php endif; ?>
+
 
                     </div>
+
 
 
                     <div
@@ -1650,6 +1303,7 @@ $percentualPresenca =
                             class="fa-solid fa-clipboard"
                             aria-hidden="true"
                         ></i>
+
 
                         <p>
                             Nenhuma anotação importante
@@ -1678,9 +1332,8 @@ $percentualPresenca =
             </section>
 
 
-            <!-- ===========================
-                 LEMBRETES
-            ============================ -->
+
+            <!-- LEMBRETES -->
 
             <section
                 class="info-card"
@@ -1710,106 +1363,55 @@ $percentualPresenca =
                         class="reminders-list"
                         id="reminders-list"
                     >
-
-                        <?php foreach (
-                            $proximosLembretes
-                            as $lembrete
-                        ): ?>
-
-
+                        <?php foreach ($proximosLembretes as $lembrete): ?>
                             <div class="reminder-item">
-
-                                <div
-                                    class="reminder-icon"
-                                    aria-hidden="true"
-                                >
-
-                                    <i
-                                        class="fa-solid fa-clock"
-                                    ></i>
-
+                                <div class="reminder-icon" aria-hidden="true">
+                                    <i class="fa-solid fa-clock"></i>
                                 </div>
-
 
                                 <div class="reminder-text">
-
-                                    <?= htmlspecialchars(
-                                        $lembrete['texto'],
-                                        ENT_QUOTES,
-                                        'UTF-8'
-                                    ) ?>
-
+                                    <?= htmlspecialchars($lembrete['texto']) ?>
                                 </div>
-
 
                                 <div class="reminder-time">
-
                                     <?php
+                                    $dataLembrete = $lembrete['data'];
 
-                                    if (
-                                        $lembrete['data'] ===
-                                        ''
-                                    ) {
-
-                                        echo 'Sem data';
-
-                                    } elseif (
-                                        $lembrete['data'] ===
-                                        $hoje
-                                    ) {
-
-                                        echo 'Hoje';
-
+                                    if ($dataLembrete === $hoje) {
+                                        echo $lembrete['hora'] !== ''
+                                            ? htmlspecialchars($lembrete['hora'])
+                                            : 'Hoje';
                                     } else {
-
-                                        echo htmlspecialchars(
-                                            formatarDataLembreteInicio(
-                                                $lembrete['data']
-                                            ),
-                                            ENT_QUOTES,
-                                            'UTF-8'
+                                        echo date(
+                                            'd/m',
+                                            strtotime($dataLembrete)
                                         );
+
+                                        if ($lembrete['hora'] !== '') {
+                                            echo ' · ' .
+                                                htmlspecialchars(
+                                                    $lembrete['hora']
+                                                );
+                                        }
                                     }
-
-
-                                    if (
-                                        $lembrete['hora'] !==
-                                        ''
-                                    ) {
-
-                                        echo ' · ';
-
-                                        echo htmlspecialchars(
-                                            $lembrete['hora'],
-                                            ENT_QUOTES,
-                                            'UTF-8'
-                                        );
-                                    }
-
                                     ?>
-
                                 </div>
-
                             </div>
-
-
                         <?php endforeach; ?>
-
                     </div>
 
 
                     <div
                         class="empty-reminders"
                         id="empty-reminders"
-                        style="<?= !empty($proximosLembretes)
-                            ? 'display:none;'
-                            : '' ?>"
+                        style="<?= !empty($proximosLembretes) ? 'display:none;' : '' ?>"
                     >
 
                         <i
                             class="fa-solid fa-bell-slash"
                             aria-hidden="true"
                         ></i>
+
 
                         <p>
                             Nenhum lembrete próximo
@@ -1828,6 +1430,7 @@ $percentualPresenca =
 </main>
 
 
+
 <!-- ===========================
      MODAL NOVA ANOTAÇÃO
 =========================== -->
@@ -1842,7 +1445,9 @@ $percentualPresenca =
 
     <div class="modal-content">
 
+
         <div class="modal-header">
+
 
             <h3 id="titulo-note-modal">
                 Nova Anotação Importante
@@ -1853,7 +1458,7 @@ $percentualPresenca =
                 type="button"
                 class="modal-close"
                 id="close-note-modal"
-                aria-label="Fechar"
+                aria-label="Fechar janela de nova anotação"
             >
 
                 <i
@@ -1866,7 +1471,9 @@ $percentualPresenca =
         </div>
 
 
+
         <div class="modal-body">
+
 
             <label
                 for="note-text"
@@ -1880,10 +1487,20 @@ $percentualPresenca =
                 id="note-text"
                 placeholder="Digite sua anotação importante aqui..."
                 maxlength="200"
+                aria-describedby="note-limite"
             ></textarea>
 
 
+            <span
+                id="note-limite"
+                class="sr-only"
+            >
+                Máximo de 200 caracteres
+            </span>
+
+
             <div class="modal-footer">
+
 
                 <button
                     type="button"
@@ -1902,6 +1519,7 @@ $percentualPresenca =
                     Salvar
                 </button>
 
+
             </div>
 
         </div>
@@ -1911,8 +1529,9 @@ $percentualPresenca =
 </div>
 
 
+
 <!-- ===========================
-     LOGOUT
+     MODAL LOGOUT
 =========================== -->
 
 <div
@@ -1925,9 +1544,11 @@ $percentualPresenca =
 
     <div class="modal-content">
 
+
         <h3 id="titulo-logout">
             Ah... já vai?
         </h3>
+
 
         <h4>
             Tem certeza de que deseja sair?
@@ -1935,6 +1556,7 @@ $percentualPresenca =
 
 
         <div class="modal-buttons">
+
 
             <button
                 type="button"
@@ -1951,11 +1573,59 @@ $percentualPresenca =
                 Cancelar
             </button>
 
+
         </div>
 
     </div>
 
 </div>
+
+
+
+<!-- ===========================
+     MODAL FOGi
+=========================== -->
+
+<div
+    id="fogi-modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-fogi"
+>
+
+    <div class="fogi-container">
+
+
+        <div class="fogi-header">
+
+
+            <span id="titulo-fogi">
+                FOGi — Assistente de Estudos
+            </span>
+
+
+            <button
+                type="button"
+                id="fogi-close"
+            >
+                Fechar
+            </button>
+
+
+        </div>
+
+
+        <iframe
+            id="fogi-iframe"
+            src="about:blank"
+            title="FOGi - Assistente de Estudos"
+        ></iframe>
+
+
+    </div>
+
+</div>
+
 
 
 <!-- ===========================
@@ -1981,14 +1651,13 @@ $percentualPresenca =
 </footer>
 
 
-<script>
-    window.INICIO_NOTE_SAVE_URL =
-        'salvar_anotacao.php';
-</script>
 
+<script>
+window.INICIO_NOTE_SAVE_URL = 'salvar_anotacao.php';
+</script>
 <script src="inicio.js"></script>
 
-<script src="../configuracoes/aparencia.js?v=2"></script>
+
 </body>
 
 </html>
