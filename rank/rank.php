@@ -19,6 +19,14 @@ $current = basename($_SERVER['PHP_SELF']);
 
 $baseJsonDir = __DIR__ . '/../json/usuarios';
 
+/* ======================================
+   FOTOS DE PERFIL
+====================================== */
+
+$pastaFotosUrl = '../img/perfil/';
+$pastaFotosArquivo = __DIR__ . '/../img/perfil/';
+$fotoPadrao = 'foto_padrao.png';
+
 $pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
 $arquivoPerfil = $pastaUsuario . '/perfil.json';
 
@@ -380,6 +388,42 @@ foreach ($pastasUsuarios as $pasta) {
     }
 
     // ==================================
+    // FOTO DE PERFIL
+    // ==================================
+
+    $fotoPerfil = $fotoPadrao;
+
+    if (!empty($perfil['foto'])) {
+
+        $fotoUsuario =
+            basename(
+                (string) $perfil['foto']
+            );
+
+        if (
+            $fotoUsuario !== ''
+            &&
+            file_exists(
+                $pastaFotosArquivo .
+                $fotoUsuario
+            )
+        ) {
+            $fotoPerfil =
+                $fotoUsuario;
+        }
+    }
+
+    /*
+     * Caso a foto padrão também não exista,
+     * o HTML abaixo usará um ícone como fallback.
+     */
+    $caminhoFoto =
+        $pastaFotosUrl .
+        rawurlencode(
+            $fotoPerfil
+        );
+
+    // ==================================
     // LOCALIZAÇÃO
     // ==================================
 
@@ -467,8 +511,8 @@ foreach ($pastasUsuarios as $pasta) {
         'nome' =>
             $perfil['nome'],
 
-        'avatar' =>
-            '👤',
+        'foto' =>
+            $caminhoFoto,
 
         'estado' =>
             $estado,
@@ -668,8 +712,8 @@ function criarRanking(
             'nome' =>
                 $usuario['nome'],
 
-            'avatar' =>
-                $usuario['avatar'],
+            'foto' =>
+                $usuario['foto'],
 
             'estado' =>
                 $usuario['estado'],
@@ -986,6 +1030,101 @@ foreach (
     >
 
     <script src="../m.escuro/dark-mode.js"></script>
+
+    <style>
+        /* ==========================================
+           FOTO DE PERFIL NO RANKING
+        ========================================== */
+
+        .rank-full-item .avatar.avatar-foto {
+            width: 44px !important;
+            height: 44px !important;
+            min-width: 44px !important;
+            flex: 0 0 44px !important;
+
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+
+            padding: 0 !important;
+            overflow: hidden !important;
+
+            border-radius: 50% !important;
+            border: 2px solid #ffffff !important;
+
+            background: #eef4fa !important;
+
+            box-shadow:
+                0 2px 8px
+                rgba(0, 0, 0, 0.10) !important;
+
+            font-size: 0 !important;
+        }
+
+        .rank-full-item .avatar.avatar-foto img {
+            width: 100% !important;
+            height: 100% !important;
+
+            display: block;
+
+            object-fit: cover !important;
+            object-position: center !important;
+
+            border-radius: 50% !important;
+        }
+
+        .rank-full-item .avatar-fallback {
+            width: 100%;
+            height: 100%;
+
+            display: none;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            color: #7c8da0;
+            background: #eef4fa;
+
+            font-size: 17px !important;
+        }
+
+        body.dark-mode .rank-full-item .avatar.avatar-foto {
+            border-color: #334155 !important;
+            background: #243247 !important;
+        }
+
+        body.dark-mode .rank-full-item .avatar-fallback {
+            color: #cbd5e1;
+            background: #243247;
+        }
+
+        @media (max-width: 768px) {
+
+            .rank-full-item .avatar.avatar-foto {
+                width: 38px !important;
+                height: 38px !important;
+                min-width: 38px !important;
+                flex-basis: 38px !important;
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            .rank-full-item .avatar.avatar-foto {
+                width: 34px !important;
+                height: 34px !important;
+                min-width: 34px !important;
+                flex-basis: 34px !important;
+            }
+
+            .rank-full-item .avatar-fallback {
+                font-size: 14px !important;
+            }
+
+        }
+    </style>
 
           <?php include '../configuracoes/geral.php'; ?>
 <script src="<?= get_aparencia_path() ?>"></script>
@@ -1509,8 +1648,33 @@ foreach (
 
                                             </div>
 
-                                            <div class="avatar">
-                                                <?= $jogador['avatar'] ?>
+                                            <div class="avatar avatar-foto">
+
+                                                <img
+                                                    src="<?= htmlspecialchars(
+                                                        $jogador['foto'] ?? '',
+                                                        ENT_QUOTES,
+                                                        'UTF-8'
+                                                    ) ?>"
+                                                    alt="Foto de perfil de <?= htmlspecialchars(
+                                                        $jogador['nome'],
+                                                        ENT_QUOTES,
+                                                        'UTF-8'
+                                                    ) ?>"
+                                                    loading="lazy"
+                                                    onerror="
+                                                        this.style.display='none';
+                                                        this.nextElementSibling.style.display='flex';
+                                                    "
+                                                >
+
+                                                <span
+                                                    class="avatar-fallback"
+                                                    aria-hidden="true"
+                                                >
+                                                    <i class="fa-solid fa-user"></i>
+                                                </span>
+
                                             </div>
 
                                             <div class="info">
