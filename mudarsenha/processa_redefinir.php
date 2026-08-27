@@ -1,66 +1,373 @@
 <?php
-// processa_redefinir.php
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Location: mudar.php');
+session_start();
+
+
+/* ==========================================
+   VERIFICAR AUTORIZAÇÃO
+========================================== */
+
+if (
+    $_SERVER['REQUEST_METHOD'] !== 'POST'
+) {
+
+    header(
+        'Location: esqueci.php'
+    );
+
     exit;
 }
 
-$email = trim($_POST['email'] ?? '');
-$nova_senha = $_POST['nova_senha'] ?? '';
-$confirmar_senha = $_POST['confirmar_senha'] ?? '';
 
-// Validações básicas
-if (empty($email) || empty($nova_senha) || empty($confirmar_senha)) {
-    echo "Por favor, preencha todos os campos.";
+if (
+    empty(
+        $_SESSION[
+            'recuperacao_autorizada'
+        ]
+    ) ||
+    empty(
+        $_SESSION[
+            'recuperacao_arquivo'
+        ]
+    ) ||
+    empty(
+        $_SESSION[
+            'recuperacao_inicio'
+        ]
+    )
+) {
+
+    header(
+        'Location: esqueci.php'
+    );
+
     exit;
 }
 
-if ($nova_senha !== $confirmar_senha) {
-    echo "As senhas não coincidem.";
-    exit;
+
+/* ==========================================
+   VERIFICAR TEMPO
+========================================== */
+
+if (
+    (
+        time() -
+        $_SESSION[
+            'recuperacao_inicio'
+        ]
+    ) > 600
+) {
+
+    unset(
+        $_SESSION[
+            'recuperacao_autorizada'
+        ],
+        $_SESSION[
+            'recuperacao_arquivo'
+        ],
+        $_SESSION[
+            'recuperacao_email'
+        ],
+        $_SESSION[
+            'recuperacao_codigo'
+        ],
+        $_SESSION[
+            'recuperacao_pergunta'
+        ],
+        $_SESSION[
+            'recuperacao_inicio'
+        ],
+        $_SESSION[
+            'recuperacao_tentativas'
+        ]
+    );
+
+    exit(
+        'O tempo para redefinir a senha expirou. Volte e tente novamente.'
+    );
 }
 
-// Validação senha conforme regras (mín 8 caracteres, 1 maiúscula, 1 número, 1 símbolo)
-if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/', $nova_senha)) {
-    echo "Senha não atende aos requisitos de segurança.";
-    exit;
+
+/* ==========================================
+   RECEBER NOVA SENHA
+========================================== */
+
+$novaSenha =
+    $_POST['nova_senha'] ?? '';
+
+$confirmarSenha =
+    $_POST['confirmar_senha'] ?? '';
+
+
+if (
+    empty($novaSenha) ||
+    empty($confirmarSenha)
+) {
+
+    exit(
+        'Preencha os dois campos de senha.'
+    );
 }
 
-$arquivo = '../cadastro/usuario.txt';
-if (!file_exists($arquivo)) {
-    echo "Arquivo de usuários não encontrado.";
-    exit;
+
+/* ==========================================
+   VALIDAR SENHA
+========================================== */
+
+$regexSenha =
+    '/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>]).{8,}$/';
+
+
+if (
+    !preg_match(
+        $regexSenha,
+        $novaSenha
+    )
+) {
+
+    exit(
+        'A senha precisa ter pelo menos 8 caracteres, uma letra maiúscula, um número e um símbolo.'
+    );
 }
 
-// Lê todas as linhas do arquivo
-$linhas = file($arquivo, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-$encontrou = false;
 
-foreach ($linhas as $index => $linha) {
-    // Cada linha: email|senhaHash|outrosCampos
-    $partes = explode('|', $linha);
-    $email_arquivo = $partes[0] ?? '';
+if (
+    $novaSenha !==
+    $confirmarSenha
+) {
 
-    if (strcasecmp($email, $email_arquivo) === 0) {
-        // Usuário encontrado, vamos atualizar a senha
-        $hash = password_hash($nova_senha, PASSWORD_DEFAULT);
-
-        // Monta a linha atualizada mantendo os outros campos (exceto senha que atualizamos)
-        $partes[1] = $hash;
-        $linhas[$index] = implode('|', $partes);
-
-        $encontrou = true;
-        break;
-    }
+    exit(
+        'As senhas não coincidem.'
+    );
 }
 
-if (!$encontrou) {
-    echo "E-mail não cadastrado.";
-    exit;
+
+/* ==========================================
+   ABRIR JSON DO USUÁRIO
+========================================== */
+
+$arquivo =
+    $_SESSION[
+        'recuperacao_arquivo'
+    ];
+
+
+/*
+ * Garante que estamos trabalhando somente
+ * dentro da pasta de login.
+ */
+
+$pastaLogin =
+    realpath(
+        __DIR__ .
+        '/../json/usuario_login'
+    );
+
+
+$arquivoReal =
+    realpath($arquivo);
+
+
+if (
+    !$pastaLogin ||
+    !$arquivoReal ||
+    strpos(
+        $arquivoReal,
+        $pastaLogin .
+        DIRECTORY_SEPARATOR
+    ) !== 0
+) {
+
+    exit(
+        'Arquivo de usuário inválido.'
+    );
 }
 
-// Escreve de volta no arquivo
-file_put_contents($arquivo, implode(PHP_EOL, $linhas) . PHP_EOL);
 
-echo "Senha redefinida com sucesso! Você pode <a href='../index/index.php'>fazer login</a> agora.";
+if (
+    !file_exists($arquivoReal)
+) {
+
+    exit(
+        'Usuário não encontrado.'
+    );
+}
+
+
+$conteudo =
+    file_get_contents(
+        $arquivoReal
+    );
+
+
+$dados =
+    json_decode(
+        $conteudo,
+        true
+    );
+
+
+if (
+    !is_array($dados)
+) {
+
+    exit(
+        'Não foi possível carregar os dados da conta.'
+    );
+}
+
+
+/* ==========================================
+   CRIAR NOVO HASH
+========================================== */
+
+$novoHash =
+    password_hash(
+        $novaSenha,
+        PASSWORD_DEFAULT
+    );
+
+
+if (
+    $novoHash === false
+) {
+
+    exit(
+        'Não foi possível proteger a nova senha.'
+    );
+}
+
+
+/* ==========================================
+   ALTERAR SOMENTE A SENHA
+========================================== */
+
+$dados['senha'] =
+    $novoHash;
+
+
+/* ==========================================
+   SALVAR JSON
+========================================== */
+
+$json =
+    json_encode(
+        $dados,
+        JSON_PRETTY_PRINT |
+        JSON_UNESCAPED_UNICODE
+    );
+
+
+if (
+    $json === false
+) {
+
+    exit(
+        'Não foi possível preparar os dados da conta.'
+    );
+}
+
+
+$resultado =
+    file_put_contents(
+        $arquivoReal,
+        $json,
+        LOCK_EX
+    );
+
+
+if (
+    $resultado === false
+) {
+
+    exit(
+        'Não foi possível alterar a senha.'
+    );
+}
+
+
+/* ==========================================
+   LIMPAR RECUPERAÇÃO
+========================================== */
+
+unset(
+    $_SESSION[
+        'recuperacao_autorizada'
+    ],
+    $_SESSION[
+        'recuperacao_arquivo'
+    ],
+    $_SESSION[
+        'recuperacao_email'
+    ],
+    $_SESSION[
+        'recuperacao_codigo'
+    ],
+    $_SESSION[
+        'recuperacao_pergunta'
+    ],
+    $_SESSION[
+        'recuperacao_inicio'
+    ],
+    $_SESSION[
+        'recuperacao_tentativas'
+    ]
+);
+
+
+/* ==========================================
+   REDIRECIONAR
+========================================== */
+
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        http-equiv="refresh"
+        content="3;url=../login/index.php"
+    >
+
+    <title>Senha alterada</title>
+
+    <link
+        rel="stylesheet"
+        href="mudar.css"
+    >
+
+</head>
+
+<body class="pagina-sucesso">
+
+    <div class="sucesso-box">
+
+        <div class="sucesso-icone">
+            ✓
+        </div>
+
+        <h1>
+            Senha alterada!
+        </h1>
+
+        <p>
+            Sua nova senha foi salva com sucesso.
+        </p>
+
+        <a href="../login/index.php">
+            Ir para o login
+        </a>
+
+    </div>
+
+</body>
+
+</html>

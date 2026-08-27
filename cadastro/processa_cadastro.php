@@ -9,6 +9,8 @@ $email = strtolower(trim($_POST['email'] ?? ''));
 $senha = $_POST['senha'] ?? '';
 $confirmarSenha = $_POST['confirmar_senha'] ?? '';
 $dataNascimento = trim($_POST['data_nascimento'] ?? '');
+$perguntaSecreta = trim($_POST['pergunta_secreta'] ?? '');
+$respostaSecreta = trim($_POST['resposta_secreta'] ?? '');
 $telefone = trim($_POST['telefone'] ?? '');
 $serie = trim($_POST['serie'] ?? '');
 $escola = trim($_POST['escola'] ?? '');
@@ -20,6 +22,8 @@ if (
     empty($email) ||
     empty($senha) ||
     empty($dataNascimento) ||
+    empty($perguntaSecreta) ||
+    empty($respostaSecreta) ||
     !filter_var($email, FILTER_VALIDATE_EMAIL)
 ) {
     exit("Por favor, preencha todos os campos corretamente.");
@@ -27,6 +31,18 @@ if (
 
 if (!$termos) {
     exit("Você precisa aceitar os termos de uso.");
+}
+
+$perguntasPermitidas = [
+    'Qual o nome do seu primeiro animal?',
+    'Qual era seu apelido de infância?',
+    'Qual o nome da sua primeira escola?',
+    'Qual o nome do seu personagem favorito?',
+    'Qual era sua brincadeira favorita quando criança?'
+];
+
+if (!in_array($perguntaSecreta, $perguntasPermitidas, true)) {
+    exit("Pergunta de segurança inválida.");
 }
 
 $nome = strip_tags($nome);
@@ -145,6 +161,16 @@ if ($senhaHash === false) {
     exit("Não foi possível proteger a senha.");
 }
 
+$respostaSecretaNormalizada = normalizarRespostaSecreta($respostaSecreta);
+$respostaSecretaHash = password_hash($respostaSecretaNormalizada, PASSWORD_DEFAULT);
+
+if ($respostaSecretaHash === false) {
+    flock($arquivoLock, LOCK_UN);
+    fclose($arquivoLock);
+
+    exit("Não foi possível proteger a resposta de segurança.");
+}
+
 /*
 |--------------------------------------------------------------------------
 | Criar pasta individual do usuário
@@ -224,7 +250,9 @@ $dadosLogin = [
     'nome' => $nome,
     'email' => $email,
     'senha' => $senhaHash,
-    'codigo_usuario' => $codigoUsuario
+    'codigo_usuario' => $codigoUsuario,
+    'pergunta_secreta' => $perguntaSecreta,
+    'resposta_secreta' => $respostaSecretaHash
 ];
 
 if (!salvarJson($caminhoArquivoLogin, $dadosLogin)) {
@@ -245,6 +273,24 @@ exibirMensagem(
 );
 
 exit;
+
+/*
+|--------------------------------------------------------------------------
+| Normalizar resposta de segurança
+|--------------------------------------------------------------------------
+*/
+
+function normalizarRespostaSecreta(string $resposta): string
+{
+    $resposta = trim($resposta);
+    $resposta = preg_replace('/\s+/u', ' ', $resposta);
+
+    if (function_exists('mb_strtolower')) {
+        return mb_strtolower($resposta, 'UTF-8');
+    }
+
+    return strtolower($resposta);
+}
 
 /*
 |--------------------------------------------------------------------------
