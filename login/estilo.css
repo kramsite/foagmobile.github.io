@@ -1,65 +1,442 @@
-/* ==========================================
+/* =========================================================
+   FOAG — LOGIN
+========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    width: 100%;
+    min-height: 100%;
+}
+
+body {
+    min-height: 100vh;
+    background: #ffffff;
+    color: #232323;
+    font-family: 'Poppins', sans-serif;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+.logo {
+    width: 100%;
+    height: 68px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 22px;
+
+    background: #38a5ff;
+    color: #ffffff;
+
+    font-family: 'Snap ITC', 'Poppins', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+
+    box-shadow:
+        0 3px 10px
+        rgba(0, 0, 0, 0.12);
+}
+
+
+/* =========================================================
+   PÁGINA DE LOGIN
+========================================================= */
+
+.login-page {
+    width: 100%;
+    min-height: calc(100vh - 68px);
+
+    margin-top: 68px;
+
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.1fr)
+        minmax(420px, 0.9fr);
+
+    background: #ffffff;
+}
+
+
+/* =========================================================
+   LADO ESQUERDO
+========================================================= */
+
+.left-section {
+    width: 100%;
+    min-height: calc(100vh - 68px);
+
+    position: relative;
+
+    overflow: hidden;
+
+    background: #eaf5ff;
+}
+
+.left-section img {
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    inset: 0;
+
+    display: block;
+
+    object-fit: cover;
+    object-position: center;
+}
+
+
+/* =========================================================
+   LADO DIREITO
+========================================================= */
+
+.right-section {
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    padding: 55px 70px;
+
+    background: #ffffff;
+}
+
+.right-section h1 {
+    margin-bottom: 32px;
+
+    color: #232323;
+
+    font-size: 2.15rem;
+    font-weight: 600;
+
+    line-height: 1.2;
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+========================================================= */
+
+#form-login {
+    width: 100%;
+    max-width: 500px;
+}
+
+#form-login label {
+    display: block;
+
+    margin-bottom: 8px;
+
+    color: #374151;
+
+    font-size: 0.94rem;
+    font-weight: 500;
+}
+
+
+/* remove efeito causado pelos <br> */
+#form-login > br {
+    display: none;
+}
+
+
+/* =========================================================
+   INPUTS
+========================================================= */
+
+#form-login > input,
+.password-wrapper input {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+
+    border:
+        1px solid
+        #d5dce5;
+
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #232323;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+
+    outline: none;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* espaço depois do e-mail */
+#email {
+    margin-bottom: 24px;
+}
+
+#form-login > input:focus,
+.password-wrapper input:focus {
+    border-color: #38a5ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56, 165, 255, 0.12);
+}
+
+
+/* =========================================================
+   SENHA
+========================================================= */
+
+.password-wrapper {
+    width: 100%;
+
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 48px;
+}
+
+.toggle-visibility {
+    width: 38px;
+    height: 38px;
+
+    position: absolute;
+    top: 50%;
+    right: 6px;
+
+    transform:
+        translateY(-50%);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+
+    user-select: none;
+
+    font-size: 1rem;
+
+    transition:
+        background 0.2s ease;
+}
+
+.toggle-visibility:hover {
+    background: #edf6ff;
+}
+
+
+/* =========================================================
    LINKS ABAIXO DA SENHA
-========================================== */
+========================================================= */
 
 .login-links {
-  width: 100% !important;
+    width: 100%;
 
-  display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+    display: grid;
+    grid-template-columns:
+        1fr 1fr;
 
-  align-items: center !important;
+    align-items: center;
 
-  margin: 16px 0 10px 0 !important;
-  padding: 0 !important;
+    gap: 15px;
+
+    margin:
+        20px 0
+        24px;
+
+    padding: 0;
 }
 
-/* Remove estilos antigos */
 .login-links a {
-  width: auto !important;
+    width: auto;
 
-  display: block !important;
+    margin: 0;
+    padding: 0;
 
-  margin: 0 !important;
-  padding: 0 !important;
+    color: #0783f7;
 
-  color: #0783f7 !important;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
 
-  font-size: 0.95rem !important;
-  font-weight: 500 !important;
-
-  text-decoration: none !important;
+    text-decoration: none;
 }
 
-/* CADASTRE-SE NA BORDA ESQUERDA */
 .login-links .link-cadastro {
-  justify-self: start !important;
-  text-align: left !important;
+    justify-self: start;
+    text-align: left;
 }
 
-/* ESQUECI SENHA NA BORDA DIREITA */
 .login-links .link-recuperar {
-  justify-self: end !important;
-  text-align: right !important;
+    justify-self: end;
+    text-align: right;
 }
 
 .login-links a:hover {
-  text-decoration: underline !important;
+    text-decoration: underline;
 }
 
 
-/* ==========================================
-   MOBILE
-========================================== */
+/* =========================================================
+   BOTÃO ENTRAR
+========================================================= */
+
+#form-login > button[type="submit"] {
+    width: 100%;
+    height: 49px;
+
+    border: 0;
+    border-radius: 9px;
+
+    background: #38a5ff;
+    color: #ffffff;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.97rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.15s ease,
+        box-shadow 0.2s ease;
+}
+
+#form-login > button[type="submit"]:hover {
+    background: #168fe8;
+
+    box-shadow:
+        0 5px 15px
+        rgba(56, 165, 255, 0.25);
+}
+
+#form-login > button[type="submit"]:active {
+    transform:
+        translateY(1px);
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 950px) {
+
+    .login-page {
+        grid-template-columns:
+            1fr 1fr;
+    }
+
+    .right-section {
+        padding:
+            45px 35px;
+    }
+
+}
+
 
 @media (max-width: 768px) {
 
-  .login-links {
-    margin: 13px 0 9px 0 !important;
-  }
+    .logo {
+        height: 62px;
 
-  .login-links a {
-    font-size: 0.76rem !important;
-  }
+        font-size: 1.7rem;
+    }
+
+    .login-page {
+        margin-top: 62px;
+
+        min-height:
+            calc(100vh - 62px);
+
+        display: block;
+    }
+
+    .left-section {
+        width: 100%;
+        height: 220px;
+        min-height: 220px;
+    }
+
+    .left-section img {
+        object-position: center;
+    }
+
+    .right-section {
+        min-height: auto;
+
+        padding:
+            36px 25px
+            45px;
+    }
+
+    .right-section h1 {
+        margin-bottom: 25px;
+
+        font-size: 1.8rem;
+    }
+
+    #form-login {
+        max-width: none;
+    }
+
+    .login-links a {
+        font-size: 0.76rem;
+    }
+
+}
+
+
+@media (max-width: 430px) {
+
+    .left-section {
+        height: 180px;
+        min-height: 180px;
+    }
+
+    .right-section {
+        padding:
+            30px 18px
+            40px;
+    }
+
+    .login-links {
+        grid-template-columns:
+            1fr;
+
+        gap: 8px;
+    }
+
+    .login-links .link-cadastro,
+    .login-links .link-recuperar {
+        justify-self: start;
+        text-align: left;
+    }
 
 }

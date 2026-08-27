@@ -7,7 +7,7 @@
 
   <title>Login</title>
 
-  <link rel="stylesheet" href="estilo.css">
+  <link rel="stylesheet" href="./estilo.css?v=50">
 
   <link
     href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap"
@@ -17,17 +17,17 @@
 
 <body>
 
-  <!-- Cabeçalho fixo -->
+  <!-- CABEÇALHO -->
   <div class="logo">
     FOAG
   </div>
 
 
-  <!-- Página de login -->
+  <!-- PÁGINA DE LOGIN -->
   <div class="login-page">
 
 
-    <!-- Lado esquerdo -->
+    <!-- LADO ESQUERDO -->
     <div class="left-section">
 
       <img
@@ -38,7 +38,7 @@
     </div>
 
 
-    <!-- Lado direito -->
+    <!-- LADO DIREITO -->
     <div class="right-section">
 
       <h1>Login</h1>
@@ -52,11 +52,7 @@
       >
 
 
-        <!-- ==================================================
-             CAMPOS ISCA
-             Evita que navegadores preencham os campos reais
-        =================================================== -->
-
+        <!-- CAMPOS ISCA -->
         <div
           aria-hidden="true"
           style="
@@ -86,47 +82,30 @@
         </div>
 
 
-
-        <!-- ==================================================
-             E-MAIL
-        =================================================== -->
-
+        <!-- E-MAIL -->
         <label for="email">
           E-mail:
         </label>
-
-        <br>
 
         <input
           type="email"
           id="email"
           name="email"
           required
-
           autocomplete="off"
-
           autocorrect="off"
           autocapitalize="none"
           spellcheck="false"
-
           data-lpignore="true"
           data-1p-ignore="true"
           data-bwignore="true"
         >
 
-        <br><br>
 
-
-
-        <!-- ==================================================
-             SENHA
-        =================================================== -->
-
+        <!-- SENHA -->
         <label for="senha">
           Senha:
         </label>
-
-        <br>
 
 
         <div class="password-wrapper">
@@ -136,13 +115,10 @@
             id="senha"
             name="senha"
             required
-
             autocomplete="off"
-
             autocorrect="off"
             autocapitalize="none"
             spellcheck="false"
-
             data-lpignore="true"
             data-1p-ignore="true"
             data-bwignore="true"
@@ -162,14 +138,7 @@
         </div>
 
 
-        <br><br>
-
-
-
-        <!-- ==================================================
-             LINKS
-        =================================================== -->
-
+        <!-- LINKS -->
         <div class="login-links">
 
           <a
@@ -190,22 +159,16 @@
         </div>
 
 
-
-        <!-- ==================================================
-             BOTÃO
-        =================================================== -->
-
+        <!-- BOTÃO -->
         <button type="submit">
           Entrar
         </button>
-
 
       </form>
 
     </div>
 
   </div>
-
 
 
   <script>
@@ -220,7 +183,6 @@
       document.getElementById('form-login');
 
 
-
     /* ==================================================
        LIMPAR PREENCHIMENTO AUTOMÁTICO
     =================================================== */
@@ -228,36 +190,29 @@
     function limparAutofill() {
 
       if (emailInput) {
-
         emailInput.value = '';
-
         emailInput.setAttribute(
           'autocomplete',
           'off'
         );
-
       }
 
 
       if (senhaInput) {
-
         senhaInput.value = '';
-
         senhaInput.type = 'password';
 
         senhaInput.setAttribute(
           'autocomplete',
           'off'
         );
-
       }
 
     }
 
 
-
     /* ==================================================
-       QUANDO O HTML CARREGAR
+       CARREGAMENTO
     =================================================== */
 
     document.addEventListener(
@@ -266,23 +221,15 @@
 
         limparAutofill();
 
-
-        /*
-         * Alguns navegadores tentam preencher
-         * depois do carregamento.
-         */
-
         setTimeout(
           limparAutofill,
           100
         );
 
-
         setTimeout(
           limparAutofill,
           500
         );
-
 
         setTimeout(
           limparAutofill,
@@ -293,21 +240,13 @@
     );
 
 
-
     /* ==================================================
-       QUANDO VOLTAR PARA A PÁGINA
+       VOLTAR PARA A PÁGINA
     =================================================== */
 
     window.addEventListener(
       'pageshow',
-      function (event) {
-
-        if (event.persisted) {
-
-          limparAutofill();
-
-        }
-
+      function () {
 
         setTimeout(
           limparAutofill,
@@ -318,9 +257,8 @@
     );
 
 
-
     /* ==================================================
-       IMPEDIR RESTAURAÇÃO DO FORMULÁRIO
+       RESETAR FORMULÁRIO
     =================================================== */
 
     window.addEventListener(
@@ -328,17 +266,13 @@
       function () {
 
         if (formLogin) {
-
           formLogin.reset();
-
         }
-
 
         limparAutofill();
 
       }
     );
-
 
 
     /* ==================================================
@@ -416,7 +350,6 @@
       });
 
   </script>
-
 
 </body>
 
