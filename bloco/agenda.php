@@ -28,56 +28,28 @@ if (!is_dir($pastaUsuario)) {
     exit("Pasta do usuário não encontrada.");
 }
 
-// ======================================
+// ==========================================
 // DADOS DA AGENDA
-// ======================================
+// ==========================================
 
-$arquivoAgenda = $pastaUsuario . '/agenda.json';
+$tarefas =
+    isset($agendaData['tarefas']) &&
+    is_array($agendaData['tarefas'])
+        ? array_values($agendaData['tarefas'])
+        : [];
 
-$estruturaAgendaPadrao = [
-    'notas' => [],
-    'tarefas' => [],
-    'nao_esquecer' => []
-];
+$lembretes =
+    isset($agendaData['nao_esquecer']) &&
+    is_array($agendaData['nao_esquecer'])
+        ? array_values($agendaData['nao_esquecer'])
+        : [];
 
-if (!file_exists($arquivoAgenda)) {
-    file_put_contents(
-        $arquivoAgenda,
-        json_encode(
-            $estruturaAgendaPadrao,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        )
-    );
-}
-
-$agendaData = json_decode(
-    file_get_contents($arquivoAgenda),
-    true
-);
-
-if (!is_array($agendaData)) {
-    $agendaData = $estruturaAgendaPadrao;
-} else {
-    $chaves = array_keys($agendaData);
-
-    $ehListaNumerica =
-        count($chaves) > 0 &&
-        $chaves === range(0, count($chaves) - 1);
-
-    if ($ehListaNumerica) {
-        $agendaData = $estruturaAgendaPadrao;
-    } else {
-        foreach ($estruturaAgendaPadrao as $chave => $valor) {
-            if (
-                !isset($agendaData[$chave]) ||
-                !is_array($agendaData[$chave])
-            ) {
-                $agendaData[$chave] = $valor;
-            }
-        }
-    }
-}
-
+$notasAgenda =
+    isset($agendaData['notas']) &&
+    is_array($agendaData['notas'])
+        ? array_values($agendaData['notas'])
+        : [];
+        
 // ======================================
 // RESUMO DA AGENDA
 // ======================================
