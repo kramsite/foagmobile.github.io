@@ -893,7 +893,7 @@ $caminho_foto =
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
     <link rel="stylesheet" href="editr.css">
-    <script src="./m.escuro/dark-mode.js"></script>
+    <script src="../m.escuro/dark-mode.js"></script>
 </head>
 
 <body>
