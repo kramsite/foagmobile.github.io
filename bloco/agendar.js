@@ -147,171 +147,387 @@ document.addEventListener('DOMContentLoaded', function () {
     let dadosExclusao = null;
 
     // =================================================
-    // SALVAR AGENDA NO SERVIDOR
-    // =================================================
+// SALVAR AGENDA NO SERVIDOR
+// =================================================
 
-    async function salvarAgendaNoServidor() {
-        try {
-            const resposta = await fetch(AGENDA_SAVE_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(agendaData)
-            });
+let filaSalvamentoAgenda = Promise.resolve();
 
-            const textoResposta = await resposta.text();
+async function enviarAgendaParaServidor(payload) {
+    const resposta = await fetch(
+        AGENDA_SAVE_URL,
+        {
+            method: 'POST',
+            credentials: 'same-origin',
+            cache: 'no-store',
 
-            console.log(
-                'Resposta do salvar_agenda.php:',
-                resposta.status,
-                textoResposta
-            );
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
 
-            if (!resposta.ok) {
-                throw new Error(
-                    `Erro HTTP ${resposta.status}: ${textoResposta}`
+            body: payload
+        }
+    );
+
+    const textoResposta = await resposta.text();
+
+    let retorno = null;
+
+    try {
+        retorno = JSON.parse(textoResposta);
+    } catch (erro) {
+        retorno = null;
+    }
+
+    console.log(
+        'Resposta salvar_agenda.php:',
+        resposta.status,
+        textoResposta
+    );
+
+    if (!resposta.ok) {
+        throw new Error(
+            retorno?.mensagem ||
+            textoResposta ||
+            `Erro HTTP ${resposta.status}`
+        );
+    }
+
+    if (
+        retorno &&
+        retorno.ok === false
+    ) {
+        throw new Error(
+            retorno.mensagem ||
+            'Não foi possível salvar a Agenda.'
+        );
+    }
+
+    console.log(
+        'Agenda salva com sucesso ✅',
+        retorno
+    );
+
+    return true;
+}
+
+
+function salvarAgendaNoServidor() {
+
+    /*
+     * Faz uma cópia dos dados no momento
+     * em que o salvamento foi solicitado.
+     */
+    const payload =
+        JSON.stringify(agendaData);
+
+    /*
+     * Coloca os salvamentos em fila.
+     *
+     * Isso evita:
+     *
+     * salvamento 1
+     * salvamento 2
+     *
+     * e o salvamento 1 terminar depois
+     * e apagar as informações do 2.
+     */
+    filaSalvamentoAgenda =
+        filaSalvamentoAgenda.then(
+            function () {
+                return enviarAgendaParaServidor(
+                    payload
+                );
+            },
+            function () {
+                return enviarAgendaParaServidor(
+                    payload
                 );
             }
+        );
 
-            return true;
-        } catch (erro) {
-            console.error('Erro ao salvar a Agenda:', erro);
+    filaSalvamentoAgenda =
+        filaSalvamentoAgenda.catch(
+            function (erro) {
 
-            alert(
-                'Não foi possível salvar a Agenda. Tente novamente.'
-            );
+                console.error(
+                    'Erro ao salvar a Agenda:',
+                    erro
+                );
 
-            return false;
-        }
+                return false;
+            }
+        );
+
+    return filaSalvamentoAgenda;
+}
+
+
+// =================================================
+// MODAIS DA AGENDA
+// =================================================
+
+function abrirModalNomearNota(
+    tituloInicial = ''
+) {
+    if (
+        !modalNomearNota ||
+        !inputNomeNota
+    ) {
+        return;
     }
 
-    // =================================================
-    // MODAIS DA AGENDA
-    // =================================================
+    inputNomeNota.value =
+        tituloInicial;
 
-    function abrirModalNomearNota(tituloInicial = '') {
-        if (!modalNomearNota || !inputNomeNota) {
-            return;
-        }
+    modalNomearNota.style.display =
+        'flex';
 
-        inputNomeNota.value = tituloInicial;
-        modalNomearNota.style.display = 'flex';
+    setTimeout(
+        function () {
 
-        setTimeout(function () {
             inputNomeNota.focus();
             inputNomeNota.select();
-        }, 50);
+
+        },
+        50
+    );
+}
+
+
+function fecharModalNomearNota() {
+
+    if (modalNomearNota) {
+        modalNomearNota.style.display =
+            'none';
     }
 
-    function fecharModalNomearNota() {
-        if (modalNomearNota) {
-            modalNomearNota.style.display = 'none';
-        }
-
-        notaPendente = '';
-        notaEmEdicaoId = null;
+    if (inputNomeNota) {
+        inputNomeNota.value =
+            '';
     }
 
-    function abrirModalExclusao(
-        titulo,
-        mensagem,
-        tipo,
-        dados
+    notaPendente = '';
+    notaEmEdicaoId = null;
+}
+
+
+function abrirModalExclusao(
+    titulo,
+    mensagem,
+    tipo,
+    dados
+) {
+    if (
+        !modalExcluir ||
+        !excluirTitulo ||
+        !excluirMensagem
     ) {
-        if (
-            !modalExcluir ||
-            !excluirTitulo ||
-            !excluirMensagem
-        ) {
-            return;
-        }
-
-        excluirTitulo.textContent = titulo;
-        excluirMensagem.textContent = mensagem;
-
-        tipoExclusao = tipo;
-        dadosExclusao = dados;
-
-        modalExcluir.style.display = 'flex';
+        return;
     }
 
-    function fecharModalExclusao() {
-        if (modalExcluir) {
-            modalExcluir.style.display = 'none';
-        }
+    excluirTitulo.textContent =
+        titulo;
 
-        tipoExclusao = '';
-        dadosExclusao = null;
+    excluirMensagem.textContent =
+        mensagem;
+
+    tipoExclusao =
+        tipo;
+
+    dadosExclusao =
+        dados;
+
+    modalExcluir.style.display =
+        'flex';
+}
+
+
+function fecharModalExclusao() {
+
+    if (modalExcluir) {
+        modalExcluir.style.display =
+            'none';
     }
 
-    // =================================================
-    // TAREFAS E NÃO ESQUECER
-    // =================================================
+    tipoExclusao = '';
+    dadosExclusao = null;
+}
 
-    function atualizarIndices(lista) {
-        if (!lista) {
-            return;
-        }
 
-        Array.from(lista.rows).forEach(function (linha, indice) {
+// =================================================
+// TAREFAS E NÃO ESQUECER
+// =================================================
+
+function atualizarIndices(lista) {
+
+    if (!lista) {
+        return;
+    }
+
+    Array.from(
+        lista.rows
+    ).forEach(
+        function (linha, indice) {
+
             if (linha.cells[0]) {
-                linha.cells[0].textContent = indice + 1;
+                linha.cells[0].textContent =
+                    indice + 1;
             }
-        });
+        }
+    );
+}
+
+
+// =================================================
+// CRIAR LINHA
+// =================================================
+
+function criarLinhaAgenda(
+    lista,
+    dadosIniciais = {}
+) {
+    if (!lista) {
+        return null;
     }
 
-    function criarLinhaAgenda(lista) {
-        if (!lista) {
-            return null;
-        }
+    const linha =
+        lista.insertRow();
 
-        const linha = lista.insertRow();
 
-        // Número
-        const celulaIndice = linha.insertCell(0);
-        celulaIndice.textContent = lista.rows.length;
+    /*
+     * Aqui guardamos os dados originais
+     * da tarefa.
+     *
+     * Isso é importante para não apagar
+     * informações vindas do calendário.
+     *
+     * Exemplo:
+     *
+     * origem
+     * materia_id
+     * materia_nome
+     * concluida
+     * evento_id
+     */
+    linha._dadosOriginais = {
+        ...dadosIniciais
+    };
 
-        // Conteúdo
-        const celulaConteudo = linha.insertCell(1);
-        celulaConteudo.contentEditable = 'true';
-        celulaConteudo.style.wordBreak = 'break-word';
 
-        // Data
-        const celulaData = linha.insertCell(2);
+    // ==============================
+    // NÚMERO
+    // ==============================
 
-        const inputData = document.createElement('input');
-        inputData.type = 'date';
+    const celulaIndice =
+        linha.insertCell(0);
 
-        celulaData.appendChild(inputData);
+    celulaIndice.textContent =
+        lista.rows.length;
 
-        // Ações
-        const celulaAcoes = linha.insertCell(3);
 
-        const botaoExcluir = document.createElement('button');
-        botaoExcluir.type = 'button';
-        botaoExcluir.textContent = 'Excluir';
-        botaoExcluir.className = 'btn-excluir';
+    // ==============================
+    // CONTEÚDO
+    // ==============================
 
-        botaoExcluir.addEventListener('click', function () {
+    const celulaConteudo =
+        linha.insertCell(1);
+
+    celulaConteudo.contentEditable =
+        'true';
+
+    celulaConteudo.style.wordBreak =
+        'break-word';
+
+    celulaConteudo.textContent =
+        String(
+            dadosIniciais.texto ??
+            dadosIniciais.titulo ??
+            ''
+        );
+
+
+    // ==============================
+    // DATA
+    // ==============================
+
+    const celulaData =
+        linha.insertCell(2);
+
+    const inputData =
+        document.createElement(
+            'input'
+        );
+
+    inputData.type =
+        'date';
+
+    inputData.value =
+        String(
+            dadosIniciais.data ??
+            dadosIniciais.date ??
+            ''
+        );
+
+    celulaData.appendChild(
+        inputData
+    );
+
+
+    // ==============================
+    // AÇÕES
+    // ==============================
+
+    const celulaAcoes =
+        linha.insertCell(3);
+
+    const botaoExcluir =
+        document.createElement(
+            'button'
+        );
+
+    botaoExcluir.type =
+        'button';
+
+    botaoExcluir.textContent =
+        'Excluir';
+
+    botaoExcluir.className =
+        'btn-excluir';
+
+
+    botaoExcluir.addEventListener(
+        'click',
+        function () {
+
             const texto =
-                celulaConteudo.textContent.trim() ||
+                celulaConteudo
+                    .textContent
+                    .trim() ||
                 'Item sem título';
 
+
             const tipo =
-                lista.id === 'lista-tarefas'
+                lista.id ===
+                'lista-tarefas'
                     ? 'tarefa'
                     : 'nao-esquecer';
+
 
             const titulo =
                 tipo === 'tarefa'
                     ? 'Excluir Tarefa'
                     : 'Excluir Item';
 
+
             const resumo =
                 texto.length > 50
-                    ? `${texto.substring(0, 50)}...`
+                    ? `${texto.substring(
+                        0,
+                        50
+                    )}...`
                     : texto;
+
 
             abrirModalExclusao(
                 titulo,
@@ -321,122 +537,238 @@ document.addEventListener('DOMContentLoaded', function () {
                     linha: linha
                 }
             );
-        });
+        }
+    );
 
-        celulaAcoes.appendChild(botaoExcluir);
 
-        return linha;
+    celulaAcoes.appendChild(
+        botaoExcluir
+    );
+
+    return linha;
+}
+
+
+// =================================================
+// PEGAR DADOS DE UMA LINHA
+// =================================================
+
+function dadosDaLinha(linha) {
+
+    const dadosOriginais =
+        linha?._dadosOriginais &&
+        typeof linha._dadosOriginais ===
+            'object'
+            ? linha._dadosOriginais
+            : {};
+
+
+    const inputData =
+        linha?.cells[2]
+            ?.querySelector(
+                'input[type="date"]'
+            );
+
+
+    /*
+     * Primeiro mantém os dados antigos.
+     *
+     * Depois atualiza somente texto e data.
+     */
+    return {
+        ...dadosOriginais,
+
+        texto:
+            linha?.cells[1]
+                ?.textContent
+                .trim() || '',
+
+        data:
+            inputData?.value || ''
+    };
+}
+
+
+// =================================================
+// SALVAR TAREFAS
+// =================================================
+
+function salvarDadosAgenda() {
+
+    if (
+        !listaTarefas ||
+        !listaNaoEsquecer
+    ) {
+        return Promise.resolve(
+            false
+        );
     }
 
-    function salvarDadosAgenda() {
-        if (!listaTarefas || !listaNaoEsquecer) {
-            return;
-        }
 
-        agendaData.tarefas = Array.from(
+    // ==============================
+    // TAREFAS
+    // ==============================
+
+    agendaData.tarefas =
+        Array.from(
             listaTarefas.rows
-        ).map(function (linha) {
-            const inputData =
-                linha.cells[2]?.querySelector('input');
+        )
+        .map(
+            dadosDaLinha
+        )
+        .filter(
+            function (item) {
 
-            return {
-                texto:
-                    linha.cells[1]?.textContent.trim() || '',
-                data:
-                    inputData?.value || ''
-            };
-        });
+                return (
+                    item.texto !== '' ||
+                    item.data !== ''
+                );
+            }
+        );
 
-        agendaData.nao_esquecer = Array.from(
+
+    // ==============================
+    // NÃO ESQUECER
+    // ==============================
+
+    agendaData.nao_esquecer =
+        Array.from(
             listaNaoEsquecer.rows
-        ).map(function (linha) {
-            const inputData =
-                linha.cells[2]?.querySelector('input');
+        )
+        .map(
+            dadosDaLinha
+        )
+        .filter(
+            function (item) {
 
-            return {
-                texto:
-                    linha.cells[1]?.textContent.trim() || '',
-                data:
-                    inputData?.value || ''
-            };
-        });
+                return (
+                    item.texto !== '' ||
+                    item.data !== ''
+                );
+            }
+        );
 
-        salvarAgendaNoServidor();
+
+    console.log(
+        'Salvando Agenda:',
+        agendaData
+    );
+
+
+    return salvarAgendaNoServidor();
+}
+
+
+// =================================================
+// SALVAMENTO AUTOMÁTICO
+// =================================================
+
+const salvarDadosComAtraso =
+    debounce(
+        salvarDadosAgenda,
+        500
+    );
+
+
+// =================================================
+// CARREGAR TAREFAS DO JSON
+// =================================================
+
+function carregarDadosAgenda() {
+
+    if (
+        !listaTarefas ||
+        !listaNaoEsquecer
+    ) {
+        return;
     }
 
-    const salvarDadosComAtraso =
-        debounce(salvarDadosAgenda, 500);
 
-    function carregarDadosAgenda() {
-        if (!listaTarefas || !listaNaoEsquecer) {
-            return;
+    listaTarefas.innerHTML =
+        '';
+
+    listaNaoEsquecer.innerHTML =
+        '';
+
+
+    // ==============================
+    // CARREGAR TAREFAS
+    // ==============================
+
+    agendaData.tarefas.forEach(
+        function (tarefa) {
+
+            criarLinhaAgenda(
+                listaTarefas,
+                tarefa
+            );
         }
+    );
 
-        listaTarefas.innerHTML = '';
-        listaNaoEsquecer.innerHTML = '';
 
-        agendaData.tarefas.forEach(function (tarefa) {
-            const linha = criarLinhaAgenda(listaTarefas);
+    // ==============================
+    // CARREGAR NÃO ESQUECER
+    // ==============================
 
-            if (!linha) {
-                return;
-            }
+    agendaData.nao_esquecer.forEach(
+        function (item) {
 
-            linha.cells[1].textContent =
-                tarefa.texto || '';
-
-            const inputData =
-                linha.cells[2].querySelector('input');
-
-            if (inputData) {
-                inputData.value =
-                    tarefa.data || '';
-            }
-        });
-
-        agendaData.nao_esquecer.forEach(function (item) {
-            const linha =
-                criarLinhaAgenda(listaNaoEsquecer);
-
-            if (!linha) {
-                return;
-            }
-
-            linha.cells[1].textContent =
-                item.texto || '';
-
-            const inputData =
-                linha.cells[2].querySelector('input');
-
-            if (inputData) {
-                inputData.value =
-                    item.data || '';
-            }
-        });
-
-        atualizarIndices(listaTarefas);
-        atualizarIndices(listaNaoEsquecer);
-    }
-
-    function excluirTarefa(linha) {
-        if (!linha) {
-            return;
+            criarLinhaAgenda(
+                listaNaoEsquecer,
+                item
+            );
         }
+    );
 
-        linha.remove();
-        atualizarIndices(listaTarefas);
-        salvarDadosAgenda();
+
+    atualizarIndices(
+        listaTarefas
+    );
+
+    atualizarIndices(
+        listaNaoEsquecer
+    );
+}
+
+
+// =================================================
+// EXCLUIR TAREFA
+// =================================================
+
+function excluirTarefa(linha) {
+
+    if (!linha) {
+        return;
     }
 
-    function excluirNaoEsquecer(linha) {
-        if (!linha) {
-            return;
-        }
+    linha.remove();
 
-        linha.remove();
-        atualizarIndices(listaNaoEsquecer);
-        salvarDadosAgenda();
+    atualizarIndices(
+        listaTarefas
+    );
+
+    salvarDadosAgenda();
+}
+
+
+// =================================================
+// EXCLUIR NÃO ESQUECER
+// =================================================
+
+function excluirNaoEsquecer(linha) {
+
+    if (!linha) {
+        return;
     }
+
+    linha.remove();
+
+    atualizarIndices(
+        listaNaoEsquecer
+    );
+
+    salvarDadosAgenda();
+}
 
     // =================================================
     // NOTAS
@@ -1426,39 +1758,7 @@ if (configuracoesIcon) {
   });
 }
 
-// Perfil
-if (perfilIcon) {
-  perfilIcon.addEventListener('click', () => {
-    window.location.href = '../perfil/perfil.php';
-  });
-}
 
-// Abrir modal de logout
-if (iconSair && logoutModal) {
-  iconSair.addEventListener('click', () => {
-    logoutModal.style.display = 'flex';
-  });
-}
-
-// Confirmar logout
-if (confirmLogout) {
-  confirmLogout.addEventListener('click', () => {
-    window.location.href = '../login/index.php';
-  });
-}
-
-// Cancelar logout
-if (cancelLogout && logoutModal) {
-  cancelLogout.addEventListener('click', () => {
-    logoutModal.style.display = 'none';
-  });
-
-  logoutModal.addEventListener('click', e => {
-    if (e.target === logoutModal) {
-      logoutModal.style.display = 'none';
-    }
-  });
-}
 
     // =================================================
     // TECLA ESC

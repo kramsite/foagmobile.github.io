@@ -742,11 +742,9 @@ salvarJson(
       <i class="fa-solid fa-gear"></i>
           </a>
 
-        <i
-            id="icon-perfil"
-            class="fa-regular fa-user"
-            title="Perfil">
-        </i>
+        <a href="../perfil/perfil.php" class="link-perfil" title="Perfil">
+            <i class="fa-regular fa-user"></i>
+        </a>
 
         <i
             id="icon-sair"
@@ -1015,124 +1013,6 @@ salvarJson(
                     class="btn-modal"
                 >
                     OK
-                </button>
-
-            </div>
-
-        </div>
-
-        <!-- ==================================
-             MODAL DO PERFIL
-        =================================== -->
-
-        <div
-            id="modal-perfil"
-            class="modal-perfil"
-        >
-
-            <div class="modal-content perfil-content">
-
-                <div class="perfil-header">
-
-                    <h2>
-                        <i class="fa-regular fa-user"></i>
-                        Meu Perfil Personalizado
-                    </h2>
-
-                    <button
-                        id="fechar-perfil"
-                        class="btn-fechar"
-                    >
-                        <i class="fa-solid fa-xmark"></i>
-                    </button>
-
-                </div>
-
-                <div
-                    class="perfil-preview"
-                    id="perfilPreview"
-                >
-
-                    <div class="avatar-container">
-
-                        <div class="avatar">
-                            <i class="fa-regular fa-user"></i>
-                        </div>
-
-                        <div
-                            class="avatar-badges"
-                            id="avatarBadges"
-                        >
-                        </div>
-
-                    </div>
-
-                    <div class="perfil-info">
-
-                        <h3 id="perfilNome">
-                            <?= htmlspecialchars(
-                                $perfilData['nome']
-                                    ?? 'Estudante',
-                                ENT_QUOTES,
-                                'UTF-8'
-                            ) ?>
-                        </h3>
-
-                        <div
-                            class="perfil-emojis"
-                            id="perfilEmojis"
-                        >
-                        </div>
-
-                        <div class="perfil-stats">
-
-                            <span>
-                                <i class="fa-solid fa-star"></i>
-
-                                <span id="perfilEstrelas">
-                                    <?= (int) $lojaData['estrelas'] ?>
-                                </span>
-
-                                estrelas
-                            </span>
-
-                            <span>
-                                <i class="fa-regular fa-clock"></i>
-
-                                <span id="perfilTempo">
-                                    <?= floor(
-                                        $lojaData['total_estudado'] / 60
-                                    ) ?>h
-                                </span>
-
-                                estudados
-                            </span>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="perfil-itens">
-
-                    <h4>
-                        Itens Ativos
-                    </h4>
-
-                    <div
-                        class="itens-ativos"
-                        id="itensAtivos"
-                    >
-                    </div>
-
-                </div>
-
-                <button
-                    id="fechar-perfil-btn"
-                    class="btn-modal"
-                >
-                    Fechar
                 </button>
 
             </div>
