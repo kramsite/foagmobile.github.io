@@ -1,253 +1,641 @@
-/* ==================== VARIÁVEIS MODO ESCURO ==================== */
+/* =========================================================
+   FOAG — PERFIL
+   DARK MODE REFEITO
+========================================================= */
+
 :root {
-  --dark-bg: #0f172a;         /* Azul muito escuro */
-  --dark-surface: #1e293b;    /* Azul escuro */
-  --dark-primary: #669ada;    /* Azul vibrante */
-  --dark-secondary: #3b82f6;  /* Azul mais claro */
-  --dark-text: #e2e8f0;       /* Cinza claro */
-  --dark-border: #334155;     /* Borda azulada */
-  --dark-card: #1e293b;       /* Cor do card */
+    --perfil-dark-bg: #0b1220;
+    --perfil-dark-page: #101a2a;
+    --perfil-dark-card: #162235;
+    --perfil-dark-card-2: #1b2a40;
+    --perfil-dark-card-3: #213149;
+
+    --perfil-dark-border: #2a3a50;
+    --perfil-dark-border-soft: #223249;
+
+    --perfil-dark-text: #f1f5f9;
+    --perfil-dark-text-2: #cbd5e1;
+    --perfil-dark-muted: #8fa3bb;
+
+    --perfil-dark-blue: #38a5ff;
+    --perfil-dark-blue-hover: #218fe7;
+    --perfil-dark-blue-soft: rgba(56, 165, 255, 0.12);
 }
 
-/* ==================== BASE ==================== */
+
+/* =========================================================
+   BASE DA PÁGINA
+========================================================= */
+
 body.dark-mode {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
+    background: var(--perfil-dark-bg) !important;
+    color: var(--perfil-dark-text) !important;
 }
 
-/* ==================== CONTAINER PRINCIPAL ==================== */
 body.dark-mode .container {
-  background-color: var(--dark-card) !important;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3) !important;
-  border: 1px solid var(--dark-border) !important;
+    background: transparent !important;
+    border: 0 !important;
+    box-shadow: none !important;
 }
 
-/* ==================== PAINEL ESQUERDO ==================== */
-body.dark-mode .left-panel {
-  background-color: var(--dark-primary) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .perfil-conteudo,
+body.dark-mode .conteudo.perfil-conteudo {
+    background:
+        linear-gradient(
+            180deg,
+            #101a2a 0%,
+            #0f1928 100%
+        ) !important;
+
+    color: var(--perfil-dark-text) !important;
 }
 
-body.dark-mode .left-panel p {
-  color: var(--dark-text) !important;
+
+/* =========================================================
+   TÍTULO DA PÁGINA
+========================================================= */
+
+body.dark-mode .titulo-pagina {
+    color: var(--perfil-dark-text) !important;
 }
 
-body.dark-mode .left-panel .avatar {
-  border: 3px solid var(--dark-border) !important;
+body.dark-mode .titulo-pagina span {
+    color: #8fb5da !important;
+    opacity: 1 !important;
 }
 
-/* ==================== PAINEL DIREITO ==================== */
-body.dark-mode .right-panel {
-  background-color: var(--dark-surface) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .titulo-pagina h1 {
+    color: #f8fafc !important;
+    opacity: 1 !important;
 }
 
-/* ==================== LABELS ==================== */
-body.dark-mode .campo-info label {
-  color: var(--dark-text) !important;
+
+/* =========================================================
+   BOTÃO EDITAR PERFIL
+   Corrige o texto que estava quase invisível
+========================================================= */
+
+body.dark-mode .btn-editar-topo {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+
+    background: var(--perfil-dark-blue) !important;
+    color: #ffffff !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    box-shadow:
+        0 8px 24px
+        rgba(56, 165, 255, 0.22) !important;
 }
 
-/* ==================== INPUTS ==================== */
-body.dark-mode .campo-info input,
-body.dark-mode .campo-info select {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-  border: 1px solid var(--dark-border) !important;
+body.dark-mode .btn-editar-topo,
+body.dark-mode .btn-editar-topo:link,
+body.dark-mode .btn-editar-topo:visited,
+body.dark-mode .btn-editar-topo span,
+body.dark-mode .btn-editar-topo i {
+    color: #ffffff !important;
+    opacity: 1 !important;
 }
 
-body.dark-mode .campo-info input:focus,
-body.dark-mode .campo-info select:focus {
-  border-color: var(--dark-primary) !important;
-  outline: none;
+body.dark-mode .btn-editar-topo:hover {
+    background: var(--perfil-dark-blue-hover) !important;
+    transform: translateY(-1px);
 }
 
-/* ==================== BOTÕES ==================== */
-body.dark-mode .salvar {
-  background-color: var(--dark-primary) !important;
-  color: white !important;
+
+/* =========================================================
+   CARD PRINCIPAL DO PERFIL
+========================================================= */
+
+body.dark-mode .perfil-destaque {
+    background:
+        linear-gradient(
+            135deg,
+            #17263b 0%,
+            #132033 55%,
+            #182a40 100%
+        ) !important;
+
+    border: 1px solid var(--perfil-dark-border) !important;
+
+    box-shadow:
+        0 16px 40px
+        rgba(0, 0, 0, 0.22) !important;
 }
 
-body.dark-mode .salvar:hover {
-  background-color: var(--dark-secondary) !important;
+
+/* =========================================================
+   FOTO
+========================================================= */
+
+body.dark-mode .foto-container,
+body.dark-mode .moldura-container {
+    background: transparent !important;
 }
 
-body.dark-mode .cancelar {
-  background-color: var(--dark-border) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .moldura-borda {
+    background: #111c2d !important;
+    border-color: #3c4d64 !important;
+
+    box-shadow:
+        0 12px 28px
+        rgba(0, 0, 0, 0.35) !important;
 }
 
-body.dark-mode .cancelar:hover {
-  background-color: #475569 !important;
+body.dark-mode .moldura-borda.dupla {
+    border-color: #3c4d64 !important;
+
+    box-shadow:
+        0 0 0 4px var(--perfil-dark-blue),
+        0 12px 28px rgba(0, 0, 0, 0.35) !important;
 }
 
-body.dark-mode .btn-seta {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
+body.dark-mode .moldura-borda.glow {
+    border-color: var(--perfil-dark-blue) !important;
+
+    box-shadow:
+        0 0 28px rgba(56, 165, 255, 0.34),
+        0 12px 28px rgba(0, 0, 0, 0.35) !important;
 }
 
-body.dark-mode .btn-seta:hover {
-  background-color: var(--dark-primary) !important;
+body.dark-mode .foto-status {
+    border-color: #17263b !important;
 }
 
-/* ==================== BOTÃO SAIR ==================== */
-body.dark-mode .btn-sair {
-  background-color: #dc2626 !important;
-  color: white !important;
+
+/* =========================================================
+   IDENTIDADE DO PERFIL
+========================================================= */
+
+body.dark-mode .perfil-texto {
+    color: var(--perfil-dark-text) !important;
 }
 
-body.dark-mode .btn-sair:hover {
-  background-color: #ef4444 !important;
+body.dark-mode .etiqueta-perfil {
+    color: #5fb8ff !important;
+    opacity: 1 !important;
 }
 
-/* ==================== UPLOAD ==================== */
-body.dark-mode .label-upload {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-primary) !important;
+body.dark-mode .perfil-texto h2 {
+    color: #f8fafc !important;
+    opacity: 1 !important;
 }
 
-body.dark-mode .label-upload:hover {
-  background-color: var(--dark-border) !important;
+body.dark-mode .email-perfil {
+    color: var(--perfil-dark-text-2) !important;
 }
 
-/* ==================== ÁREA DE INFORMAÇÕES ==================== */
-body.dark-mode .texto-info {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-  border: 1px solid var(--dark-border) !important;
+body.dark-mode .email-perfil i {
+    color: #79bfff !important;
 }
 
-/* ==================== SELECT ==================== */
-body.dark-mode .campo-info select {
-  background-color: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
+
+/* =========================================================
+   RESUMO — SÉRIE / ESCOLA
+========================================================= */
+
+body.dark-mode .perfil-resumo span {
+    background: #1e314a !important;
+    color: #dbeafe !important;
+
+    border: 1px solid #2d4969 !important;
+
+    opacity: 1 !important;
 }
 
-body.dark-mode .campo-info select option {
-  background-color: var(--dark-bg);
-  color: var(--dark-text);
+body.dark-mode .perfil-resumo span i {
+    color: #61b7ff !important;
 }
 
-/* ==================== ITENS DA LOJA NO PERFIL ==================== */
-body.dark-mode .loja-itens-card {
-  background: var(--dark-surface) !important;
-  border-color: var(--dark-border) !important;
+
+/* =========================================================
+   ILUSTRAÇÃO DO CARD
+========================================================= */
+
+body.dark-mode .perfil-ilustracao {
+    opacity: 0.92 !important;
 }
 
-body.dark-mode .loja-itens-icone {
-  background: var(--dark-bg) !important;
-  color: var(--dark-primary) !important;
+body.dark-mode .perfil-ilustracao .circulo-1 {
+    background: rgba(56, 165, 255, 0.16) !important;
 }
 
-body.dark-mode .loja-itens-cabecalho h3 {
-  color: var(--dark-text) !important;
+body.dark-mode .perfil-ilustracao .circulo-2 {
+    background: rgba(250, 204, 21, 0.15) !important;
 }
 
-body.dark-mode .loja-itens-cabecalho p {
-  color: var(--dark-text) !important;
+body.dark-mode .perfil-ilustracao .circulo-3 {
+    background: rgba(167, 139, 250, 0.22) !important;
 }
 
-body.dark-mode .item-loja-perfil {
-  background: var(--dark-bg) !important;
-  border-color: var(--dark-border) !important;
+body.dark-mode .icone-estudante {
+    background:
+        linear-gradient(
+            145deg,
+            #2f9cf1,
+            #147ad0
+        ) !important;
+
+    color: #ffffff !important;
+
+    box-shadow:
+        0 10px 28px
+        rgba(56, 165, 255, 0.22) !important;
 }
 
-body.dark-mode .item-loja-perfil:hover {
-  border-color: var(--dark-primary) !important;
-}
 
-body.dark-mode .item-loja-perfil .nome-item {
-  color: var(--dark-text) !important;
-}
-
-body.dark-mode .item-loja-perfil .categoria-item {
-  background: var(--dark-border) !important;
-  color: var(--dark-text) !important;
-}
-
-body.dark-mode .item-loja-perfil.ativo {
-  border-color: #ffd700;
-  background: #1a2a1a !important;
-}
-
-body.dark-mode .item-loja-perfil.ativo .icone-item {
-  color: #ffd700;
-}
-
-body.dark-mode .sem-itens-loja {
-  color: var(--dark-text) !important;
-}
-
-body.dark-mode .btn-ir-loja {
-  background: var(--dark-primary) !important;
-}
-
-body.dark-mode .btn-ir-loja:hover {
-  background: var(--dark-secondary) !important;
-}
+/* =========================================================
+   CARD "INFORMAÇÕES CADASTRADAS"
+========================================================= */
 
 body.dark-mode .dados-card {
-  background: var(--dark-surface) !important;
-  border-color: var(--dark-border) !important;
+    background: var(--perfil-dark-card) !important;
+
+    border: 1px solid var(--perfil-dark-border) !important;
+
+    box-shadow:
+        0 10px 28px
+        rgba(0, 0, 0, 0.16) !important;
 }
 
-body.dark-mode .dados-icone {
-  background: var(--dark-bg) !important;
-  color: var(--dark-primary) !important;
+body.dark-mode .dados-cabecalho {
+    color: var(--perfil-dark-text) !important;
 }
 
 body.dark-mode .dados-cabecalho h3 {
-  color: var(--dark-text) !important;
+    color: #f8fafc !important;
 }
 
 body.dark-mode .dados-cabecalho p {
-  color: var(--dark-text) !important;
+    color: var(--perfil-dark-text-2) !important;
+}
+
+body.dark-mode .dados-icone {
+    background: #0d1930 !important;
+    color: #69b9ff !important;
+
+    border: 1px solid #21395a !important;
+}
+
+
+/* =========================================================
+   ITENS DE DADOS
+========================================================= */
+
+body.dark-mode .dados-grid {
+    background: transparent !important;
 }
 
 body.dark-mode .dado-item {
-  background: var(--dark-bg) !important;
-  border-color: var(--dark-border) !important;
+    background: var(--perfil-dark-card-2) !important;
+
+    border: 1px solid var(--perfil-dark-border) !important;
+
+    color: var(--perfil-dark-text) !important;
 }
 
 body.dark-mode .dado-item:hover {
-  border-color: var(--dark-primary) !important;
+    background: var(--perfil-dark-card-3) !important;
+
+    border-color: #3b82b8 !important;
+
+    transform: translateY(-1px);
 }
 
 body.dark-mode .dado-item span {
-  color: var(--dark-text) !important;
+    color: var(--perfil-dark-muted) !important;
 }
 
 body.dark-mode .dado-item strong {
-  color: var(--dark-text) !important;
+    color: #f1f5f9 !important;
 }
 
 body.dark-mode .dado-item-icone {
-  background: var(--dark-surface) !important;
-  color: var(--dark-primary) !important;
+    background: #101b2e !important;
+    color: #67b8ff !important;
+
+    border: 1px solid #263b57 !important;
 }
 
-/* ===========================================
-   MOLDURA MODO ESCURO
-   ========================================== */
 
-body.dark-mode .moldura-borda {
-    border-color: var(--dark-surface) !important;
-    background: var(--dark-surface) !important;
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+/* =========================================================
+   PERSONALIZAÇÕES / LOJA
+========================================================= */
+
+body.dark-mode .loja-itens-card {
+    background: #142135 !important;
+
+    border: 1px solid var(--perfil-dark-border) !important;
+
+    box-shadow:
+        0 8px 24px
+        rgba(0, 0, 0, 0.14) !important;
 }
 
-/* MOLDURA DUPLA NO ESCURO */
-body.dark-mode .moldura-borda.dupla {
-    border-color: var(--dark-surface) !important;
-    box-shadow: 0 0 0 4px var(--dark-primary), 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+body.dark-mode .loja-itens-cabecalho {
+    color: var(--perfil-dark-text) !important;
 }
 
-/* MOLDURA GLOW NO ESCURO */
-body.dark-mode .moldura-borda.glow {
-    border-color: var(--dark-primary) !important;
-    box-shadow: 0 0 30px rgba(102, 154, 218, 0.4), 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+body.dark-mode .loja-itens-cabecalho h3 {
+    color: #f8fafc !important;
 }
 
-/* STATUS NO ESCURO */
-body.dark-mode .foto-status {
-    border-color: var(--dark-surface) !important;
+body.dark-mode .loja-itens-cabecalho p {
+    color: var(--perfil-dark-text-2) !important;
+}
+
+body.dark-mode .loja-itens-icone {
+    background: #0d1930 !important;
+    color: #5eb5ff !important;
+
+    border: 1px solid #21395a !important;
+}
+
+
+/* =========================================================
+   BOTÃO IR À LOJA
+   Corrige o segundo botão que estava "sem nome"
+========================================================= */
+
+body.dark-mode .btn-ir-loja {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 7px !important;
+
+    background: #4d8fd7 !important;
+    color: #ffffff !important;
+
+    border: 1px solid rgba(255, 255, 255, 0.10) !important;
+
+    opacity: 1 !important;
+    visibility: visible !important;
+
+    box-shadow:
+        0 5px 16px
+        rgba(56, 165, 255, 0.16) !important;
+}
+
+body.dark-mode .btn-ir-loja,
+body.dark-mode .btn-ir-loja:link,
+body.dark-mode .btn-ir-loja:visited,
+body.dark-mode .btn-ir-loja span,
+body.dark-mode .btn-ir-loja i {
+    color: #ffffff !important;
+    opacity: 1 !important;
+}
+
+body.dark-mode .btn-ir-loja:hover {
+    background: var(--perfil-dark-blue) !important;
+}
+
+
+/* =========================================================
+   GRID DOS ITENS DA LOJA
+========================================================= */
+
+body.dark-mode .loja-itens-grid {
+    background: transparent !important;
+}
+
+body.dark-mode .item-loja-perfil {
+    background: #1a2940 !important;
+
+    border: 1px solid #2c405c !important;
+
+    color: var(--perfil-dark-text) !important;
+}
+
+body.dark-mode .item-loja-perfil:hover {
+    background: #20324c !important;
+    border-color: #3f84b8 !important;
+}
+
+body.dark-mode .item-loja-perfil .nome-item {
+    color: #f1f5f9 !important;
+}
+
+body.dark-mode .item-loja-perfil .categoria-item {
+    background: #253852 !important;
+    color: #b8c9dc !important;
+}
+
+body.dark-mode .item-loja-perfil .icone-item {
+    color: #65b8ff !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo {
+    background: #24301f !important;
+    border-color: #d6ae35 !important;
+}
+
+body.dark-mode .item-loja-perfil.ativo .icone-item {
+    color: #facc15 !important;
+}
+
+body.dark-mode .item-loja-perfil.total-estrelas {
+    background: #1d2a3e !important;
+    border-color: #3a4a60 !important;
+}
+
+
+/* =========================================================
+   ESTADO VAZIO / CARREGAMENTO
+========================================================= */
+
+body.dark-mode .sem-itens-loja,
+body.dark-mode .carregando-itens {
+    color: var(--perfil-dark-text-2) !important;
+}
+
+body.dark-mode .sem-itens-loja i,
+body.dark-mode .carregando-itens i {
+    color: #5bb4ff !important;
+}
+
+body.dark-mode .sem-itens-loja p {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .sem-itens-loja small {
+    color: #9fb0c4 !important;
+}
+
+
+/* =========================================================
+   FORMULÁRIOS / EDIÇÃO
+========================================================= */
+
+body.dark-mode .left-panel {
+    background: #142238 !important;
+    color: var(--perfil-dark-text) !important;
+}
+
+body.dark-mode .left-panel p {
+    color: var(--perfil-dark-text-2) !important;
+}
+
+body.dark-mode .right-panel {
+    background: var(--perfil-dark-card) !important;
+    color: var(--perfil-dark-text) !important;
+}
+
+body.dark-mode .campo-info label {
+    color: #dbe7f4 !important;
+}
+
+body.dark-mode .campo-info input,
+body.dark-mode .campo-info select,
+body.dark-mode .campo-info textarea {
+    background: #0f1a2b !important;
+    color: #f1f5f9 !important;
+
+    border: 1px solid #33475f !important;
+}
+
+body.dark-mode .campo-info input:focus,
+body.dark-mode .campo-info select:focus,
+body.dark-mode .campo-info textarea:focus {
+    border-color: var(--perfil-dark-blue) !important;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56, 165, 255, 0.12) !important;
+
+    outline: none !important;
+}
+
+body.dark-mode .campo-info select option {
+    background: #0f1a2b !important;
+    color: #f1f5f9 !important;
+}
+
+
+/* =========================================================
+   BOTÕES DE EDIÇÃO
+========================================================= */
+
+body.dark-mode .salvar {
+    background: var(--perfil-dark-blue) !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .salvar:hover {
+    background: var(--perfil-dark-blue-hover) !important;
+}
+
+body.dark-mode .cancelar {
+    background: #2a3b52 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .cancelar:hover {
+    background: #354a65 !important;
+}
+
+body.dark-mode .btn-seta {
+    background: #111c2d !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .btn-seta:hover {
+    background: #254769 !important;
+}
+
+body.dark-mode .btn-sair {
+    background: #c93636 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .btn-sair:hover {
+    background: #e04444 !important;
+}
+
+
+/* =========================================================
+   UPLOAD
+========================================================= */
+
+body.dark-mode .label-upload {
+    background: #111c2d !important;
+    color: #62b7ff !important;
+
+    border-color: #30455f !important;
+}
+
+body.dark-mode .label-upload:hover {
+    background: #1c2c42 !important;
+}
+
+
+/* =========================================================
+   TEXTO DE INFORMAÇÃO
+========================================================= */
+
+body.dark-mode .texto-info {
+    background: #111c2d !important;
+    color: #dbe7f4 !important;
+
+    border: 1px solid #2d4059 !important;
+}
+
+
+/* =========================================================
+   MODAL DE LOGOUT
+========================================================= */
+
+body.dark-mode .modal {
+    background: rgba(2, 8, 23, 0.72) !important;
+}
+
+body.dark-mode .modal-content {
+    background: #172437 !important;
+    color: #f1f5f9 !important;
+
+    border: 1px solid #30435b !important;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.45) !important;
+}
+
+body.dark-mode .modal-content h3,
+body.dark-mode .modal-content h4 {
+    color: #f1f5f9 !important;
+}
+
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
+
+body.dark-mode footer {
+    background: #08111f !important;
+    color: #94a3b8 !important;
+
+    border-top: 1px solid #1e2f45 !important;
+}
+
+
+/* =========================================================
+   RESPONSIVIDADE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    body.dark-mode .perfil-destaque {
+        background: #17263b !important;
+    }
+
+    body.dark-mode .btn-editar-topo,
+    body.dark-mode .btn-ir-loja {
+        color: #ffffff !important;
+    }
+
 }

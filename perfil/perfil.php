@@ -174,12 +174,14 @@ $caminho_foto =
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOAG - Perfil</title>
-    <link rel="stylesheet" href="perfilfil.css">
-    <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-    <link rel="stylesheet" href="dark-per.css">
+    <link rel="stylesheet" href="perfilfil.css?v=12">
+    <link rel="stylesheet" href="../m.escuro/dark_basee.css?v=12">
 
     <!-- ACESSIBILIDADE GLOBAL -->
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css?v=12">
+
+    <!-- DARK MODE DA PÁGINA — DEIXAR POR ÚLTIMO -->
+    <link rel="stylesheet" href="dark-per.css?v=12">
     <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
