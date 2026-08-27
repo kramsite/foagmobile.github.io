@@ -16,38 +16,38 @@
         {
             "id": "mat_23a836c9da28",
             "nome": "geografia",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#8a6a15",
+            "icone": "fa-globe"
         },
         {
             "id": "mat_47a8b822652c",
             "nome": "Quimica",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#27dd5e",
+            "icone": "fa-flask"
         },
         {
             "id": "mat_7835f7e43515",
             "nome": "Filosofia",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#fe86e8",
+            "icone": "fa-book"
         },
         {
             "id": "mat_d2031fa95c05",
             "nome": "Ed. fisica",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#39639d",
+            "icone": "fa-dna"
         },
         {
             "id": "mat_c17180db2e01",
             "nome": "Fisica",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#57568a",
+            "icone": "fa-calculator"
         },
         {
             "id": "mat_5319622704c4",
             "nome": "Português",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#ea3e3e",
+            "icone": "fa-language"
         },
         {
             "id": "mat_10e8872c7f32",
@@ -72,6 +72,13 @@
             "nome": "Historia",
             "cor": "#94a3b8",
             "icone": "fa-circle-question"
+        },
+        {
+            "id": "MAT_40202A17",
+            "nome": "ADS",
+            "cor": "#38a5ff",
+            "icone": "fa-laptop-code",
+            "criado_em": "2026-08-27 14:42:47"
         }
     ]
 }
