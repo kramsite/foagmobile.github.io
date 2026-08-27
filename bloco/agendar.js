@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.AGENDA_SAVE_URL || 'salvar_agenda.php';
 
     const HORARIO_SAVE_URL =
-        window.HORARIO_SAVE_URL || '../horario/salvar_horario.php';
+        window.HORARIO_SAVE_URL || 'salvar_agenda.php';
 
     const HORARIO_HTML =
         typeof window.HORARIO_HTML === 'string'

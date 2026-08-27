@@ -157,7 +157,7 @@ if (!isset($horarioData['html'])) {
         ); ?>;
 
         window.HORARIO_SAVE_URL =
-            "../horario/salvar_horario.php";
+            "salvar_agenda.php";
     </script>
 
     <style>

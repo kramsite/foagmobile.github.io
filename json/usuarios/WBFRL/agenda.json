@@ -1,1 +1,12 @@
-[]
+{
+    "notas": [
+        {
+            "id": 1787831898489,
+            "titulo": "aaa",
+            "texto": "aaaaaaaaaaaaa",
+            "data": "27/08/2026, 07:58:18"
+        }
+    ],
+    "tarefas": [],
+    "nao_esquecer": []
+}
