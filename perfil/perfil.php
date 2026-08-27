@@ -183,7 +183,7 @@ $caminho_foto =
     <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="./m.escuro/dark-mode.js"></script>
+    <script src="../m.escuro/dark-mode.js"></script>
 </head>
 
 <body>
@@ -251,10 +251,15 @@ $caminho_foto =
 
                 <section class="perfil-destaque">
                     <div class="perfil-identidade">
-                        <div class="foto-container">
-                            <img src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil de <?= escapar($nome) ?>">
-                            <span class="foto-status"></span>
-                        </div>
+                        <!-- NO PERFIL.PHP - Substitua o .foto-container -->
+<div class="foto-container">
+    <div class="moldura-container">
+        <div class="moldura-borda" id="molduraPerfil">
+            <img src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil de <?= escapar($nome) ?>">
+        </div>
+        <span class="foto-status"></span>
+    </div>
+</div>
 
                         <div class="perfil-texto">
                             <span class="etiqueta-perfil">Perfil do estudante</span>

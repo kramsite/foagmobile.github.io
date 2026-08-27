@@ -160,7 +160,6 @@ if (file_exists($arquivoMaterias)) {
     <!-- ACESSIBILIDADE GLOBAL -->
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
     <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
-    ]
       <?php include '../configuracoes/geral.php'; ?>
 <script src="<?= get_aparencia_path() ?>"></script>
  <script src="../configuracoes/aparencia.js?v=1"></script>
