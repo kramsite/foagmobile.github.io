@@ -1,318 +1,739 @@
-/* 1. RESET E FONTES */
+/* =========================================================
+   RESET
+========================================================= */
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
 }
 
-/* 2. ESTILO DESKTOP (PADRÃO) */
+html,
 body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  min-height: 100vh;
-  background: url('../img/livro.png') no-repeat center center/cover;
-  overflow: hidden;
-  position: relative;
+    width: 100%;
+    min-height: 100%;
 }
 
-/* Camada de desfoque (Background) */
+html {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+body {
+    min-height: 100vh;
+
+    padding: 95px 20px 40px;
+
+    background:
+        url('../img/livro.png')
+        no-repeat
+        center center / cover;
+
+    background-attachment: fixed;
+
+    position: relative;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+
+/* =========================================================
+   FUNDO DESFOCADO
+========================================================= */
+
 body::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: inherit;
-  filter: blur(6px) brightness(0.7);
-  z-index: -1;
+    content: '';
+
+    position: fixed;
+    inset: 0;
+
+    background:
+        url('../img/livro.png')
+        no-repeat
+        center center / cover;
+
+    filter:
+        blur(6px)
+        brightness(0.65);
+
+    transform: scale(1.04);
+
+    z-index: -1;
 }
 
-/* Logo fixa no topo */
+
+/* =========================================================
+   LOGO
+========================================================= */
+
 .logo {
-  font-family: 'Snap ITC', sans-serif;
-  background-color: #38a5ff;
-  color: white;
-  font-size: 2em;
-  padding: 15px 20px;
-  width: 100%;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    height: 68px;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+    align-items: center;
+
+    padding: 0 22px;
+
+    background: #38a5ff;
+
+    color: white;
+
+    font-family: 'Snap ITC', sans-serif;
+    font-size: 2em;
+
+    box-shadow:
+        0 4px 10px
+        rgba(0, 0, 0, 0.12);
 }
 
-/* Bloco branco centralizado */
+
+/* =========================================================
+   CARD PRINCIPAL
+========================================================= */
+
 .form-container {
-  background: #fff;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
-  max-width: 600px;
-  width: 90%;
-  margin-top: 50px;
-  z-index: 1;
+    width: 100%;
+    max-width: 650px;
+
+    margin: 0 auto;
+
+    padding: 30px 36px;
+
+    background: #fff;
+
+    border-radius: 16px;
+
+    box-shadow:
+        0 12px 40px
+        rgba(0, 0, 0, 0.28);
 }
 
-h2 {
-  text-align: center;
-  color: #007bff;
-  margin-bottom: 20px;
+
+/* =========================================================
+   ETAPAS
+========================================================= */
+
+.etapa {
+    width: 100%;
 }
 
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.etapa-oculta {
+    display: none !important;
+}
+
+
+/* =========================================================
+   CABEÇALHO DA ETAPA
+========================================================= */
+
+.etapa-topo {
+    margin-bottom: 18px;
+
+    text-align: center;
+}
+
+.etapa-numero {
+    display: inline-block;
+
+    margin-bottom: 5px;
+
+    color: #7d8b99;
+
+    font-size: 0.72rem;
+    font-weight: 500;
+}
+
+.etapa-topo h2 {
+    margin-bottom: 4px;
+
+    color: #087cff;
+
+    font-size: 1.55rem;
+    font-weight: 600;
+}
+
+.etapa-topo p {
+    color: #888;
+
+    font-size: 0.76rem;
+}
+
+
+/* =========================================================
+   PROGRESSO
+========================================================= */
+
+.progresso {
+    width: 100%;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    margin-bottom: 25px;
+}
+
+.progresso-item {
+    width: 75px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 5px;
+
+    color: #aaa;
+}
+
+.progresso-item span {
+    width: 30px;
+    height: 30px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #edf0f3;
+
+    border-radius: 50%;
+
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.progresso-item small {
+    font-size: 0.65rem;
+}
+
+.progresso-item.ativo {
+    color: #168bea;
+}
+
+.progresso-item.ativo span {
+    background: #38a5ff;
+
+    color: #fff;
+
+    box-shadow:
+        0 0 0 4px
+        rgba(56, 165, 255, 0.12);
+}
+
+.progresso-item.concluido {
+    color: #168bea;
+}
+
+.progresso-item.concluido span {
+    background: #38a5ff;
+
+    color: #fff;
+}
+
+.progresso-linha {
+    width: 90px;
+    height: 2px;
+
+    margin-top: 14px;
+
+    background: #e1e5e9;
+}
+
+.progresso-linha.concluida {
+    background: #38a5ff;
+}
+
+
+/* =========================================================
+   CAMPOS
+========================================================= */
+
+.campos-container {
+    width: 100%;
+}
+
+.campo-form {
+    width: 100%;
+
+    margin-bottom: 14px;
 }
 
 label {
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #333;
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #333;
+
+    font-size: 0.84rem;
+    font-weight: 500;
 }
 
-input {
-  width: 100%;
-  padding: 12px;
-  font-size: 0.9rem;
-  border: 2px solid #ddd;
-  border-radius: 5px;
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: #38a5ff;
-  outline: none;
-}
-
-/* Campos lado a lado no Desktop */
-.form-row {
-  display: flex;
-  gap: 15px;
-}
-
-.password-wrapper {
-  position: relative;
-  flex: 1;
-}
-
-.toggle-visibility {
-  position: absolute;
-  right: 12px;
-  top: 38px; /* Ajuste conforme a altura da label */
-  cursor: pointer;
-  font-size: 22px;
-  user-select: none;
-}
-
-/* Botões e Checkbox */
-button {
-  background-color: #38a5ff;
-  color: white;
-  border: none;
-  padding: 14px;
-  font-size: 1rem;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-button:hover {
-  background-color: #3099ef;
-}
-
-.btn-secondary {
-  background-color: #aaa;
-}
-
-/* --- No topo do arquivo (Desktop) --- */
-.mobile-only {
-  display: none !important; /* Esconde no PC */
-}
-
-label.termos {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  margin: 5px 0;
-  font-size: 0.85rem;
-  text-align: left;
-  cursor: pointer;
-}
-
-label.termos input[type="checkbox"] {
-  width: 18px !important;
-  height: 18px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  flex: 0 0 18px;
-}
-
-label.termos span {
-  display: inline;
-  width: auto;
-}
-
-/* --- Dentro da @media (max-width: 768px) --- */
-@media (max-width: 768px) {
-  body {
-    background: linear-gradient(to bottom, #e3f2ff 0%, #ffffff 100%) !important;
-  }
-
-  body::before { display: none !important; }
-
-  .form-container {
-    max-width: 340px;
-    padding: 25px;
-    margin-top: 60px;
-    border-radius: 15px;
-  }
-
-  /* 1. EMPILHAR CAMPOS DE SENHA */
-  .form-row {
-    flex-direction: column; /* Faz um ficar embaixo do outro */
-    gap: 15px;
-  }
-
-  /* 2. ALINHAR CHECKBOX E TEXTO */
-  
-
-  /* 3. BOTÕES LADO A LADO */
-  .btn-group {
-    display: flex;
-    gap: 10px;
-    margin-top: 10px;
-  }
-
-  .btn-group button {
-    flex: 1; /* Faz os dois botões terem o mesmo tamanho */
-    padding: 12px;
-    font-size: 0.95rem;
-  }
-
-  /* 4. AJUSTE DO MACAQUINHO */
-  .password-wrapper {
+input,
+select {
     width: 100%;
-  }
+    height: 46px;
 
-  .toggle-visibility {
-    top: 38px; /* Ajuste para centralizar no input novo */
-    right: 12px;
-  }
+    padding: 0 13px;
 
-  .hidden-mobile {
-    display: none !important;
-  }
+    background: #fff;
 
-  .mobile-only {
-    display: block !important;
-  }
+    color: #333;
+
+    border: 1.5px solid #d7dce1;
+
+    border-radius: 8px;
+
+    outline: none;
+
+    font-size: 0.84rem;
+
+    transition:
+        border-color 0.2s,
+        box-shadow 0.2s;
 }
-/* Estilos para o campo de data - VERSÃO REDUZIDA */
+
+input::placeholder {
+    color: #aaa;
+}
+
+input:focus,
+select:focus {
+    border-color: #38a5ff;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(56, 165, 255, 0.10);
+}
+
+
+/* =========================================================
+   DATA
+========================================================= */
+
 .data-wrapper {
-    position: relative;
     width: 100%;
-    margin-bottom: 15px;
 }
 
 .data-input-group {
     display: flex;
     align-items: center;
-    gap: 3px;
-    width: 100%;
-    max-width: 280px; /* Limita o tamanho máximo */
+
+    gap: 7px;
+
+    width: fit-content;
 }
 
 .data-parte {
-    width: 100%;
-    padding: 10px 5px;
-    font-size: 0.85rem;
-    border: 2px solid #ddd;
-    border-radius: 5px;
-    transition: border-color 0.3s ease;
+    height: 44px;
+
+    padding: 0;
+
     text-align: center;
-    min-width: 0;
 }
 
-/* Tamanhos individuais */
-#data_dia {
-    flex: 0 0 50px;
-}
-
+#data_dia,
 #data_mes {
-    flex: 0 0 50px;
+    width: 62px;
 }
 
 #data_ano {
-    flex: 0 0 75px;
-}
-
-.data-parte:focus {
-    border-color: #38a5ff;
-    outline: none;
-}
-
-.data-parte.invalido {
-    border-color: #dc3545 !important;
-    background-color: #fff8f8;
-}
-
-.data-parte.valido {
-    border-color: #28a745 !important;
+    width: 92px;
 }
 
 .data-separador {
-    font-size: 1rem;
-    font-weight: bold;
-    color: #555;
-    padding: 0 1px;
-    flex: 0 0 auto;
+    color: #666;
+
+    font-weight: 600;
+}
+
+.data-parte.valido {
+    border-color: #28a745;
+}
+
+.data-parte.invalido {
+    border-color: #dc3545;
+
+    background: #fff8f8;
 }
 
 .data-erro {
     display: none;
-    color: #dc3545;
-    font-size: 0.75rem;
-    margin-top: 3px;
-    padding: 3px 8px;
-    background-color: #fff0f0;
-    border-radius: 4px;
-    border-left: 3px solid #dc3545;
+
+    margin-top: 6px;
+
+    color: #cc3344;
+
+    font-size: 0.68rem;
 }
 
 .data-erro.visivel {
-    display: block !important;
+    display: block;
 }
 
-/* Ajuste para mobile */
+
+/* =========================================================
+   SENHAS
+========================================================= */
+
+.form-row {
+    width: 100%;
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+    gap: 15px;
+}
+
+.password-wrapper {
+    width: 100%;
+
+    position: relative;
+}
+
+.password-wrapper input {
+    padding-right: 46px;
+}
+
+.toggle-visibility {
+    position: absolute;
+
+    right: 13px;
+    bottom: 9px;
+
+    cursor: pointer;
+
+    font-size: 20px;
+
+    user-select: none;
+}
+
+.senha-regras {
+    margin-top: 7px;
+
+    color: #888;
+
+    font-size: 0.66rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   BOX DA SEGURANÇA
+========================================================= */
+
+.seguranca-box {
+    width: 100%;
+
+    padding: 18px;
+
+    background: #f8fbff;
+
+    border: 1px solid #dcecff;
+
+    border-radius: 12px;
+}
+
+.seguranca-cabecalho {
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    padding-bottom: 14px;
+    margin-bottom: 16px;
+
+    border-bottom: 1px solid #e4edf6;
+}
+
+.seguranca-icone {
+    width: 39px;
+    height: 39px;
+
+    flex: 0 0 39px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #e4f3ff;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+}
+
+.seguranca-cabecalho strong {
+    display: block;
+
+    margin-bottom: 2px;
+
+    color: #168bea;
+
+    font-size: 0.9rem;
+}
+
+.seguranca-cabecalho p {
+    color: #808080;
+
+    font-size: 0.68rem;
+
+    line-height: 1.4;
+}
+
+
+/* =========================================================
+   AVISO
+========================================================= */
+
+.aviso-recuperacao {
+    display: flex;
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 4px;
+
+    padding: 10px 11px;
+
+    background: #fff9e8;
+
+    border-left: 3px solid #efb632;
+
+    border-radius: 6px;
+}
+
+.aviso-recuperacao > span {
+    font-size: 14px;
+}
+
+.aviso-recuperacao strong {
+    display: block;
+
+    color: #66510d;
+
+    font-size: 0.7rem;
+}
+
+.aviso-recuperacao p {
+    margin-top: 1px;
+
+    color: #76662c;
+
+    font-size: 0.66rem;
+
+    line-height: 1.45;
+}
+
+
+/* =========================================================
+   TERMOS
+========================================================= */
+
+label.termos {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 15px;
+
+    cursor: pointer;
+
+    font-size: 0.77rem;
+}
+
+label.termos input {
+    width: 17px;
+    height: 17px;
+
+    flex: 0 0 17px;
+
+    margin: 0;
+
+    cursor: pointer;
+}
+
+label.termos a {
+    color: #087cff;
+
+    text-decoration: none;
+}
+
+label.termos a:hover {
+    text-decoration: underline;
+}
+
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+.acoes {
+    width: 100%;
+
+    display: flex;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.etapa1-acoes {
+    justify-content: flex-end;
+}
+
+button {
+    min-height: 45px;
+
+    padding: 11px 24px;
+
+    border: none;
+    border-radius: 8px;
+
+    cursor: pointer;
+
+    font-size: 0.86rem;
+    font-weight: 500;
+
+    transition:
+        background 0.2s,
+        transform 0.1s;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+.btn-principal {
+    min-width: 145px;
+
+    background: #38a5ff;
+
+    color: white;
+}
+
+.btn-principal:hover {
+    background: #168fe9;
+}
+
+.btn-principal span {
+    margin-left: 6px;
+}
+
+.btn-voltar {
+    background: #eef1f4;
+
+    color: #555;
+}
+
+.btn-voltar:hover {
+    background: #e1e5e9;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
 @media (max-width: 768px) {
-    .data-input-group {
-        max-width: 240px;
+
+    body {
+        min-height: 100vh;
+
+        padding:
+            82px
+            14px
+            30px;
+
+        background:
+            linear-gradient(
+                to bottom,
+                #e6f4ff,
+                #ffffff
+            );
+
+        overflow-y: auto;
     }
-    
-    .data-parte {
-        padding: 8px 3px;
-        font-size: 0.8rem;
+
+    body::before {
+        display: none;
     }
-    
-    #data_dia, #data_mes {
-        flex: 0 0 40px;
+
+    .logo {
+        height: 62px;
+
+        padding: 0 18px;
+
+        font-size: 1.7em;
     }
-    
-    #data_ano {
-        flex: 0 0 65px;
+
+    .form-container {
+        width: 100%;
+        max-width: 390px;
+
+        padding: 23px 19px;
+
+        border-radius: 14px;
+
+        box-shadow:
+            0 6px 22px
+            rgba(0, 0, 0, 0.10);
     }
-    
-    .data-separador {
-        font-size: 0.9rem;
+
+    .etapa-topo h2 {
+        font-size: 1.35rem;
     }
+
+    .progresso {
+        margin-bottom: 22px;
+    }
+
+    .progresso-linha {
+        width: 65px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+
+        gap: 14px;
+    }
+
+    .seguranca-box {
+        padding: 15px;
+    }
+
+    .seguranca-cabecalho {
+        align-items: flex-start;
+    }
+
+    .acoes {
+        width: 100%;
+    }
+
+    .acoes button {
+        flex: 1;
+
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .etapa1-acoes .btn-principal {
+        width: 100%;
+    }
+
 }

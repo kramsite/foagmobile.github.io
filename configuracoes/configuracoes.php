@@ -25,7 +25,6 @@ $config_padrao = [
     'tema' => 'claro',
     'tamanho_fonte' => 'media',
     'cor_principal' => 'azul',
-    'modo_compacto' => 0,
     'notificacoes_navegador' => 0,
     'lembrete_atividades' => 1,
     'lembrete_provas' => 1,
@@ -42,9 +41,19 @@ $config_padrao = [
 
 function carregarConfiguracoes() {
     global $config_padrao;
+
     if (isset($_SESSION['configuracoes']) && is_array($_SESSION['configuracoes'])) {
-        return array_merge($config_padrao, $_SESSION['configuracoes']);
+        $configuracoesSalvas = $_SESSION['configuracoes'];
+
+        // Opções removidas da página de Aparência
+        unset(
+            $configuracoesSalvas['modo_compacto'],
+            $configuracoesSalvas['reduzir_animacoes']
+        );
+
+        return array_merge($config_padrao, $configuracoesSalvas);
     }
+
     return $config_padrao;
 }
 
@@ -59,8 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     header('Content-Type: application/json');
     try {
         $dados = $_POST;
-        unset($dados['acao']);
-        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao', 'modo_compacto',
+        unset(
+            $dados['acao'],
+            $dados['modo_compacto'],
+            $dados['reduzir_animacoes']
+        );
+        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao',
                        'notificacoes_navegador', 'lembrete_atividades',
                        'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro',
                        // ===== ACESSIBILIDADE =====
@@ -99,6 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup'])) {
         $dados = json_decode($conteudo, true);
         if (json_last_error() !== JSON_ERROR_NONE) throw new Exception('Arquivo JSON inválido');
         if (!isset($dados['configuracoes'])) throw new Exception('Estrutura inválida');
+
+        unset(
+            $dados['configuracoes']['modo_compacto'],
+            $dados['configuracoes']['reduzir_animacoes']
+        );
+
         $_SESSION['configuracoes'] = array_merge($config_padrao, $dados['configuracoes']);
         echo json_encode(['success' => true, 'message' => 'Backup importado com sucesso!']);
     } catch (Exception $e) {
@@ -304,27 +323,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                                 </select>
                             </div>
 
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Modo compacto</strong>
-                                    <small>Reduz os espaços entre os elementos.</small>
-                                </span>
-                                <span class="switch">
-                                    <input type="checkbox" name="modo_compacto" <?= $config['modo_compacto'] ? 'checked' : '' ?>>
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
-
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Reduzir animações</strong>
-                                    <small>Diminui movimentos e transições nas páginas.</small>
-                                </span>
-                                <span class="switch">
-                                    <input type="checkbox" name="reduzir_animacoes" <?= $config['reduzir_animacoes'] ? 'checked' : '' ?>>
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
                         </div>
                     </section>
 
@@ -920,24 +918,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             .then(data => {
                 if (data.success) {
 
-                // ===== GARANTIR TEMA SALVO =====
-                const temaEscolhido =
-                    document.getElementById('tema')?.value || 'claro';
+                    // ===== GARANTIR TEMA SALVO =====
+                    const temaEscolhido =
+                        document.getElementById('tema')?.value || 'claro';
 
-                aplicarTema(temaEscolhido);
+                    aplicarTema(temaEscolhido);
+
+                    // ===== SALVAR APARÊNCIA =====
+                    const tamanhoFonte =
+                        document.querySelector('[name="tamanho_fonte"]')?.value || 'media';
+
+                    if (
+                        window.foagAparencia &&
+                        typeof window.foagAparencia.atualizar === 'function'
+                    ) {
+                        window.foagAparencia.atualizar({
+                            tamanho_fonte: tamanhoFonte
+                        });
+                    } else {
+                        localStorage.setItem(
+                            'foag_aparencia',
+                            JSON.stringify({
+                                tamanho_fonte: tamanhoFonte
+                            })
+                        );
+                    }
+
                     // ===== SALVAR ACESSIBILIDADE NO LOCALSTORAGE =====
                     const configAcessibilidade = {
-                        tamanho_fonte: document.querySelector('[name="tamanho_fonte"]')?.value || 'media',
                         alto_contraste: document.querySelector('[name="alto_contraste"]')?.checked || false,
                         destacar_links: document.querySelector('[name="destacar_links"]')?.checked || false,
                         libras: document.querySelector('[name="libras"]')?.checked || false,
                         leitura_voz: document.querySelector('[name="leitura_voz"]')?.checked || false
                     };
-                    localStorage.setItem('foag_acessibilidade', JSON.stringify(configAcessibilidade));
-                    
+
+                    localStorage.setItem(
+                        'foag_acessibilidade',
+                        JSON.stringify(configAcessibilidade)
+                    );
+
                     if (typeof window.atualizarAcessibilidade === 'function') {
                         window.atualizarAcessibilidade(configAcessibilidade);
                     }
+
                     // ==================================================
                     
                     mostrarToast('✅ ' + data.message, 'sucesso');
@@ -1274,20 +1297,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         // 13. RESTAURAR ACESSIBILIDADE
         // ============================================
         document.getElementById('btn-restaurar-acessibilidade')?.addEventListener('click', function() {
-            const campoFonte = document.querySelector('[name="tamanho_fonte"]');
             const campoContraste = document.querySelector('[name="alto_contraste"]');
             const campoLinks = document.querySelector('[name="destacar_links"]');
             const campoLibras = document.querySelector('[name="libras"]');
             const campoVoz = document.querySelector('[name="leitura_voz"]');
 
-            if (campoFonte) campoFonte.value = 'media';
             if (campoContraste) campoContraste.checked = false;
             if (campoLinks) campoLinks.checked = false;
             if (campoLibras) campoLibras.checked = false;
             if (campoVoz) campoVoz.checked = false;
 
             const configAcessibilidade = {
-                tamanho_fonte: 'media',
                 alto_contraste: false,
                 destacar_links: false,
                 libras: false,
@@ -1755,6 +1775,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <script
         src="../acessibilidade/acessibilidade.js?v=13">
     </script>
+
+    <!-- ======================================
+         APARÊNCIA GLOBAL FOAG
+    ======================================= -->
+    <script src="aparencia.js?v=1"></script>
 
 </body>
 </html>

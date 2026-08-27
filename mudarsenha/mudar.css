@@ -1,0 +1,993 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  font-family: 'Poppins', sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background: #fff;
+
+  overflow: hidden;
+}
+
+
+/* ==========================================
+   CABEÇALHO
+========================================== */
+
+.logo {
+  width: 100%;
+  height: 68px;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+
+  padding: 0 22px;
+
+  background: #38a5ff;
+
+  color: #fff;
+
+  font-family: 'Snap ITC', sans-serif;
+  font-size: 2.2rem;
+
+  box-shadow:
+    0 3px 10px
+    rgba(0, 0, 0, 0.10);
+}
+
+
+/* ==========================================
+   PÁGINA
+========================================== */
+
+.login-page {
+  width: 100%;
+  height: calc(100vh - 68px);
+
+  margin-top: 68px;
+
+  display: flex;
+
+  overflow: hidden;
+}
+
+
+/* ==========================================
+   IMAGEM
+========================================== */
+
+.left-section {
+  width: 50%;
+  height: 100%;
+
+  position: relative;
+
+  overflow: hidden;
+}
+
+.left-section img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+  object-position: center;
+}
+
+.left-section::after {
+  content: '';
+
+  position: absolute;
+
+  top: 0;
+  right: 0;
+
+  width: 110px;
+  height: 100%;
+
+  background:
+    linear-gradient(
+      to right,
+      transparent,
+      #fff
+    );
+
+  pointer-events: none;
+}
+
+
+/* ==========================================
+   LADO DIREITO
+========================================== */
+
+.right-section {
+  width: 50%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 35px 55px;
+
+  background: #fff;
+}
+
+
+/* ==========================================
+   CARD
+========================================== */
+
+.recuperacao-box {
+  width: 100%;
+  max-width: 450px;
+
+  padding: 29px 31px;
+
+  background: #fff;
+
+  border: 1px solid #edf0f3;
+
+  border-radius: 16px;
+
+  box-shadow:
+    0 10px 34px
+    rgba(0, 0, 0, 0.08);
+
+  text-align: center;
+}
+
+
+/* ==========================================
+   PASSO A PASSO
+========================================== */
+
+.progresso-recuperacao {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  margin-bottom: 23px;
+}
+
+.progresso-item {
+  width: 72px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 6px;
+
+  color: #adb4ba;
+}
+
+.progresso-item span {
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #edf0f3;
+
+  border: 2px solid #edf0f3;
+
+  border-radius: 50%;
+
+  font-size: 0.72rem;
+  font-weight: 600;
+
+  transition: 0.2s;
+}
+
+.progresso-item small {
+  font-size: 0.6rem;
+  font-weight: 500;
+
+  white-space: nowrap;
+}
+
+.progresso-item.ativo {
+  color: #168bea;
+}
+
+.progresso-item.ativo span {
+  background: #38a5ff;
+
+  border-color: #38a5ff;
+
+  color: white;
+
+  box-shadow:
+    0 0 0 4px
+    rgba(56, 165, 255, 0.10);
+}
+
+.progresso-item.concluido span {
+  background: #38a5ff;
+
+  border-color: #38a5ff;
+
+  color: #fff;
+}
+
+.progresso-linha {
+  width: 52px;
+  height: 2px;
+
+  margin-top: 14px;
+
+  background: #e5e9ed;
+}
+
+.progresso-linha.ativa {
+  background: #38a5ff;
+}
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+.recuperacao-box h1 {
+  margin-bottom: 7px;
+
+  color: #0783f7;
+
+  font-size: 1.65rem;
+  font-weight: 600;
+
+  line-height: 1.2;
+}
+
+
+/* ==========================================
+   DESCRIÇÃO
+========================================== */
+
+.descricao {
+  max-width: 350px;
+
+  margin: 0 auto 21px;
+
+  color: #777;
+
+  font-size: 0.77rem;
+
+  line-height: 1.55;
+}
+
+
+/* ==========================================
+   FORM
+========================================== */
+
+.recuperacao-box form {
+  width: 100%;
+
+  text-align: left;
+}
+
+
+/* ==========================================
+   CAMPOS
+========================================== */
+
+.campo {
+  width: 100%;
+
+  margin-bottom: 14px;
+}
+
+.campo label {
+  display: block;
+
+  margin-bottom: 6px;
+
+  color: #333;
+
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+
+/* ==========================================
+   INPUTS
+========================================== */
+
+input[type="email"],
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  height: 47px;
+
+  padding: 0 14px;
+
+  border: 1.5px solid #d7dce1;
+
+  border-radius: 8px;
+
+  background: #fff;
+
+  color: #222;
+
+  font-size: 0.85rem;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+input::placeholder {
+  color: #aaa;
+}
+
+input:focus {
+  border-color: #38a5ff;
+
+  box-shadow:
+    0 0 0 3px
+    rgba(56, 165, 255, 0.10);
+}
+
+
+/* ==========================================
+   SENHA
+========================================== */
+
+.password-wrapper {
+  width: 100%;
+
+  position: relative;
+}
+
+.password-wrapper input {
+  padding-right: 48px;
+}
+
+.toggle-visibility {
+  position: absolute;
+
+  top: 50%;
+  right: 13px;
+
+  transform: translateY(-50%);
+
+  cursor: pointer;
+
+  font-size: 1.2rem;
+
+  user-select: none;
+}
+
+
+/* ==========================================
+   BOTÃO
+========================================== */
+
+button {
+  width: 100%;
+  height: 47px;
+
+  border: none;
+
+  border-radius: 8px;
+
+  background: #38a5ff;
+
+  color: #fff;
+
+  font-size: 0.92rem;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+button:hover {
+  background: #1d95f7;
+}
+
+button:active {
+  transform: scale(0.99);
+}
+
+
+/* ==========================================
+   VOLTAR
+========================================== */
+
+.voltar-login {
+  display: inline-block;
+
+  margin-top: 17px;
+
+  color: #0783f7;
+
+  font-size: 0.74rem;
+  font-weight: 500;
+
+  text-decoration: none;
+}
+
+.voltar-login:hover {
+  text-decoration: underline;
+}
+
+
+/* ==========================================
+   CONTA
+========================================== */
+
+.conta-encontrada {
+  width: 100%;
+
+  margin-bottom: 12px;
+
+  padding: 11px 13px;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 2px;
+
+  background: #f8fafc;
+
+  border: 1px solid #e5e9ed;
+
+  border-radius: 8px;
+
+  text-align: left;
+}
+
+.conta-encontrada span {
+  color: #8b959e;
+
+  font-size: 0.64rem;
+}
+
+.conta-encontrada strong {
+  color: #444;
+
+  font-size: 0.79rem;
+  font-weight: 500;
+}
+
+
+/* ==========================================
+   PERGUNTA
+========================================== */
+
+.pergunta-box {
+  width: 100%;
+
+  margin-bottom: 14px;
+
+  padding: 13px 14px;
+
+  background: #eef7ff;
+
+  border: 1px solid #d4e9fd;
+
+  border-radius: 8px;
+
+  text-align: left;
+}
+
+.pergunta-box span {
+  display: block;
+
+  margin-bottom: 4px;
+
+  color: #788692;
+
+  font-size: 0.64rem;
+}
+
+.pergunta-box strong {
+  color: #2f3942;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  line-height: 1.45;
+}
+
+
+/* ==========================================
+   ERRO
+========================================== */
+
+.mensagem-erro {
+  width: 100%;
+
+  margin-bottom: 14px;
+
+  padding: 10px 12px;
+
+  background: #fff1f1;
+
+  border: 1px solid #efcccc;
+
+  border-radius: 7px;
+
+  color: #c73838;
+
+  font-size: 0.7rem;
+
+  text-align: left;
+}
+
+.erro-senha {
+  display: none;
+}
+
+.erro-senha.visivel {
+  display: block;
+}
+
+
+/* ==========================================
+   REQUISITOS
+========================================== */
+
+.requisitos-senha {
+  width: 100%;
+
+  margin: 1px 0 14px;
+
+  padding: 11px;
+
+  background: #f7faff;
+
+  border: 1px solid #deebf7;
+
+  border-radius: 8px;
+}
+
+.requisitos-senha > strong {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #4a555f;
+
+  font-size: 0.68rem;
+}
+
+.requisitos-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, 1fr);
+
+  gap: 6px;
+}
+
+.requisitos-grid span {
+  padding: 6px 8px;
+
+  background: #fff;
+
+  border: 1px solid #e3e7eb;
+
+  border-radius: 6px;
+
+  color: #aaa;
+
+  font-size: 0.61rem;
+
+  transition: 0.2s;
+}
+
+.requisitos-grid span.ok {
+  background: #eefaf2;
+
+  border-color: #ccebd6;
+
+  color: #238c44;
+}
+
+
+/* ==========================================
+   ETAPA 3
+========================================== */
+
+.etapa3-box {
+  width: 100%;
+
+  max-width: 450px;
+
+  padding: 27px 31px;
+}
+
+
+/* TÍTULO DA ETAPA 3 */
+
+.etapa3-box h1 {
+  margin: 0 0 6px;
+
+  color: #0783f7;
+
+  font-size: 1.55rem;
+  font-weight: 600;
+
+  line-height: 1.2;
+
+  text-align: center;
+}
+
+
+/* DESCRIÇÃO ETAPA 3 */
+
+.etapa3-box .descricao {
+  max-width: 325px;
+
+  margin: 0 auto 18px;
+
+  color: #777;
+
+  font-size: 0.74rem;
+
+  line-height: 1.5;
+
+  text-align: center;
+}
+
+
+/* ==========================================
+   CONTA VERIFICADA
+========================================== */
+
+.conta-etapa3 {
+  width: 100%;
+
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 15px;
+
+  padding: 10px 12px;
+
+  background: #f4fbf6;
+
+  border: 1px solid #d9efe0;
+
+  border-radius: 8px;
+
+  text-align: left;
+}
+
+.conta-etapa3-icone {
+  width: 30px;
+  height: 30px;
+
+  flex: 0 0 30px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #e1f5e7;
+
+  color: #258f45;
+
+  border-radius: 50%;
+
+  font-size: 0.74rem;
+  font-weight: 600;
+}
+
+.conta-etapa3 > div:last-child {
+  display: flex;
+  flex-direction: column;
+
+  gap: 1px;
+
+  min-width: 0;
+}
+
+.conta-etapa3 span {
+  color: #819087;
+
+  font-size: 0.61rem;
+}
+
+.conta-etapa3 strong {
+  color: #35433a;
+
+  font-size: 0.75rem;
+  font-weight: 500;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+
+  white-space: nowrap;
+}
+
+
+/* ==========================================
+   CAMPOS ETAPA 3
+========================================== */
+
+.etapa3-box .campo {
+  margin-bottom: 12px;
+}
+
+.etapa3-box .campo label {
+  font-size: 0.79rem;
+}
+
+
+/* ==========================================
+   REQUISITOS ETAPA 3
+========================================== */
+
+.etapa3-requisitos {
+  margin: 0 0 14px;
+
+  padding: 10px;
+
+  background: #f7faff;
+
+  border: 1px solid #deebf7;
+
+  border-radius: 8px;
+}
+
+.etapa3-requisitos > strong {
+  display: block;
+
+  margin-bottom: 7px;
+
+  color: #4a555f;
+
+  font-size: 0.64rem;
+}
+
+.etapa3-requisitos .requisitos-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 6px;
+}
+
+.etapa3-requisitos .requisitos-grid span {
+  padding: 6px 7px;
+
+  background: #fff;
+
+  border: 1px solid #e3e7eb;
+
+  border-radius: 6px;
+
+  color: #9ca3a9;
+
+  font-size: 0.58rem;
+
+  transition: 0.2s;
+}
+
+.etapa3-requisitos .requisitos-grid span.ok {
+  background: #edf9f1;
+
+  border-color: #cbe9d4;
+
+  color: #258d44;
+}
+
+
+/* ==========================================
+   BOTÃO ETAPA 3
+========================================== */
+
+.etapa3-box button {
+  margin-top: 1px;
+}
+
+
+/* ==========================================
+   VOLTAR ETAPA 3
+========================================== */
+
+.etapa3-box .voltar-login {
+  margin-top: 14px;
+
+  font-size: 0.7rem;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 768px) {
+
+  html,
+  body {
+    height: auto;
+
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+
+  .logo {
+    height: 55px;
+
+    justify-content: center;
+
+    font-size: 1.6rem;
+  }
+
+
+  .login-page {
+    min-height: calc(100vh - 55px);
+    height: auto;
+
+    margin-top: 55px;
+
+    padding: 25px 15px;
+
+    background:
+      linear-gradient(
+        180deg,
+        #eaf6ff,
+        #fff
+      );
+  }
+
+
+  .left-section {
+    display: none;
+  }
+
+
+  .right-section {
+    width: 100%;
+    height: auto;
+
+    padding: 0;
+  }
+
+
+  .recuperacao-box {
+    max-width: 380px;
+
+    margin: auto;
+
+    padding: 25px 20px;
+  }
+
+
+  .progresso-linha {
+    width: 34px;
+  }
+
+
+  .progresso-item {
+    width: 65px;
+  }
+
+
+  .recuperacao-box h1 {
+    font-size: 1.4rem;
+  }
+
+
+  .requisitos-grid {
+    grid-template-columns: 1fr;
+  }
+
+
+  /* ETAPA 3 MOBILE */
+
+  .etapa3-box {
+    max-width: 380px;
+
+    padding: 23px 19px;
+  }
+
+
+  .etapa3-box h1 {
+    font-size: 1.35rem;
+  }
+
+
+  .etapa3-box .descricao {
+    font-size: 0.72rem;
+  }
+
+
+  .conta-etapa3 {
+    padding: 9px 10px;
+  }
+
+
+  .etapa3-requisitos .requisitos-grid {
+    grid-template-columns: 1fr;
+  }
+
+}
+
+
+/* ==========================================
+   TELAS BAIXAS
+========================================== */
+
+@media (max-height: 650px) and (min-width: 769px) {
+
+  .right-section {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+
+
+  .recuperacao-box {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+
+  .progresso-recuperacao {
+    margin-bottom: 15px;
+  }
+
+
+  .etapa3-box {
+    padding-top: 17px;
+    padding-bottom: 17px;
+  }
+
+
+  .etapa3-box h1 {
+    font-size: 1.35rem;
+  }
+
+
+  .etapa3-box .descricao {
+    margin-bottom: 12px;
+  }
+
+
+  .etapa3-box .campo {
+    margin-bottom: 9px;
+  }
+
+
+  .etapa3-requisitos {
+    margin-bottom: 10px;
+  }
+
+}
