@@ -265,7 +265,7 @@ nav.menu a:hover {
 
 /* Cabeçalho da tabela */
 #scheduleTable th {
-    background:linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    background: #38a5ff;
     color: #ffffff !important;
     font-weight: 700 !important;
     font-size: 15px !important;
@@ -348,7 +348,7 @@ nav.menu a:hover {
     padding: 10px 16px;
 
     /* Gradiente azul para os botões */
-    background: linear-gradient(135deg, #38a5ff 0%, #2a7fc9 100%) !important;
+    background:  #38a5ff;
     color: #ffffff !important;
     font-weight: 700 !important;
 
@@ -1745,6 +1745,7 @@ body.dark-mode #notas.agenda-notas-card textarea {
     }
 }
 
+
 /* =====================================================
    MELHORIAS DA AGENDA — TAREFAS + HORÁRIO
 ===================================================== */
@@ -1819,46 +1820,6 @@ body.dark-mode #notas.agenda-notas-card textarea {
     background: #fffbea !important;
 }
 
-/* Campo de horário com início e fim */
-#scheduleTable td.horario-hora {
-    padding: 8px !important;
-    min-width: 190px !important;
-    cursor: default !important;
-}
-
-.horario-faixa {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    width: 100%;
-}
-
-.input-horario {
-    width: 82px;
-    min-width: 0;
-    padding: 7px 5px;
-    border: 1px solid #cbd5e1;
-    border-radius: 7px;
-    background: #ffffff;
-    color: #1e293b;
-    font-family: 'Poppins', sans-serif;
-    font-size: 13px;
-    text-align: center;
-    outline: none;
-}
-
-.input-horario:focus {
-    border-color: #38a5ff;
-    box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.14);
-}
-
-.horario-separador {
-    color: #64748b;
-    font-size: 12px;
-    font-weight: 600;
-}
-
 /* Sugestões das matérias */
 .horario-autocomplete {
     position: absolute;
@@ -1915,6 +1876,177 @@ body.dark-mode #notas.agenda-notas-card textarea {
     white-space: nowrap;
 }
 
+/* =====================================================
+   HORÁRIO DAS AULAS — LIMPO E SEM ESTILO NATIVO
+===================================================== */
+
+/* A célula do horário deixa de usar o gradiente azul da primeira coluna */
+#scheduleTable td.celula-horario:first-child {
+    width: 190px !important;
+    min-width: 190px !important;
+    padding: 9px 10px !important;
+
+    background: #f7faff !important;
+    color: #25364d !important;
+
+    text-shadow: none !important;
+    cursor: default !important;
+}
+
+/* Um único componente visual para início + fim */
+.horario-inputs {
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 6px;
+
+    padding: 6px 8px;
+
+    background: #ffffff;
+    border: 1px solid #dbe7f2;
+    border-radius: 9px;
+
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.05);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background-color 0.2s ease;
+}
+
+.horario-inputs:focus-within {
+    border-color: #38a5ff;
+    box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.12);
+}
+
+/* Remove o "platinado" / estilo nativo do navegador */
+.horario-inputs input[type="time"] {
+    appearance: none !important;
+    -webkit-appearance: none !important;
+
+    width: 100%;
+    min-width: 0;
+
+    margin: 0;
+    padding: 3px 0;
+
+    background: transparent !important;
+    background-color: transparent !important;
+    color: #25364d !important;
+
+    border: 0 !important;
+    border-radius: 0 !important;
+
+    outline: 0 !important;
+    box-shadow: none !important;
+
+    font-family: 'Poppins', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-align: center;
+
+    color-scheme: light;
+}
+
+/* Esconde o botão/ícone de relógio padrão */
+.horario-inputs input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none !important;
+    opacity: 0 !important;
+    width: 0 !important;
+    height: 0 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+/* Limpa os fundos internos do input time */
+.horario-inputs input[type="time"]::-webkit-datetime-edit,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-fields-wrapper,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-text,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-hour-field,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-minute-field,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-ampm-field {
+    background: transparent !important;
+    background-color: transparent !important;
+    color: inherit !important;
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Evita caixinhas internas ao selecionar hora/minuto */
+.horario-inputs input[type="time"]::-webkit-datetime-edit-hour-field:focus,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-minute-field:focus,
+.horario-inputs input[type="time"]::-webkit-datetime-edit-ampm-field:focus {
+    background: rgba(56, 165, 255, 0.10) !important;
+    border-radius: 4px;
+}
+
+/* Separador entre os horários */
+.horario-separador {
+    flex-shrink: 0;
+    color: #9aa9bb;
+    font-size: 0;
+    line-height: 1;
+}
+
+.horario-separador::after {
+    content: "—";
+    color: #9aa9bb;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Hover discreto na célula */
+#scheduleTable td.celula-horario:first-child:hover {
+    background: #f1f7fd !important;
+}
+
+/* DARK MODE */
+body.dark-mode #scheduleTable td.celula-horario:first-child {
+    background: #172033 !important;
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .horario-inputs {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+    box-shadow: none;
+}
+
+body.dark-mode .horario-inputs:focus-within {
+    border-color: #669ada !important;
+    box-shadow: 0 0 0 3px rgba(102, 154, 218, 0.14);
+}
+
+body.dark-mode .horario-inputs input[type="time"] {
+    background: transparent !important;
+    color: #e2e8f0 !important;
+    color-scheme: dark;
+}
+
+body.dark-mode .horario-separador::after {
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+    #scheduleTable td.celula-horario:first-child {
+        width: 175px !important;
+        min-width: 175px !important;
+    }
+
+    .horario-inputs {
+        gap: 4px;
+        padding: 5px 6px;
+    }
+
+    .horario-inputs input[type="time"] {
+        font-size: 12px;
+    }
+}
+
+
 /* Dark mode */
 body.dark-mode #tabela-tarefas tr.tarefa-concluida td {
     background: #162033 !important;
@@ -1936,15 +2068,7 @@ body.dark-mode .tarefa-texto:focus {
     background: #243247;
 }
 
-body.dark-mode .input-horario {
-    background: #0f172a;
-    color: #e2e8f0;
-    border-color: #475569;
-}
 
-body.dark-mode .horario-separador {
-    color: #94a3b8;
-}
 
 body.dark-mode .horario-autocomplete {
     background: #1e293b;
@@ -1961,14 +2085,4 @@ body.dark-mode .horario-autocomplete-item.ativo {
     color: #ffffff;
 }
 
-@media (max-width: 600px) {
-    #scheduleTable td.horario-hora {
-        min-width: 170px !important;
-    }
-
-    .input-horario {
-        width: 72px;
-        font-size: 12px;
-    }
-}
 
