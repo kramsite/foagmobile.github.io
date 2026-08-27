@@ -128,16 +128,16 @@ if (!isset($dadosAtuais['itens']) || empty($dadosAtuais['itens'])) {
         ['id' => 'moldura_classica', 'nome' => 'Moldura Clássica', 'descricao' => '🖼️ Elegância atemporal', 'preco' => 85, 'icone' => 'fa-regular fa-image', 'categoria' => 'molduras', 'imagem' => ''],
 
         // ===================================
-        // EFEITOS
+        // ESPECIAIS (CURSORES)
         // ===================================
-        ['id' => 'efeito_brilho', 'nome' => 'Efeito Brilho', 'descricao' => '✨ Um brilho especial no perfil', 'preco' => 70, 'icone' => 'fa-solid fa-wand-magic-sparkles', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_particulas', 'nome' => 'Efeito Partículas', 'descricao' => '✨ Partículas flutuantes', 'preco' => 85, 'icone' => 'fa-solid fa-wand-magic-sparkles', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_neon', 'nome' => 'Efeito Neon', 'descricao' => '✨ Brilho neon no perfil', 'preco' => 95, 'icone' => 'fa-solid fa-lightbulb', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_sombra', 'nome' => 'Efeito Sombra', 'descricao' => '✨ Sombras suaves e elegantes', 'preco' => 55, 'icone' => 'fa-solid fa-circle-half-stroke', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_arco_iris', 'nome' => 'Efeito Arco-Íris', 'descricao' => '🌈 Cores vibrantes no perfil', 'preco' => 100, 'icone' => 'fa-solid fa-rainbow', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_estrelas', 'nome' => 'Efeito Estrelas Cadentes', 'descricao' => '⭐ Estrelas caindo no perfil', 'preco' => 110, 'icone' => 'fa-solid fa-star', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_borboleta', 'nome' => 'Efeito Borboletas', 'descricao' => '🦋 Borboletas voando pelo perfil', 'preco' => 95, 'icone' => 'fa-solid fa-butterfly', 'categoria' => 'efeitos', 'imagem' => ''],
-        ['id' => 'efeito_fogo', 'nome' => 'Efeito Fogo', 'descricao' => '🔥 Chamas de paixão', 'preco' => 105, 'icone' => 'fa-solid fa-fire', 'categoria' => 'efeitos', 'imagem' => ''],
+        ['id' => 'cursor_estrela', 'nome' => 'Cursor Estrela', 'descricao' => '⭐ Um cursor em forma de estrela', 'preco' => 40, 'icone' => 'fa-solid fa-star', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_foguete', 'nome' => 'Cursor Foguete', 'descricao' => '🚀 Um cursor de foguete espacial', 'preco' => 45, 'icone' => 'fa-solid fa-rocket', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_coracao', 'nome' => 'Cursor Coração', 'descricao' => '❤️ Um cursor em formato de coração', 'preco' => 35, 'icone' => 'fa-solid fa-heart', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_lampada', 'nome' => 'Cursor Lâmpada', 'descricao' => '💡 Um cursor com uma lâmpada brilhante', 'preco' => 40, 'icone' => 'fa-solid fa-lightbulb', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_raio', 'nome' => 'Cursor Raio', 'descricao' => '⚡ Um cursor com um raio de energia', 'preco' => 50, 'icone' => 'fa-solid fa-bolt', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_trofeu', 'nome' => 'Cursor Troféu', 'descricao' => '🏆 Um cursor de vencedor', 'preco' => 55, 'icone' => 'fa-solid fa-trophy', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_alvo', 'nome' => 'Cursor Alvo', 'descricao' => '🎯 Um cursor preciso como um alvo', 'preco' => 45, 'icone' => 'fa-solid fa-bullseye', 'categoria' => 'especiais', 'imagem' => ''],
+        ['id' => 'cursor_flor', 'nome' => 'Cursor Flor', 'descricao' => '🌸 Um cursor com uma flor delicada', 'preco' => 35, 'icone' => 'fa-solid fa-flower', 'categoria' => 'especiais', 'imagem' => ''],
     ];
 }
 

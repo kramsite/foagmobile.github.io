@@ -163,7 +163,7 @@ $estruturaLojaPadrao = [
             'preco' => 20,
             'icone' => 'fa-solid fa-rocket',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/aaa.jpg'
         ],
 
         [
@@ -173,7 +173,7 @@ $estruturaLojaPadrao = [
             'preco' => 15,
             'icone' => 'fa-solid fa-book',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/blom.jpg'
         ],
 
         [
@@ -183,7 +183,7 @@ $estruturaLojaPadrao = [
             'preco' => 25,
             'icone' => 'fa-solid fa-lightbulb',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/coracao.jpg'
         ],
 
         [
@@ -193,7 +193,7 @@ $estruturaLojaPadrao = [
             'preco' => 22,
             'icone' => 'fa-solid fa-bullseye',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/favor.jpg'
         ],
 
         [
@@ -203,7 +203,7 @@ $estruturaLojaPadrao = [
             'preco' => 28,
             'icone' => 'fa-solid fa-brain',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/flor.jpg'
         ],
 
         [
@@ -213,7 +213,7 @@ $estruturaLojaPadrao = [
             'preco' => 20,
             'icone' => 'fa-solid fa-bolt',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/freddy.jpg'
         ],
 
         [
@@ -223,7 +223,7 @@ $estruturaLojaPadrao = [
             'preco' => 30,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/ha.jpg'
         ],
 
         [
@@ -233,7 +233,7 @@ $estruturaLojaPadrao = [
             'preco' => 35,
             'icone' => 'fa-solid fa-trophy',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/nem.jpg'
         ],
 
         [
@@ -243,7 +243,7 @@ $estruturaLojaPadrao = [
             'preco' => 15,
             'icone' => 'fa-solid fa-heart',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/ouvindo.jpg'
         ],
 
         [
@@ -253,7 +253,7 @@ $estruturaLojaPadrao = [
             'preco' => 25,
             'icone' => 'fa-solid fa-globe',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/sabia.jpg'
         ],
 
         [
@@ -263,7 +263,7 @@ $estruturaLojaPadrao = [
             'preco' => 18,
             'icone' => 'fa-solid fa-cloud',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/sem.jpg'
         ],
 
         [
@@ -273,7 +273,7 @@ $estruturaLojaPadrao = [
             'preco' => 22,
             'icone' => 'fa-solid fa-key',
             'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/'
+            'imagem' => '../img/loja/emoji/sorrindo.jpg'
         ],
 
         // ===================================
@@ -475,87 +475,87 @@ $estruturaLojaPadrao = [
         ],
 
         // ===================================
-        // EFEITOS
+        // ESPECIAIS (CURSORES)
         // ===================================
 
         [
-            'id' => 'efeito_brilho',
-            'nome' => 'Efeito Brilho',
-            'descricao' => '✨ Um brilho especial no perfil',
-            'preco' => 70,
-            'icone' => 'fa-solid fa-wand-magic-sparkles',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
-        ],
-
-        [
-            'id' => 'efeito_particulas',
-            'nome' => 'Efeito Partículas',
-            'descricao' => '✨ Partículas flutuantes',
-            'preco' => 85,
-            'icone' => 'fa-solid fa-wand-magic-sparkles',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
-        ],
-
-        [
-            'id' => 'efeito_neon',
-            'nome' => 'Efeito Neon',
-            'descricao' => '✨ Brilho neon no perfil',
-            'preco' => 95,
-            'icone' => 'fa-solid fa-lightbulb',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
-        ],
-
-        [
-            'id' => 'efeito_sombra',
-            'nome' => 'Efeito Sombra',
-            'descricao' => '✨ Sombras suaves e elegantes',
-            'preco' => 55,
-            'icone' => 'fa-solid fa-circle-half-stroke',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
-        ],
-
-        [
-            'id' => 'efeito_arco_iris',
-            'nome' => 'Efeito Arco-Íris',
-            'descricao' => '🌈 Cores vibrantes no perfil',
-            'preco' => 100,
-            'icone' => 'fa-solid fa-rainbow',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
-        ],
-
-        [
-            'id' => 'efeito_estrelas',
-            'nome' => 'Efeito Estrelas Cadentes',
-            'descricao' => '⭐ Estrelas caindo no perfil',
-            'preco' => 110,
+            'id' => 'cursor_estrela',
+            'nome' => 'Cursor Estrela',
+            'descricao' => '⭐ Um cursor em forma de estrela',
+            'preco' => 40,
             'icone' => 'fa-solid fa-star',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
         ],
 
         [
-            'id' => 'efeito_borboleta',
-            'nome' => 'Efeito Borboletas',
-            'descricao' => '🦋 Borboletas voando pelo perfil',
-            'preco' => 95,
-            'icone' => 'fa-solid fa-butterfly',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
+            'id' => 'cursor_foguete',
+            'nome' => 'Cursor Foguete',
+            'descricao' => '🚀 Um cursor de foguete espacial',
+            'preco' => 45,
+            'icone' => 'fa-solid fa-rocket',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
         ],
 
         [
-            'id' => 'efeito_fogo',
-            'nome' => 'Efeito Fogo',
-            'descricao' => '🔥 Chamas de paixão',
-            'preco' => 105,
-            'icone' => 'fa-solid fa-fire',
-            'categoria' => 'efeitos',
-            'imagem' => '../img/loja/efeito/'
+            'id' => 'cursor_coracao',
+            'nome' => 'Cursor Coração',
+            'descricao' => '❤️ Um cursor em formato de coração',
+            'preco' => 35,
+            'icone' => 'fa-solid fa-heart',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
+        ],
+
+        [
+            'id' => 'cursor_lampada',
+            'nome' => 'Cursor Lâmpada',
+            'descricao' => '💡 Um cursor com uma lâmpada brilhante',
+            'preco' => 40,
+            'icone' => 'fa-solid fa-lightbulb',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
+        ],
+
+        [
+            'id' => 'cursor_raio',
+            'nome' => 'Cursor Raio',
+            'descricao' => '⚡ Um cursor com um raio de energia',
+            'preco' => 50,
+            'icone' => 'fa-solid fa-bolt',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
+        ],
+
+        [
+            'id' => 'cursor_trofeu',
+            'nome' => 'Cursor Troféu',
+            'descricao' => '🏆 Um cursor de vencedor',
+            'preco' => 55,
+            'icone' => 'fa-solid fa-trophy',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
+        ],
+
+        [
+            'id' => 'cursor_alvo',
+            'nome' => 'Cursor Alvo',
+            'descricao' => '🎯 Um cursor preciso como um alvo',
+            'preco' => 45,
+            'icone' => 'fa-solid fa-bullseye',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
+        ],
+
+        [
+            'id' => 'cursor_flor',
+            'nome' => 'Cursor Flor',
+            'descricao' => '🌸 Um cursor com uma flor delicada',
+            'preco' => 35,
+            'icone' => 'fa-solid fa-flower',
+            'categoria' => 'especiais',
+            'imagem' => '../img/loja/especial/'
         ],
     ]
 ];
@@ -1017,10 +1017,10 @@ salvarJson(
 
             <button
                 class="filtro-btn"
-                data-filtro="efeitos"
+                data-filtro="especiais"
             >
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                Efeitos
+                <i class="fa-solid fa-mouse-pointer"></i>
+                Especiais
             </button>
 
             <button
