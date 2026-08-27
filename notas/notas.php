@@ -1385,6 +1385,10 @@ $current =
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="../m.escuro/dark-mode.js"></script>
+
+        <?php include '../configuracoes/geral.php'; ?>
+<script src="<?= get_aparencia_path() ?>"></script>
+ <script src="../configuracoes/aparencia.js?v=1"></script>
   <style>
       #icon-fogi {
         cursor: pointer;

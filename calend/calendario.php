@@ -468,6 +468,10 @@ function gerarCalendario(
         defer
     ></script>
 
+      <?php include '../configuracoes/geral.php'; ?>
+<script src="<?= get_aparencia_path() ?>"></script>
+ <script src="../configuracoes/aparencia.js?v=1"></script>
+
     <style>
         /* Mantém o painel anual acima dos meses sem alterar o grid original */
         .calendario-area {

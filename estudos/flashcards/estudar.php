@@ -207,6 +207,10 @@ $icone =
 <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
 <script src="../../m.escuro/dark-mode.js"></script>
 
+      <?php include '../configuracoes/geral.php'; ?>
+<script src="<?= get_aparencia_path() ?>"></script>
+ <script src="../configuracoes/aparencia.js?v=1"></script>
+
     <script>
 
         window.ESTUDO_DATA =

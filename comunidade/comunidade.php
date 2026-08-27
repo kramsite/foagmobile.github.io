@@ -368,6 +368,10 @@ function isSalvo($perguntaId, $interacoes) {
 
     <script src="../m.escuro/dark-mode.js"></script>
 
+        <?php include '../includes/header.php'; ?>
+<script src="<?= get_aparencia_path() ?>"></script>
+ <script src="../configuracoes/aparencia.js?v=1"></script>
+
     <script>
         window.CHAT_DATA = <?= json_encode(
             $chatData,
