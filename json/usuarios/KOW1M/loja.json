@@ -84,7 +84,7 @@
             "preco": 20,
             "icone": "fa-solid fa-rocket",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_livro",
@@ -93,7 +93,7 @@
             "preco": 15,
             "icone": "fa-solid fa-book",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_lampada",
@@ -102,7 +102,7 @@
             "preco": 25,
             "icone": "fa-solid fa-lightbulb",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_alvo",
@@ -111,7 +111,7 @@
             "preco": 22,
             "icone": "fa-solid fa-bullseye",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_cerebro",
@@ -120,7 +120,7 @@
             "preco": 28,
             "icone": "fa-solid fa-brain",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_raio",
@@ -129,7 +129,7 @@
             "preco": 20,
             "icone": "fa-solid fa-bolt",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_estrela_brilhante",
@@ -138,7 +138,7 @@
             "preco": 30,
             "icone": "fa-solid fa-star",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_trofeu",
@@ -147,7 +147,7 @@
             "preco": 35,
             "icone": "fa-solid fa-trophy",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_coracao",
@@ -156,7 +156,7 @@
             "preco": 15,
             "icone": "fa-solid fa-heart",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_planeta",
@@ -165,7 +165,7 @@
             "preco": 25,
             "icone": "fa-solid fa-globe",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_nuvem",
@@ -174,7 +174,7 @@
             "preco": 18,
             "icone": "fa-solid fa-cloud",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "emoji_chave",
@@ -183,7 +183,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/emoji\/"
         },
         {
             "id": "fundo_neon",
@@ -258,15 +258,6 @@
             "imagem": "..\/img\/loja\/fundo\/cidade.jpg"
         },
         {
-            "id": "fundo_espaco",
-            "nome": "Fundo Espaço",
-            "descricao": "🚀 O infinito universo",
-            "preco": 140,
-            "icone": "fa-solid fa-rocket",
-            "categoria": "fundos",
-            "imagem": "..\/img\/loja\/fundo\/espaco.jpg"
-        },
-        {
             "id": "fundo_praia",
             "nome": "Fundo Praia",
             "descricao": "🏖️ Areia e mar",
@@ -300,7 +291,7 @@
             "preco": 80,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_prata",
@@ -309,7 +300,7 @@
             "preco": 60,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_neon",
@@ -318,7 +309,7 @@
             "preco": 90,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_minimalista",
@@ -327,7 +318,7 @@
             "preco": 40,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_vintage",
@@ -336,7 +327,7 @@
             "preco": 70,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_rustica",
@@ -345,7 +336,7 @@
             "preco": 65,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_moderna",
@@ -354,7 +345,7 @@
             "preco": 75,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "moldura_classica",
@@ -363,7 +354,7 @@
             "preco": 85,
             "icone": "fa-regular fa-image",
             "categoria": "molduras",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/moldura\/"
         },
         {
             "id": "efeito_brilho",
@@ -372,7 +363,7 @@
             "preco": 70,
             "icone": "fa-solid fa-wand-magic-sparkles",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_particulas",
@@ -381,7 +372,7 @@
             "preco": 85,
             "icone": "fa-solid fa-wand-magic-sparkles",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_neon",
@@ -390,7 +381,7 @@
             "preco": 95,
             "icone": "fa-solid fa-lightbulb",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_sombra",
@@ -399,7 +390,7 @@
             "preco": 55,
             "icone": "fa-solid fa-circle-half-stroke",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_arco_iris",
@@ -408,7 +399,7 @@
             "preco": 100,
             "icone": "fa-solid fa-rainbow",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_estrelas",
@@ -417,7 +408,7 @@
             "preco": 110,
             "icone": "fa-solid fa-star",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_borboleta",
@@ -426,7 +417,7 @@
             "preco": 95,
             "icone": "fa-solid fa-butterfly",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         },
         {
             "id": "efeito_fogo",
@@ -435,7 +426,7 @@
             "preco": 105,
             "icone": "fa-solid fa-fire",
             "categoria": "efeitos",
-            "imagem": ""
+            "imagem": "..\/img\/loja\/efeito\/"
         }
     ]
 }
