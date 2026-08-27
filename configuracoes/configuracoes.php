@@ -25,7 +25,6 @@ $config_padrao = [
     'tema' => 'claro',
     'tamanho_fonte' => 'media',
     'cor_principal' => 'azul',
-    'modo_compacto' => 0,
     'notificacoes_navegador' => 0,
     'lembrete_atividades' => 1,
     'lembrete_provas' => 1,
@@ -42,9 +41,19 @@ $config_padrao = [
 
 function carregarConfiguracoes() {
     global $config_padrao;
+
     if (isset($_SESSION['configuracoes']) && is_array($_SESSION['configuracoes'])) {
-        return array_merge($config_padrao, $_SESSION['configuracoes']);
+        $configuracoesSalvas = $_SESSION['configuracoes'];
+
+        // Opções removidas da página de Aparência
+        unset(
+            $configuracoesSalvas['modo_compacto'],
+            $configuracoesSalvas['reduzir_animacoes']
+        );
+
+        return array_merge($config_padrao, $configuracoesSalvas);
     }
+
     return $config_padrao;
 }
 
@@ -59,8 +68,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
     header('Content-Type: application/json');
     try {
         $dados = $_POST;
-        unset($dados['acao']);
-        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao', 'modo_compacto',
+        unset(
+            $dados['acao'],
+            $dados['modo_compacto'],
+            $dados['reduzir_animacoes']
+        );
+        $checkboxes = ['mostrar_concluidas', 'confirmar_exclusao',
                        'notificacoes_navegador', 'lembrete_atividades',
                        'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro',
                        // ===== ACESSIBILIDADE =====
@@ -99,6 +112,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['backup'])) {
         $dados = json_decode($conteudo, true);
         if (json_last_error() !== JSON_ERROR_NONE) throw new Exception('Arquivo JSON inválido');
         if (!isset($dados['configuracoes'])) throw new Exception('Estrutura inválida');
+
+        unset(
+            $dados['configuracoes']['modo_compacto'],
+            $dados['configuracoes']['reduzir_animacoes']
+        );
+
         $_SESSION['configuracoes'] = array_merge($config_padrao, $dados['configuracoes']);
         echo json_encode(['success' => true, 'message' => 'Backup importado com sucesso!']);
     } catch (Exception $e) {
@@ -115,7 +134,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         switch ($acao) {
             case 'limpar-pomodoro': break;
             case 'limpar-atividades': break;
-            case 'apagar-dados': $_SESSION['configuracoes'] = $config_padrao; break;
             default: throw new Exception('Ação desconhecida');
         }
         echo json_encode(['success' => true, 'message' => 'Ação executada com sucesso!']);
@@ -304,27 +322,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                                 </select>
                             </div>
 
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Modo compacto</strong>
-                                    <small>Reduz os espaços entre os elementos.</small>
-                                </span>
-                                <span class="switch">
-                                    <input type="checkbox" name="modo_compacto" <?= $config['modo_compacto'] ? 'checked' : '' ?>>
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
-
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Reduzir animações</strong>
-                                    <small>Diminui movimentos e transições nas páginas.</small>
-                                </span>
-                                <span class="switch">
-                                    <input type="checkbox" name="reduzir_animacoes" <?= $config['reduzir_animacoes'] ? 'checked' : '' ?>>
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
                         </div>
                     </section>
 
@@ -483,10 +480,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
 
                             <div class="zona-perigo">
                                 <div>
-                                    <h3>⚠️ Zona de perigo</h3>
-                                    <p>Essas ações não poderão ser desfeitas.</p>
+                                    <h3>⚠️ Excluir conta</h3>
+                                    <p>Exclui permanentemente sua conta e todos os dados associados a ela.</p>
                                 </div>
-                                <button type="button" class="btn-perigo" data-acao="apagar-dados" aria-label="Apagar todos os dados">Apagar todos os dados</button>
+                                <button
+                                    type="button"
+                                    class="btn-perigo"
+                                    id="btn-excluir-conta"
+                                    aria-label="Excluir minha conta"
+                                >
+                                    <i class="fa-solid fa-user-xmark" aria-hidden="true"></i>
+                                    Excluir minha conta
+                                </button>
                             </div>
                         </div>
                     </section>
@@ -680,6 +685,77 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                 <button id="confirmar-acao" aria-label="Confirmar ação">Confirmar</button>
                 <button id="cancelar-acao" aria-label="Cancelar ação">Cancelar</button>
             </div>
+        </div>
+    </div>
+
+    <!-- Modal Excluir Conta -->
+    <div
+        id="excluir-conta-modal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="excluir-conta-titulo"
+        aria-describedby="excluir-conta-descricao"
+    >
+        <div class="modal-content modal-excluir-conta">
+            <div class="modal-excluir-icone" aria-hidden="true">
+                <i class="fa-solid fa-user-xmark"></i>
+            </div>
+
+            <h3 id="excluir-conta-titulo">Excluir minha conta?</h3>
+
+            <p id="excluir-conta-descricao">
+                Essa ação é permanente. Todos os seus dados do FOAG serão excluídos e não poderão ser recuperados.
+            </p>
+
+            <form id="form-excluir-conta" autocomplete="off">
+                <label for="senha-excluir-conta">Digite sua senha para confirmar</label>
+
+                <div class="campo-senha-excluir">
+                    <input
+                        type="password"
+                        id="senha-excluir-conta"
+                        name="senha"
+                        placeholder="Sua senha atual"
+                        autocomplete="current-password"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        id="toggle-senha-excluir"
+                        class="btn-toggle-senha-excluir"
+                        aria-label="Mostrar senha"
+                    >
+                        <i class="fa-regular fa-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <div
+                    id="erro-excluir-conta"
+                    class="erro-excluir-conta"
+                    role="alert"
+                    aria-live="assertive"
+                ></div>
+
+                <div class="modal-buttons modal-buttons-excluir">
+                    <button
+                        type="button"
+                        id="cancelar-excluir-conta"
+                        class="btn-cancelar-exclusao"
+                    >
+                        Cancelar
+                    </button>
+
+                    <button
+                        type="submit"
+                        id="confirmar-excluir-conta"
+                        class="btn-confirmar-exclusao"
+                    >
+                        Excluir permanentemente
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
@@ -920,24 +996,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             .then(data => {
                 if (data.success) {
 
-                // ===== GARANTIR TEMA SALVO =====
-                const temaEscolhido =
-                    document.getElementById('tema')?.value || 'claro';
+                    // ===== GARANTIR TEMA SALVO =====
+                    const temaEscolhido =
+                        document.getElementById('tema')?.value || 'claro';
 
-                aplicarTema(temaEscolhido);
+                    aplicarTema(temaEscolhido);
+
+                    // ===== SALVAR APARÊNCIA =====
+                    const tamanhoFonte =
+                        document.querySelector('[name="tamanho_fonte"]')?.value || 'media';
+
+                    if (
+                        window.FOAGAparencia &&
+                        typeof window.FOAGAparencia.salvarTamanhoFonte === 'function'
+                    ) {
+                        window.FOAGAparencia.salvarTamanhoFonte(tamanhoFonte);
+                    } else {
+                        localStorage.setItem(
+                            'foag_aparencia',
+                            JSON.stringify({
+                                tamanho_fonte: tamanhoFonte
+                            })
+                        );
+                    }
+
                     // ===== SALVAR ACESSIBILIDADE NO LOCALSTORAGE =====
                     const configAcessibilidade = {
-                        tamanho_fonte: document.querySelector('[name="tamanho_fonte"]')?.value || 'media',
                         alto_contraste: document.querySelector('[name="alto_contraste"]')?.checked || false,
                         destacar_links: document.querySelector('[name="destacar_links"]')?.checked || false,
                         libras: document.querySelector('[name="libras"]')?.checked || false,
                         leitura_voz: document.querySelector('[name="leitura_voz"]')?.checked || false
                     };
-                    localStorage.setItem('foag_acessibilidade', JSON.stringify(configAcessibilidade));
-                    
+
+                    localStorage.setItem(
+                        'foag_acessibilidade',
+                        JSON.stringify(configAcessibilidade)
+                    );
+
                     if (typeof window.atualizarAcessibilidade === 'function') {
                         window.atualizarAcessibilidade(configAcessibilidade);
                     }
+
                     // ==================================================
                     
                     mostrarToast('✅ ' + data.message, 'sucesso');
@@ -1002,13 +1101,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                 const acao = this.dataset.acao;
                 const titulos = {
                     'limpar-pomodoro': '🧹 Limpar histórico do Pomodoro',
-                    'limpar-atividades': '🧹 Limpar atividades concluídas',
-                    'apagar-dados': '⚠️ Apagar todos os dados'
+                    'limpar-atividades': '🧹 Limpar atividades concluídas'
                 };
                 const textos = {
                     'limpar-pomodoro': 'Todos os ciclos do Pomodoro serão removidos.',
-                    'limpar-atividades': 'Todas as atividades finalizadas serão removidas.',
-                    'apagar-dados': 'TODOS os dados serão removidos. Irreversível!'
+                    'limpar-atividades': 'Todas as atividades finalizadas serão removidas.'
                 };
                 abrirModal(titulos[acao] || 'Confirmar', textos[acao] || 'Irreversível!', function(confirmado) {
                     if (confirmado) {
@@ -1021,7 +1118,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                         .then(data => {
                             if (data.success) {
                                 mostrarToast('✅ ' + data.message, 'sucesso');
-                                if (acao === 'apagar-dados') setTimeout(() => location.reload(), 1500);
                             } else {
                                 mostrarToast('❌ ' + data.message, 'erro');
                             }
@@ -1029,6 +1125,180 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                         .catch(() => mostrarToast('❌ Erro ao executar', 'erro'));
                     }
                 });
+            });
+        });
+
+        // ============================================
+        // EXCLUIR CONTA
+        // ============================================
+        const btnExcluirConta = document.getElementById('btn-excluir-conta');
+        const modalExcluirConta = document.getElementById('excluir-conta-modal');
+        const formExcluirConta = document.getElementById('form-excluir-conta');
+        const senhaExcluirConta = document.getElementById('senha-excluir-conta');
+        const cancelarExcluirConta = document.getElementById('cancelar-excluir-conta');
+        const confirmarExcluirConta = document.getElementById('confirmar-excluir-conta');
+        const erroExcluirConta = document.getElementById('erro-excluir-conta');
+        const toggleSenhaExcluir = document.getElementById('toggle-senha-excluir');
+
+        function abrirModalExcluirConta() {
+            if (!modalExcluirConta) return;
+
+            if (erroExcluirConta) {
+                erroExcluirConta.textContent = '';
+                erroExcluirConta.classList.remove('visivel');
+            }
+
+            if (senhaExcluirConta) {
+                senhaExcluirConta.value = '';
+            }
+
+            modalExcluirConta.style.display = 'flex';
+
+            setTimeout(() => {
+                senhaExcluirConta?.focus();
+            }, 100);
+        }
+
+        function fecharModalExcluirConta() {
+            if (!modalExcluirConta) return;
+
+            modalExcluirConta.style.display = 'none';
+
+            if (senhaExcluirConta) {
+                senhaExcluirConta.value = '';
+                senhaExcluirConta.type = 'password';
+            }
+
+            if (toggleSenhaExcluir) {
+                const icone = toggleSenhaExcluir.querySelector('i');
+                if (icone) {
+                    icone.className = 'fa-regular fa-eye';
+                }
+                toggleSenhaExcluir.setAttribute('aria-label', 'Mostrar senha');
+            }
+
+            if (erroExcluirConta) {
+                erroExcluirConta.textContent = '';
+                erroExcluirConta.classList.remove('visivel');
+            }
+        }
+
+        btnExcluirConta?.addEventListener('click', abrirModalExcluirConta);
+        cancelarExcluirConta?.addEventListener('click', fecharModalExcluirConta);
+
+        modalExcluirConta?.addEventListener('click', function(e) {
+            if (e.target === modalExcluirConta) {
+                fecharModalExcluirConta();
+            }
+        });
+
+        toggleSenhaExcluir?.addEventListener('click', function() {
+            if (!senhaExcluirConta) return;
+
+            const mostrando = senhaExcluirConta.type === 'text';
+            senhaExcluirConta.type = mostrando ? 'password' : 'text';
+
+            const icone = this.querySelector('i');
+
+            if (icone) {
+                icone.className = mostrando
+                    ? 'fa-regular fa-eye'
+                    : 'fa-regular fa-eye-slash';
+            }
+
+            this.setAttribute(
+                'aria-label',
+                mostrando ? 'Mostrar senha' : 'Ocultar senha'
+            );
+        });
+
+        formExcluirConta?.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const senha = senhaExcluirConta?.value || '';
+
+            if (!senha.trim()) {
+                if (erroExcluirConta) {
+                    erroExcluirConta.textContent = 'Digite sua senha para confirmar.';
+                    erroExcluirConta.classList.add('visivel');
+                }
+
+                senhaExcluirConta?.focus();
+                return;
+            }
+
+            if (erroExcluirConta) {
+                erroExcluirConta.textContent = '';
+                erroExcluirConta.classList.remove('visivel');
+            }
+
+            if (confirmarExcluirConta) {
+                confirmarExcluirConta.disabled = true;
+                confirmarExcluirConta.innerHTML =
+                    '<i class="fa-solid fa-spinner fa-spin" aria-hidden="true"></i> Excluindo...';
+            }
+
+            fetch('excluir.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'
+                },
+                body: new URLSearchParams({
+                    senha: senha
+                })
+            })
+            .then(async response => {
+                let data;
+
+                try {
+                    data = await response.json();
+                } catch (erro) {
+                    throw new Error('Resposta inválida do servidor.');
+                }
+
+                if (!response.ok || !data.success) {
+                    throw new Error(
+                        data.message || 'Não foi possível excluir a conta.'
+                    );
+                }
+
+                return data;
+            })
+            .then(data => {
+                /*
+                 * Limpa preferências locais para que outro usuário
+                 * no mesmo navegador não herde as configurações.
+                 */
+                localStorage.removeItem('foag_aparencia');
+                localStorage.removeItem('foag_acessibilidade');
+                localStorage.removeItem('darkMode');
+                localStorage.removeItem('foagTema');
+
+                mostrarToast(
+                    '✅ ' + (data.message || 'Conta excluída com sucesso.'),
+                    'sucesso'
+                );
+
+                setTimeout(() => {
+                    window.location.href =
+                        data.redirect || '../login/index.php';
+                }, 900);
+            })
+            .catch(erro => {
+                if (erroExcluirConta) {
+                    erroExcluirConta.textContent =
+                        erro.message || 'Erro ao excluir a conta.';
+                    erroExcluirConta.classList.add('visivel');
+                }
+
+                senhaExcluirConta?.focus();
+            })
+            .finally(() => {
+                if (confirmarExcluirConta) {
+                    confirmarExcluirConta.disabled = false;
+                    confirmarExcluirConta.innerHTML =
+                        'Excluir permanentemente';
+                }
             });
         });
 
@@ -1144,6 +1414,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         // ============================================
         document.addEventListener('keydown', function(e) {
             if (e.key === 'Escape') {
+                if (
+                    modalExcluirConta &&
+                    modalExcluirConta.style.display === 'flex'
+                ) {
+                    fecharModalExcluirConta();
+                }
+
                 document.querySelectorAll('.modal, #fogi-modal').forEach(modal => {
                     if (modal.style.display === 'flex') {
                         modal.style.display = 'none';
@@ -1274,20 +1551,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         // 13. RESTAURAR ACESSIBILIDADE
         // ============================================
         document.getElementById('btn-restaurar-acessibilidade')?.addEventListener('click', function() {
-            const campoFonte = document.querySelector('[name="tamanho_fonte"]');
             const campoContraste = document.querySelector('[name="alto_contraste"]');
             const campoLinks = document.querySelector('[name="destacar_links"]');
             const campoLibras = document.querySelector('[name="libras"]');
             const campoVoz = document.querySelector('[name="leitura_voz"]');
 
-            if (campoFonte) campoFonte.value = 'media';
             if (campoContraste) campoContraste.checked = false;
             if (campoLinks) campoLinks.checked = false;
             if (campoLibras) campoLibras.checked = false;
             if (campoVoz) campoVoz.checked = false;
 
             const configAcessibilidade = {
-                tamanho_fonte: 'media',
                 alto_contraste: false,
                 destacar_links: false,
                 libras: false,
@@ -1714,7 +1988,194 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
             white-space: nowrap !important;
             border: 0 !important;
         }
-    </style>
+    
+        /* ===== EXCLUIR CONTA ===== */
+        .modal-excluir-conta {
+            width: min(92%, 430px);
+            padding: 28px;
+            border-radius: 16px;
+        }
+
+        .modal-excluir-icone {
+            width: 54px;
+            height: 54px;
+            margin: 0 auto 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: #fff1f2;
+            color: #dc3545;
+            font-size: 1.35rem;
+        }
+
+        .modal-excluir-conta h3 {
+            margin-bottom: 8px;
+            color: #1f2937;
+            font-size: 1.15rem;
+        }
+
+        .modal-excluir-conta > p {
+            margin: 0 auto 20px;
+            color: #6b7280;
+            font-size: 0.82rem;
+            line-height: 1.6;
+            max-width: 340px;
+        }
+
+        #form-excluir-conta {
+            text-align: left;
+        }
+
+        #form-excluir-conta > label {
+            display: block;
+            margin-bottom: 7px;
+            color: #374151;
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        .campo-senha-excluir {
+            position: relative;
+        }
+
+        #senha-excluir-conta {
+            width: 100%;
+            height: 44px;
+            padding: 0 46px 0 12px;
+            border: 1px solid #d8dee7;
+            border-radius: 9px;
+            background: #fff;
+            color: #1f2937;
+            outline: none;
+            font-size: 0.85rem;
+        }
+
+        #senha-excluir-conta:focus {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.10);
+        }
+
+        .btn-toggle-senha-excluir {
+            position: absolute;
+            top: 50%;
+            right: 7px;
+            transform: translateY(-50%);
+            width: 34px;
+            height: 34px;
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .btn-toggle-senha-excluir:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .erro-excluir-conta {
+            display: none;
+            margin-top: 9px;
+            padding: 9px 11px;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            background: #fff1f2;
+            color: #b91c1c;
+            font-size: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .erro-excluir-conta.visivel {
+            display: block;
+        }
+
+        .modal-buttons-excluir {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1.3fr;
+            gap: 10px;
+        }
+
+        .btn-cancelar-exclusao,
+        .btn-confirmar-exclusao {
+            min-height: 42px;
+            padding: 9px 12px;
+            border: 0;
+            border-radius: 9px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-cancelar-exclusao {
+            background: #eef2f6;
+            color: #374151;
+        }
+
+        .btn-cancelar-exclusao:hover {
+            background: #dfe5eb;
+        }
+
+        .btn-confirmar-exclusao {
+            background: #dc3545;
+            color: #fff;
+        }
+
+        .btn-confirmar-exclusao:hover {
+            background: #bd2130;
+        }
+
+        .btn-confirmar-exclusao:disabled {
+            opacity: 0.65;
+            cursor: wait;
+        }
+
+        body.dark-mode .modal-excluir-conta {
+            background: #1e293b !important;
+            border: 1px solid #334155 !important;
+        }
+
+        body.dark-mode .modal-excluir-conta h3,
+        body.dark-mode #form-excluir-conta > label {
+            color: #f1f5f9 !important;
+        }
+
+        body.dark-mode .modal-excluir-conta > p {
+            color: #94a3b8 !important;
+        }
+
+        body.dark-mode #senha-excluir-conta {
+            background: #0f172a !important;
+            color: #f1f5f9 !important;
+            border-color: #475569 !important;
+        }
+
+        body.dark-mode .btn-toggle-senha-excluir {
+            color: #cbd5e1 !important;
+        }
+
+        body.dark-mode .btn-toggle-senha-excluir:hover {
+            background: #334155 !important;
+        }
+
+        body.dark-mode .btn-cancelar-exclusao {
+            background: #334155 !important;
+            color: #e2e8f0 !important;
+        }
+
+        @media (max-width: 480px) {
+            .modal-excluir-conta {
+                padding: 22px 18px;
+            }
+
+            .modal-buttons-excluir {
+                grid-template-columns: 1fr;
+            }
+        }
+
+</style>
 
     <!-- ======================================
          VLIBRAS OFICIAL
@@ -1755,6 +2216,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <script
         src="../acessibilidade/acessibilidade.js?v=13">
     </script>
+
+    <!-- ======================================
+         APARÊNCIA GLOBAL FOAG
+    ======================================= -->
+    <script src="aparencia.js?v=1"></script>
 
 </body>
 </html>
