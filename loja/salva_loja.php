@@ -69,7 +69,7 @@ foreach ($dados as $chave => $valor) {
     }
 }
 
-// Garantir que itens existe com a estrutura completa
+// Garantir que itens existe com a estrutura completa (SEM INSÍGNIAS)
 if (!isset($dadosAtuais['itens']) || empty($dadosAtuais['itens'])) {
     $dadosAtuais['itens'] = [
         // ===================================
@@ -83,20 +83,6 @@ if (!isset($dadosAtuais['itens']) || empty($dadosAtuais['itens'])) {
         ['id' => 'tema_preto', 'nome' => 'Tema Preto', 'descricao' => 'Mude o tema do perfil para preto', 'preco' => 65, 'icone' => 'fa-solid fa-palette', 'categoria' => 'temas', 'imagem' => ''],
         ['id' => 'tema_laranja', 'nome' => 'Tema Laranja', 'descricao' => 'Mude o tema do perfil para laranja', 'preco' => 55, 'icone' => 'fa-solid fa-palette', 'categoria' => 'temas', 'imagem' => ''],
         ['id' => 'tema_magenta', 'nome' => 'Tema Magenta', 'descricao' => 'Mude o tema do perfil para magenta', 'preco' => 65, 'icone' => 'fa-solid fa-palette', 'categoria' => 'temas', 'imagem' => ''],
-
-        // ===================================
-        // INSÍGNIAS
-        // ===================================
-        ['id' => 'badge_estudioso', 'nome' => 'Insígnia Estudioso', 'descricao' => 'Mostre que você é um estudante dedicado', 'preco' => 30, 'icone' => 'fa-solid fa-graduation-cap', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_mestre', 'nome' => 'Insígnia Mestre', 'descricao' => 'Para os mestres do estudo', 'preco' => 80, 'icone' => 'fa-solid fa-crown', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_maratonista', 'nome' => 'Insígnia Maratonista', 'descricao' => 'Para quem estuda por longas horas', 'preco' => 60, 'icone' => 'fa-solid fa-running', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_dedicado', 'nome' => 'Insígnia Dedicado', 'descricao' => 'Dedicação é a chave do sucesso', 'preco' => 40, 'icone' => 'fa-solid fa-heart', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_campeao', 'nome' => 'Insígnia Campeão', 'descricao' => 'Você é um verdadeiro campeão', 'preco' => 100, 'icone' => 'fa-solid fa-trophy', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_lider', 'nome' => 'Insígnia Líder', 'descricao' => 'Liderança e determinação', 'preco' => 70, 'icone' => 'fa-solid fa-flag', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_persistente', 'nome' => 'Insígnia Persistente', 'descricao' => 'Nunca desista dos seus sonhos', 'preco' => 50, 'icone' => 'fa-solid fa-fire', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_sabio', 'nome' => 'Insígnia Sábio', 'descricao' => 'A sabedoria é o seu maior dom', 'preco' => 90, 'icone' => 'fa-solid fa-owl', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_guerreiro', 'nome' => 'Insígnia Guerreiro', 'descricao' => 'Você enfrenta qualquer desafio', 'preco' => 75, 'icone' => 'fa-solid fa-shield-halved', 'categoria' => 'insignias', 'imagem' => ''],
-        ['id' => 'badge_lenda', 'nome' => 'Insígnia Lenda', 'descricao' => 'Você é uma lenda viva do estudo', 'preco' => 150, 'icone' => 'fa-solid fa-chess-queen', 'categoria' => 'insignias', 'imagem' => ''],
 
         // ===================================
         // EMOJIS
@@ -125,7 +111,6 @@ if (!isset($dadosAtuais['itens']) || empty($dadosAtuais['itens'])) {
         ['id' => 'fundo_montanha', 'nome' => 'Fundo Montanha', 'descricao' => '🏔️ Picos e natureza', 'preco' => 100, 'icone' => 'fa-solid fa-mountain', 'categoria' => 'fundos', 'imagem' => ''],
         ['id' => 'fundo_floresta', 'nome' => 'Fundo Floresta', 'descricao' => '🌲 Natureza exuberante', 'preco' => 110, 'icone' => 'fa-solid fa-tree', 'categoria' => 'fundos', 'imagem' => ''],
         ['id' => 'fundo_cidade', 'nome' => 'Fundo Cidade', 'descricao' => '🏙️ A vida urbana', 'preco' => 105, 'icone' => 'fa-solid fa-city', 'categoria' => 'fundos', 'imagem' => ''],
-        ['id' => 'fundo_espaco', 'nome' => 'Fundo Espaço', 'descricao' => '🚀 O infinito universo', 'preco' => 140, 'icone' => 'fa-solid fa-rocket', 'categoria' => 'fundos', 'imagem' => ''],
         ['id' => 'fundo_praia', 'nome' => 'Fundo Praia', 'descricao' => '🏖️ Areia e mar', 'preco' => 115, 'icone' => 'fa-solid fa-umbrella-beach', 'categoria' => 'fundos', 'imagem' => ''],
         ['id' => 'fundo_castelo', 'nome' => 'Fundo Castelo', 'descricao' => '🏰 Um mundo de fantasia', 'preco' => 125, 'icone' => 'fa-solid fa-castle', 'categoria' => 'fundos', 'imagem' => ''],
         ['id' => 'fundo_jardim', 'nome' => 'Fundo Jardim', 'descricao' => '🌺 Flores e cores', 'preco' => 105, 'icone' => 'fa-solid fa-flower', 'categoria' => 'fundos', 'imagem' => ''],

@@ -55,7 +55,7 @@ function salvarJson($caminho, $dados)
 $arquivoLoja = $pastaUsuario . '/loja.json';
 
 // ======================================
-// ESTRUTURA PADRÃO DA LOJA
+// ESTRUTURA PADRÃO DA LOJA (SEM INSÍGNIAS)
 // ======================================
 
 $estruturaLojaPadrao = [
@@ -142,7 +142,6 @@ $estruturaLojaPadrao = [
             'imagem' => '../img/loja/tema/laranja.png'
         ],
 
-
         [
             'id' => 'tema_magenta',
             'nome' => 'Tema Magenta',
@@ -151,110 +150,6 @@ $estruturaLojaPadrao = [
             'icone' => 'fa-solid fa-palette',
             'categoria' => 'temas',
             'imagem' => '../img/loja/tema/magenta.jpg'
-        ],
-
-        // ===================================
-        // INSÍGNIAS
-        // ===================================
-
-        [
-            'id' => 'badge_estudioso',
-            'nome' => 'Insígnia Estudioso',
-            'descricao' => 'Mostre que você é um estudante dedicado',
-            'preco' => 30,
-            'icone' => 'fa-solid fa-graduation-cap',
-            'categoria' => 'insignias',
-            'imagem' => '../img/loja/fundo/images.jpg'
-        ],
-
-        [
-            'id' => 'badge_mestre',
-            'nome' => 'Insígnia Mestre',
-            'descricao' => 'Para os mestres do estudo',
-            'preco' => 80,
-            'icone' => 'fa-solid fa-crown',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_maratonista',
-            'nome' => 'Insígnia Maratonista',
-            'descricao' => 'Para quem estuda por longas horas',
-            'preco' => 60,
-            'icone' => 'fa-solid fa-running',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_dedicado',
-            'nome' => 'Insígnia Dedicado',
-            'descricao' => 'Dedicação é a chave do sucesso',
-            'preco' => 40,
-            'icone' => 'fa-solid fa-heart',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_campeao',
-            'nome' => 'Insígnia Campeão',
-            'descricao' => 'Você é um verdadeiro campeão',
-            'preco' => 100,
-            'icone' => 'fa-solid fa-trophy',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_lider',
-            'nome' => 'Insígnia Líder',
-            'descricao' => 'Liderança e determinação',
-            'preco' => 70,
-            'icone' => 'fa-solid fa-flag',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_persistente',
-            'nome' => 'Insígnia Persistente',
-            'descricao' => 'Nunca desista dos seus sonhos',
-            'preco' => 50,
-            'icone' => 'fa-solid fa-fire',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_sabio',
-            'nome' => 'Insígnia Sábio',
-            'descricao' => 'A sabedoria é o seu maior dom',
-            'preco' => 90,
-            'icone' => 'fa-solid fa-owl',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_guerreiro',
-            'nome' => 'Insígnia Guerreiro',
-            'descricao' => 'Você enfrenta qualquer desafio',
-            'preco' => 75,
-            'icone' => 'fa-solid fa-shield-halved',
-            'categoria' => 'insignias',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'badge_lenda',
-            'nome' => 'Insígnia Lenda',
-            'descricao' => 'Você é uma lenda viva do estudo',
-            'preco' => 150,
-            'icone' => 'fa-solid fa-chess-queen',
-            'categoria' => 'insignias',
-            'imagem' => ''
         ],
 
         // ===================================
@@ -268,7 +163,7 @@ $estruturaLojaPadrao = [
             'preco' => 20,
             'icone' => 'fa-solid fa-rocket',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -278,7 +173,7 @@ $estruturaLojaPadrao = [
             'preco' => 15,
             'icone' => 'fa-solid fa-book',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -288,7 +183,7 @@ $estruturaLojaPadrao = [
             'preco' => 25,
             'icone' => 'fa-solid fa-lightbulb',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -298,7 +193,7 @@ $estruturaLojaPadrao = [
             'preco' => 22,
             'icone' => 'fa-solid fa-bullseye',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -308,7 +203,7 @@ $estruturaLojaPadrao = [
             'preco' => 28,
             'icone' => 'fa-solid fa-brain',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -318,7 +213,7 @@ $estruturaLojaPadrao = [
             'preco' => 20,
             'icone' => 'fa-solid fa-bolt',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -328,7 +223,7 @@ $estruturaLojaPadrao = [
             'preco' => 30,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -338,7 +233,7 @@ $estruturaLojaPadrao = [
             'preco' => 35,
             'icone' => 'fa-solid fa-trophy',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -348,7 +243,7 @@ $estruturaLojaPadrao = [
             'preco' => 15,
             'icone' => 'fa-solid fa-heart',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -358,7 +253,7 @@ $estruturaLojaPadrao = [
             'preco' => 25,
             'icone' => 'fa-solid fa-globe',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -368,7 +263,7 @@ $estruturaLojaPadrao = [
             'preco' => 18,
             'icone' => 'fa-solid fa-cloud',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         [
@@ -378,7 +273,7 @@ $estruturaLojaPadrao = [
             'preco' => 22,
             'icone' => 'fa-solid fa-key',
             'categoria' => 'emojis',
-            'imagem' => ''
+            'imagem' => '../img/loja/emoji/'
         ],
 
         // ===================================
@@ -392,7 +287,7 @@ $estruturaLojaPadrao = [
             'preco' => 100,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/neon.jpg'
         ],
 
         [
@@ -402,7 +297,7 @@ $estruturaLojaPadrao = [
             'preco' => 120,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/galaxia.jpg'
         ],
 
         [
@@ -412,7 +307,7 @@ $estruturaLojaPadrao = [
             'preco' => 130,
             'icone' => 'fa-solid fa-sun',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/sol.jpg'
         ],
 
         [
@@ -422,7 +317,7 @@ $estruturaLojaPadrao = [
             'preco' => 110,
             'icone' => 'fa-solid fa-water',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/mar.jpg'
         ],
 
         [
@@ -432,7 +327,7 @@ $estruturaLojaPadrao = [
             'preco' => 150,
             'icone' => 'fa-solid fa-cloud',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/nevoa.jpg'
         ],
 
         [
@@ -442,7 +337,7 @@ $estruturaLojaPadrao = [
             'preco' => 100,
             'icone' => 'fa-solid fa-mountain',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/montanha.jpg'
         ],
 
         [
@@ -452,7 +347,7 @@ $estruturaLojaPadrao = [
             'preco' => 110,
             'icone' => 'fa-solid fa-tree',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/floresta.jpg'
         ],
 
         [
@@ -462,17 +357,7 @@ $estruturaLojaPadrao = [
             'preco' => 105,
             'icone' => 'fa-solid fa-city',
             'categoria' => 'fundos',
-            'imagem' => ''
-        ],
-
-        [
-            'id' => 'fundo_espaco',
-            'nome' => 'Fundo Espaço',
-            'descricao' => '🚀 O infinito universo',
-            'preco' => 140,
-            'icone' => 'fa-solid fa-rocket',
-            'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/cidade.jpg'
         ],
 
         [
@@ -482,7 +367,7 @@ $estruturaLojaPadrao = [
             'preco' => 115,
             'icone' => 'fa-solid fa-umbrella-beach',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/praia.jpg'
         ],
 
         [
@@ -492,7 +377,7 @@ $estruturaLojaPadrao = [
             'preco' => 125,
             'icone' => 'fa-solid fa-castle',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/castelo.jpg'
         ],
 
         [
@@ -502,7 +387,7 @@ $estruturaLojaPadrao = [
             'preco' => 105,
             'icone' => 'fa-solid fa-flower',
             'categoria' => 'fundos',
-            'imagem' => ''
+            'imagem' => '../img/loja/fundo/jardim.jpg'
         ],
 
         // ===================================
@@ -516,7 +401,7 @@ $estruturaLojaPadrao = [
             'preco' => 80,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -526,7 +411,7 @@ $estruturaLojaPadrao = [
             'preco' => 60,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -536,7 +421,7 @@ $estruturaLojaPadrao = [
             'preco' => 90,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -546,7 +431,7 @@ $estruturaLojaPadrao = [
             'preco' => 40,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -556,7 +441,7 @@ $estruturaLojaPadrao = [
             'preco' => 70,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -566,7 +451,7 @@ $estruturaLojaPadrao = [
             'preco' => 65,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -576,7 +461,7 @@ $estruturaLojaPadrao = [
             'preco' => 75,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         [
@@ -586,7 +471,7 @@ $estruturaLojaPadrao = [
             'preco' => 85,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => ''
+            'imagem' => '../img/loja/moldura/'
         ],
 
         // ===================================
@@ -600,7 +485,7 @@ $estruturaLojaPadrao = [
             'preco' => 70,
             'icone' => 'fa-solid fa-wand-magic-sparkles',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -610,7 +495,7 @@ $estruturaLojaPadrao = [
             'preco' => 85,
             'icone' => 'fa-solid fa-wand-magic-sparkles',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -620,7 +505,7 @@ $estruturaLojaPadrao = [
             'preco' => 95,
             'icone' => 'fa-solid fa-lightbulb',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -630,7 +515,7 @@ $estruturaLojaPadrao = [
             'preco' => 55,
             'icone' => 'fa-solid fa-circle-half-stroke',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -640,7 +525,7 @@ $estruturaLojaPadrao = [
             'preco' => 100,
             'icone' => 'fa-solid fa-rainbow',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -650,7 +535,7 @@ $estruturaLojaPadrao = [
             'preco' => 110,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -660,7 +545,7 @@ $estruturaLojaPadrao = [
             'preco' => 95,
             'icone' => 'fa-solid fa-butterfly',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
 
         [
@@ -670,7 +555,7 @@ $estruturaLojaPadrao = [
             'preco' => 105,
             'icone' => 'fa-solid fa-fire',
             'categoria' => 'efeitos',
-            'imagem' => ''
+            'imagem' => '../img/loja/efeito/'
         ],
     ]
 ];
@@ -799,11 +684,6 @@ if (file_exists($arquivoPomodoro)) {
 
         if (is_array($pomodoroData)) {
 
-            /*
-             * Se seu pomodoro já tiver total_minutos,
-             * usamos diretamente.
-             */
-
             if (
                 isset($pomodoroData['total_minutos']) &&
                 is_numeric($pomodoroData['total_minutos'])
@@ -812,11 +692,6 @@ if (file_exists($arquivoPomodoro)) {
                 $totalMinutos = (int)
                     $pomodoroData['total_minutos'];
             }
-
-            /*
-             * Caso não tenha total_minutos,
-             * tenta calcular pelas sessões.
-             */
 
             elseif (
                 isset($pomodoroData['sessions']) &&
@@ -969,13 +844,6 @@ salvarJson(
         window.LOJA_SAVE_URL =
             "salvar_loja.php";
 
-        /*
-         * Mantemos USER_ID porque o loja.js
-         * pode estar usando esse nome.
-         *
-         * Mas o valor agora é o codigo_usuario.
-         */
-
         window.USER_ID =
             "<?= htmlspecialchars(
                 $codigoUsuario,
@@ -1121,14 +989,6 @@ salvarJson(
             >
                 <i class="fa-solid fa-palette"></i>
                 Temas
-            </button>
-
-            <button
-                class="filtro-btn"
-                data-filtro="insignias"
-            >
-                <i class="fa-solid fa-award"></i>
-                Insígnias
             </button>
 
             <button
