@@ -409,12 +409,16 @@ document.addEventListener('DOMContentLoaded', function () {
                     );
 
 
+                // Verifica se o item tem imagem
+                const temImagem = item.imagem && item.imagem.trim() !== '';
+
+
                 card.innerHTML = `
                     <div class="icone">
-                        <i class="${
-                            item.icone ||
-                            'fa-solid fa-gift'
-                        }"></i>
+                        ${temImagem 
+                            ? `<img src="${item.imagem}" alt="${item.nome}" class="item-imagem">` 
+                            : `<i class="${item.icone || 'fa-solid fa-gift'}"></i>`
+                        }
                     </div>
 
                     <div class="nome">
@@ -510,13 +514,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (modalIcone) {
 
+            // Verifica se o item tem imagem
+            const temImagem = item.imagem && item.imagem.trim() !== '';
+
             modalIcone.innerHTML =
-                `
-                <i class="${
-                    item.icone ||
-                    'fa-solid fa-gift'
-                }"></i>
-                `;
+                temImagem
+                    ? `<img src="${item.imagem}" alt="${item.nome}" class="modal-item-imagem">`
+                    : `<i class="${item.icone || 'fa-solid fa-gift'}"></i>`;
         }
 
 
