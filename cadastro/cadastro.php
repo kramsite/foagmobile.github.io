@@ -25,7 +25,27 @@
             id="form-cadastro"
             method="POST"
             action="processa_cadastro.php"
+            autocomplete="off"
         >
+
+            <!-- Campos isca para evitar que navegadores/gerenciadores preencham o cadastro -->
+            <div
+                aria-hidden="true"
+                style="position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;overflow:hidden;"
+            >
+                <input
+                    type="text"
+                    name="usuario_salvo_ignorar"
+                    autocomplete="username"
+                    tabindex="-1"
+                >
+                <input
+                    type="password"
+                    name="senha_salva_ignorar"
+                    autocomplete="current-password"
+                    tabindex="-1"
+                >
+            </div>
 
             <!-- ==================================================
                  ETAPA 1
@@ -74,8 +94,15 @@
                             id="nome"
                             name="nome"
                             placeholder="Digite seu nome"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="words"
+                            spellcheck="false"
                             required
-                        >
+                        
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                     </div>
 
@@ -91,8 +118,15 @@
                             id="email"
                             name="email"
                             placeholder="exemplo@email.com"
+                            autocomplete="off"
+                            autocorrect="off"
+                            autocapitalize="none"
+                            spellcheck="false"
                             required
-                        >
+                        
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                     </div>
 
@@ -114,8 +148,12 @@
                                     placeholder="DD"
                                     maxlength="2"
                                     inputmode="numeric"
+                                    autocomplete="off"
                                     required
-                                >
+                                
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                                 <span class="data-separador">
                                     /
@@ -128,8 +166,12 @@
                                     placeholder="MM"
                                     maxlength="2"
                                     inputmode="numeric"
+                                    autocomplete="off"
                                     required
-                                >
+                                
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                                 <span class="data-separador">
                                     /
@@ -142,8 +184,12 @@
                                     placeholder="AAAA"
                                     maxlength="4"
                                     inputmode="numeric"
+                                    autocomplete="off"
                                     required
-                                >
+                                
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                             </div>
 
@@ -179,7 +225,10 @@
                                 name="senha"
                                 placeholder="********"
                                 required
-                            >
+                            
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                             <span
                                 class="toggle-visibility"
@@ -203,7 +252,10 @@
                                 name="confirmar_senha"
                                 placeholder="********"
                                 required
-                            >
+                            
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                             <span
                                 class="toggle-visibility"
@@ -313,6 +365,7 @@
                         <select
                             id="pergunta_secreta"
                             name="pergunta_secreta"
+                            autocomplete="off"
                             required
                         >
 
@@ -358,7 +411,10 @@
                             placeholder="Digite sua resposta"
                             autocomplete="off"
                             required
-                        >
+                        
+                            data-lpignore="true"
+                            data-1p-ignore="true"
+                            data-bwignore="true">
 
                     </div>
 
@@ -466,6 +522,78 @@
     <script>
 
         const form = document.getElementById('form-cadastro');
+
+        /* ==================================================
+           BLOQUEAR / LIMPAR PREENCHIMENTO AUTOMÁTICO
+        =================================================== */
+
+        const camposSemAutofill = [
+            'nome',
+            'email',
+            'data_dia',
+            'data_mes',
+            'data_ano',
+            'senha',
+            'confirmar_senha',
+            'resposta_secreta'
+        ];
+
+        function limparPreenchimentoAutomatico() {
+            camposSemAutofill.forEach(id => {
+                const campo = document.getElementById(id);
+
+                if (!campo) return;
+
+                campo.value = '';
+
+                campo.setAttribute(
+                    'autocomplete',
+                    (
+                        id === 'senha' ||
+                        id === 'confirmar_senha'
+                    )
+                        ? 'new-password'
+                        : 'off'
+                );
+            });
+
+            const dataHidden = document.getElementById('data_nascimento');
+
+            if (dataHidden) {
+                dataHidden.value = '';
+            }
+        }
+
+        /*
+         * Executa em mais de um momento porque alguns navegadores
+         * tentam preencher os campos depois que a página já carregou.
+         */
+        document.addEventListener(
+            'DOMContentLoaded',
+            function () {
+                limparPreenchimentoAutomatico();
+
+                setTimeout(
+                    limparPreenchimentoAutomatico,
+                    100
+                );
+
+                setTimeout(
+                    limparPreenchimentoAutomatico,
+                    500
+                );
+            }
+        );
+
+        window.addEventListener(
+            'pageshow',
+            function () {
+                setTimeout(
+                    limparPreenchimentoAutomatico,
+                    50
+                );
+            }
+        );
 
         const step1 = document.getElementById('step-1');
         const step2 = document.getElementById('step-2');
@@ -948,6 +1076,8 @@
 
                 step1.classList.remove('etapa-oculta');
                 step2.classList.add('etapa-oculta');
+
+                limparPreenchimentoAutomatico();
 
             }
         );

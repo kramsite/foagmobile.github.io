@@ -642,3 +642,146 @@ body.dark-mode .choices__list[aria-expanded] {
         width: 100%;
     }
 }
+
+/* ===========================================
+   MOLDURA PERSONALIZÁVEL
+   ========================================== */
+
+.foto-container,
+.foto-area {
+    position: relative;
+    width: 132px;
+    height: 132px;
+    flex-shrink: 0;
+}
+
+.moldura-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===========================================
+   BORDA DA MOLDURA (FÁCIL DE PERSONALIZAR)
+   ========================================== */
+
+.moldura-borda {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* ===== MOLDURA PADRÃO (REDONDA) ===== */
+    border-radius: 50%;
+    border: 6px solid var(--branco);
+    background: var(--branco);
+    
+    /* ===== SOMBRA PADRÃO ===== */
+    box-shadow: 0 12px 28px rgba(38, 79, 114, 0.2);
+    
+    /* ===== FACILITA PERSONALIZAÇÃO ===== */
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+/* ===========================================
+   IMAGEM DENTRO DA MOLDURA
+   ========================================== */
+
+.moldura-borda img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: inherit; /* HERDA O BORDER-RADIUS DA MOLDURA */
+    display: block;
+}
+
+/* ===========================================
+   ESTILOS PRONTOS PARA MOLDURAS FUTURAS
+   ========================================== */
+
+/* --- MOLDURA QUADRADA --- */
+.moldura-borda.quadrada {
+    border-radius: 12px;
+}
+
+/* --- MOLDURA COM PONTAS ARREDONDADAS --- */
+.moldura-borda.arredondada {
+    border-radius: 20px;
+}
+
+/* --- MOLDURA HEXAGONAL (SIMULADA) --- */
+.moldura-borda.hexagonal {
+    border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+    clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* --- MOLDURA CORAÇÃO (SIMULADA) --- */
+.moldura-borda.coracao {
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    clip-path: path("M50,30 A20,20,0,0,1,90,30 A20,20,0,0,1,50,80 A20,20,0,0,1,10,30 A20,20,0,0,1,50,30Z");
+    /* Ou use clip-path com SVG */
+}
+
+/* --- MOLDURA COM DUPLA BORDA (DISCORD STYLE) --- */
+.moldura-borda.dupla {
+    border: 4px solid var(--branco);
+    box-shadow: 0 0 0 4px var(--azul-foag), 0 12px 28px rgba(38, 79, 114, 0.2);
+}
+
+/* --- MOLDURA COM GLOW (BRILHO) --- */
+.moldura-borda.glow {
+    border: 4px solid var(--azul-foag);
+    box-shadow: 0 0 20px rgba(56, 165, 255, 0.5), 0 12px 28px rgba(38, 79, 114, 0.2);
+}
+
+/* --- MOLDURA COM GRADIENTE --- */
+.moldura-borda.gradiente {
+    border: 4px solid transparent;
+    background: linear-gradient(45deg, #38a5ff, #ff6b6b, #ffd93d) border-box;
+    -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+}
+
+.moldura-borda.gradiente img {
+    border-radius: inherit;
+}
+
+/* ===========================================
+   STATUS (VERDE ONLINE)
+   ========================================== */
+
+.foto-status {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 4px solid var(--branco);
+    background: #36c66f;
+    z-index: 5;
+}
+
+/* ===========================================
+   RESPONSIVO
+   ========================================== */
+
+@media (max-width: 550px) {
+    .foto-container,
+    .foto-area {
+        width: 110px;
+        height: 110px;
+    }
+    
+    .moldura-borda {
+        border-width: 5px;
+    }
+}

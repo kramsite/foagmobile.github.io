@@ -969,13 +969,17 @@ $caminho_foto =
 
                 <form method="post" enctype="multipart/form-data">
                     <section class="foto-card">
-                        <div class="foto-area">
-                            <img id="previewFoto" src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil">
-
-                            <label for="foto" class="btn-camera">
-                                <i class="fa-solid fa-camera"></i>
-                            </label>
-                        </div>
+<!-- NO EDITAR.PHP - Substitua o .foto-area -->
+<div class="foto-area">
+    <div class="moldura-container">
+        <div class="moldura-borda" id="molduraEditar">
+            <img id="previewFoto" src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil">
+        </div>
+        <label for="foto" class="btn-camera">
+            <i class="fa-solid fa-camera"></i>
+        </label>
+    </div>
+</div>
 
                         <div class="foto-informacoes">
                             <span>Foto de perfil</span>

@@ -224,3 +224,30 @@ body.dark-mode .dado-item-icone {
   background: var(--dark-surface) !important;
   color: var(--dark-primary) !important;
 }
+
+/* ===========================================
+   MOLDURA MODO ESCURO
+   ========================================== */
+
+body.dark-mode .moldura-borda {
+    border-color: var(--dark-surface) !important;
+    background: var(--dark-surface) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* MOLDURA DUPLA NO ESCURO */
+body.dark-mode .moldura-borda.dupla {
+    border-color: var(--dark-surface) !important;
+    box-shadow: 0 0 0 4px var(--dark-primary), 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* MOLDURA GLOW NO ESCURO */
+body.dark-mode .moldura-borda.glow {
+    border-color: var(--dark-primary) !important;
+    box-shadow: 0 0 30px rgba(102, 154, 218, 0.4), 0 12px 28px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* STATUS NO ESCURO */
+body.dark-mode .foto-status {
+    border-color: var(--dark-surface) !important;
+}

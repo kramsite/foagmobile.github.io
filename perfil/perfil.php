@@ -251,10 +251,15 @@ $caminho_foto =
 
                 <section class="perfil-destaque">
                     <div class="perfil-identidade">
-                        <div class="foto-container">
-                            <img src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil de <?= escapar($nome) ?>">
-                            <span class="foto-status"></span>
-                        </div>
+                        <!-- NO PERFIL.PHP - Substitua o .foto-container -->
+<div class="foto-container">
+    <div class="moldura-container">
+        <div class="moldura-borda" id="molduraPerfil">
+            <img src="<?= escapar($caminho_foto) ?>" alt="Foto de perfil de <?= escapar($nome) ?>">
+        </div>
+        <span class="foto-status"></span>
+    </div>
+</div>
 
                         <div class="perfil-texto">
                             <span class="etiqueta-perfil">Perfil do estudante</span>
