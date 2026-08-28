@@ -153,7 +153,7 @@
             href="../mudarsenha/esqueci.php"
             class="link-recuperar"
           >
-            Esqueci minha senha?
+            ESQUECI MINHA SENHA
           </a>
 
         </div>
