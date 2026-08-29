@@ -22,7 +22,8 @@
                 "Sociologia",
                 "Artes",
                 "Inglês",
-                "Historia"
+                "Historia",
+                "ADS"
             ],
             "notas": [
                 {
@@ -96,6 +97,12 @@
                     "2": 7.5,
                     "3": null,
                     "4": null
+                },
+                {
+                    "1": null,
+                    "2": null,
+                    "3": null,
+                    "4": null
                 }
             ],
             "materia_ids": [
@@ -110,7 +117,8 @@
                 "mat_10e8872c7f32",
                 "mat_a0970ead927a",
                 "mat_a9102dddebde",
-                "mat_68f00281c995"
+                "mat_68f00281c995",
+                "MAT_40202A17"
             ]
         }
     },
