@@ -1336,7 +1336,7 @@ footer {
 
 .item-imagem[src$="/campeao.png"],
 .modal-item-imagem[src$="/campeao.png"] {
-    --escala-moldura: 0.72;
+    --escala-moldura: 0.9;
 }
 
 .item-imagem[src$="/dragao.png"],
