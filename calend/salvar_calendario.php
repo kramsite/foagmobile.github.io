@@ -8,32 +8,86 @@ header(
 
 
 // ==========================================
-// VERIFICAR LOGIN
+// CARREGAR SISTEMA DE ESTRELAS
 // ==========================================
 
+$arquivoEstrelas =
+    __DIR__ .
+    '/../estrelas/adicionar_estrelas.php';
+
+
 if (
-    empty(
-        $_SESSION['codigo_usuario']
+    !file_exists(
+        $arquivoEstrelas
     )
 ) {
 
-    http_response_code(401);
+    http_response_code(
+        500
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'Usuário não autenticado.'
+
+            'mensagem' =>
+                'Arquivo do sistema de estrelas não encontrado.',
+
+            'arquivo' =>
+                $arquivoEstrelas
+        ],
+        JSON_UNESCAPED_UNICODE |
+        JSON_UNESCAPED_SLASHES
+    );
+
+
+    exit;
+}
+
+
+require_once
+    $arquivoEstrelas;
+
+
+// ==========================================
+// VERIFICAR LOGIN
+// ==========================================
+
+$codigoUsuario =
+    $_SESSION[
+        'codigo_usuario'
+    ]
+    ??
+    $_SESSION[
+        'user_id'
+    ]
+    ??
+    null;
+
+
+if (
+    !$codigoUsuario
+) {
+
+    http_response_code(
+        401
+    );
+
+
+    echo json_encode(
+        [
+            'sucesso' => false,
+
+            'mensagem' =>
+                'Usuário não autenticado.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
+
     exit;
-
 }
-
-
-$codigoUsuario =
-    $_SESSION['codigo_usuario'];
 
 
 // ==========================================
@@ -41,22 +95,29 @@ $codigoUsuario =
 // ==========================================
 
 if (
-    $_SERVER['REQUEST_METHOD'] !==
+    $_SERVER[
+        'REQUEST_METHOD'
+    ] !==
     'POST'
 ) {
 
-    http_response_code(405);
+    http_response_code(
+        405
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'Método não permitido.'
+
+            'mensagem' =>
+                'Método não permitido.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
-    exit;
 
+    exit;
 }
 
 
@@ -76,18 +137,23 @@ if (
     )
 ) {
 
-    http_response_code(404);
+    http_response_code(
+        404
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'Pasta do usuário não encontrada.'
+
+            'mensagem' =>
+                'Pasta do usuário não encontrada.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
-    exit;
 
+    exit;
 }
 
 
@@ -119,23 +185,28 @@ if (
     )
 ) {
 
-    http_response_code(400);
+    http_response_code(
+        400
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'JSON inválido.'
+
+            'mensagem' =>
+                'JSON inválido.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
-    exit;
 
+    exit;
 }
 
 
 // ==========================================
-// FUNÇÃO PARA VALIDAR DATA
+// VALIDAR DATA
 // ==========================================
 
 function dataCalendarioValida(
@@ -149,7 +220,6 @@ function dataCalendarioValida(
     ) {
 
         return false;
-
     }
 
 
@@ -161,13 +231,12 @@ function dataCalendarioValida(
     ) {
 
         return false;
-
     }
 
 
     $objetoData =
-        DateTime::createFromFormat(
-            'Y-m-d',
+        DateTimeImmutable::createFromFormat(
+            '!Y-m-d',
             $data
         );
 
@@ -176,29 +245,31 @@ function dataCalendarioValida(
         $objetoData &&
         $objetoData->format(
             'Y-m-d'
-        ) === $data
+        ) ===
+        $data
     );
-
 }
 
 
 // ==========================================
-// DADOS FINAIS
+// ESTRUTURA FINAL
 // ==========================================
 
 $dadosSalvar = [
 
-    'dias' => [],
+    'dias' =>
+        [],
 
-    'metas' => [],
+    'metas' =>
+        [],
 
-    'configuracoes' => []
-
+    'configuracoes' =>
+        []
 ];
 
 
 // ==========================================
-// SALVAR STATUS DOS DIAS
+// STATUS DOS DIAS
 // ==========================================
 
 $statusPermitidos = [
@@ -210,13 +281,13 @@ $statusPermitidos = [
     'sem-aula',
 
     'roxo'
-
 ];
 
 
 $diasRecebidos =
-    $dadosRecebidos['dias']
-        ?? [];
+    $dadosRecebidos[
+        'dias'
+    ] ?? [];
 
 
 if (
@@ -237,7 +308,6 @@ if (
         ) {
 
             continue;
-
         }
 
 
@@ -250,26 +320,27 @@ if (
         ) {
 
             continue;
-
         }
 
 
-        $dadosSalvar['dias'][
+        $dadosSalvar[
+            'dias'
+        ][
             $data
-        ] = $status;
-
+        ] =
+            $status;
     }
-
 }
 
 
 // ==========================================
-// SALVAR METAS MENSAIS
+// METAS MENSAIS
 // ==========================================
 
 $metasRecebidas =
-    $dadosRecebidos['metas']
-        ?? [];
+    $dadosRecebidos[
+        'metas'
+    ] ?? [];
 
 
 if (
@@ -283,14 +354,6 @@ if (
         as $chave => $meta
     ) {
 
-        /*
-         Exemplos aceitos:
-
-         2026-1
-         2026-2
-         2026-12
-        */
-
         if (
             !preg_match(
                 '/^\d{4}-(?:[1-9]|1[0-2])$/',
@@ -299,7 +362,6 @@ if (
         ) {
 
             continue;
-
         }
 
 
@@ -310,7 +372,6 @@ if (
         ) {
 
             continue;
-
         }
 
 
@@ -328,17 +389,18 @@ if (
             );
 
 
-        $dadosSalvar['metas'][
+        $dadosSalvar[
+            'metas'
+        ][
             $chave
-        ] = $meta;
-
+        ] =
+            $meta;
     }
-
 }
 
 
 // ==========================================
-// SALVAR CONFIGURAÇÕES ANUAIS
+// CONFIGURAÇÕES ANUAIS
 // ==========================================
 
 $configuracoesRecebidas =
@@ -366,7 +428,6 @@ if (
         ) {
 
             continue;
-
         }
 
 
@@ -377,7 +438,6 @@ if (
         ) {
 
             continue;
-
         }
 
 
@@ -387,12 +447,16 @@ if (
 
         $metaAnual =
             isset(
-                $config['meta_anual']
-            )
-                ? (float)$config[
+                $config[
                     'meta_anual'
                 ]
-                : 80;
+            )
+                ?
+                (float)$config[
+                    'meta_anual'
+                ]
+                :
+                80;
 
 
         $metaAnual =
@@ -440,8 +504,8 @@ if (
             )
         ) {
 
-            $inicioAno = '';
-
+            $inicioAno =
+                '';
         }
 
 
@@ -452,8 +516,8 @@ if (
             )
         ) {
 
-            $fimAno = '';
-
+            $fimAno =
+                '';
         }
 
 
@@ -464,8 +528,8 @@ if (
             )
         ) {
 
-            $inicioFerias = '';
-
+            $inicioFerias =
+                '';
         }
 
 
@@ -476,13 +540,73 @@ if (
             )
         ) {
 
-            $fimFerias = '';
-
+            $fimFerias =
+                '';
         }
 
 
         // ======================================
-        // MONTAR CONFIGURAÇÃO DO ANO
+        // GARANTIR ORDEM DAS DATAS
+        // ======================================
+
+        if (
+            $inicioAno !== '' &&
+            $fimAno !== '' &&
+            $inicioAno >
+                $fimAno
+        ) {
+
+            http_response_code(
+                400
+            );
+
+
+            echo json_encode(
+                [
+                    'sucesso' =>
+                        false,
+
+                    'mensagem' =>
+                        'O início do ano letivo não pode ser posterior ao final.'
+                ],
+                JSON_UNESCAPED_UNICODE
+            );
+
+
+            exit;
+        }
+
+
+        if (
+            $inicioFerias !== '' &&
+            $fimFerias !== '' &&
+            $inicioFerias >
+                $fimFerias
+        ) {
+
+            http_response_code(
+                400
+            );
+
+
+            echo json_encode(
+                [
+                    'sucesso' =>
+                        false,
+
+                    'mensagem' =>
+                        'O início das férias não pode ser posterior ao final.'
+                ],
+                JSON_UNESCAPED_UNICODE
+            );
+
+
+            exit;
+        }
+
+
+        // ======================================
+        // MONTAR CONFIGURAÇÃO
         // ======================================
 
         $dadosSalvar[
@@ -505,16 +629,13 @@ if (
 
             'fim_ferias_meio' =>
                 $fimFerias
-
         ];
-
     }
-
 }
 
 
 // ==========================================
-// TRANSFORMAR EM JSON
+// GERAR JSON
 // ==========================================
 
 $json =
@@ -530,23 +651,28 @@ if (
     $json === false
 ) {
 
-    http_response_code(500);
+    http_response_code(
+        500
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'Erro ao gerar JSON.'
+
+            'mensagem' =>
+                'Erro ao gerar JSON.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
-    exit;
 
+    exit;
 }
 
 
 // ==========================================
-// SALVAR ARQUIVO
+// SALVAR CALENDÁRIO
 // ==========================================
 
 $resultado =
@@ -561,29 +687,136 @@ if (
     $resultado === false
 ) {
 
-    http_response_code(500);
+    http_response_code(
+        500
+    );
+
 
     echo json_encode(
         [
             'sucesso' => false,
-            'mensagem' => 'Não foi possível salvar o calendário.'
+
+            'mensagem' =>
+                'Não foi possível salvar o calendário.'
         ],
         JSON_UNESCAPED_UNICODE
     );
 
-    exit;
 
+    exit;
 }
 
 
 // ==========================================
-// SUCESSO
+// PROCESSAR PONTOS DE PRESENÇA
+// ==========================================
+
+$resultadoPontos = [
+
+    'funcao_encontrada' =>
+        false,
+
+    'processado' =>
+        false,
+
+    'dias_seguidos' =>
+        0,
+
+    'maior_sequencia_mes' =>
+        0,
+
+    'ultima_data' =>
+        null,
+
+    'mes_referencia' =>
+        null,
+
+    'recompensa_concedida' =>
+        false,
+
+    'marco' =>
+        null,
+
+    'estrelas' =>
+        0
+];
+
+
+try {
+
+    $resultadoPontos[
+        'funcao_encontrada'
+    ] =
+        function_exists(
+            'processarSequenciaPresencaCalendario'
+        );
+
+
+    if (
+        $resultadoPontos[
+            'funcao_encontrada'
+        ]
+    ) {
+
+        $processamento =
+            processarSequenciaPresencaCalendario(
+                $codigoUsuario,
+                $dadosSalvar
+            );
+
+
+        if (
+            is_array(
+                $processamento
+            )
+        ) {
+
+            $resultadoPontos =
+                array_merge(
+                    $resultadoPontos,
+                    $processamento
+                );
+
+
+            $resultadoPontos[
+                'funcao_encontrada'
+            ] =
+                true;
+        }
+    }
+
+} catch (
+    Throwable $erro
+) {
+
+    $resultadoPontos[
+        'erro'
+    ] =
+        $erro->getMessage();
+
+
+    error_log(
+        'Erro nos pontos do calendário: ' .
+        $erro->getMessage()
+    );
+}
+
+
+// ==========================================
+// RESPOSTA
 // ==========================================
 
 echo json_encode(
     [
-        'sucesso' => true,
-        'mensagem' => 'Calendário salvo com sucesso.'
+        'sucesso' =>
+            true,
+
+        'mensagem' =>
+            'Calendário salvo com sucesso.',
+
+        'pontos' =>
+            $resultadoPontos
     ],
-    JSON_UNESCAPED_UNICODE
+    JSON_UNESCAPED_UNICODE |
+    JSON_UNESCAPED_SLASHES
 );

@@ -23,6 +23,7 @@ function estruturaPadraoPontos()
             ],
 
             'frequencia' => [
+
                 'meses_processados' => [],
 
                 'sequencia_presenca' => [
@@ -52,8 +53,10 @@ function estruturaPadraoPontos()
 // CAMINHO DO PONTOS.JSON
 // ==========================================
 
-function caminhoArquivoPontos($codigoUsuario)
-{
+function caminhoArquivoPontos(
+    $codigoUsuario
+) {
+
     return
         __DIR__ .
         '/../json/usuarios/' .
@@ -66,10 +69,13 @@ function caminhoArquivoPontos($codigoUsuario)
 // CARREGAR PONTOS
 // ==========================================
 
-function carregarPontos($codigoUsuario)
-{
+function carregarPontos(
+    $codigoUsuario
+) {
+
     $estrutura =
         estruturaPadraoPontos();
+
 
     $arquivo =
         caminhoArquivoPontos(
@@ -77,7 +83,12 @@ function carregarPontos($codigoUsuario)
         );
 
 
-    if (!file_exists($arquivo)) {
+    if (
+        !file_exists(
+            $arquivo
+        )
+    ) {
+
         return $estrutura;
     }
 
@@ -88,7 +99,10 @@ function carregarPontos($codigoUsuario)
         );
 
 
-    if ($conteudo === false) {
+    if (
+        $conteudo === false
+    ) {
+
         return $estrutura;
     }
 
@@ -100,7 +114,12 @@ function carregarPontos($codigoUsuario)
         );
 
 
-    if (!is_array($dados)) {
+    if (
+        !is_array(
+            $dados
+        )
+    ) {
+
         return $estrutura;
     }
 
@@ -133,7 +152,11 @@ function salvarPontos(
         );
 
 
-    if (!is_dir($pasta)) {
+    if (
+        !is_dir(
+            $pasta
+        )
+    ) {
 
         mkdir(
             $pasta,
@@ -143,18 +166,30 @@ function salvarPontos(
     }
 
 
-    return file_put_contents(
-        $arquivo,
-
+    $json =
         json_encode(
             $dados,
             JSON_PRETTY_PRINT |
             JSON_UNESCAPED_UNICODE |
             JSON_UNESCAPED_SLASHES
-        ),
+        );
 
-        LOCK_EX
-    ) !== false;
+
+    if (
+        $json === false
+    ) {
+
+        return false;
+    }
+
+
+    return (
+        file_put_contents(
+            $arquivo,
+            $json,
+            LOCK_EX
+        ) !== false
+    );
 }
 
 
@@ -171,13 +206,16 @@ function adicionarEstrelas(
 ) {
 
     $quantidade =
-        (int) $quantidade;
+        (int)$quantidade;
 
 
     if (
         $quantidade <= 0 ||
-        empty($chave)
+        empty(
+            $chave
+        )
     ) {
+
         return false;
     }
 
@@ -189,12 +227,63 @@ function adicionarEstrelas(
 
 
     // ======================================
+    // GARANTIR ESTRUTURAS
+    // ======================================
+
+    if (
+        !isset(
+            $pontos[
+                'historico'
+            ]
+        ) ||
+        !is_array(
+            $pontos[
+                'historico'
+            ]
+        )
+    ) {
+
+        $pontos[
+            'historico'
+        ] = [];
+    }
+
+
+    if (
+        !isset(
+            $pontos[
+                'controle'
+            ][
+                'recompensas_recebidas'
+            ]
+        ) ||
+        !is_array(
+            $pontos[
+                'controle'
+            ][
+                'recompensas_recebidas'
+            ]
+        )
+    ) {
+
+        $pontos[
+            'controle'
+        ][
+            'recompensas_recebidas'
+        ] = [];
+    }
+
+
+    // ======================================
     // VERIFICAR DUPLICAÇÃO
     // ======================================
 
     $recebidas =
-        $pontos['controle']['recompensas_recebidas']
-        ?? [];
+        $pontos[
+            'controle'
+        ][
+            'recompensas_recebidas'
+        ];
 
 
     if (
@@ -204,6 +293,7 @@ function adicionarEstrelas(
             true
         )
     ) {
+
         return false;
     }
 
@@ -212,20 +302,53 @@ function adicionarEstrelas(
     // SOMAR ESTRELAS
     // ======================================
 
-    $pontos['estrelas'] +=
+    $pontos[
+        'estrelas'
+    ] =
+        (int)(
+            $pontos[
+                'estrelas'
+            ] ?? 0
+        );
+
+
+    $pontos[
+        'estrelas'
+    ] +=
         $quantidade;
+
+
+    // ======================================
+    // HORÁRIO
+    // ======================================
+
+    $timezone =
+        new DateTimeZone(
+            'America/Cuiaba'
+        );
+
+
+    $agora =
+        new DateTimeImmutable(
+            'now',
+            $timezone
+        );
 
 
     // ======================================
     // HISTÓRICO
     // ======================================
 
-    $pontos['historico'][] = [
+    $pontos[
+        'historico'
+    ][] = [
 
         'id' =>
             'estrela_' .
             bin2hex(
-                random_bytes(6)
+                random_bytes(
+                    6
+                )
             ),
 
         'tipo' =>
@@ -238,12 +361,12 @@ function adicionarEstrelas(
             $quantidade,
 
         'data' =>
-            date(
+            $agora->format(
                 'Y-m-d H:i:s'
             ),
 
         'timestamp' =>
-            time(),
+            $agora->getTimestamp(),
 
         'chave' =>
             $chave
@@ -251,10 +374,14 @@ function adicionarEstrelas(
 
 
     // ======================================
-    // MARCAR RECOMPENSA COMO RECEBIDA
+    // REGISTRAR RECOMPENSA
     // ======================================
 
-    $pontos['controle']['recompensas_recebidas'][] =
+    $pontos[
+        'controle'
+    ][
+        'recompensas_recebidas'
+    ][] =
         $chave;
 
 
@@ -266,7 +393,7 @@ function adicionarEstrelas(
 
 
 // ==========================================
-// IDENTIFICAR SESSÃO
+// IDENTIFICAR SESSÃO POMODORO
 // ==========================================
 
 function identificarSessaoPomodoro(
@@ -276,22 +403,42 @@ function identificarSessaoPomodoro(
 
     if (
         !empty(
-            $sessao['id']
+            $sessao[
+                'id'
+            ]
         )
     ) {
 
         return
             (string)
-            $sessao['id'];
+            $sessao[
+                'id'
+            ];
     }
 
 
     $dados = [
-        $sessao['ts'] ?? '',
-        $sessao['minutes'] ?? '',
-        $sessao['mode'] ?? '',
-        $sessao['source'] ?? '',
-        $sessao['discipline'] ?? '',
+
+        $sessao[
+            'ts'
+        ] ?? '',
+
+        $sessao[
+            'minutes'
+        ] ?? '',
+
+        $sessao[
+            'mode'
+        ] ?? '',
+
+        $sessao[
+            'source'
+        ] ?? '',
+
+        $sessao[
+            'discipline'
+        ] ?? '',
+
         $indice
     ];
 
@@ -322,63 +469,71 @@ function contarSessoesPremiadasNoDia(
 
 
     $historico =
-        $pontos['historico']
-        ?? [];
+        $pontos[
+            'historico'
+        ] ?? [];
 
 
-    $total = 0;
+    $total =
+        0;
 
 
-    foreach ($historico as $item) {
+    foreach (
+        $historico
+        as $item
+    ) {
 
-        if (!is_array($item)) {
+        if (
+            !is_array(
+                $item
+            )
+        ) {
+
             continue;
         }
 
 
         $tipo =
-            $item['tipo']
-            ?? '';
+            $item[
+                'tipo'
+            ] ?? '';
+
 
         $dataHistorico =
-            $item['data']
-            ?? '';
+            $item[
+                'data'
+            ] ?? '';
+
 
         $chave =
-            $item['chave']
-            ?? '';
+            $item[
+                'chave'
+            ] ?? '';
 
-
-        // ==================================
-        // SOMENTE POMODORO OU CRONÔMETRO
-        // ==================================
 
         if (
-            $tipo !== 'pomodoro' &&
-            $tipo !== 'cronometro'
+            $tipo !==
+                'pomodoro' &&
+            $tipo !==
+                'cronometro'
         ) {
+
             continue;
         }
 
-
-        // ==================================
-        // SOMENTE NA DATA INFORMADA
-        // ==================================
 
         if (
             substr(
                 $dataHistorico,
                 0,
                 10
-            ) !== $data
+            ) !==
+            $data
         ) {
+
             continue;
         }
 
-
-        // ==================================
-        // NÃO CONTAR BÔNUS DE 2H / 4H
-        // ==================================
 
         $ehSessaoPomodoro =
             strpos(
@@ -420,43 +575,64 @@ function processarEstrelasPomodoro(
 
     $resultado = [
 
-        'estrelas_sessoes' => 0,
+        'estrelas_sessoes' =>
+            0,
 
-        'estrelas_bonus' => 0,
+        'estrelas_bonus' =>
+            0,
 
-        'limite_diario_atingido' => false,
+        'limite_diario_atingido' =>
+            false,
 
-        'sessoes_premiadas_hoje' => 0
+        'sessoes_premiadas_hoje' =>
+            0
     ];
 
 
     $sessoesAntigas =
-        $dadosAnteriores['sessions']
-        ?? [];
+        $dadosAnteriores[
+            'sessions'
+        ] ?? [];
+
 
     $sessoesNovas =
-        $dadosNovos['sessions']
-        ?? [];
+        $dadosNovos[
+            'sessions'
+        ] ?? [];
 
 
     if (
-        !is_array($sessoesAntigas) ||
-        !is_array($sessoesNovas)
+        !is_array(
+            $sessoesAntigas
+        ) ||
+        !is_array(
+            $sessoesNovas
+        )
     ) {
 
         return $resultado;
     }
 
 
-    // ======================================
-    // CONFIGURAÇÕES
-    // ======================================
-
     $limiteDiario =
         3;
 
+
+    $timezone =
+        new DateTimeZone(
+            'America/Cuiaba'
+        );
+
+
+    $agora =
+        new DateTimeImmutable(
+            'now',
+            $timezone
+        );
+
+
     $hoje =
-        date(
+        $agora->format(
             'Y-m-d'
         );
 
@@ -469,10 +645,11 @@ function processarEstrelasPomodoro(
 
 
     // ======================================
-    // IDENTIFICAR SESSÕES QUE JÁ EXISTIAM
+    // IDENTIFICAR SESSÕES ANTIGAS
     // ======================================
 
-    $idsAntigos = [];
+    $idsAntigos =
+        [];
 
 
     foreach (
@@ -480,7 +657,12 @@ function processarEstrelasPomodoro(
         as $indice => $sessao
     ) {
 
-        if (!is_array($sessao)) {
+        if (
+            !is_array(
+                $sessao
+            )
+        ) {
+
             continue;
         }
 
@@ -492,13 +674,15 @@ function processarEstrelasPomodoro(
             );
 
 
-        $idsAntigos[$id] =
+        $idsAntigos[
+            $id
+        ] =
             true;
     }
 
 
     // ======================================
-    // VERIFICAR AS NOVAS SESSÕES
+    // VERIFICAR NOVAS SESSÕES
     // ======================================
 
     foreach (
@@ -506,7 +690,12 @@ function processarEstrelasPomodoro(
         as $indice => $sessao
     ) {
 
-        if (!is_array($sessao)) {
+        if (
+            !is_array(
+                $sessao
+            )
+        ) {
+
             continue;
         }
 
@@ -518,61 +707,76 @@ function processarEstrelasPomodoro(
             );
 
 
-        // Já estava salvo antes
         if (
             isset(
-                $idsAntigos[$idSessao]
+                $idsAntigos[
+                    $idSessao
+                ]
             )
         ) {
+
             continue;
         }
 
 
         $modo =
-            $sessao['mode']
-            ?? '';
+            $sessao[
+                'mode'
+            ] ?? '';
+
 
         $origem =
-            $sessao['source']
-            ?? '';
+            $sessao[
+                'source'
+            ] ?? '';
+
 
         $minutos =
             (int)(
-                $sessao['minutes']
-                ?? 0
+                $sessao[
+                    'minutes'
+                ] ?? 0
             );
 
 
         $sessaoValida =
             false;
 
+
         $tipo =
             '';
 
+
         $descricao =
             '';
+
 
         $chave =
             '';
 
 
         // ==================================
-        // POMODORO CONCLUÍDO
+        // POMODORO
         // ==================================
 
         if (
-            $origem === 'pomodoro' &&
-            $modo === 'focus'
+            $origem ===
+                'pomodoro' &&
+            $modo ===
+                'focus'
         ) {
 
             $sessaoValida =
                 true;
 
+
             $tipo =
                 'pomodoro';
 
+
             $descricao =
                 'Sessão de Pomodoro concluída';
+
 
             $chave =
                 'pomodoro_' .
@@ -582,23 +786,28 @@ function processarEstrelasPomodoro(
 
         // ==================================
         // CRONÔMETRO
-        // MÍNIMO 30 MINUTOS
         // ==================================
 
         elseif (
-            $origem === 'cronometro' &&
-            $modo === 'focus' &&
-            $minutos >= 1
+            $origem ===
+                'cronometro' &&
+            $modo ===
+                'focus' &&
+            $minutos >=
+                1
         ) {
 
             $sessaoValida =
                 true;
 
+
             $tipo =
                 'cronometro';
 
+
             $descricao =
                 'Sessão de 30 minutos ou mais no cronômetro';
+
 
             $chave =
                 'cronometro_' .
@@ -606,18 +815,13 @@ function processarEstrelasPomodoro(
         }
 
 
-        // ==================================
-        // NÃO GERA ESTRELAS
-        // ==================================
+        if (
+            !$sessaoValida
+        ) {
 
-        if (!$sessaoValida) {
             continue;
         }
 
-
-        // ==================================
-        // LIMITE DE 3 SESSÕES NO DIA
-        // ==================================
 
         if (
             $premiadasHoje >=
@@ -626,15 +830,13 @@ function processarEstrelasPomodoro(
 
             $resultado[
                 'limite_diario_atingido'
-            ] = true;
+            ] =
+                true;
+
 
             continue;
         }
 
-
-        // ==================================
-        // ADICIONAR +2 ESTRELAS
-        // ==================================
 
         $adicionou =
             adicionarEstrelas(
@@ -646,19 +848,23 @@ function processarEstrelasPomodoro(
             );
 
 
-        if ($adicionou) {
+        if (
+            $adicionou
+        ) {
 
             $premiadasHoje++;
 
+
             $resultado[
                 'estrelas_sessoes'
-            ] += 2;
+            ] +=
+                2;
         }
     }
 
 
     // ======================================
-    // PROCESSAR BÔNUS DE 2H / 4H
+    // BÔNUS DE TEMPO
     // ======================================
 
     $bonus =
@@ -693,8 +899,21 @@ function processarBonusTempoDia(
     $sessoes
 ) {
 
+    $timezone =
+        new DateTimeZone(
+            'America/Cuiaba'
+        );
+
+
+    $agora =
+        new DateTimeImmutable(
+            'now',
+            $timezone
+        );
+
+
     $hoje =
-        date(
+        $agora->format(
             'Y-m-d'
         );
 
@@ -716,6 +935,7 @@ function processarBonusTempoDia(
     $totalMinutos =
         0;
 
+
     $estrelasBonus =
         0;
 
@@ -725,56 +945,63 @@ function processarBonusTempoDia(
         as $sessao
     ) {
 
-        if (!is_array($sessao)) {
+        if (
+            !is_array(
+                $sessao
+            )
+        ) {
+
             continue;
         }
 
 
         $timestamp =
             (int)(
-                $sessao['ts']
-                ?? 0
+                $sessao[
+                    'ts'
+                ] ?? 0
             );
 
 
         if (
-            $timestamp < $inicioHoje ||
-            $timestamp > $fimHoje
+            $timestamp <
+                $inicioHoje ||
+            $timestamp >
+                $fimHoje
         ) {
+
             continue;
         }
 
 
         $modo =
-            $sessao['mode']
-            ?? '';
+            $sessao[
+                'mode'
+            ] ?? '';
+
 
         $origem =
-            $sessao['source']
-            ?? '';
+            $sessao[
+                'source'
+            ] ?? '';
+
 
         $minutos =
             (int)(
-                $sessao['minutes']
-                ?? 0
+                $sessao[
+                    'minutes'
+                ] ?? 0
             );
 
-
-        // ==================================
-        // SOMENTE SESSÕES DE FOCO
-        // ==================================
 
         if (
             $modo !==
             'focus'
         ) {
+
             continue;
         }
 
-
-        // ==================================
-        // POMODORO CONCLUÍDO
-        // ==================================
 
         if (
             $origem ===
@@ -786,13 +1013,11 @@ function processarBonusTempoDia(
         }
 
 
-        // ==================================
-        // CRONÔMETRO VÁLIDO
-        // ==================================
-
         elseif (
-            $origem === 'cronometro' &&
-            $minutos >= 1
+            $origem ===
+                'cronometro' &&
+            $minutos >=
+                1
         ) {
 
             $totalMinutos +=
@@ -802,11 +1027,12 @@ function processarBonusTempoDia(
 
 
     // ======================================
-    // BÔNUS DE 2 HORAS
+    // BÔNUS 2 HORAS
     // ======================================
 
     if (
-        $totalMinutos >= 120
+        $totalMinutos >=
+        120
     ) {
 
         $adicionou =
@@ -820,7 +1046,9 @@ function processarBonusTempoDia(
             );
 
 
-        if ($adicionou) {
+        if (
+            $adicionou
+        ) {
 
             $estrelasBonus +=
                 3;
@@ -829,11 +1057,12 @@ function processarBonusTempoDia(
 
 
     // ======================================
-    // BÔNUS DE 4 HORAS
+    // BÔNUS 4 HORAS
     // ======================================
 
     if (
-        $totalMinutos >= 240
+        $totalMinutos >=
+        240
     ) {
 
         $adicionou =
@@ -847,7 +1076,9 @@ function processarBonusTempoDia(
             );
 
 
-        if ($adicionou) {
+        if (
+            $adicionou
+        ) {
 
             $estrelasBonus +=
                 5;
@@ -856,4 +1087,917 @@ function processarBonusTempoDia(
 
 
     return $estrelasBonus;
+}
+
+
+// =====================================================
+// CALENDÁRIO — VALIDAR DATA
+// =====================================================
+
+function dataPresencaValida(
+    $data
+) {
+
+    if (
+        !is_string(
+            $data
+        ) ||
+        !preg_match(
+            '/^\d{4}-\d{2}-\d{2}$/',
+            $data
+        )
+    ) {
+
+        return false;
+    }
+
+
+    $objeto =
+        DateTimeImmutable::createFromFormat(
+            '!Y-m-d',
+            $data
+        );
+
+
+    return (
+        $objeto &&
+        $objeto->format(
+            'Y-m-d'
+        ) ===
+        $data
+    );
+}
+
+
+// =====================================================
+// CALENDÁRIO — CARREGAR FERIADOS
+// =====================================================
+
+function carregarFeriadosParaPontos()
+{
+    $arquivo =
+        __DIR__ .
+        '/../json/feriados.json';
+
+
+    if (
+        !file_exists(
+            $arquivo
+        )
+    ) {
+
+        return [];
+    }
+
+
+    $conteudo =
+        file_get_contents(
+            $arquivo
+        );
+
+
+    if (
+        $conteudo === false
+    ) {
+
+        return [];
+    }
+
+
+    $dados =
+        json_decode(
+            $conteudo,
+            true
+        );
+
+
+    return is_array(
+        $dados
+    )
+        ? $dados
+        : [];
+}
+
+
+// =====================================================
+// CALENDÁRIO — PROCESSAR SEQUÊNCIA DE PRESENÇA
+// =====================================================
+
+function processarSequenciaPresencaCalendario(
+    $codigoUsuario,
+    $calendario
+) {
+
+    $resultado = [
+
+        'processado' =>
+            false,
+
+        'dias_seguidos' =>
+            0,
+
+        'maior_sequencia_mes' =>
+            0,
+
+        'ultima_data' =>
+            null,
+
+        'mes_referencia' =>
+            null,
+
+        'recompensa_concedida' =>
+            false,
+
+        'marco' =>
+            null,
+
+        'estrelas' =>
+            0
+    ];
+
+
+    if (
+        !is_array(
+            $calendario
+        )
+    ) {
+
+        return $resultado;
+    }
+
+
+    // ======================================
+    // DATA ATUAL
+    // ======================================
+
+    $timezone =
+        new DateTimeZone(
+            'America/Cuiaba'
+        );
+
+
+    $agora =
+        new DateTimeImmutable(
+            'now',
+            $timezone
+        );
+
+
+    $hoje =
+        $agora->format(
+            'Y-m-d'
+        );
+
+
+    $anoAtual =
+        $agora->format(
+            'Y'
+        );
+
+
+    $mesAtual =
+        $agora->format(
+            'Y-m'
+        );
+
+
+    $resultado[
+        'mes_referencia'
+    ] =
+        $mesAtual;
+
+
+    // ======================================
+    // CONFIGURAÇÃO DO ANO
+    // ======================================
+
+    $config =
+        $calendario[
+            'configuracoes'
+        ][
+            $anoAtual
+        ] ?? null;
+
+
+    if (
+        !is_array(
+            $config
+        )
+    ) {
+
+        return $resultado;
+    }
+
+
+    $inicioAno =
+        $config[
+            'inicio_ano_letivo'
+        ] ?? '';
+
+
+    $fimAno =
+        $config[
+            'fim_ano_letivo'
+        ] ?? '';
+
+
+    $inicioFerias =
+        $config[
+            'inicio_ferias_meio'
+        ] ?? '';
+
+
+    $fimFerias =
+        $config[
+            'fim_ferias_meio'
+        ] ?? '';
+
+
+    if (
+        !dataPresencaValida(
+            $inicioAno
+        ) ||
+        !dataPresencaValida(
+            $fimAno
+        )
+    ) {
+
+        return $resultado;
+    }
+
+
+    if (
+        $inicioAno >
+        $fimAno
+    ) {
+
+        return $resultado;
+    }
+
+
+    if (
+        $hoje <
+        $inicioAno
+    ) {
+
+        return $resultado;
+    }
+
+
+    // ======================================
+    // DATA FINAL PARA CÁLCULO
+    // ======================================
+
+    $limiteFinal =
+        $hoje;
+
+
+    if (
+        $fimAno <
+        $limiteFinal
+    ) {
+
+        $limiteFinal =
+            $fimAno;
+    }
+
+
+    // ======================================
+    // STATUS DOS DIAS
+    // ======================================
+
+    $diasMarcados =
+        $calendario[
+            'dias'
+        ] ?? [];
+
+
+    if (
+        !is_array(
+            $diasMarcados
+        )
+    ) {
+
+        $diasMarcados =
+            [];
+    }
+
+
+    // ======================================
+    // FERIADOS
+    // ======================================
+
+    $feriados =
+        carregarFeriadosParaPontos();
+
+
+    // ======================================
+    // CONTADORES
+    // ======================================
+
+    $sequenciaAtual =
+        0;
+
+
+    $maiorSequenciaMes =
+        0;
+
+
+    $ultimaDataLetiva =
+        null;
+
+
+    // ======================================
+    // PERCORRER PERÍODO LETIVO
+    // ======================================
+
+    $dataAtual =
+        new DateTimeImmutable(
+            $inicioAno,
+            $timezone
+        );
+
+
+    $dataFinal =
+        new DateTimeImmutable(
+            $limiteFinal,
+            $timezone
+        );
+
+
+    while (
+        $dataAtual <=
+        $dataFinal
+    ) {
+
+        $iso =
+            $dataAtual->format(
+                'Y-m-d'
+            );
+
+
+        $mesData =
+            $dataAtual->format(
+                'Y-m'
+            );
+
+
+        // 1 segunda ... 7 domingo
+        $diaSemana =
+            (int)$dataAtual->format(
+                'N'
+            );
+
+
+        $ehFimDeSemana =
+            $diaSemana >=
+            6;
+
+
+        $ehFeriado =
+            array_key_exists(
+                $iso,
+                $feriados
+            );
+
+
+        $ehFerias =
+            false;
+
+
+        if (
+            dataPresencaValida(
+                $inicioFerias
+            ) &&
+            dataPresencaValida(
+                $fimFerias
+            )
+        ) {
+
+            $ehFerias =
+                (
+                    $iso >=
+                        $inicioFerias &&
+                    $iso <=
+                        $fimFerias
+                );
+        }
+
+
+        $status =
+            $diasMarcados[
+                $iso
+            ] ?? '';
+
+
+        $ehSemAula =
+            $status ===
+            'sem-aula';
+
+
+        // ==================================
+        // DIAS NEUTROS
+        // ==================================
+        //
+        // Não contam e não quebram sequência.
+        //
+        // ==================================
+
+        if (
+            $ehFimDeSemana ||
+            $ehFeriado ||
+            $ehFerias ||
+            $ehSemAula
+        ) {
+
+            $dataAtual =
+                $dataAtual->modify(
+                    '+1 day'
+                );
+
+            continue;
+        }
+
+
+        $ultimaDataLetiva =
+            $iso;
+
+
+        // ==================================
+        // FALTA / ATESTADO
+        // ==================================
+
+        if (
+            $status ===
+                'vermelho' ||
+            $status ===
+                'amarelo'
+        ) {
+
+            $sequenciaAtual =
+                0;
+
+
+            $dataAtual =
+                $dataAtual->modify(
+                    '+1 day'
+                );
+
+
+            continue;
+        }
+
+
+        // ==================================
+        // PRESENÇA
+        // ==================================
+        //
+        // Qualquer dia letivo sem falta ou
+        // atestado é presença automática.
+        //
+        // ==================================
+
+        $sequenciaAtual++;
+
+
+        // ==================================
+        // MAIOR SEQUÊNCIA VISTA NESTE MÊS
+        // ==================================
+
+        if (
+            $mesData ===
+            $mesAtual
+        ) {
+
+            $maiorSequenciaMes =
+                max(
+                    $maiorSequenciaMes,
+                    $sequenciaAtual
+                );
+        }
+
+
+        $dataAtual =
+            $dataAtual->modify(
+                '+1 day'
+            );
+    }
+
+
+    // ======================================
+    // RESULTADO DO CÁLCULO
+    // ======================================
+
+    $resultado[
+        'processado'
+    ] =
+        true;
+
+
+    $resultado[
+        'dias_seguidos'
+    ] =
+        $sequenciaAtual;
+
+
+    $resultado[
+        'maior_sequencia_mes'
+    ] =
+        $maiorSequenciaMes;
+
+
+    $resultado[
+        'ultima_data'
+    ] =
+        $ultimaDataLetiva;
+
+
+    // ======================================
+    // CARREGAR PONTOS
+    // ======================================
+
+    $pontos =
+        carregarPontos(
+            $codigoUsuario
+        );
+
+
+    // ======================================
+    // GARANTIR ESTRUTURA FREQUÊNCIA
+    // ======================================
+
+    if (
+        !isset(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ]
+        ) ||
+        !is_array(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ]
+        )
+    ) {
+
+        $pontos[
+            'controle'
+        ][
+            'frequencia'
+        ] = [
+
+            'meses_processados' =>
+                [],
+
+            'sequencia_presenca' => [
+
+                'dias' =>
+                    0,
+
+                'ultima_data' =>
+                    null,
+
+                'marcos_recebidos' =>
+                    []
+            ]
+        ];
+    }
+
+
+    if (
+        !isset(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ][
+                'sequencia_presenca'
+            ]
+        ) ||
+        !is_array(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ][
+                'sequencia_presenca'
+            ]
+        )
+    ) {
+
+        $pontos[
+            'controle'
+        ][
+            'frequencia'
+        ][
+            'sequencia_presenca'
+        ] = [
+
+            'dias' =>
+                0,
+
+            'ultima_data' =>
+                null,
+
+            'marcos_recebidos' =>
+                []
+        ];
+    }
+
+
+    $controle =&
+        $pontos[
+            'controle'
+        ][
+            'frequencia'
+        ][
+            'sequencia_presenca'
+        ];
+
+
+    // ======================================
+    // ATUALIZAR CONTAGEM
+    // ======================================
+
+    $controle[
+        'dias'
+    ] =
+        $sequenciaAtual;
+
+
+    $controle[
+        'ultima_data'
+    ] =
+        $ultimaDataLetiva;
+
+
+    if (
+        !isset(
+            $controle[
+                'marcos_recebidos'
+            ]
+        ) ||
+        !is_array(
+            $controle[
+                'marcos_recebidos'
+            ]
+        )
+    ) {
+
+        $controle[
+            'marcos_recebidos'
+        ] =
+            [];
+    }
+
+
+    // ======================================
+    // SALVAR CONTAGEM MESMO SEM RECOMPENSA
+    // ======================================
+
+    salvarPontos(
+        $codigoUsuario,
+        $pontos
+    );
+
+
+    // ======================================
+    // JÁ RECEBEU RECOMPENSA NESTE MÊS?
+    // ======================================
+
+    if (
+        array_key_exists(
+            $mesAtual,
+            $controle[
+                'marcos_recebidos'
+            ]
+        )
+    ) {
+
+        return $resultado;
+    }
+
+
+    // ======================================
+    // DEFINIR RECOMPENSA
+    // ======================================
+
+    $marcoAtingido =
+        null;
+
+
+    $quantidadeEstrelas =
+        0;
+
+
+    /*
+     * Apenas UMA recompensa de sequência
+     * pode ser recebida por mês.
+     *
+     * Se atingir mais de um marco antes
+     * de receber, ganha o maior alcançado.
+     */
+
+    if (
+        $maiorSequenciaMes >=
+        25
+    ) {
+
+        $marcoAtingido =
+            25;
+
+
+        $quantidadeEstrelas =
+            40;
+
+    } elseif (
+        $maiorSequenciaMes >=
+        10
+    ) {
+
+        $marcoAtingido =
+            10;
+
+
+        $quantidadeEstrelas =
+            12;
+
+    } elseif (
+        $maiorSequenciaMes >=
+        5
+    ) {
+
+        $marcoAtingido =
+            5;
+
+
+        $quantidadeEstrelas =
+            7;
+    }
+
+
+    // ======================================
+    // NÃO ATINGIU MARCO
+    // ======================================
+
+    if (
+        $marcoAtingido ===
+        null
+    ) {
+
+        return $resultado;
+    }
+
+
+    // ======================================
+    // CHAVE ÚNICA DO MÊS
+    // ======================================
+
+    $chave =
+        'sequencia_presenca_' .
+        $mesAtual;
+
+
+    // ======================================
+    // ADICIONAR ESTRELAS
+    // ======================================
+
+    $adicionou =
+        adicionarEstrelas(
+            $codigoUsuario,
+            'sequencia_presenca',
+            $marcoAtingido .
+            ' dias seguidos de presença',
+            $quantidadeEstrelas,
+            $chave
+        );
+
+
+    // ======================================
+    // RECARREGAR PONTOS
+    // ======================================
+
+    $pontos =
+        carregarPontos(
+            $codigoUsuario
+        );
+
+
+    if (
+        !isset(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ][
+                'sequencia_presenca'
+            ][
+                'marcos_recebidos'
+            ]
+        ) ||
+        !is_array(
+            $pontos[
+                'controle'
+            ][
+                'frequencia'
+            ][
+                'sequencia_presenca'
+            ][
+                'marcos_recebidos'
+            ]
+        )
+    ) {
+
+        $pontos[
+            'controle'
+        ][
+            'frequencia'
+        ][
+            'sequencia_presenca'
+        ][
+            'marcos_recebidos'
+        ] =
+            [];
+    }
+
+
+    // ======================================
+    // MARCAR MÊS COMO PREMIADO
+    // ======================================
+
+    $pontos[
+        'controle'
+    ][
+        'frequencia'
+    ][
+        'sequencia_presenca'
+    ][
+        'marcos_recebidos'
+    ][
+        $mesAtual
+    ] =
+        $marcoAtingido;
+
+
+    $pontos[
+        'controle'
+    ][
+        'frequencia'
+    ][
+        'sequencia_presenca'
+    ][
+        'dias'
+    ] =
+        $sequenciaAtual;
+
+
+    $pontos[
+        'controle'
+    ][
+        'frequencia'
+    ][
+        'sequencia_presenca'
+    ][
+        'ultima_data'
+    ] =
+        $ultimaDataLetiva;
+
+
+    salvarPontos(
+        $codigoUsuario,
+        $pontos
+    );
+
+
+    // ======================================
+    // RESULTADO
+    // ======================================
+
+    if (
+        $adicionou
+    ) {
+
+        $resultado[
+            'recompensa_concedida'
+        ] =
+            true;
+
+
+        $resultado[
+            'marco'
+        ] =
+            $marcoAtingido;
+
+
+        $resultado[
+            'estrelas'
+        ] =
+            $quantidadeEstrelas;
+    }
+
+
+    return $resultado;
 }

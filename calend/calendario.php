@@ -473,6 +473,7 @@ function gerarCalendario(
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
     <link rel="stylesheet" href="dark_calendario.css">
     <link rel="stylesheet" href="calendario_dashboard.css">
+    <link rel="stylesheet" href="../estrelas/modal_estrelas.css?v=<?= time() ?>">    
     <!-- ======================================
          ACESSIBILIDADE GLOBAL
     ======================================= -->
@@ -1241,6 +1242,7 @@ function gerarCalendario(
     </footer>
 
 
+    <script src="../estrelas/modal_estrelas.js?v=1"></script>
 
     <script src="calend.js?v=<?= time() ?>"></script>
 

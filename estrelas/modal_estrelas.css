@@ -1,0 +1,332 @@
+/* ==========================================
+   FOAG — MODAL DE ESTRELAS
+========================================== */
+
+#modal-estrelas {
+    position: fixed !important;
+    inset: 0 !important;
+
+    width: 100vw !important;
+    height: 100vh !important;
+
+    z-index: 999999 !important;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(20, 20, 30, 0.48);
+
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+
+    box-sizing: border-box;
+}
+
+
+/* ==========================================
+   MODAL ABERTO
+========================================== */
+
+#modal-estrelas.ativo {
+    display: flex !important;
+}
+
+
+/* ==========================================
+   CAIXA PRINCIPAL
+========================================== */
+
+#modal-estrelas .modal-estrelas-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 420px;
+
+    margin: auto;
+
+    padding: 38px 30px 30px;
+
+    background: #ffffff;
+
+    border-radius: 24px;
+
+    text-align: center;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.22);
+
+    box-sizing: border-box;
+
+    animation:
+        modalEstrelasEntrar
+        0.35s ease;
+}
+
+
+/* ==========================================
+   ÍCONE PRINCIPAL
+========================================== */
+
+#modal-estrelas .modal-estrelas-icone {
+    width: 82px;
+    height: 82px;
+
+    margin:
+        0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            135deg,
+            #fff6c8,
+            #ffd75f
+        );
+
+    font-size: 40px;
+
+    box-shadow:
+        0 10px 30px
+        rgba(255, 193, 7, 0.25);
+}
+
+
+/* ==========================================
+   TÍTULO
+========================================== */
+
+#modal-estrelas .modal-estrelas-box h2 {
+    margin:
+        0 0 8px;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 26px;
+    font-weight: 700;
+
+    color: #2c2c2c;
+}
+
+
+/* ==========================================
+   TEXTOS
+========================================== */
+
+#modal-estrelas .modal-estrelas-box p {
+    margin: 0;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 16px;
+    line-height: 1.6;
+
+    color: #666666;
+}
+
+
+/* ==========================================
+   QUANTIDADE DE ESTRELAS
+========================================== */
+
+#modal-estrelas .modal-estrelas-quantidade {
+    display: block;
+
+    margin:
+        15px 0 7px;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 27px;
+    font-weight: 700;
+
+    color: #d99c00;
+}
+
+
+/* ==========================================
+   BOTÃO CONTINUAR
+========================================== */
+
+#modal-estrelas .modal-estrelas-fechar {
+    width: 100%;
+
+    margin-top: 24px;
+
+    padding:
+        13px 20px;
+
+    border: 0;
+
+    border-radius: 12px;
+
+    background: #7f1734;
+
+    color: #ffffff;
+
+    font-family:
+        'Poppins',
+        sans-serif;
+
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+#modal-estrelas .modal-estrelas-fechar:hover {
+    transform:
+        translateY(-1px);
+
+    opacity: 0.93;
+}
+
+
+/* ==========================================
+   ESTRELAS DECORATIVAS
+========================================== */
+
+#modal-estrelas .modal-estrelas-brilho {
+    position: absolute;
+
+    font-size: 19px;
+
+    pointer-events: none;
+
+    animation:
+        brilhoEstrela
+        1.6s ease-in-out
+        infinite alternate;
+}
+
+
+#modal-estrelas .modal-estrelas-brilho.um {
+    top: 27px;
+    left: 35px;
+}
+
+
+#modal-estrelas .modal-estrelas-brilho.dois {
+    top: 55px;
+    right: 40px;
+
+    animation-delay: 0.4s;
+}
+
+
+#modal-estrelas .modal-estrelas-brilho.tres {
+    top: 125px;
+    left: 54px;
+
+    font-size: 13px;
+
+    animation-delay: 0.7s;
+}
+
+
+/* ==========================================
+   ANIMAÇÃO DO MODAL
+========================================== */
+
+@keyframes modalEstrelasEntrar {
+
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(20px)
+            scale(0.94);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
+}
+
+
+/* ==========================================
+   ANIMAÇÃO DAS ESTRELAS
+========================================== */
+
+@keyframes brilhoEstrela {
+
+    from {
+        transform:
+            scale(0.8)
+            rotate(-8deg);
+
+        opacity: 0.5;
+    }
+
+    to {
+        transform:
+            scale(1.2)
+            rotate(8deg);
+
+        opacity: 1;
+    }
+}
+
+
+/* ==========================================
+   CELULAR
+========================================== */
+
+@media (
+    max-width: 500px
+) {
+
+    #modal-estrelas {
+        padding: 16px;
+    }
+
+
+    #modal-estrelas .modal-estrelas-box {
+        max-width: 360px;
+
+        padding:
+            34px 24px 25px;
+
+        border-radius: 20px;
+    }
+
+
+    #modal-estrelas .modal-estrelas-icone {
+        width: 72px;
+        height: 72px;
+
+        font-size: 35px;
+    }
+
+
+    #modal-estrelas .modal-estrelas-box h2 {
+        font-size: 23px;
+    }
+
+
+    #modal-estrelas .modal-estrelas-quantidade {
+        font-size: 24px;
+    }
+}

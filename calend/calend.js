@@ -263,15 +263,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         const possiveis = [
-
             item.data,
-
             item.date,
-
             item.data_tarefa,
-
             item.dataTarefa,
-
             item.prazo
         ];
 
@@ -446,6 +441,72 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     'Erro ao salvar calendário.'
                 );
+            }
+
+
+            // ==========================================
+            // DEBUG DOS PONTOS
+            // ==========================================
+
+            if (
+                retorno?.pontos
+            ) {
+
+                console.log(
+                    'Resultado dos pontos:',
+                    retorno.pontos
+                );
+            }
+
+
+            // ==========================================
+            // MODAL DE RECOMPENSA
+            // ==========================================
+
+            if (
+                retorno?.pontos
+                    ?.recompensa_concedida === true
+            ) {
+
+                const estrelas =
+                    Number(
+                        retorno.pontos.estrelas ||
+                        0
+                    );
+
+
+                const marco =
+                    Number(
+                        retorno.pontos.marco ||
+                        0
+                    );
+
+
+                if (
+                    estrelas > 0 &&
+                    typeof window.mostrarModalEstrelas ===
+                        'function'
+                ) {
+
+                    window.mostrarModalEstrelas(
+
+                        estrelas,
+
+                        marco > 0
+
+                            ? `${marco} dias seguidos de presença! Continue assim! :)`
+
+                            : 'Continue assim! :)'
+                    );
+
+                } else if (
+                    estrelas > 0
+                ) {
+
+                    console.warn(
+                        'As estrelas foram recebidas, mas mostrarModalEstrelas() não foi carregada.'
+                    );
+                }
             }
 
 
@@ -730,7 +791,6 @@ document.addEventListener('DOMContentLoaded', () => {
             );
 
 
-        // Domingo ou sábado
         if (
             diaSemana === 0 ||
             diaSemana === 6
@@ -742,7 +802,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         /*
          * TABELA:
-         *
          * 0 = horário
          * 1 = segunda
          * 2 = terça
@@ -801,6 +860,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (
                         !celulas.length
                     ) {
+
                         return;
                     }
 
@@ -949,10 +1009,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                         ).trim();
 
-
-                    // =====================================
-                    // COMPATIBILIDADE HORÁRIO ANTIGO
-                    // =====================================
 
                     if (
                         !inicio &&
@@ -3380,9 +3436,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resumo.innerHTML = `
 
                 <p class="agenda-resumo-vazio">
-
                     Nenhuma tarefa cadastrada para este dia.
-
                 </p>
 
             `;
@@ -3573,9 +3627,7 @@ document.addEventListener('DOMContentLoaded', () => {
             resumo.innerHTML = `
 
                 <p class="agenda-resumo-vazio">
-
                     Nenhuma aula cadastrada para este dia.
-
                 </p>
 
             `;
@@ -3674,7 +3726,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
 
-        // Garante que o mês esteja aberto
         abrirMes(
             mes
         );
@@ -4024,10 +4075,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     'click',
                     async evento => {
 
-                        // =================================
-                        // IGNORAR CONTROLES
-                        // =================================
-
                         if (
                             evento.target.closest(
 
@@ -4045,10 +4092,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 '.dia[data-date]'
                             );
 
-
-                        // =================================
-                        // CLIQUE NO MÊS
-                        // =================================
 
                         if (
                             !dia
@@ -4073,7 +4116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
                         // =================================
-                        // SE COR ESTIVER SELECIONADA
+                        // COR SELECIONADA
                         // =================================
 
                         if (
@@ -4121,6 +4164,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 return;
                             }
+
+
+                            // Guarda status anterior
+                            const statusAnterior =
+                                statusDia(
+                                    dia
+                                );
 
 
                             dia.classList.remove(
@@ -4176,6 +4226,47 @@ document.addEventListener('DOMContentLoaded', () => {
                             if (
                                 !salvou
                             ) {
+
+                                // =================================
+                                // RESTAURAR SE DER ERRO
+                                // =================================
+
+                                dia.classList.remove(
+
+                                    'vermelho',
+
+                                    'amarelo',
+
+                                    'sem-aula',
+
+                                    'roxo'
+                                );
+
+
+                                if (
+                                    statusAnterior
+                                ) {
+
+                                    dia.classList.add(
+                                        statusAnterior
+                                    );
+
+
+                                    calendData.dias[
+                                        iso
+                                    ] =
+                                        statusAnterior;
+
+                                } else {
+
+                                    delete calendData.dias[
+                                        iso
+                                    ];
+                                }
+
+
+                                atualizarTudo();
+
 
                                 alert(
                                     'Não foi possível salvar esta alteração no calendário.'
@@ -4411,6 +4502,12 @@ document.addEventListener('DOMContentLoaded', () => {
                             `${mes.dataset.ano}-${mes.dataset.mes}`;
 
 
+                        const valorAnterior =
+                            calendData.metas[
+                                chave
+                            ];
+
+
                         calendData.metas[
                             chave
                         ] =
@@ -4443,6 +4540,29 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (
                             !salvou
                         ) {
+
+                            if (
+                                valorAnterior != null
+                            ) {
+
+                                calendData.metas[
+                                    chave
+                                ] =
+                                    valorAnterior;
+
+
+                                evento.target.value =
+                                    String(
+                                        valorAnterior
+                                    );
+
+                            } else {
+
+                                delete calendData.metas[
+                                    chave
+                                ];
+                            }
+
 
                             alert(
                                 'Não foi possível salvar a frequência mínima mensal.'
@@ -5045,6 +5165,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window._debugBuscarHorarios =
         buscarHorarios;
+
+
+    window._debugSalvarCalendario =
+        salvarCalendarioServidor;
 
 
     console.log(
