@@ -1,18 +1,16 @@
 {
-    "notas": [
+    "notas": [],
+    "tarefas": [
         {
-            "id": 1787841222701,
-            "titulo": "Anotação rápida",
-            "texto": "eu amo você",
-            "data": "27/08/2026 16:33"
+            "concluida": false,
+            "texto": "bombom de morango",
+            "data": "2026-08-29"
         },
         {
-            "id": 1787841212340,
-            "titulo": "batata",
-            "texto": "batata frita",
-            "data": "27/08/2026, 10:33:32"
+            "texto": "Sou lindo",
+            "data": "2026-08-31",
+            "origem": "calendario"
         }
     ],
-    "tarefas": [],
     "nao_esquecer": []
 }

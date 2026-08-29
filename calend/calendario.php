@@ -5,13 +5,15 @@ session_start();
 // VERIFICAR LOGIN
 // ======================================
 
-if (empty($_SESSION['codigo_usuario'])) {
+$codigoUsuario =
+    $_SESSION['codigo_usuario']
+    ?? $_SESSION['user_id']
+    ?? null;
+
+if (!$codigoUsuario) {
     header('Location: ../login/index.php');
     exit;
 }
-
-$codigoUsuario =
-    $_SESSION['codigo_usuario'];
 
 $current =
     basename($_SERVER['PHP_SELF']);

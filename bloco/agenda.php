@@ -18,45 +18,143 @@ $current = basename($_SERVER['PHP_SELF']);
 // PASTA DO USUÁRIO
 // ======================================
 
-$baseJsonDir = __DIR__ . '/../json/usuarios';
+$baseJsonDir =
+    __DIR__ . '/../json/usuarios';
 
-$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+$pastaUsuario =
+    $baseJsonDir . '/' . $codigoUsuario;
 
-// A pasta já deve ter sido criada no cadastro.
-// Se não existir, alguma coisa está errada.
 if (!is_dir($pastaUsuario)) {
-    exit("Pasta do usuário não encontrada.");
+    exit('Pasta do usuário não encontrada.');
 }
 
-// ==========================================
+
+// ======================================
+// CARREGAR AGENDA DO USUÁRIO
+// ======================================
+
+$arquivoAgenda =
+    $pastaUsuario . '/agenda.json';
+
+$estruturaAgendaPadrao = [
+    'notas' => [],
+    'tarefas' => [],
+    'nao_esquecer' => []
+];
+
+
+// ======================================
+// CRIAR AGENDA CASO NÃO EXISTA
+// ======================================
+
+if (!file_exists($arquivoAgenda)) {
+
+    file_put_contents(
+        $arquivoAgenda,
+        json_encode(
+            $estruturaAgendaPadrao,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ),
+        LOCK_EX
+    );
+}
+
+
+// ======================================
+// LER AGENDA.JSON
+// ======================================
+
+$conteudoAgenda =
+    file_get_contents(
+        $arquivoAgenda
+    );
+
+$agendaData =
+    json_decode(
+        $conteudoAgenda ?: '',
+        true
+    );
+
+
+// ======================================
+// CORRIGIR JSON INVÁLIDO
+// ======================================
+
+if (!is_array($agendaData)) {
+
+    $agendaData =
+        $estruturaAgendaPadrao;
+}
+
+
+// ======================================
+// GARANTIR ESTRUTURA
+// ======================================
+
+if (
+    !isset($agendaData['notas']) ||
+    !is_array($agendaData['notas'])
+) {
+    $agendaData['notas'] = [];
+}
+
+
+if (
+    !isset($agendaData['tarefas']) ||
+    !is_array($agendaData['tarefas'])
+) {
+    $agendaData['tarefas'] = [];
+}
+
+
+if (
+    !isset($agendaData['nao_esquecer']) ||
+    !is_array($agendaData['nao_esquecer'])
+) {
+    $agendaData['nao_esquecer'] = [];
+}
+
+
+// ======================================
 // DADOS DA AGENDA
-// ==========================================
+// ======================================
 
 $tarefas =
-    isset($agendaData['tarefas']) &&
-    is_array($agendaData['tarefas'])
-        ? array_values($agendaData['tarefas'])
-        : [];
+    array_values(
+        $agendaData['tarefas']
+    );
 
 $lembretes =
-    isset($agendaData['nao_esquecer']) &&
-    is_array($agendaData['nao_esquecer'])
-        ? array_values($agendaData['nao_esquecer'])
-        : [];
+    array_values(
+        $agendaData['nao_esquecer']
+    );
 
 $notasAgenda =
-    isset($agendaData['notas']) &&
-    is_array($agendaData['notas'])
-        ? array_values($agendaData['notas'])
-        : [];
-        
+    array_values(
+        $agendaData['notas']
+    );
+
+
 // ======================================
 // RESUMO DA AGENDA
 // ======================================
 
-$totalTarefas = count($agendaData['tarefas'] ?? []);
-$totalLembretes = count($agendaData['nao_esquecer'] ?? []);
-$totalNotas = count($agendaData['notas'] ?? []);
+$totalTarefas =
+    count(
+        $agendaData['tarefas']
+    );
+
+$totalLembretes =
+    count(
+        $agendaData['nao_esquecer']
+    );
+
+$totalNotas =
+    count(
+        $agendaData['notas']
+    );
 
 // ======================================
 // DADOS DO HORÁRIO

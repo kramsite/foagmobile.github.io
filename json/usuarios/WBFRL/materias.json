@@ -52,26 +52,26 @@
         {
             "id": "mat_10e8872c7f32",
             "nome": "Sociologia",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#ff6bd0",
+            "icone": "fa-landmark"
         },
         {
             "id": "mat_a0970ead927a",
             "nome": "Artes",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#dc388f",
+            "icone": "fa-book"
         },
         {
             "id": "mat_a9102dddebde",
             "nome": "Inglês",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#4fb5c9",
+            "icone": "fa-language"
         },
         {
             "id": "mat_68f00281c995",
             "nome": "Historia",
-            "cor": "#94a3b8",
-            "icone": "fa-circle-question"
+            "cor": "#9c4bd2",
+            "icone": "fa-landmark"
         },
         {
             "id": "MAT_40202A17",
