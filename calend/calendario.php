@@ -137,6 +137,45 @@ foreach (
 }
 
 // ======================================
+// HORÁRIO DO USUÁRIO
+// ======================================
+
+$arquivoHorario =
+    $pastaUsuario . '/horario.json';
+
+$horarioData = [
+    'html' => ''
+];
+
+if (file_exists($arquivoHorario)) {
+
+    $conteudoHorario =
+        file_get_contents(
+            $arquivoHorario
+        );
+
+    $horarioJson =
+        json_decode(
+            $conteudoHorario ?: '',
+            true
+        );
+
+    if (is_array($horarioJson)) {
+
+        $horarioData =
+            $horarioJson;
+    }
+}
+
+if (
+    !isset($horarioData['html']) ||
+    !is_string($horarioData['html'])
+) {
+
+    $horarioData['html'] = '';
+}
+
+// ======================================
 // CALENDÁRIO DO USUÁRIO
 // ======================================
 
@@ -428,52 +467,20 @@ function gerarCalendario(
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendário - FOAG</title>
-
-    <link
-        rel="stylesheet"
-        href="calendario.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="../m.escuro/dark_basee.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="dark_calendario.css"
-    >
-
-    <link
-        rel="stylesheet"
-        href="calendario_dashboard.css"
-    >
-
+    <link rel="stylesheet" href="calendario.css">
+    <link rel="stylesheet" href="../m.escuro/dark_basee.css">
+    <link rel="stylesheet" href="dark_calendario.css">
+    <link rel="stylesheet" href="calendario_dashboard.css">
     <!-- ======================================
          ACESSIBILIDADE GLOBAL
     ======================================= -->
-
-    <link
-        rel="stylesheet"
-        href="../acessibilidade/acessibilidade.css"
-    >
-
-    <script
-        src="../acessibilidade/acessibilidade.js?v=6"
-        defer
-    ></script>
-
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <script src="../acessibilidade/acessibilidade.js?v=6" defer></script>
       <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
-
+      <script src="<?= get_aparencia_path() ?>"></script>
+      <script src="../configuracoes/aparencia.js?v=1"></script>
     <style>
         /* Mantém o painel anual acima dos meses sem alterar o grid original */
         .calendario-area {
@@ -489,21 +496,10 @@ function gerarCalendario(
             box-sizing: border-box;
         }
     </style>
-
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap"
-        rel="stylesheet"
-    >
-
-    <link
-        rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-    >
-
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="../m.escuro/dark-mode.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
     <script>
         window.CAL_AGENDA_DATA =
             <?= json_encode(
@@ -515,8 +511,12 @@ function gerarCalendario(
         window.CAL_AGENDA_SAVE_URL =
             "../bloco/salvar_agenda.php";
 
-        window.CAL_HORARIO_URL =
-            "../horario/horario_api.php";
+       window.CAL_HORARIO_HTML =
+        <?= json_encode(
+            $horarioData['html'] ?? '',
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        ); ?>;
 
         window.CAL_CALEND_DATA =
             <?= json_encode(
@@ -1241,8 +1241,8 @@ function gerarCalendario(
     </footer>
 
 
-    <script src="calend.js"></script>
 
+    <script src="calend.js?v=<?= time() ?>"></script>
 
     <script>
         document.addEventListener(

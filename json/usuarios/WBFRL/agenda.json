@@ -2,14 +2,10 @@
     "notas": [],
     "tarefas": [
         {
-            "concluida": false,
-            "texto": "bombom de morango",
-            "data": "2026-08-29"
-        },
-        {
             "texto": "Sou lindo",
             "data": "2026-08-31",
-            "origem": "calendario"
+            "origem": "calendario",
+            "concluida": false
         }
     ],
     "nao_esquecer": []
