@@ -466,6 +466,16 @@ $estruturaLojaPadrao = [
         ],
 
         [
+            'id' => 'moldura_neon',
+            'nome' => 'Moldura Neon',
+            'descricao' => 'Brilho neon em azul e rosa',
+            'preco' => 80,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/neon.png'
+        ],
+
+        [
             'id' => 'moldura_campeao',
             'nome' => 'Moldura Campeão',
             'descricao' => 'Louros dourados de campeão',
@@ -475,21 +485,21 @@ $estruturaLojaPadrao = [
             'imagem' => '../img/loja/moldura/campeao.png'
         ],
 
-        [
-            'id' => 'moldura_estrelas',
-            'nome' => 'Moldura Estrelas',
-            'descricao' => 'Estrelas brilhando ao redor do perfil',
-            'preco' => 75,
+         [
+            'id' => 'moldura_gato_preto',
+            'nome' => 'Moldura Gato Preto',
+            'descricao' => 'Um gatinho preto acompanhando seu perfil',
+            'preco' => 98,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/estrelas.png'
+            'imagem' => '../img/loja/moldura/gatopreto.png'
         ],
 
         [
             'id' => 'moldura_fogo',
             'nome' => 'Moldura Fogo',
             'descricao' => 'Chamas intensas ao redor do perfil',
-            'preco' => 80,
+            'preco' => 100,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
             'imagem' => '../img/loja/moldura/fogo.png'
@@ -506,16 +516,6 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'moldura_gato_preto',
-            'nome' => 'Moldura Gato Preto',
-            'descricao' => 'Um gatinho preto acompanhando seu perfil',
-            'preco' => 85,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/gatopreto.png'
-        ],
-
-        [
             'id' => 'moldura_livros',
             'nome' => 'Moldura Livros',
             'descricao' => 'Livros e estrelas para quem vive estudando',
@@ -523,26 +523,6 @@ $estruturaLojaPadrao = [
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
             'imagem' => '../img/loja/moldura/livros.png'
-        ],
-
-        [
-            'id' => 'moldura_querubim',
-            'nome' => 'Moldura Querubim',
-            'descricao' => 'Asas claras com detalhes dourados',
-            'preco' => 95,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/querubim.png'
-        ],
-
-        [
-            'id' => 'moldura_rei',
-            'nome' => 'Moldura Rei',
-            'descricao' => 'Detalhes dourados dignos de realeza',
-            'preco' => 100,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/rei.png'
         ],
 
         [
@@ -556,13 +536,13 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'moldura_neon',
-            'nome' => 'Moldura Neon',
-            'descricao' => 'Brilho neon em azul e rosa',
-            'preco' => 80,
+            'id' => 'moldura_querubim',
+            'nome' => 'Moldura Querubim',
+            'descricao' => 'Asas claras com detalhes dourados',
+            'preco' => 95,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/neon.png'
+            'imagem' => '../img/loja/moldura/querubim.png'
         ],
 
         [
@@ -573,6 +553,16 @@ $estruturaLojaPadrao = [
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
             'imagem' => '../img/loja/moldura/dragao.png'
+        ],
+
+        [
+            'id' => 'moldura_rei',
+            'nome' => 'Moldura Rei',
+            'descricao' => 'Detalhes dourados dignos de realeza',
+            'preco' => 100,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/rei.png'
         ],
 
         // ===================================
