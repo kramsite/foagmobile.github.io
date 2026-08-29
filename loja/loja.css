@@ -1229,3 +1229,300 @@ footer {
         height: 50px;
     }
 }
+
+/* =====================================================
+   MOLDURAS — PREVIEW PADRONIZADO
+   Fogo é a referência. Cada PNG recebe um pequeno ajuste
+   para o círculo interno encaixar no mesmo avatar.
+===================================================== */
+
+/* CARD: área fixa para qualquer moldura */
+.item-card .icone:has(.item-imagem[src*="/moldura/"]) {
+    width: 116px;
+    height: 116px;
+    min-width: 116px;
+    min-height: 116px;
+    margin-bottom: 14px;
+    position: relative;
+    background: transparent;
+    border-radius: 50%;
+    box-shadow: none;
+    overflow: visible;
+}
+
+/* Círculo da foto: este tamanho nunca muda */
+.item-card .icone:has(.item-imagem[src*="/moldura/"])::before {
+    content: "\f007";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    width: 68px;
+    height: 68px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f8fbff, #e7f1f9);
+    color: #9bb3c7;
+    font-size: 27px;
+    box-shadow:
+        inset 0 0 0 1px #dbe8f2,
+        0 4px 14px rgba(42, 127, 201, 0.12);
+}
+
+.item-card .icone:has(.item-imagem[src*="/moldura/"]) > i {
+    display: none;
+}
+
+.item-card .icone .item-imagem[src*="/moldura/"],
+.modal-icon .modal-item-imagem[src*="/moldura/"] {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+
+    width: var(--tamanho-moldura, 116px);
+    height: var(--tamanho-moldura, 116px);
+
+    object-fit: contain;
+    object-position: center;
+    border-radius: 0;
+    background: transparent;
+
+    transform:
+        translate(
+            calc(-50% + var(--offset-x, 0px)),
+            calc(-50% + var(--offset-y, 0px))
+        )
+        scale(var(--escala-moldura, 1));
+
+    filter: drop-shadow(0 4px 5px rgba(0, 0, 0, 0.15));
+}
+
+/* No hover a moldura NÃO muda de tamanho, para não perder o encaixe */
+.item-card:hover .icone .item-imagem[src*="/moldura/"] {
+    filter: drop-shadow(0 7px 9px rgba(0, 0, 0, 0.20));
+}
+
+.item-card:has(.item-imagem[src*="/moldura/"]) {
+    padding-top: 22px;
+}
+
+/* =====================================================
+   AJUSTE INDIVIDUAL DO CÍRCULO INTERNO
+   Base visual: fogo.png = 1
+===================================================== */
+
+.item-imagem[src$="/fogo.png"],
+.modal-item-imagem[src$="/fogo.png"] {
+    --escala-moldura: 0.93;
+}
+
+.item-imagem[src$="/borboletas.png"],
+.modal-item-imagem[src$="/borboletas.png"] {
+    --escala-moldura: 0.9;
+}
+
+.item-imagem[src$="/cachorro.png"],
+.modal-item-imagem[src$="/cachorro.png"] {
+    --escala-moldura: 1.07;
+    --offset-x: -3px;
+    --offset-y: -8px;
+}
+
+.item-imagem[src$="/campeao.png"],
+.modal-item-imagem[src$="/campeao.png"] {
+    --escala-moldura: 0.72;
+}
+
+.item-imagem[src$="/dragao.png"],
+.modal-item-imagem[src$="/dragao.png"] {
+    --escala-moldura: 0.80;
+}
+
+.item-imagem[src$="/estrelas.png"],
+.modal-item-imagem[src$="/estrelas.png"] {
+    --escala-moldura: 0.70;
+}
+
+.item-imagem[src$="/galaxia.png"],
+.modal-item-imagem[src$="/galaxia.png"] {
+    --escala-moldura: 0.80;
+}
+
+.item-imagem[src$="/gatolaranja.png"],
+.modal-item-imagem[src$="/gatolaranja.png"] {
+    --escala-moldura: 0.86;
+    --offset-x: 1px;
+    --offset-y: -12px;
+}
+
+.item-imagem[src$="/gatopreto.png"],
+.modal-item-imagem[src$="/gatopreto.png"] {
+    --escala-moldura: 1.08;
+    --offset-x: 0.1px;
+    --offset-y: -8.3px;
+}
+
+.item-imagem[src$="/livros.png"],
+.modal-item-imagem[src$="/livros.png"] {
+    --escala-moldura: 0.82;
+}
+
+.item-imagem[src$="/natureza.png"],
+.modal-item-imagem[src$="/natureza.png"] {
+    --escala-moldura: 0.74;
+}
+
+.item-imagem[src$="/nuvens.png"],
+.modal-item-imagem[src$="/nuvens.png"] {
+    --escala-moldura: 0.80;
+}
+
+.item-imagem[src$="/querubim.png"],
+.modal-item-imagem[src$="/querubim.png"] {
+    --escala-moldura: 0.88;
+}
+
+.item-imagem[src$="/rei.png"],
+.modal-item-imagem[src$="/rei.png"] {
+    --escala-moldura: 0.80;
+}
+
+.item-imagem[src$="/sakura.png"],
+.modal-item-imagem[src$="/sakura.png"] {
+    --escala-moldura: 0.78;
+}
+
+.item-imagem[src$="/neon.png"],
+.modal-item-imagem[src$="/neon.png"] {
+    --escala-moldura: 0.76;
+}
+
+.item-imagem[src$="/agua.png"],
+.modal-item-imagem[src$="/agua.png"] {
+    --escala-moldura: 0.82;
+}
+
+/* =====================================================
+   MODAL DE COMPRA — MESMO ENCAIXE
+===================================================== */
+
+.modal-icon:has(.modal-item-imagem[src*="/moldura/"]) {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 18px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+}
+
+.modal-icon:has(.modal-item-imagem[src*="/moldura/"])::before {
+    content: "\f007";
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    position: absolute;
+    width: 88px;
+    height: 88px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: linear-gradient(145deg, #f8fbff, #e7f1f9);
+    color: #9bb3c7;
+    font-size: 35px;
+    box-shadow:
+        inset 0 0 0 1px #dbe8f2,
+        0 5px 16px rgba(42, 127, 201, 0.12);
+}
+
+.modal-icon .modal-item-imagem[src*="/moldura/"] {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    left: 50%;
+    top: 50%;
+    z-index: 2;
+    object-fit: contain;
+    object-position: center;
+    border-radius: 0;
+    background: transparent;
+    transform: translate(-50%, -50%) scale(var(--escala-moldura, 1));
+    transform-origin: center;
+    filter: drop-shadow(0 5px 7px rgba(0, 0, 0, 0.18));
+    pointer-events: none;
+}
+
+/* Reaplica as escalas no modal porque a regra genérica acima vem depois */
+.modal-item-imagem[src$="/fogo.png"] { --escala-moldura: 1; }
+.modal-item-imagem[src$="/borboletas.png"] { --escala-moldura: 0.74; }
+.modal-item-imagem[src$="/cachorro.png"] { --escala-moldura: 0.92; }
+.modal-item-imagem[src$="/campeao.png"] { --escala-moldura: 0.72; }
+.modal-item-imagem[src$="/dragao.png"] { --escala-moldura: 0.78; }
+.modal-item-imagem[src$="/estrelas.png"] { --escala-moldura: 0.66; }
+.modal-item-imagem[src$="/galaxia.png"] { --escala-moldura: 0.80; }
+.modal-item-imagem[src$="/gatolaranja.png"] { --escala-moldura: 0.86; }
+.modal-item-imagem[src$="/gatopreto.png"] { --escala-moldura: 0.95; }
+.modal-item-imagem[src$="/livros.png"] { --escala-moldura: 0.82; }
+.modal-item-imagem[src$="/natureza.png"] { --escala-moldura: 0.74; }
+.modal-item-imagem[src$="/nuvens.png"] { --escala-moldura: 0.80; }
+.modal-item-imagem[src$="/querubim.png"] { --escala-moldura: 0.88; }
+.modal-item-imagem[src$="/rei.png"] { --escala-moldura: 0.80; }
+.modal-item-imagem[src$="/sakura.png"] { --escala-moldura: 0.84; }
+.modal-item-imagem[src$="/neon.png"] { --escala-moldura: 0.76; }
+.modal-item-imagem[src$="/agua.png"] { --escala-moldura: 0.82; }
+
+/* =====================================================
+   RESPONSIVIDADE DAS MOLDURAS
+===================================================== */
+
+@media (max-width: 768px) {
+    .item-card .icone:has(.item-imagem[src*="/moldura/"]) {
+        width: 92px;
+        height: 92px;
+        min-width: 92px;
+        min-height: 92px;
+    }
+
+    .item-card .icone:has(.item-imagem[src*="/moldura/"])::before {
+        width: 54px;
+        height: 54px;
+        font-size: 22px;
+    }
+
+   .item-card .icone .item-imagem[src*="/moldura/"] {
+        width: 92px;
+        height: 92px;
+    }
+}
+
+@media (max-width: 480px) {
+    .item-card .icone:has(.item-imagem[src*="/moldura/"]) {
+        width: 82px;
+        height: 82px;
+        min-width: 82px;
+        min-height: 82px;
+    }
+
+    .item-card .icone:has(.item-imagem[src*="/moldura/"])::before {
+        width: 48px;
+        height: 48px;
+        font-size: 20px;
+    }
+
+   .item-card .icone .item-imagem[src*="/moldura/"] {
+        width: 82px;
+        height: 82px;
+    }
+}
+

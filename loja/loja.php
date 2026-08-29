@@ -157,9 +157,9 @@ $estruturaLojaPadrao = [
         // ===================================
 
         [
-            'id' => 'emoji_foguete',
-            'nome' => 'Emoji Foguete',
-            'descricao' => '🚀 Mostre sua determinação',
+            'id' => 'emoji_feliz',
+            'nome' => 'Felizinho',
+            'descricao' => 'Um gatinho contente e tranquilo',
             'preco' => 20,
             'icone' => 'fa-solid fa-rocket',
             'categoria' => 'emojis',
@@ -167,9 +167,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_livro',
-            'nome' => 'Emoji Livro',
-            'descricao' => '📚 Para os amantes da leitura',
+            'id' => 'emoji_explode',
+            'nome' => 'Explodindo',
+            'descricao' => 'Gatinho no limite da paciência',
             'preco' => 15,
             'icone' => 'fa-solid fa-book',
             'categoria' => 'emojis',
@@ -177,9 +177,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_lampada',
-            'nome' => 'Emoji Lâmpada',
-            'descricao' => '💡 Ideias brilhantes',
+            'id' => 'emoji_coracao',
+            'nome' => 'Carinho',
+            'descricao' => 'Gatinho espalhando carinho',
             'preco' => 25,
             'icone' => 'fa-solid fa-lightbulb',
             'categoria' => 'emojis',
@@ -187,9 +187,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_alvo',
-            'nome' => 'Emoji Alvo',
-            'descricao' => '🎯 Foco no objetivo',
+            'id' => 'emoji_olhinho',
+            'nome' => 'Olhinhos',
+            'descricao' => 'Gatinho quer algo',
             'preco' => 22,
             'icone' => 'fa-solid fa-bullseye',
             'categoria' => 'emojis',
@@ -197,9 +197,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_cerebro',
-            'nome' => 'Emoji Cérebro',
-            'descricao' => '🧠 Inteligência e raciocínio',
+            'id' => 'emoji_flor',
+            'nome' => 'Tome uma flor',
+            'descricao' => 'Gatinho uma flor para uma flor',
             'preco' => 28,
             'icone' => 'fa-solid fa-brain',
             'categoria' => 'emojis',
@@ -207,9 +207,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_raio',
-            'nome' => 'Emoji Raio',
-            'descricao' => '⚡ Energia e velocidade',
+            'id' => 'emoji_freddy',
+            'nome' => 'Freddy',
+            'descricao' => 'Five nights at cat',
             'preco' => 20,
             'icone' => 'fa-solid fa-bolt',
             'categoria' => 'emojis',
@@ -217,9 +217,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_estrela_brilhante',
-            'nome' => 'Emoji Estrela Brilhante',
-            'descricao' => '🌟 Você é uma estrela',
+            'id' => 'emoji_risada',
+            'nome' => 'Risonho',
+            'descricao' => 'Gatinho KAKAKAKAKA',
             'preco' => 30,
             'icone' => 'fa-solid fa-star',
             'categoria' => 'emojis',
@@ -227,9 +227,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_trofeu',
-            'nome' => 'Emoji Troféu',
-            'descricao' => '🏆 Para os vencedores',
+            'id' => 'emoji_nuquiditu',
+            'nome' => 'Nuquidito',
+            'descricao' => 'Gatinho OMG',
             'preco' => 35,
             'icone' => 'fa-solid fa-trophy',
             'categoria' => 'emojis',
@@ -237,9 +237,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_coracao',
-            'nome' => 'Emoji Coração',
-            'descricao' => '❤️ Amor e dedicação',
+            'id' => 'emoji_vibes',
+            'nome' => 'Vibes',
+            'descricao' => 'Gatinho vibes',
             'preco' => 15,
             'icone' => 'fa-solid fa-heart',
             'categoria' => 'emojis',
@@ -247,9 +247,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_planeta',
-            'nome' => 'Emoji Planeta',
-            'descricao' => '🪐 Explore novos mundos',
+            'id' => 'emoji_nerd',
+            'nome' => 'Eu sei a resposta',
+            'descricao' => 'Gatinho Well, actually...',
             'preco' => 25,
             'icone' => 'fa-solid fa-globe',
             'categoria' => 'emojis',
@@ -258,8 +258,8 @@ $estruturaLojaPadrao = [
 
         [
             'id' => 'emoji_nuvem',
-            'nome' => 'Emoji Nuvem',
-            'descricao' => '☁️ Sonhe alto',
+            'nome' => 'Dumi',
+            'descricao' => 'Gatinho sla',
             'preco' => 18,
             'icone' => 'fa-solid fa-cloud',
             'categoria' => 'emojis',
@@ -267,9 +267,9 @@ $estruturaLojaPadrao = [
         ],
 
         [
-            'id' => 'emoji_chave',
-            'nome' => 'Emoji Chave',
-            'descricao' => '🔑 A chave do sucesso',
+            'id' => 'emoji_sorriso',
+            'nome' => 'Sorriso',
+            'descricao' => 'Gatinho feliz',
             'preco' => 22,
             'icone' => 'fa-solid fa-key',
             'categoria' => 'emojis',
@@ -394,84 +394,185 @@ $estruturaLojaPadrao = [
         // MOLDURAS
         // ===================================
 
+
         [
-            'id' => 'moldura_dourada',
-            'nome' => 'Moldura Dourada',
-            'descricao' => '🖼️ Uma moldura elegante e dourada',
-            'preco' => 80,
+            'id' => 'moldura_natureza',
+            'nome' => 'Moldura Natureza',
+            'descricao' => 'Folhas verdes ao redor do perfil',
+            'preco' => 70,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
+            'imagem' => '../img/loja/moldura/natureza.png'
         ],
 
         [
-            'id' => 'moldura_prata',
-            'nome' => 'Moldura Prata',
-            'descricao' => '🖼️ Sofisticação em prata',
-            'preco' => 60,
+            'id' => 'moldura_nuvens',
+            'nome' => 'Moldura Nuvens',
+            'descricao' => 'Nuvens azuis leves e delicadas',
+            'preco' => 75,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
+            'imagem' => '../img/loja/moldura/nuvens.png'
+        ],
+
+        [
+            'id' => 'moldura_estrelas',
+            'nome' => 'Moldura Estrelas',
+            'descricao' => 'Estrelas brilhando ao redor do perfil',
+            'preco' => 75,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/estrelas.png'
+        ],
+
+        [
+            'id' => 'moldura_agua',
+            'nome' => 'Moldura Água',
+            'descricao' => 'Ondas azuis envolvendo o perfil',
+            'preco' => 80,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/agua.png'
+        ],
+
+        [
+            'id' => 'moldura_borboletas',
+            'nome' => 'Moldura Borboletas',
+            'descricao' => 'Borboletas delicadas ao redor do perfil',
+            'preco' => 85,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/borboletas.png'
+        ],
+
+        [
+            'id' => 'moldura_cachorro',
+            'nome' => 'Moldura Cachorrinho',
+            'descricao' => 'Um cachorrinho descansando na moldura',
+            'preco' => 90,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/cachorro.png'
+        ],
+
+        [
+            'id' => 'moldura_gato_laranja',
+            'nome' => 'Moldura Gato Laranja',
+            'descricao' => 'Um gatinho laranja descansando na moldura',
+            'preco' => 90,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/gatolaranja.png'
+        ],
+
+        [
+            'id' => 'moldura_campeao',
+            'nome' => 'Moldura Campeão',
+            'descricao' => 'Louros dourados de campeão',
+            'preco' => 92,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/campeao.png'
+        ],
+
+        [
+            'id' => 'moldura_estrelas',
+            'nome' => 'Moldura Estrelas',
+            'descricao' => 'Estrelas brilhando ao redor do perfil',
+            'preco' => 75,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/estrelas.png'
+        ],
+
+        [
+            'id' => 'moldura_fogo',
+            'nome' => 'Moldura Fogo',
+            'descricao' => 'Chamas intensas ao redor do perfil',
+            'preco' => 80,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/fogo.png'
+        ],
+
+        [
+            'id' => 'moldura_galaxia',
+            'nome' => 'Moldura Galáxia',
+            'descricao' => 'Energia cósmica em tons roxos',
+            'preco' => 90,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/galaxia.png'
+        ],
+
+        [
+            'id' => 'moldura_gato_preto',
+            'nome' => 'Moldura Gato Preto',
+            'descricao' => 'Um gatinho preto acompanhando seu perfil',
+            'preco' => 85,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/gatopreto.png'
+        ],
+
+        [
+            'id' => 'moldura_livros',
+            'nome' => 'Moldura Livros',
+            'descricao' => 'Livros e estrelas para quem vive estudando',
+            'preco' => 80,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/livros.png'
+        ],
+
+        [
+            'id' => 'moldura_querubim',
+            'nome' => 'Moldura Querubim',
+            'descricao' => 'Asas claras com detalhes dourados',
+            'preco' => 95,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/querubim.png'
+        ],
+
+        [
+            'id' => 'moldura_rei',
+            'nome' => 'Moldura Rei',
+            'descricao' => 'Detalhes dourados dignos de realeza',
+            'preco' => 100,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/rei.png'
+        ],
+
+        [
+            'id' => 'moldura_sakura',
+            'nome' => 'Moldura Sakura',
+            'descricao' => 'Flores de sakura ao redor do perfil',
+            'preco' => 75,
+            'icone' => 'fa-regular fa-image',
+            'categoria' => 'molduras',
+            'imagem' => '../img/loja/moldura/sakura.png'
         ],
 
         [
             'id' => 'moldura_neon',
             'nome' => 'Moldura Neon',
-            'descricao' => '🖼️ Uma moldura neon vibrante',
-            'preco' => 90,
+            'descricao' => 'Brilho neon em azul e rosa',
+            'preco' => 80,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
+            'imagem' => '../img/loja/moldura/neon.png'
         ],
 
         [
-            'id' => 'moldura_minimalista',
-            'nome' => 'Moldura Minimalista',
-            'descricao' => '🖼️ Simples e elegante',
-            'preco' => 40,
+            'id' => 'moldura_dragao',
+            'nome' => 'Moldura Dragão',
+            'descricao' => 'Energia azul de dragão ao redor do perfil',
+            'preco' => 100,
             'icone' => 'fa-regular fa-image',
             'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
-        ],
-
-        [
-            'id' => 'moldura_vintage',
-            'nome' => 'Moldura Vintage',
-            'descricao' => '🖼️ Estilo retrô',
-            'preco' => 70,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
-        ],
-
-        [
-            'id' => 'moldura_rustica',
-            'nome' => 'Moldura Rústica',
-            'descricao' => '🖼️ Madeira e natureza',
-            'preco' => 65,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
-        ],
-
-        [
-            'id' => 'moldura_moderna',
-            'nome' => 'Moldura Moderna',
-            'descricao' => '🖼️ Design contemporâneo',
-            'preco' => 75,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
-        ],
-
-        [
-            'id' => 'moldura_classica',
-            'nome' => 'Moldura Clássica',
-            'descricao' => '🖼️ Elegância atemporal',
-            'preco' => 85,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/'
+            'imagem' => '../img/loja/moldura/dragao.png'
         ],
 
         // ===================================
