@@ -113,9 +113,9 @@ $current = basename($_SERVER['PHP_SELF']);
   <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_pomo.css">
 
-      <?php include '../configuracoes/geral.php'; ?>
+      <?php include '../../configuracoes/geral.php'; ?>
 <script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+ <script src="../../configuracoes/aparencia.js?v=1"></script>
 
   <script src="../../m.escuro/dark-mode.js"></script>
   <!-- Chart.js para os gráficos -->
