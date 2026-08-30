@@ -794,7 +794,7 @@ function processarEstrelasPomodoro(
             $modo ===
                 'focus' &&
             $minutos >=
-                1
+                30
         ) {
 
             $sessaoValida =
@@ -1017,7 +1017,7 @@ function processarBonusTempoDia(
             $origem ===
                 'cronometro' &&
             $minutos >=
-                1
+                30
         ) {
 
             $totalMinutos +=

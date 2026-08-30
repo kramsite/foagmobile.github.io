@@ -12,7 +12,8 @@
         "Sociologia",
         "Artes",
         "Inglês",
-        "Historia"
+        "Historia",
+        "ADS"
     ],
     "sessions": [
         {
@@ -86,6 +87,14 @@
             "mode": "focus",
             "source": "cronometro",
             "discipline": "Quimica"
+        },
+        {
+            "id": "628b0acf-a85d-4af5-88c9-ad79bd6561ac",
+            "ts": 1788059330656,
+            "minutes": 1,
+            "mode": "focus",
+            "source": "cronometro",
+            "discipline": "Ed. fisica"
         }
     ],
     "goals": {

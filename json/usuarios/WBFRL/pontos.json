@@ -1,5 +1,5 @@
 {
-    "estrelas": 122,
+    "estrelas": 124,
     "historico": [
         {
             "id": "estrela_d63d0474bd6e",
@@ -54,6 +54,15 @@
             "data": "2026-08-29 23:04:32",
             "timestamp": 1788059072,
             "chave": "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
+        },
+        {
+            "id": "estrela_264496556ac5",
+            "tipo": "cronometro",
+            "descricao": "Sessão de 30 minutos ou mais no cronômetro",
+            "estrelas": 2,
+            "data": "2026-08-29 23:08:50",
+            "timestamp": 1788059330,
+            "chave": "cronometro_628b0acf-a85d-4af5-88c9-ad79bd6561ac"
         }
     ],
     "controle": {
@@ -91,7 +100,8 @@
             "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b",
             "sequencia_presenca_2026-08",
             "nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
-            "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
+            "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
+            "cronometro_628b0acf-a85d-4af5-88c9-ad79bd6561ac"
         ]
     }
 }
