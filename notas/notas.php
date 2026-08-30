@@ -5,6 +5,19 @@ ini_set('display_errors', 1);
 session_start();
 
 // ======================================
+// SISTEMA DE ESTRELAS
+// ======================================
+
+require_once
+    __DIR__ .
+    '/../estrelas/adicionar_estrelas.php';
+
+$recompensaBoletim = [
+    'estrelas' => 0,
+    'motivos' => []
+];
+
+// ======================================
 // LOGIN OBRIGATÓRIO
 // ======================================
 
@@ -823,6 +836,388 @@ function calcularQuantoPrecisa(
 }
 
 // ======================================
+// ESTRELAS — BOLETIM
+// ======================================
+
+function calcularEstrelasNota(
+    $nota,
+    $notaMaxima
+) {
+    $nota = (float)$nota;
+    $notaMaxima = (float)$notaMaxima;
+
+    if (
+        $notaMaxima <= 0 ||
+        $nota < 0 ||
+        $nota > $notaMaxima
+    ) {
+        return 0;
+    }
+
+    $percentual =
+        ($nota / $notaMaxima) * 100;
+
+    if ($percentual >= 99.999) {
+        return 10;
+    }
+
+    if ($percentual >= 90) {
+        return 7;
+    }
+
+    if ($percentual >= 80) {
+        return 5;
+    }
+
+    if ($percentual >= 70) {
+        return 3;
+    }
+
+    return 0;
+}
+
+function nomeAvaliacaoBoletim(
+    $avaliacao,
+    $tipoCurso
+) {
+    if ($tipoCurso === 'faculdade') {
+        $nomes = [
+            1 => 'P1',
+            2 => 'P2',
+            3 => 'Trabalho',
+            4 => 'P3'
+        ];
+    } else {
+        $nomes = [
+            1 => '1º Bimestre',
+            2 => '2º Bimestre',
+            3 => '3º Bimestre',
+            4 => '4º Bimestre'
+        ];
+    }
+
+    return
+        $nomes[$avaliacao] ??
+        ('Avaliação ' . $avaliacao);
+}
+
+function hashPeriodoBoletim($periodo)
+{
+    return substr(
+        hash(
+            'sha256',
+            (string)$periodo
+        ),
+        0,
+        12
+    );
+}
+
+function registrarControleRecompensaNota(
+    $codigoUsuario,
+    $chave
+) {
+    $pontos =
+        carregarPontos(
+            $codigoUsuario
+        );
+
+    if (
+        !isset(
+            $pontos['controle']['notas']
+        ) ||
+        !is_array(
+            $pontos['controle']['notas']
+        )
+    ) {
+        $pontos['controle']['notas'] = [
+            'recompensas' => []
+        ];
+    }
+
+    if (
+        !isset(
+            $pontos['controle']['notas']['recompensas']
+        ) ||
+        !is_array(
+            $pontos['controle']['notas']['recompensas']
+        )
+    ) {
+        $pontos['controle']['notas']['recompensas'] = [];
+    }
+
+    if (
+        !in_array(
+            $chave,
+            $pontos['controle']['notas']['recompensas'],
+            true
+        )
+    ) {
+        $pontos['controle']['notas']['recompensas'][] =
+            $chave;
+
+        salvarPontos(
+            $codigoUsuario,
+            $pontos
+        );
+    }
+}
+
+function concederRecompensaBoletim(
+    $codigoUsuario,
+    $tipo,
+    $descricao,
+    $quantidade,
+    $chave,
+    &$recompensaBoletim
+) {
+    $quantidade =
+        (int)$quantidade;
+
+    if (
+        $quantidade <= 0 ||
+        trim((string)$chave) === ''
+    ) {
+        return false;
+    }
+
+    $adicionou =
+        adicionarEstrelas(
+            $codigoUsuario,
+            $tipo,
+            $descricao,
+            $quantidade,
+            $chave
+        );
+
+    if (!$adicionou) {
+        return false;
+    }
+
+    registrarControleRecompensaNota(
+        $codigoUsuario,
+        $chave
+    );
+
+    $recompensaBoletim['estrelas'] +=
+        $quantidade;
+
+    $recompensaBoletim['motivos'][] =
+        $descricao;
+
+    return true;
+}
+
+function obterNotaLinhaBoletim(
+    $linhaNotas,
+    $avaliacao
+) {
+    if (!is_array($linhaNotas)) {
+        return null;
+    }
+
+    $valor =
+        $linhaNotas[$avaliacao] ??
+        $linhaNotas[(string)$avaliacao] ??
+        null;
+
+    if (
+        $valor === null ||
+        $valor === ''
+    ) {
+        return null;
+    }
+
+    return (float)$valor;
+}
+
+function processarBonusBimestreBoletim(
+    $codigoUsuario,
+    $periodo,
+    $avaliacao,
+    $materias,
+    $materiaIds,
+    $notas,
+    $notaMaxima,
+    $mediaAprovacao,
+    $tipoCurso,
+    &$recompensaBoletim
+) {
+    $avaliacao =
+        (int)$avaliacao;
+
+    if (
+        $avaliacao < 1 ||
+        $avaliacao > 4
+    ) {
+        return;
+    }
+
+    $notasValidas = [];
+
+    foreach (
+        $materias
+        as $indice => $materiaNome
+    ) {
+        $materiaNome =
+            trim(
+                (string)$materiaNome
+            );
+
+        $materiaId =
+            trim(
+                (string)(
+                    $materiaIds[$indice] ??
+                    ''
+                )
+            );
+
+        if (
+            $materiaNome === '' ||
+            $materiaId === ''
+        ) {
+            continue;
+        }
+
+        $nota =
+            obterNotaLinhaBoletim(
+                $notas[$indice] ?? [],
+                $avaliacao
+            );
+
+        if ($nota === null) {
+            return;
+        }
+
+        if (
+            $nota < 0 ||
+            $nota > $notaMaxima
+        ) {
+            return;
+        }
+
+        $notasValidas[] =
+            $nota;
+    }
+
+    if (count($notasValidas) === 0) {
+        return;
+    }
+
+    $periodoHash =
+        hashPeriodoBoletim(
+            $periodo
+        );
+
+    $nomeAvaliacao =
+        nomeAvaliacaoBoletim(
+            $avaliacao,
+            $tipoCurso
+        );
+
+    // ==================================
+    // FECHOU TODAS AS NOTAS
+    // +10 estrelas
+    // ==================================
+
+    concederRecompensaBoletim(
+        $codigoUsuario,
+        'boletim_completo',
+        $nomeAvaliacao .
+            ' com todas as notas preenchidas',
+        10,
+        'boletim_completo_' .
+            $periodoHash .
+            '_avaliacao_' .
+            $avaliacao,
+        $recompensaBoletim
+    );
+
+    // ==================================
+    // TODAS AS MATÉRIAS APROVADAS
+    // +15 estrelas
+    // ==================================
+
+    $todasAprovadas =
+        true;
+
+    foreach ($notasValidas as $nota) {
+        if ($nota < $mediaAprovacao) {
+            $todasAprovadas = false;
+            break;
+        }
+    }
+
+    if ($todasAprovadas) {
+        concederRecompensaBoletim(
+            $codigoUsuario,
+            'boletim_aprovado',
+            $nomeAvaliacao .
+                ' aprovado em todas as matérias',
+            15,
+            'boletim_aprovado_' .
+                $periodoHash .
+                '_avaliacao_' .
+                $avaliacao,
+            $recompensaBoletim
+        );
+    }
+
+    // ==================================
+    // DESEMPENHO GERAL
+    // >= 80% = +20
+    // >= 90% = +30
+    // NÃO ACUMULAM ENTRE SI
+    // ==================================
+
+    $limiteOito =
+        $notaMaxima * 0.80;
+
+    $limiteNove =
+        $notaMaxima * 0.90;
+
+    $menorNota =
+        min($notasValidas);
+
+    $estrelasDesempenho =
+        0;
+
+    $descricaoDesempenho =
+        '';
+
+    if ($menorNota >= $limiteNove) {
+        $estrelasDesempenho = 30;
+        $descricaoDesempenho =
+            $nomeAvaliacao .
+            ' excelente: todas as notas foram 90% ou mais';
+    } elseif ($menorNota >= $limiteOito) {
+        $estrelasDesempenho = 20;
+        $descricaoDesempenho =
+            $nomeAvaliacao .
+            ' de destaque: todas as notas foram 80% ou mais';
+    }
+
+    if ($estrelasDesempenho > 0) {
+        /*
+         * Uma única chave para desempenho.
+         * Assim o bônus de 80% e o de 90%
+         * nunca acumulam no mesmo bimestre.
+         */
+        concederRecompensaBoletim(
+            $codigoUsuario,
+            'boletim_destaque',
+            $descricaoDesempenho,
+            $estrelasDesempenho,
+            'boletim_desempenho_' .
+                $periodoHash .
+                '_avaliacao_' .
+                $avaliacao,
+            $recompensaBoletim
+        );
+    }
+}
+
+// ======================================
 // VARIÁVEIS ATUAIS
 // ======================================
 
@@ -913,6 +1308,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $notasRef =&
         $data['periodos'][$periodoAlvo]['notas'];
+
+    // ==================================
+    // CONTROLE DAS RECOMPENSAS DESTE POST
+    // ==================================
+
+    $notasAntes =
+        $notasRef;
+
+    $premiarNotasNestePost =
+        isset(
+            $_POST['salvar_edicoes']
+        );
+
+    $avaliacoesAlteradas = [];
 
     // ==================================
     // 0) SALVAR MATÉRIAS DA TELA
@@ -1036,43 +1445,274 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // ==================================
     // SALVAR NOTAS DA TELA
+    // + PROCESSAR RECOMPENSAS INDIVIDUAIS
     // ==================================
 
     foreach ($_POST as $key => $value) {
         if (
-            preg_match(
+            !preg_match(
                 '/^nota_(\d+)_(\d+)$/',
                 $key,
                 $matches
             )
         ) {
-            $linha =
-                (int)$matches[1];
+            continue;
+        }
 
-            $avaliacao =
-                (int)$matches[2];
+        $linha =
+            (int)$matches[1];
 
-            if (
-                $avaliacao < 1 ||
-                $avaliacao > 4
-            ) {
-                continue;
-            }
+        $avaliacao =
+            (int)$matches[2];
 
-            if (!isset($notasRef[$linha])) {
-                $notasRef[$linha] =
-                    notasVazias();
-            }
+        if (
+            $avaliacao < 1 ||
+            $avaliacao > 4
+        ) {
+            continue;
+        }
 
-            $value =
-                trim(
-                    (string)$value
+        if (!isset($notasRef[$linha])) {
+            $notasRef[$linha] =
+                notasVazias();
+        }
+
+        $notaAnteriorSalva =
+            obterNotaLinhaBoletim(
+                $notasAntes[$linha] ?? [],
+                $avaliacao
+            );
+
+        $value =
+            trim(
+                (string)$value
+            );
+
+        $novaNota =
+            ($value === '')
+                ? null
+                : (float)$value;
+
+        $notasRef[$linha][$avaliacao] =
+            $novaNota;
+
+        // Recompensas só são avaliadas ao
+        // clicar em "Salvar alterações".
+        if (!$premiarNotasNestePost) {
+            continue;
+        }
+
+        $notaMudou =
+            false;
+
+        if (
+            $notaAnteriorSalva === null &&
+            $novaNota !== null
+        ) {
+            $notaMudou = true;
+        } elseif (
+            $notaAnteriorSalva !== null &&
+            $novaNota === null
+        ) {
+            $notaMudou = true;
+        } elseif (
+            $notaAnteriorSalva !== null &&
+            $novaNota !== null &&
+            abs(
+                $notaAnteriorSalva -
+                $novaNota
+            ) > 0.00001
+        ) {
+            $notaMudou = true;
+        }
+
+        if (!$notaMudou) {
+            continue;
+        }
+
+        $avaliacoesAlteradas[$avaliacao] =
+            true;
+
+        // Nota vazia não gera prêmio.
+        if ($novaNota === null) {
+            continue;
+        }
+
+        $notaMaximaAtual =
+            (float)(
+                $data['nota_maxima'] ??
+                10
+            );
+
+        $mediaAprovacaoAtual =
+            (float)(
+                $data['media_aprovacao'] ??
+                6
+            );
+
+        if (
+            $novaNota < 0 ||
+            $novaNota > $notaMaximaAtual
+        ) {
+            continue;
+        }
+
+        $materiaId =
+            trim(
+                (string)(
+                    $materiaIdsRef[$linha] ??
+                    ''
+                )
+            );
+
+        $materiaNome =
+            trim(
+                (string)(
+                    $materiasRef[$linha] ??
+                    'Matéria'
+                )
+            );
+
+        if ($materiaId === '') {
+            continue;
+        }
+
+        $periodoHash =
+            hashPeriodoBoletim(
+                $periodoAlvo
+            );
+
+        $nomeAvaliacao =
+            nomeAvaliacaoBoletim(
+                $avaliacao,
+                $data['tipo_curso'] ?? 'escola'
+            );
+
+        // ==================================
+        // 1) NOTA INDIVIDUAL
+        // 70% = 3
+        // 80% = 5
+        // 90% = 7
+        // 100% = 10
+        // ==================================
+
+        $estrelasNota =
+            calcularEstrelasNota(
+                $novaNota,
+                $notaMaximaAtual
+            );
+
+        if ($estrelasNota > 0) {
+            concederRecompensaBoletim(
+                $codigoUsuario,
+                'nota',
+                'Nota ' .
+                    number_format(
+                        $novaNota,
+                        2,
+                        ',',
+                        '.'
+                    ) .
+                    ' em ' .
+                    $materiaNome .
+                    ' — ' .
+                    $nomeAvaliacao,
+                $estrelasNota,
+                'nota_' .
+                    $materiaId .
+                    '_' .
+                    $periodoHash .
+                    '_avaliacao_' .
+                    $avaliacao,
+                $recompensaBoletim
+            );
+        }
+
+        // ==================================
+        // 2) EVOLUÇÃO DA NOTA
+        // +5 estrelas
+        // ==================================
+
+        if ($avaliacao >= 2) {
+            $notaAnteriorBimestre =
+                obterNotaLinhaBoletim(
+                    $notasRef[$linha] ?? [],
+                    $avaliacao - 1
                 );
 
-            $notasRef[$linha][$avaliacao] =
-                ($value === '')
-                    ? null
-                    : (float)$value;
+            if (
+                $notaAnteriorBimestre !== null &&
+                $novaNota > $notaAnteriorBimestre
+            ) {
+                concederRecompensaBoletim(
+                    $codigoUsuario,
+                    'evolucao_nota',
+                    'Evolução em ' .
+                        $materiaNome .
+                        ': nota maior que na avaliação anterior',
+                    5,
+                    'evolucao_nota_' .
+                        $materiaId .
+                        '_' .
+                        $periodoHash .
+                        '_avaliacao_' .
+                        $avaliacao,
+                    $recompensaBoletim
+                );
+            }
+
+            // ==================================
+            // 3) RECUPEROU UMA MATÉRIA
+            // +8 estrelas
+            // ==================================
+
+            if (
+                $notaAnteriorBimestre !== null &&
+                $notaAnteriorBimestre < $mediaAprovacaoAtual &&
+                $novaNota >= $mediaAprovacaoAtual
+            ) {
+                concederRecompensaBoletim(
+                    $codigoUsuario,
+                    'recuperacao_nota',
+                    'Recuperação em ' .
+                        $materiaNome .
+                        ': voltou para a média de aprovação',
+                    8,
+                    'recuperacao_nota_' .
+                        $materiaId .
+                        '_' .
+                        $periodoHash .
+                        '_avaliacao_' .
+                        $avaliacao,
+                    $recompensaBoletim
+                );
+            }
+        }
+    }
+
+    // ==================================
+    // 4 A 7) BÔNUS GERAIS DO BIMESTRE
+    // ==================================
+
+    if ($premiarNotasNestePost) {
+        foreach (
+            array_keys(
+                $avaliacoesAlteradas
+            )
+            as $avaliacaoAlterada
+        ) {
+            processarBonusBimestreBoletim(
+                $codigoUsuario,
+                $periodoAlvo,
+                $avaliacaoAlterada,
+                $materiasRef,
+                $materiaIdsRef,
+                $notasRef,
+                (float)($data['nota_maxima'] ?? 10),
+                (float)($data['media_aprovacao'] ?? 6),
+                $data['tipo_curso'] ?? 'escola',
+                $recompensaBoletim
+            );
         }
     }
 
@@ -1376,6 +2016,7 @@ $current =
   <link rel="stylesheet" href="boletim.css">
   <link rel="stylesheet" href="../m.escuro/dark_basee.css">
   <link rel="stylesheet" href="dark_notas.css">
+  <link rel="stylesheet" href="../estrelas/modal_estrelas.css?v=<?= time() ?>">
 
   <!-- ACESSIBILIDADE GLOBAL -->
   <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
@@ -1897,6 +2538,43 @@ $current =
     &copy; 2025 FOAG. Todos os direitos reservados.
   </footer>
 
-  <script src="notas.js"></script>
+  <script src="../estrelas/modal_estrelas.js?v=<?= time() ?>"></script>
+  <script src="notas.js?v=<?= time() ?>"></script>
+
+  <?php if (($recompensaBoletim['estrelas'] ?? 0) > 0): ?>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const estrelas =
+            <?= json_encode((int)$recompensaBoletim['estrelas']); ?>;
+
+        const motivos =
+            <?= json_encode(
+                $recompensaBoletim['motivos'] ?? [],
+                JSON_UNESCAPED_UNICODE |
+                JSON_UNESCAPED_SLASHES
+            ); ?>;
+
+        let mensagem =
+            'Mandou bem no Boletim! Continue assim! :)';
+
+        if (Array.isArray(motivos) && motivos.length === 1) {
+            mensagem = motivos[0] + '! :)';
+        } else if (Array.isArray(motivos) && motivos.length > 1) {
+            mensagem =
+                `Você conquistou ${motivos.length} recompensas no Boletim! :)`;
+        }
+
+        if (
+            estrelas > 0 &&
+            typeof window.mostrarModalEstrelas === 'function'
+        ) {
+            window.mostrarModalEstrelas(
+                estrelas,
+                mensagem
+            );
+        }
+    });
+  </script>
+  <?php endif; ?>
 </body>
 </html>

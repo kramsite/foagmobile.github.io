@@ -1,12 +1,10 @@
 {
     "notas": [],
-    "tarefas": [
+    "tarefas": [],
+    "nao_esquecer": [
         {
-            "texto": "Sou lindo",
-            "data": "2026-08-31",
-            "origem": "calendario",
-            "concluida": false
+            "texto": "prova de quimica",
+            "data": "2026-08-31"
         }
-    ],
-    "nao_esquecer": []
+    ]
 }

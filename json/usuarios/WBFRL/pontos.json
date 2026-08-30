@@ -1,5 +1,5 @@
 {
-    "estrelas": 100,
+    "estrelas": 122,
     "historico": [
         {
             "id": "estrela_d63d0474bd6e",
@@ -27,6 +27,33 @@
             "data": "2026-08-25 16:59:34",
             "timestamp": 1787669974,
             "chave": "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
+        },
+        {
+            "id": "estrela_b2ba75c143ac",
+            "tipo": "sequencia_presenca",
+            "descricao": "5 dias seguidos de presença",
+            "estrelas": 7,
+            "data": "2026-08-29 13:46:44",
+            "timestamp": 1788025604,
+            "chave": "sequencia_presenca_2026-08"
+        },
+        {
+            "id": "estrela_47ce01961b70",
+            "tipo": "nota",
+            "descricao": "Nota 10,00 em matematica — 3º Bimestre",
+            "estrelas": 10,
+            "data": "2026-08-29 23:04:32",
+            "timestamp": 1788059072,
+            "chave": "nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
+        },
+        {
+            "id": "estrela_5cbd0b0f2a73",
+            "tipo": "evolucao_nota",
+            "descricao": "Evolução em matematica: nota maior que na avaliação anterior",
+            "estrelas": 5,
+            "data": "2026-08-29 23:04:32",
+            "timestamp": 1788059072,
+            "chave": "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
         }
     ],
     "controle": {
@@ -41,12 +68,17 @@
             "meses_processados": [],
             "sequencia_presenca": {
                 "dias": 0,
-                "ultima_data": null,
-                "marcos_recebidos": []
+                "ultima_data": "2026-08-28",
+                "marcos_recebidos": {
+                    "2026-08": 5
+                }
             }
         },
         "notas": {
-            "recompensas": []
+            "recompensas": [
+                "nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
+                "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
+            ]
         },
         "sequencia_estudo": {
             "dias": 0,
@@ -56,7 +88,10 @@
         "recompensas_recebidas": [
             "cronometro_d49d4859-28ec-4ab7-8f2d-d1be701372ca",
             "cronometro_93afd090-bece-40bd-b495-27c099431fb4",
-            "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b"
+            "cronometro_a3a7e974-a6c7-4a13-ba46-aaa392a5e25b",
+            "sequencia_presenca_2026-08",
+            "nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
+            "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3"
         ]
     }
 }
