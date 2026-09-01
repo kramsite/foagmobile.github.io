@@ -1,6 +1,33 @@
 /* ==================== dark_comunidade.css ==================== */
 /* Estilos específicos para a página Comunidade no modo escuro */
 
+/* ============================================
+   FUNDO DA PÁGINA E CONTEÚDO PRINCIPAL
+   ============================================ */
+
+body.dark-mode {
+    background: var(--dark-bg) !important;
+}
+
+body.dark-mode .container {
+    background: var(--dark-bg) !important;
+}
+
+body.dark-mode .main-content {
+    background: var(--dark-bg) !important;
+}
+
+body.dark-mode .main-content .chat-card {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ============================================
+   CARD PRINCIPAL
+   ============================================ */
+
 body.dark-mode .chat-card {
     background: var(--dark-surface) !important;
     color: var(--dark-text) !important;
@@ -16,6 +43,10 @@ body.dark-mode .chat-header h2 {
     color: var(--dark-text) !important;
 }
 
+body.dark-mode .chat-header h2 i {
+    color: var(--dark-primary-light) !important;
+}
+
 body.dark-mode .chat-header p {
     color: var(--dark-text-muted) !important;
 }
@@ -23,6 +54,60 @@ body.dark-mode .chat-header p {
 body.dark-mode .chat-stats {
     color: var(--dark-text-muted) !important;
 }
+
+body.dark-mode .chat-stats i {
+    color: var(--dark-primary-light) !important;
+}
+
+/* ============================================
+   ABAS
+   ============================================ */
+
+body.dark-mode .abas-container {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .aba-btn {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .aba-btn:hover {
+    color: var(--dark-primary-light) !important;
+    background: var(--dark-bg) !important;
+}
+
+body.dark-mode .aba-btn.ativo {
+    color: var(--dark-primary-light) !important;
+    border-bottom-color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .aba-btn .badge {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .aba-btn.ativo .badge {
+    background: rgba(96, 165, 250, 0.15) !important;
+    color: var(--dark-primary-light) !important;
+}
+
+/* ============================================
+   AVISO DE CENSURA
+   ============================================ */
+
+body.dark-mode .censure-notice {
+    background: rgba(245, 158, 11, 0.1) !important;
+    border-color: rgba(245, 158, 11, 0.3) !important;
+    color: #fbbf24 !important;
+}
+
+body.dark-mode .censure-notice i {
+    color: #fbbf24 !important;
+}
+
+/* ============================================
+   FORMULÁRIO DE PERGUNTA
+   ============================================ */
 
 body.dark-mode .pergunta-form {
     background: var(--dark-bg) !important;
@@ -56,15 +141,98 @@ body.dark-mode .pergunta-form .form-actions select:focus {
 
 body.dark-mode .btn-postar {
     background: var(--dark-primary) !important;
+    box-shadow: 0 3px 8px rgba(59, 130, 246, 0.2) !important;
 }
 
 body.dark-mode .btn-postar:hover {
     background: #2563eb !important;
 }
 
+/* ============================================
+   PREVIEW DE CENSURA
+   ============================================ */
+
+body.dark-mode #censure-preview {
+    background: rgba(220, 38, 38, 0.15) !important;
+    border-color: rgba(220, 38, 38, 0.3) !important;
+    color: #f87171 !important;
+}
+
+body.dark-mode #censure-preview i {
+    color: #f87171 !important;
+}
+
+/* ============================================
+   FILTROS
+   ============================================ */
+
+body.dark-mode .filtros-container {
+    background: var(--dark-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .filtros-container .busca-wrapper input {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .filtros-container .busca-wrapper input:focus {
+    border-color: var(--dark-primary-light) !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+}
+
+body.dark-mode .filtros-container .busca-wrapper input::placeholder {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .filtros-container .busca-wrapper button {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .filtros-container .busca-wrapper button:hover {
+    background: #2563eb !important;
+}
+
+body.dark-mode .filtros-container .filtro-materia label {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .filtros-container .filtro-materia select {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .filtros-container .filtro-materia select:focus {
+    border-color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .btn-limpar-filtros {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .btn-limpar-filtros:hover {
+    background: #475569 !important;
+}
+
+/* ============================================
+   LISTA DE PERGUNTAS
+   ============================================ */
+
 body.dark-mode .pergunta-item {
     background: var(--dark-surface) !important;
     border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-item:hover {
+    border-color: var(--dark-primary) !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-autor .avatar {
+    background: var(--dark-primary) !important;
 }
 
 body.dark-mode .pergunta-item .pergunta-autor .nome {
@@ -75,16 +243,27 @@ body.dark-mode .pergunta-item .pergunta-autor .data {
     color: var(--dark-text-muted) !important;
 }
 
+body.dark-mode .pergunta-item .pergunta-autor .usuario-tag {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
 body.dark-mode .pergunta-item .pergunta-materia {
     background: var(--dark-border) !important;
     color: var(--dark-text-muted) !important;
+    border-color: rgba(255, 255, 255, 0.05) !important;
 }
 
 body.dark-mode .pergunta-item .pergunta-texto {
     color: var(--dark-text) !important;
 }
 
-body.dark-mode .pergunta-item .pergunta-acoes {
+body.dark-mode .pergunta-item .pergunta-texto .censurado {
+    background: rgba(220, 38, 38, 0.15) !important;
+    color: #f87171 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-rodape {
     border-color: var(--dark-border) !important;
 }
 
@@ -94,8 +273,63 @@ body.dark-mode .pergunta-item .pergunta-acoes button {
 
 body.dark-mode .pergunta-item .pergunta-acoes button:hover {
     background: var(--dark-border) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-curtir {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-curtir:hover {
+    background: rgba(220, 38, 38, 0.15) !important;
+    color: #f87171 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-curtir.curtido {
+    color: #f87171 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-curtir.curtido i {
+    color: #f87171 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-salvar {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-salvar:hover {
+    background: rgba(245, 158, 11, 0.15) !important;
+    color: #fbbf24 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-salvar.salvo {
+    color: #fbbf24 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-salvar.salvo i {
+    color: #fbbf24 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-ver-respostas {
     color: var(--dark-primary-light) !important;
 }
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-ver-respostas:hover {
+    background: rgba(96, 165, 250, 0.15) !important;
+    color: var(--dark-primary-light) !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-excluir {
+    color: #f87171 !important;
+}
+
+body.dark-mode .pergunta-item .pergunta-acoes .btn-excluir:hover {
+    background: rgba(220, 38, 38, 0.15) !important;
+    color: #f87171 !important;
+}
+
+/* ============================================
+   RESPOSTAS
+   ============================================ */
 
 body.dark-mode .respostas-container {
     border-color: var(--dark-border) !important;
@@ -105,11 +339,15 @@ body.dark-mode .resposta-item {
     border-color: var(--dark-border) !important;
 }
 
-body.dark-mode .resposta-item .resposta-autor .nome {
+body.dark-mode .resposta-item .resposta-header .avatar-pequeno {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .resposta-item .resposta-header .nome {
     color: var(--dark-text) !important;
 }
 
-body.dark-mode .resposta-item .resposta-autor .data {
+body.dark-mode .resposta-item .resposta-header .data {
     color: var(--dark-text-muted) !important;
 }
 
@@ -117,67 +355,75 @@ body.dark-mode .resposta-item .resposta-texto {
     color: #cbd5e1 !important;
 }
 
-body.dark-mode .resposta-item .resposta-acoes button {
-    color: var(--dark-text-muted) !important;
-}
-
-body.dark-mode .resposta-item .resposta-acoes button:hover {
+body.dark-mode .resposta-item .resposta-texto .censurado {
+    background: rgba(220, 38, 38, 0.15) !important;
     color: #f87171 !important;
 }
 
-body.dark-mode .resposta-form textarea {
-    background: var(--dark-bg) !important;
-    color: var(--dark-text) !important;
-    border-color: var(--dark-border) !important;
-}
-
-body.dark-mode .resposta-form textarea:focus {
-    border-color: var(--dark-primary-light) !important;
-}
-
-body.dark-mode .resposta-form .form-actions .btn-enviar-resposta {
-    background: var(--dark-primary) !important;
-    color: #ffffff !important;
-}
-
-body.dark-mode .resposta-form .form-actions .btn-enviar-resposta:hover {
-    background: #2563eb !important;
-}
-
-body.dark-mode .resposta-form .form-actions .btn-cancelar-resposta {
-    background: var(--dark-border) !important;
+body.dark-mode .sem-respostas {
     color: var(--dark-text-muted) !important;
 }
 
-body.dark-mode .resposta-form .form-actions .btn-cancelar-resposta:hover {
-    background: #475569 !important;
-}
+/* ============================================
+   SEM RESULTADOS
+   ============================================ */
 
-body.dark-mode .sem-perguntas i {
+body.dark-mode .sem-resultados i {
     color: var(--dark-border) !important;
 }
 
-body.dark-mode .sem-perguntas h3 {
+body.dark-mode .sem-resultados h3 {
     color: var(--dark-text-muted) !important;
 }
 
-body.dark-mode .sem-perguntas p {
+body.dark-mode .sem-resultados p {
     color: var(--dark-text-muted) !important;
 }
 
-/* Modo escuro - Modal */
+/* ============================================
+   MODAIS
+   ============================================ */
+
 body.dark-mode .modal-content {
     background: var(--dark-surface) !important;
     color: var(--dark-text) !important;
     border: 1px solid var(--dark-border) !important;
 }
 
+body.dark-mode .modal-content h3 {
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode .modal-content h4,
+body.dark-mode .modal-content p {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode #cancel-logout {
+    background: var(--dark-border) !important;
+    color: var(--dark-text) !important;
+}
+
+body.dark-mode #cancel-logout:hover {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode #confirm-logout {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode #confirm-logout:hover {
+    background: #2563eb !important;
+}
+
+/* Modal de exclusão */
+
 body.dark-mode .modal-excluir .modal-content {
-    border-top: 5px solid #ff5c5c !important;
+    border-top-color: #f87171 !important;
 }
 
 body.dark-mode .modal-excluir h3 {
-    color: #ff5c5c !important;
+    color: #f87171 !important;
 }
 
 body.dark-mode .modal-excluir p {
@@ -193,14 +439,21 @@ body.dark-mode .modal-excluir .btn-cancelar:hover {
     background: var(--dark-primary) !important;
 }
 
-body.dark-mode #cancel-logout {
-    background: var(--dark-border) !important;
-    color: var(--dark-text) !important;
+body.dark-mode .btn-excluir-confirmar {
+    background: #dc2626 !important;
 }
 
-body.dark-mode #cancel-logout:hover {
-    background: var(--dark-primary) !important;
+body.dark-mode .btn-excluir-confirmar:hover {
+    background: #b91c1c !important;
 }
+
+body.dark-mode .excluir-icon {
+    color: #f87171 !important;
+}
+
+/* ============================================
+   HEADER ICONS
+   ============================================ */
 
 body.dark-mode .header-icons i {
     color: #ffffff !important;
@@ -208,4 +461,264 @@ body.dark-mode .header-icons i {
 
 body.dark-mode .header-icons i:hover {
     color: #006cc5 !important;
+}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+
+body.dark-mode footer {
+    background: var(--dark-bg) !important;
+    color: var(--dark-text-muted) !important;
+    border-top: 1px solid var(--dark-border) !important;
+}
+
+/* ============================================
+   SCROLLBAR PERSONALIZADA
+   ============================================ */
+
+body.dark-mode ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+body.dark-mode ::-webkit-scrollbar-track {
+    background: var(--dark-bg);
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb {
+    background: var(--dark-border);
+    border-radius: 4px;
+}
+
+body.dark-mode ::-webkit-scrollbar-thumb:hover {
+    background: var(--dark-text-muted);
+}
+
+/* ============================================
+   CORREÇÃO PARA O CONTEÚDO DENTRO DO CARD
+   ============================================ */
+
+body.dark-mode .chat-card .perguntas-lista {
+    background: transparent !important;
+}
+
+body.dark-mode .chat-card .aba-conteudo {
+    background: transparent !important;
+}
+
+body.dark-mode .chat-card .aba-conteudo.ativo {
+    background: transparent !important;
+}
+
+/* ============================================
+   CORREÇÃO PARA O FUNDO DAS ABAS
+   ============================================ */
+
+body.dark-mode #aba-minhas {
+    background: transparent !important;
+}
+
+body.dark-mode #aba-explorar {
+    background: transparent !important;
+}
+
+/* ============================================
+   ACESSIBILIDADE - ALTO CONTRASTE NO MODO ESCURO
+   ============================================ */
+
+body.dark-mode.alto-contraste .chat-card {
+    background: #0a0a0a !important;
+    border-color: #ffffff !important;
+}
+
+body.dark-mode.alto-contraste .pergunta-item {
+    background: #1a1a1a !important;
+    border-color: #ffffff !important;
+}
+
+body.dark-mode.alto-contraste .pergunta-item .pergunta-texto {
+    color: #ffffff !important;
+}
+
+body.dark-mode.alto-contraste .pergunta-item .pergunta-autor .nome {
+    color: #ffffff !important;
+}
+
+body.dark-mode.alto-contraste .aba-btn.ativo {
+    color: #ffff00 !important;
+    border-bottom-color: #ffff00 !important;
+}
+
+body.dark-mode.alto-contraste .btn-postar {
+    background: #0066cc !important;
+}
+
+body.dark-mode.alto-contraste .btn-postar:hover {
+    background: #0055aa !important;
+}
+
+body.dark-mode.alto-contraste .btn-curtir.curtido {
+    color: #ff6666 !important;
+}
+
+body.dark-mode.alto-contraste .btn-salvar.salvo {
+    color: #ffcc00 !important;
+}
+
+/* ============================================
+   ACESSIBILIDADE - DESTACAR LINKS
+   ============================================ */
+
+body.dark-mode.destacar-links a {
+    color: #60a5fa !important;
+    text-decoration: underline !important;
+    font-weight: bold !important;
+    background: rgba(96, 165, 250, 0.1) !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+}
+
+body.dark-mode.destacar-links a:hover {
+    background: rgba(96, 165, 250, 0.2) !important;
+}
+
+/* ============================================
+   TAMANHO DA FONTE - PEQUENA
+   ============================================ */
+
+body.fonte-pequena .chat-card {
+    font-size: 0.85rem !important;
+}
+
+body.fonte-pequena .chat-header h2 {
+    font-size: 1.2rem !important;
+}
+
+body.fonte-pequena .pergunta-item .pergunta-texto {
+    font-size: 0.85rem !important;
+}
+
+body.fonte-pequena .aba-btn {
+    font-size: 0.8rem !important;
+}
+
+/* ============================================
+   TAMANHO DA FONTE - GRANDE
+   ============================================ */
+
+body.fonte-grande .chat-card {
+    font-size: 1.15rem !important;
+}
+
+body.fonte-grande .chat-header h2 {
+    font-size: 1.6rem !important;
+}
+
+body.fonte-grande .pergunta-item .pergunta-texto {
+    font-size: 1.15rem !important;
+}
+
+body.fonte-grande .aba-btn {
+    font-size: 1rem !important;
+}
+
+body.fonte-grande .pergunta-item .pergunta-autor .nome {
+    font-size: 1.1rem !important;
+}
+
+body.fonte-grande .pergunta-item .pergunta-acoes button {
+    font-size: 0.95rem !important;
+}
+
+/* =====================================================
+   MODO ESCURO - RESPOSTAS
+===================================================== */
+
+body.dark-mode .resposta-form {
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-form-wrapper {
+    background: var(--dark-bg) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-form textarea {
+    background: var(--dark-surface) !important;
+    color: var(--dark-text) !important;
+    border-color: var(--dark-border) !important;
+}
+
+body.dark-mode .resposta-form textarea:focus {
+    border-color: var(--dark-primary-light) !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+}
+
+body.dark-mode .resposta-form textarea::placeholder {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .resposta-censure-preview {
+    background: rgba(220, 38, 38, 0.15) !important;
+    border-color: rgba(220, 38, 38, 0.3) !important;
+    color: #f87171 !important;
+}
+
+body.dark-mode .resposta-censure-preview i {
+    color: #f87171 !important;
+}
+
+body.dark-mode .btn-enviar-resposta {
+    background: var(--dark-primary) !important;
+}
+
+body.dark-mode .btn-enviar-resposta:hover {
+    background: #2563eb !important;
+}
+
+body.dark-mode .btn-cancelar-resposta {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .btn-cancelar-resposta:hover {
+    background: #475569 !important;
+}
+
+body.dark-mode .usuario-tag-resposta {
+    background: var(--dark-border) !important;
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .btn-excluir-resposta {
+    color: var(--dark-text-muted) !important;
+}
+
+body.dark-mode .btn-excluir-resposta:hover {
+    background: rgba(220, 38, 38, 0.15) !important;
+    color: #f87171 !important;
+}
+
+/* =====================================================
+   RESPONSIVIDADE
+===================================================== */
+
+@media (max-width: 520px) {
+    .resposta-buttons {
+        flex-direction: column;
+    }
+
+    .resposta-buttons button {
+        width: 100%;
+    }
+
+    .resposta-form-wrapper {
+        padding: 10px;
+    }
+
+    .resposta-form textarea {
+        min-height: 50px;
+        font-size: 12px;
+    }
 }

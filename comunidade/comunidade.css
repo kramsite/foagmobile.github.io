@@ -1232,3 +1232,138 @@ footer {
         width: 100%;
     }
 }
+
+/* =====================================================
+   RESPOSTAS - FORMULÁRIO
+===================================================== */
+
+.resposta-form {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #edf1f5;
+    display: none;
+}
+
+.resposta-form.visivel {
+    display: block;
+}
+
+.resposta-form-wrapper {
+    background: #f8fafc;
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid #e7ebf0;
+}
+
+.resposta-form textarea {
+    width: 100%;
+    min-height: 60px;
+    padding: 10px 12px;
+    background: #ffffff;
+    color: #232323;
+    border: 1px solid #d7dde5;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    font-family: 'Poppins', sans-serif;
+}
+
+.resposta-form textarea:focus {
+    border-color: #38a5ff;
+    box-shadow: 0 0 0 3px rgba(56, 165, 255, 0.12);
+}
+
+.resposta-form textarea::placeholder {
+    color: #9aa4b2;
+}
+
+.resposta-form-actions {
+    margin-top: 8px;
+}
+
+.resposta-censure-preview {
+    display: none;
+    padding: 6px 10px;
+    background: #fff2f2;
+    border: 1px solid #ffd4d4;
+    border-radius: 6px;
+    color: #d93f3f;
+    font-size: 11px;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 8px;
+}
+
+.resposta-censure-preview i {
+    color: #d93f3f;
+}
+
+.resposta-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.resposta-buttons button {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.btn-enviar-resposta {
+    background: #38a5ff;
+    color: #ffffff;
+}
+
+.btn-enviar-resposta:hover {
+    background: #168fe8;
+    transform: translateY(-1px);
+}
+
+.btn-cancelar-resposta {
+    background: #e9edf2;
+    color: #4b5563;
+}
+
+.btn-cancelar-resposta:hover {
+    background: #dce2e8;
+}
+
+/* Tag "Você" nas respostas */
+.usuario-tag-resposta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 5px;
+    padding: 1px 6px;
+    background: #eef6fc;
+    color: #5793be;
+    border-radius: 20px;
+    font-size: 8px;
+    font-weight: 500;
+}
+
+/* Botão excluir resposta */
+.btn-excluir-resposta {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: color 0.2s ease, background 0.2s ease;
+    margin-left: auto;
+}
+
+.btn-excluir-resposta:hover {
+    background: #fef2f2;
+    color: #ef4444;
+}

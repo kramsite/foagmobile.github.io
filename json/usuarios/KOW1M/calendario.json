@@ -1,1 +1,13 @@
-[]
+{
+    "dias": [],
+    "metas": [],
+    "configuracoes": {
+        "2026": {
+            "meta_anual": 100,
+            "inicio_ano_letivo": "2011-07-11",
+            "fim_ano_letivo": "",
+            "inicio_ferias_meio": "2001-01-01",
+            "fim_ferias_meio": "2011-07-11"
+        }
+    }
+}

@@ -355,22 +355,28 @@ function isSalvo($perguntaId, $interacoes) {
 
     <link rel="stylesheet" href="comunidade.css">
     <link rel="stylesheet" href="../m.escuro/dark_basee.css">
-    <link rel="stylesheet" href="dark_comunidade.css">
+    <link rel="stylesheet" href="dark_comu.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- ACESSIBILIDADE GLOBAL -->
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-    <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
-
+    <!-- ======================================
+         MODO ESCURO GLOBAL
+    ======================================= -->
     <script src="../m.escuro/dark-mode.js"></script>
 
-        <?php include '../includes/header.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+    <!-- ======================================
+         APARÊNCIA GLOBAL (TAMANHO DA FONTE)
+    ======================================= -->
+    <script src="../configuracoes/aparencia.js?v=1"></script>
+
+    <!-- ======================================
+         ACESSIBILIDADE GLOBAL
+    ======================================= -->
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
+    <script src="../acessibilidade/acessibilidade.js?v=13" defer></script>
 
     <script>
         window.CHAT_DATA = <?= json_encode(
@@ -397,10 +403,7 @@ function isSalvo($perguntaId, $interacoes) {
         // Palavras proibidas para censura no front-end
         window.PALAVRAS_PROIBIDAS = <?= json_encode($palavrasProibidas, JSON_UNESCAPED_UNICODE); ?>;
     </script>
-
-    
 </head>
-
 <body>
 
     <!-- ======================================

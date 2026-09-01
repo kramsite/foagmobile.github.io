@@ -176,13 +176,8 @@ $current = basename($_SERVER['PHP_SELF']);
          APARÊNCIA
     =========================================== -->
 
-    <?php include '../../configuracoes/geral.php'; ?>
 
-    <script src="<?= get_aparencia_path() ?>"></script>
 
-    <script
-        src="../../configuracoes/aparencia.js?v=1"
-    ></script>
 
 
     <script
