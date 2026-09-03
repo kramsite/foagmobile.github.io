@@ -1035,7 +1035,7 @@ body.dark-mode .total-estrelas .icone-item i {
 /* Seção de insígnias dentro do card */
 .insignias-section {
     width: 100%;
-    overflow: hidden; /* Evita que o conteúdo saia */
+    overflow: hidden;
 }
 
 /* Cabeçalho das insígnias */
@@ -1082,7 +1082,7 @@ body.dark-mode .total-estrelas .icone-item i {
     white-space: nowrap;
 }
 
-/* Grid das insígnias - com overflow controlado */
+/* Grid geral das insígnias */
 .insignias-grid {
     width: 100%;
     overflow: hidden;
@@ -1126,7 +1126,7 @@ body.dark-mode .total-estrelas .icone-item i {
 
 .insignias-grid-sub {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
     gap: 12px;
     width: 100%;
     overflow: hidden;
@@ -1145,7 +1145,7 @@ body.dark-mode .total-estrelas .icone-item i {
     background: #fbfcfd;
     transition: all 0.3s ease;
     cursor: default;
-    min-width: 0; /* Evita overflow */
+    min-width: 0;
     max-width: 100%;
     overflow: hidden;
 }
@@ -1296,7 +1296,7 @@ body.dark-mode .sem-insignias p {
 }
 
 /* ===========================================
-   RESPONSIVO
+   RESPONSIVO - INSÍGNIAS
 ============================================ */
 
 @media (max-width: 550px) {
@@ -1310,7 +1310,7 @@ body.dark-mode .sem-insignias p {
     }
     
     .insignias-grid-sub {
-        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
         gap: 10px;
     }
     
@@ -1322,67 +1322,5 @@ body.dark-mode .sem-insignias p {
     
     .insignia-item .insignia-nome {
         font-size: 10px;
-    }
-}
-/* ===========================================
-   INSÍGNIAS - GRUPOS POR CATEGORIA
-============================================ */
-
-.insignia-categoria-grupo {
-    margin-bottom: 16px;
-}
-
-.insignia-categoria-grupo:last-child {
-    margin-bottom: 0;
-}
-
-.insignia-categoria-titulo {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--texto);
-}
-
-.insignia-categoria-titulo i {
-    color: var(--azul-foag);
-}
-
-.categoria-contador {
-    margin-left: auto;
-    padding: 1px 10px;
-    border-radius: 12px;
-    background: var(--azul-claro);
-    color: var(--azul-escuro);
-    font-size: 11px;
-    font-weight: 500;
-}
-
-.insignias-grid-sub {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-    gap: 12px;
-}
-
-/* Dark mode para categorias */
-body.dark-mode .insignia-categoria-titulo {
-    color: #e2e8f0;
-}
-
-body.dark-mode .insignia-categoria-titulo i {
-    color: #669ada;
-}
-
-body.dark-mode .categoria-contador {
-    background: #0f172a;
-    color: #669ada;
-}
-
-/* Responsivo */
-@media (max-width: 550px) {
-    .insignias-grid-sub {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
 }

@@ -1,0 +1,44 @@
+{
+    "estrelas": 600,
+    "historico": [
+        {
+            "id": "estrela_fc771971c9f0",
+            "tipo": "sequencia_presenca",
+            "descricao": "25 dias seguidos de presença",
+            "estrelas": 40,
+            "data": "2026-09-03 08:54:24",
+            "timestamp": 1788440064,
+            "chave": "sequencia_presenca_2026-09"
+        }
+    ],
+    "controle": {
+        "pomodoro": {
+            "bonus_diarios": []
+        },
+        "flashcards": {
+            "ultimo_dia": null,
+            "estrelas_dia": 0
+        },
+        "frequencia": {
+            "meses_processados": [],
+            "sequencia_presenca": {
+                "dias": 150,
+                "ultima_data": "2026-09-03",
+                "marcos_recebidos": {
+                    "2026-09": 25
+                }
+            }
+        },
+        "notas": {
+            "recompensas": []
+        },
+        "sequencia_estudo": {
+            "dias": 0,
+            "ultima_data_estudo": null,
+            "marcos_recebidos": []
+        },
+        "recompensas_recebidas": [
+            "sequencia_presenca_2026-09"
+        ]
+    }
+}
