@@ -1,178 +1,95 @@
 /* =========================================================
    FOAG — LIBRAS GLOBAL
-   Versão 17
+   Versão 19
 
-   COMPORTAMENTO:
-   1. O switch "Libras" da página Configurações sempre abre desligado.
-   2. Marcar ou desmarcar o switch NÃO altera nada imediatamente.
-   3. Somente depois de clicar em SALVAR a preferência é gravada.
-   4. Depois de salva como ativa, o VLibras aparece em qualquer
-      página do FOAG que carregue este arquivo.
+   REGRA:
+   - O switch das Configurações sozinho NÃO ativa/desativa.
+   - A preferência só é gravada depois de clicar em SALVAR.
+   - Depois do SALVAR, a página recarrega.
+   - Este arquivo lê a preferência salva e carrega o VLibras.
+   - Todas as páginas do FOAG que carregarem este arquivo
+     respeitam a mesma preferência.
 ========================================================= */
 
 (function () {
     'use strict';
 
-    const CHAVE_CONFIG = 'foag_acessibilidade';
-    const ID_SCRIPT_VLIBRAS = 'foag-vlibras-plugin';
+    const CHAVE = 'foag_libras_v19';
+    const ID_SCRIPT = 'foag-vlibras-oficial';
 
-    /* =====================================================
-       LER ESTADO JÁ SALVO
-       Não altera nada.
-    ===================================================== */
-    function lerEstadoSalvo() {
-        try {
-            const salvo = localStorage.getItem(CHAVE_CONFIG);
-
-            if (!salvo) {
-                return false;
-            }
-
-            const dados = JSON.parse(salvo);
-
-            return dados && dados.libras === true;
-
-        } catch (erro) {
-            console.error(
-                'FOAG: erro ao ler configuração de Libras:',
-                erro
-            );
-
-            return false;
-        }
+    function librasAtiva() {
+        return localStorage.getItem(CHAVE) === '1';
     }
 
-    /* =====================================================
-       GRAVAR ESTADO
-       Chamada somente após o botão SALVAR da Configurações.
-    ===================================================== */
-    function gravarEstado(ativo) {
-        localStorage.setItem(
-            CHAVE_CONFIG,
-            JSON.stringify({
-                libras: Boolean(ativo)
-            })
-        );
-    }
-
-    /* =====================================================
-       ESCONDER RESTOS DE UMA INTEGRAÇÃO ANTIGA
-    ===================================================== */
-    function esconderVLibrasExistente() {
-        document.querySelectorAll('[vw]').forEach(function (elemento) {
-            elemento.style.display = 'none';
-        });
-    }
-
-    /* =====================================================
-       MOSTRAR ELEMENTOS JÁ CRIADOS
-    ===================================================== */
-    function mostrarVLibrasExistente() {
-        document.querySelectorAll('[vw]').forEach(function (elemento) {
-            elemento.style.display = '';
-        });
-    }
-
-    /* =====================================================
-       CARREGAR VLIBRAS
-    ===================================================== */
     function carregarVLibras() {
-        if (!lerEstadoSalvo()) {
-            esconderVLibrasExistente();
+
+        if (!librasAtiva()) {
             return;
         }
 
-        const scriptExistente =
-            document.getElementById(ID_SCRIPT_VLIBRAS) ||
+        /*
+         * Evita carregar mais de uma vez.
+         */
+        if (
+            document.getElementById(ID_SCRIPT) ||
             document.querySelector(
-                'script[src*="vlibras.gov.br/app/vlibras-plugin.js"]'
-            );
-
-        if (scriptExistente) {
-            mostrarVLibrasExistente();
+                'script[src="https://vlibras.gov.br/app/vlibras-plugin.js"]'
+            )
+        ) {
             return;
         }
 
+        /*
+         * VLibras Widget 7:
+         * segundo a documentação oficial, apenas carregar
+         * este script já inicializa o widget automaticamente.
+         */
         const script = document.createElement('script');
 
-        script.id = ID_SCRIPT_VLIBRAS;
-        script.src = 'https://vlibras.gov.br/app/vlibras-plugin.js';
+        script.id = ID_SCRIPT;
+        script.src =
+            'https://vlibras.gov.br/app/vlibras-plugin.js';
+
         script.async = true;
 
         script.onload = function () {
-            console.log('FOAG: VLibras carregado.');
+            console.log('FOAG: VLibras carregado com sucesso.');
         };
 
         script.onerror = function () {
             console.error(
-                'FOAG: não foi possível carregar o VLibras.'
+                'FOAG: erro ao carregar o VLibras oficial.'
             );
         };
 
         document.body.appendChild(script);
     }
 
-    /* =====================================================
-       API PARA CONFIGURACOES.PHP
-    ===================================================== */
-    window.FOAGLibras = {
-
-        estaAtiva: function () {
-            return lerEstadoSalvo();
-        },
-
-        /*
-         * configuracoes.php chama esta função SOMENTE
-         * quando o POST de Salvar retorna success=true.
-         */
-        salvar: function (ativo) {
-            const estavaAtiva = lerEstadoSalvo();
-            const novoEstado = Boolean(ativo);
-
-            gravarEstado(novoEstado);
-
-            // ATIVAR
-            if (novoEstado) {
-                carregarVLibras();
-                return;
-            }
-
-            // DESATIVAR
-            if (estavaAtiva && !novoEstado) {
-                /*
-                 * Recarrega para remover totalmente o widget
-                 * criado pelo script oficial.
-                 */
-                window.location.reload();
-                return;
-            }
-
-            esconderVLibrasExistente();
-        }
-    };
-
-    /* =====================================================
-       INICIALIZAÇÃO EM TODAS AS PÁGINAS
-
-       Se o usuário já salvou Libras=true anteriormente,
-       carrega automaticamente o VLibras.
-
-       IMPORTANTE:
-       isso NÃO mexe no switch da página Configurações.
-       O switch é controlado pela própria configuracoes.php
-       e começa sempre desligado.
-    ===================================================== */
     function iniciar() {
-        if (lerEstadoSalvo()) {
+
+        if (librasAtiva()) {
             carregarVLibras();
-        } else {
-            esconderVLibrasExistente();
         }
     }
 
+    /*
+     * Disponível para diagnóstico.
+     * NÃO altera o estado salvo.
+     */
+    window.FOAGLibras = {
+        estaAtiva: librasAtiva
+    };
+
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', iniciar);
+
+        document.addEventListener(
+            'DOMContentLoaded',
+            iniciar,
+            { once: true }
+        );
+
     } else {
+
         iniciar();
     }
 

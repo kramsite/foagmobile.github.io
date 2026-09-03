@@ -936,24 +936,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                     }
 
                     // =============================================
-                    // LIBRAS — SOMENTE DEPOIS DE CLICAR EM SALVAR
+                    // LIBRAS — SÓ APLICA DEPOIS DE CLICAR EM SALVAR
                     // =============================================
                     const campoLibras =
-                        document.querySelector('[name="libras"]');
+                        document.getElementById('config-libras');
 
                     const librasAtiva =
                         campoLibras ? campoLibras.checked : false;
 
-                    if (
-                        window.FOAGLibras &&
-                        typeof window.FOAGLibras.salvar === 'function'
-                    ) {
-                        window.FOAGLibras.salvar(librasAtiva);
-                    } else {
-                        console.error(
-                            'FOAG: acessibilidade.js não foi carregado.'
-                        );
-                    }
+                    /*
+                     * Chave NOVA para não herdar testes das versões
+                     * anteriores que estavam causando o comportamento
+                     * mostrado no vídeo.
+                     */
+                    localStorage.setItem(
+                        'foag_libras_v19',
+                        librasAtiva ? '1' : '0'
+                    );
+
+                    mostrarToast(
+                        librasAtiva
+                            ? '✅ Configurações salvas. Libras ativada!'
+                            : '✅ Configurações salvas. Libras desativada!',
+                        'sucesso'
+                    );
+
+                    /*
+                     * O VLibras NÃO é ativado pelo clique no switch.
+                     * Ele só entra em ação depois do SALVAR, quando
+                     * recarregamos a página e acessibilidade.js lê
+                     * a preferência recém-salva.
+                     */
+                    setTimeout(function () {
+                        window.location.reload();
+                    }, 500);
+
+                    return;
 
                     // ==================================================
 
@@ -1466,20 +1484,27 @@ mostrarToast('✅ ' + data.message, 'sucesso');
         });
 
         // ============================================
-        // 13. LIBRAS — SWITCH SEMPRE DESLIGADO AO ABRIR
+        // 13. LIBRAS — SINCRONIZAR O SWITCH COM O QUE
+        //     FOI SALVO ANTERIORMENTE
         //
-        // O estado salvo do site NÃO é copiado para o botão.
-        // Marcar/desmarcar aqui NÃO faz nada sozinho.
-        // A alteração só acontece depois de clicar em SALVAR.
+        // IMPORTANTE:
+        // - sem configuração salva: começa DESLIGADO;
+        // - marcou, mas não salvou: não muda o site;
+        // - marcou e salvou: no próximo carregamento
+        //   aparece LIGADO;
+        // - desmarcou e salvou: aparece DESLIGADO.
         // ============================================
         const campoLibrasConfig =
-            document.querySelector('[name="libras"]');
+            document.getElementById('config-libras');
 
         if (campoLibrasConfig) {
-            campoLibrasConfig.checked = false;
+            campoLibrasConfig.checked =
+                localStorage.getItem('foag_libras_v19') === '1';
         }
 
-        console.log('⚙️ Configurações FOAG carregadas. Switch de Libras iniciado desligado.');
+        console.log(
+            '⚙️ Configurações FOAG: estado de Libras sincronizado.'
+        );
     });
     </script>
 
@@ -2066,7 +2091,7 @@ mostrarToast('✅ ' + data.message, 'sucesso');
     ======================================= -->
 
     <script
-        src="acessibilidade.js?v=17">
+        src="acessibilidade.js?v=19">
     </script>
 
     <!-- ======================================
