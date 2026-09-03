@@ -146,7 +146,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurações - FOAG</title>
-    <link rel="stylesheet" href="configuracoes.css">
+    <link rel="stylesheet" href="configuracoes.css?v=21">
+    <link rel="stylesheet" href="dark_configuracoes.css?v=21">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -972,13 +973,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                     }, 500);
 
                     return;
-
-                    // ==================================================
-
-mostrarToast('✅ ' + data.message, 'sucesso');
-                    document.getElementById('status-configuracoes').innerHTML = 
-                        '<i class="fa-solid fa-circle" style="color:#22c55e;font-size:0.6rem;" aria-hidden="true"></i> ' +
-                        new Date().toLocaleTimeString() + ' - Configurações salvas';
                 } else {
                     mostrarToast('❌ ' + data.message, 'erro');
                 }
@@ -1428,11 +1422,18 @@ mostrarToast('✅ ' + data.message, 'sucesso');
         // CARREGAR TEMA SALVO
         // ============================================
 
-        // O PHP já coloca no select o tema salvo.
-        // Portanto usamos o próprio select como fonte principal.
-        let temaInicial = temaSelect
-            ? temaSelect.value
-            : 'claro';
+        // Usa primeiro a preferência salva no navegador.
+        // Se ainda não existir, usa o valor vindo do PHP.
+        const temaSalvoLocal =
+            localStorage.getItem('foagTema');
+
+        let temaInicial =
+            temaSalvoLocal ||
+            (temaSelect ? temaSelect.value : 'claro');
+
+        if (temaSelect) {
+            temaSelect.value = temaInicial;
+        }
 
         aplicarTema(temaInicial);
 
@@ -1835,49 +1836,8 @@ mostrarToast('✅ ' + data.message, 'sucesso');
             .card-cabecalho h2 { font-size: 1rem; }
         }
 
-        /* ============================================
-           MODO ESCURO
-           ============================================ */
-        body.dark-mode {
-            background: #0f172a !important;
-            color: #f1f5f9 !important;
-        }
-        body.dark-mode .configuracoes-conteudo { background: #0f172a !important; }
-        body.dark-mode .configuracao-card { background: #1e293b !important; border-color: #334155 !important; }
-        body.dark-mode .card-cabecalho { border-color: #334155 !important; }
-        body.dark-mode .card-cabecalho h2 { color: #f1f5f9 !important; }
-        body.dark-mode .card-cabecalho p { color: #94a3b8 !important; }
-        body.dark-mode .configuracao-texto label,
-        body.dark-mode .configuracao-texto strong { color: #f1f5f9 !important; }
-        body.dark-mode .configuracao-texto span,
-        body.dark-mode .configuracao-texto small { color: #94a3b8 !important; }
-        body.dark-mode .configuracao-item { border-color: #334155 !important; }
-        body.dark-mode .configuracao-item select {
-            background: #0f172a !important;
-            color: #f1f5f9 !important;
-            border-color: #334155 !important;
-        }
-        body.dark-mode .card-icone { background: rgba(56,165,255,0.16) !important; color: #60a5fa !important; }
-        body.dark-mode .btn-secundario { background: #334155 !important; color: #e2e8f0 !important; }
-        body.dark-mode .btn-secundario:hover { background: #475569 !important; }
-        body.dark-mode .zona-perigo { background: rgba(220,53,69,0.08) !important; border-color: rgba(220,53,69,0.4) !important; }
-        body.dark-mode .zona-perigo h3 { color: #f87171 !important; }
-        body.dark-mode .zona-perigo p { color: #fca5a5 !important; }
-        body.dark-mode .barra-salvar { background: #1e293b !important; border-color: #334155 !important; }
-        body.dark-mode .barra-salvar p { color: #94a3b8 !important; }
-        body.dark-mode .modal-content { background: #1e293b !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; }
-        body.dark-mode header.cabecalho { background: #0b1a2e !important; border-bottom: 1px solid #334155 !important; }
-        body.dark-mode nav.menu { background: #0b1a2e !important; border-right: 1px solid #334155 !important; }
-        body.dark-mode nav.menu a { color: #94a3b8 !important; }
-        body.dark-mode nav.menu a:hover { background: rgba(96,165,250,0.15) !important; color: #60a5fa !important; }
-        body.dark-mode footer { background: #020617 !important; color: #94a3b8 !important; border-top: 1px solid #334155 !important; }
-        body.dark-mode #toast-configuracoes { background: #1e293b !important; color: #f1f5f9 !important; border: 1px solid #334155 !important; }
-        body.dark-mode #cancel-logout { background: #334155 !important; color: #e2e8f0 !important; }
-        body.dark-mode .skip-link { background: #1e293b !important; border: 2px solid #60a5fa !important; color: #f1f5f9 !important; }
-        body.dark-mode *:focus-visible { outline-color: #60a5fa !important; }
-        body.dark-mode .card-cabecalho:focus-visible { outline-color: #60a5fa !important; }
-        body.dark-mode button:focus-visible { outline-color: #60a5fa !important; }
-        body.dark-mode .switch input:focus-visible + .slider { outline-color: #60a5fa !important; }
+        
+
 
         /* ============================================
            ACESSIBILIDADE
@@ -2040,41 +2000,7 @@ mostrarToast('✅ ' + data.message, 'sucesso');
             opacity: 0.65;
             cursor: wait;
         }
-
-        body.dark-mode .modal-excluir-conta {
-            background: #1e293b !important;
-            border: 1px solid #334155 !important;
-        }
-
-        body.dark-mode .modal-excluir-conta h3,
-        body.dark-mode #form-excluir-conta > label {
-            color: #f1f5f9 !important;
-        }
-
-        body.dark-mode .modal-excluir-conta > p {
-            color: #94a3b8 !important;
-        }
-
-        body.dark-mode #senha-excluir-conta {
-            background: #0f172a !important;
-            color: #f1f5f9 !important;
-            border-color: #475569 !important;
-        }
-
-        body.dark-mode .btn-toggle-senha-excluir {
-            color: #cbd5e1 !important;
-        }
-
-        body.dark-mode .btn-toggle-senha-excluir:hover {
-            background: #334155 !important;
-        }
-
-        body.dark-mode .btn-cancelar-exclusao {
-            background: #334155 !important;
-            color: #e2e8f0 !important;
-        }
-
-        @media (max-width: 480px) {
+@media (max-width: 480px) {
             .modal-excluir-conta {
                 padding: 22px 18px;
             }
@@ -2091,13 +2017,13 @@ mostrarToast('✅ ' + data.message, 'sucesso');
     ======================================= -->
 
     <script
-        src="acessibilidade.js?v=19">
+        src="acessibilidade.js?v=21">
     </script>
 
     <!-- ======================================
          APARÊNCIA GLOBAL FOAG
     ======================================= -->
-    <script src="aparencia.js?v=1"></script>
+    <script src="aparencia.js?v=2"></script>
 
 </body>
 </html>

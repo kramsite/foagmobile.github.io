@@ -1,71 +1,110 @@
 /* =========================================================
    FOAG — CONFIGURAÇÕES
-   MODO ESCURO
+   MODO ESCURO NO MESMO PADRÃO DA PÁGINA INICIAL
 ========================================================= */
 
+/* PALETA
+   Fundo principal:   #0F172A
+   Cards:             #1E293B
+   Áreas internas:    #243247
+   Bordas:            #334155
+   Azul ativo:        #294C6D
+   Azul destaque:     #60A5FA
+   Texto principal:   #F8FAFC
+   Texto secundário:  #CBD5E1
+   Texto suave:       #94A3B8
+*/
+
 /* =========================================================
-   FUNDO GERAL
+   BASE
 ========================================================= */
 
 html body.dark-mode {
-    background: #0f172a !important;
-    color: #f8fafc !important;
+    background: #0F172A !important;
+    color: #F8FAFC !important;
 }
 
-html body.dark-mode .configuracoes-conteudo,
+html body.dark-mode .container,
+html body.dark-mode .conteudo,
+html body.dark-mode .configuracoes-conteudo {
+    background: #0F172A !important;
+}
+
 html body.dark-mode .configuracoes-pagina {
-    background: #0f172a !important;
+    background: transparent !important;
 }
 
 
 /* =========================================================
-   TOPO — CORREÇÃO PRINCIPAL
+   CABEÇALHO
+========================================================= */
+
+html body.dark-mode header.cabecalho {
+    background: #1E293B !important;
+    color: #FFFFFF !important;
+    border-bottom: 1px solid #334155 !important;
+    box-shadow: none !important;
+}
+
+html body.dark-mode .header-icons,
+html body.dark-mode .header-icons i {
+    color: #F8FAFC !important;
+}
+
+html body.dark-mode .header-icons i:hover {
+    color: #60A5FA !important;
+}
+
+
+/* =========================================================
+   MENU LATERAL
+========================================================= */
+
+html body.dark-mode nav.menu {
+    background: #1E293B !important;
+    border-right: 1px solid #334155 !important;
+    box-shadow: none !important;
+}
+
+html body.dark-mode nav.menu a {
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
+    border: 1px solid transparent !important;
+}
+
+html body.dark-mode nav.menu a:hover {
+    background: #243247 !important;
+    border-color: #334155 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+html body.dark-mode nav.menu a.active {
+    background: #294C6D !important;
+    border-color: #4B6B8B !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+}
+
+
+/* =========================================================
+   TOPO DA PÁGINA
 ========================================================= */
 
 html body.dark-mode .configuracoes-topo {
     background: transparent !important;
-    color: #f8fafc !important;
-
-    opacity: 1 !important;
-    filter: none !important;
 }
 
 html body.dark-mode .configuracoes-topo h1 {
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
     opacity: 1 !important;
-    filter: none !important;
-
-    text-shadow: none !important;
 }
 
 html body.dark-mode .configuracoes-topo p {
-    color: #cbd5e1 !important;
-    -webkit-text-fill-color: #cbd5e1 !important;
-
+    color: #94A3B8 !important;
+    -webkit-text-fill-color: #94A3B8 !important;
     opacity: 1 !important;
-    filter: none !important;
-}
-
-
-/* =========================================================
-   TÍTULOS E TEXTOS GERAIS
-========================================================= */
-
-html body.dark-mode .configuracoes-pagina h1,
-html body.dark-mode .configuracoes-pagina h2,
-html body.dark-mode .configuracoes-pagina h3,
-html body.dark-mode .configuracoes-pagina h4 {
-    color: #f8fafc !important;
-    -webkit-text-fill-color: #f8fafc !important;
-}
-
-html body.dark-mode .configuracoes-pagina strong,
-html body.dark-mode .configuracoes-pagina label,
-html body.dark-mode .titulo-opcao {
-    color: #f1f5f9 !important;
-    -webkit-text-fill-color: #f1f5f9 !important;
 }
 
 
@@ -74,50 +113,47 @@ html body.dark-mode .titulo-opcao {
 ========================================================= */
 
 html body.dark-mode .configuracao-card {
-    background: #1e293b !important;
-
+    background: #1E293B !important;
     border: 1px solid #334155 !important;
-
-    box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: none !important;
 }
 
 html body.dark-mode .card-cabecalho {
-    background: #1e293b !important;
-
-    border-bottom-color: #334155 !important;
+    background: #1E293B !important;
+    border-bottom-color: transparent !important;
 }
 
 html body.dark-mode .card-cabecalho:hover {
-    background: #263449 !important;
+    background: #243247 !important;
 }
 
 html body.dark-mode .card-cabecalho h2 {
-    color: #f8fafc !important;
-    -webkit-text-fill-color: #f8fafc !important;
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
 }
 
 html body.dark-mode .card-cabecalho p {
-    color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
+    color: #94A3B8 !important;
+    -webkit-text-fill-color: #94A3B8 !important;
 }
 
 html body.dark-mode .card-cabecalho .card-toggle {
-    color: #94a3b8 !important;
+    color: #94A3B8 !important;
 }
 
 
 /* =========================================================
-   ÍCONE DOS CARDS
+   ÍCONES DOS CARDS
 ========================================================= */
 
 html body.dark-mode .card-icone {
-    background: rgba(56, 165, 255, 0.15) !important;
-    color: #60a5fa !important;
+    background: #214C70 !important;
+    color: #60A5FA !important;
+    border: 1px solid #2F5F85 !important;
 }
 
 html body.dark-mode .card-icone i {
-    color: #60a5fa !important;
+    color: #60A5FA !important;
 }
 
 
@@ -126,27 +162,29 @@ html body.dark-mode .card-icone i {
 ========================================================= */
 
 html body.dark-mode .card-conteudo {
-    background: #1e293b !important;
+    background: #1E293B !important;
+}
+
+html body.dark-mode .card-conteudo.aberto {
+    border-top: 1px solid #334155 !important;
 }
 
 html body.dark-mode .configuracao-item {
     border-bottom-color: #334155 !important;
 }
 
-html body.dark-mode .configuracao-texto {
-    color: #f1f5f9 !important;
-}
-
+html body.dark-mode .configuracao-texto,
 html body.dark-mode .configuracao-texto label,
-html body.dark-mode .configuracao-texto strong {
-    color: #f1f5f9 !important;
-    -webkit-text-fill-color: #f1f5f9 !important;
+html body.dark-mode .configuracao-texto strong,
+html body.dark-mode .titulo-opcao {
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
 }
 
 html body.dark-mode .configuracao-texto span,
 html body.dark-mode .configuracao-texto small {
-    color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
 }
 
 
@@ -155,36 +193,32 @@ html body.dark-mode .configuracao-texto small {
 ========================================================= */
 
 html body.dark-mode .configuracao-item select {
-    background: #0f172a !important;
-
-    color: #f8fafc !important;
-    -webkit-text-fill-color: #f8fafc !important;
-
+    background: #243247 !important;
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
     border: 1px solid #475569 !important;
+    box-shadow: none !important;
 }
 
 html body.dark-mode .configuracao-item select:hover {
-    border-color: #64748b !important;
+    border-color: #64748B !important;
 }
 
 html body.dark-mode .configuracao-item select:focus,
 html body.dark-mode .configuracao-item select:focus-visible {
-    border-color: #38a5ff !important;
-
-    box-shadow:
-        0 0 0 3px rgba(56, 165, 255, 0.18) !important;
-
+    border-color: #60A5FA !important;
     outline: none !important;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, .16) !important;
 }
 
 html body.dark-mode .configuracao-item select option {
-    background: #0f172a !important;
-    color: #f8fafc !important;
+    background: #243247 !important;
+    color: #F8FAFC !important;
 }
 
 
 /* =========================================================
-   SWITCH
+   SWITCHES
 ========================================================= */
 
 html body.dark-mode .slider {
@@ -192,16 +226,11 @@ html body.dark-mode .slider {
 }
 
 html body.dark-mode .slider::before {
-    background: #ffffff !important;
+    background: #F8FAFC !important;
 }
 
 html body.dark-mode .switch input:checked + .slider {
-    background: #38a5ff !important;
-}
-
-html body.dark-mode .switch input:focus-visible + .slider {
-    outline: 3px solid #60a5fa !important;
-    outline-offset: 2px !important;
+    background: #3B82C4 !important;
 }
 
 
@@ -211,50 +240,45 @@ html body.dark-mode .switch input:focus-visible + .slider {
 
 html body.dark-mode .btn-principal,
 html body.dark-mode .btn-salvar-topo {
-    background: #38a5ff !important;
-    color: #ffffff !important;
-
-    -webkit-text-fill-color: #ffffff !important;
+    background: #294C6D !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+    border: 1px solid #4B6B8B !important;
+    box-shadow: none !important;
 }
 
 html body.dark-mode .btn-principal:hover,
 html body.dark-mode .btn-salvar-topo:hover {
-    background: #168ce8 !important;
+    background: #35628A !important;
 }
 
 html body.dark-mode .btn-secundario {
-    background: #334155 !important;
-
-    color: #f1f5f9 !important;
-    -webkit-text-fill-color: #f1f5f9 !important;
-
-    border-color: #475569 !important;
+    background: #243247 !important;
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
+    border: 1px solid #334155 !important;
 }
 
 html body.dark-mode .btn-secundario:hover {
-    background: #475569 !important;
-
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
+    background: #334155 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
 }
 
 
 /* =========================================================
-   BARRA SALVAR
+   BARRA DE SALVAR
 ========================================================= */
 
 html body.dark-mode .barra-salvar {
-    background: #1e293b !important;
-
-    border-color: #334155 !important;
-
-    box-shadow:
-        0 -5px 20px rgba(0, 0, 0, 0.25) !important;
+    background: #1E293B !important;
+    border: 1px solid #334155 !important;
+    box-shadow: 0 -5px 20px rgba(0, 0, 0, .18) !important;
 }
 
 html body.dark-mode .barra-salvar p {
-    color: #94a3b8 !important;
-    -webkit-text-fill-color: #94a3b8 !important;
+    color: #94A3B8 !important;
+    -webkit-text-fill-color: #94A3B8 !important;
 }
 
 
@@ -263,45 +287,40 @@ html body.dark-mode .barra-salvar p {
 ========================================================= */
 
 html body.dark-mode .zona-perigo {
-    background: rgba(220, 38, 38, 0.08) !important;
-
-    border-color:
-        rgba(248, 113, 113, 0.35) !important;
+    background: #261F2B !important;
+    border: 1px solid #6B3740 !important;
 }
 
 html body.dark-mode .zona-perigo h3 {
-    color: #f87171 !important;
-    -webkit-text-fill-color: #f87171 !important;
+    color: #FCA5A5 !important;
+    -webkit-text-fill-color: #FCA5A5 !important;
 }
 
 html body.dark-mode .zona-perigo p {
-    color: #fecaca !important;
-    -webkit-text-fill-color: #fecaca !important;
+    color: #E7B0B5 !important;
+    -webkit-text-fill-color: #E7B0B5 !important;
 }
 
 html body.dark-mode .btn-perigo {
-    background: #dc3545 !important;
-    color: #ffffff !important;
+    background: #B83B49 !important;
+    color: #FFFFFF !important;
 }
 
 html body.dark-mode .btn-perigo:hover {
-    background: #bd2130 !important;
+    background: #A4313E !important;
 }
 
 html body.dark-mode .btn-perigo-outline {
     background: transparent !important;
-
-    color: #f87171 !important;
-    -webkit-text-fill-color: #f87171 !important;
-
-    border-color: #f87171 !important;
+    color: #F87171 !important;
+    -webkit-text-fill-color: #F87171 !important;
+    border-color: #B74B58 !important;
 }
 
 html body.dark-mode .btn-perigo-outline:hover {
-    background: #dc3545 !important;
-
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
+    background: #B83B49 !important;
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
 }
 
 
@@ -315,42 +334,32 @@ html body.dark-mode .sobre-texto {
 }
 
 html body.dark-mode .sobre-foag h3 {
-    color: #f8fafc !important;
+    color: #F8FAFC !important;
 }
 
-html body.dark-mode .sobre-foag p {
-    color: #cbd5e1 !important;
+html body.dark-mode .sobre-foag p,
+html body.dark-mode .sobre-texto {
+    color: #CBD5E1 !important;
 }
 
 html body.dark-mode .sobre-foag span {
-    color: #94a3b8 !important;
-}
-
-html body.dark-mode .sobre-texto {
-    color: #cbd5e1 !important;
+    color: #94A3B8 !important;
 }
 
 html body.dark-mode .logo-foag {
-    background: #38a5ff !important;
-    color: #ffffff !important;
+    background: #294C6D !important;
+    color: #FFFFFF !important;
 }
 
 html body.dark-mode .sobre-links a {
-    background:
-        rgba(56, 165, 255, 0.12) !important;
-
-    border-color:
-        rgba(96, 165, 250, 0.25) !important;
-
-    color: #60a5fa !important;
-    -webkit-text-fill-color: #60a5fa !important;
+    background: #243247 !important;
+    border-color: #334155 !important;
+    color: #60A5FA !important;
+    -webkit-text-fill-color: #60A5FA !important;
 }
 
 html body.dark-mode .sobre-links a:hover {
-    background:
-        rgba(56, 165, 255, 0.20) !important;
-
-    color: #93c5fd !important;
+    background: #334155 !important;
 }
 
 
@@ -358,71 +367,71 @@ html body.dark-mode .sobre-links a:hover {
    MODAIS
 ========================================================= */
 
-html body.dark-mode .modal-content {
-    background: #1e293b !important;
-
-    color: #f8fafc !important;
-
+html body.dark-mode .modal-content,
+html body.dark-mode .modal-excluir-conta {
+    background: #1E293B !important;
+    color: #F8FAFC !important;
     border: 1px solid #334155 !important;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, .38) !important;
 }
 
-html body.dark-mode .modal-content h3 {
-    color: #f8fafc !important;
+html body.dark-mode .modal-content h3,
+html body.dark-mode .modal-excluir-conta h3,
+html body.dark-mode #form-excluir-conta > label {
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
 }
 
 html body.dark-mode .modal-content h4,
-html body.dark-mode .modal-content p {
-    color: #cbd5e1 !important;
-}
-
-html body.dark-mode #cancel-logout,
-html body.dark-mode #cancelar-acao {
-    background: #334155 !important;
-    color: #f1f5f9 !important;
-}
-
-
-/* =========================================================
-   EXCLUIR CONTA
-========================================================= */
-
-html body.dark-mode .modal-excluir-conta {
-    background: #1e293b !important;
-    border-color: #334155 !important;
-}
-
-html body.dark-mode .modal-excluir-conta h3,
-html body.dark-mode #form-excluir-conta > label {
-    color: #f8fafc !important;
-}
-
+html body.dark-mode .modal-content p,
 html body.dark-mode .modal-excluir-conta > p {
-    color: #cbd5e1 !important;
+    color: #CBD5E1 !important;
+    -webkit-text-fill-color: #CBD5E1 !important;
 }
 
 html body.dark-mode #senha-excluir-conta {
-    background: #0f172a !important;
-
-    color: #f8fafc !important;
-
+    background: #243247 !important;
+    color: #F8FAFC !important;
+    -webkit-text-fill-color: #F8FAFC !important;
     border-color: #475569 !important;
 }
 
 html body.dark-mode #senha-excluir-conta::placeholder {
-    color: #64748b !important;
+    color: #94A3B8 !important;
 }
 
 html body.dark-mode .btn-toggle-senha-excluir {
-    color: #cbd5e1 !important;
+    color: #CBD5E1 !important;
 }
 
 html body.dark-mode .btn-toggle-senha-excluir:hover {
     background: #334155 !important;
 }
 
-html body.dark-mode .btn-cancelar-exclusao {
-    background: #334155 !important;
-    color: #f1f5f9 !important;
+html body.dark-mode .btn-cancelar-exclusao,
+html body.dark-mode #cancel-logout,
+html body.dark-mode #cancelar-acao {
+    background: #243247 !important;
+    color: #F8FAFC !important;
+}
+
+
+/* =========================================================
+   FOGI
+========================================================= */
+
+html body.dark-mode #fogi-modal .fogi-container {
+    background: #1E293B !important;
+}
+
+html body.dark-mode #fogi-modal .fogi-header {
+    background: #243247 !important;
+    color: #FFFFFF !important;
+}
+
+html body.dark-mode #fogi-close {
+    background: #F8FAFC !important;
+    color: #1E293B !important;
 }
 
 
@@ -431,55 +440,9 @@ html body.dark-mode .btn-cancelar-exclusao {
 ========================================================= */
 
 html body.dark-mode #toast-configuracoes {
-    background: #020617 !important;
-
-    color: #f8fafc !important;
-
+    background: #243247 !important;
+    color: #F8FAFC !important;
     border: 1px solid #334155 !important;
-}
-
-
-/* =========================================================
-   MENU LATERAL
-========================================================= */
-
-html body.dark-mode nav.menu {
-    background: #0b1a2e !important;
-
-    border-right:
-        1px solid #334155 !important;
-}
-
-html body.dark-mode nav.menu a {
-    color: #e2e8f0 !important;
-    -webkit-text-fill-color: #e2e8f0 !important;
-}
-
-html body.dark-mode nav.menu a:hover,
-html body.dark-mode nav.menu a.active {
-    background:
-        rgba(96, 165, 250, 0.16) !important;
-
-    color: #ffffff !important;
-    -webkit-text-fill-color: #ffffff !important;
-}
-
-
-/* =========================================================
-   CABEÇALHO
-========================================================= */
-
-html body.dark-mode header.cabecalho {
-    background: #0b1a2e !important;
-
-    color: #ffffff !important;
-
-    border-bottom:
-        1px solid #334155 !important;
-}
-
-html body.dark-mode .header-icons i {
-    color: #ffffff !important;
 }
 
 
@@ -488,12 +451,9 @@ html body.dark-mode .header-icons i {
 ========================================================= */
 
 html body.dark-mode footer {
-    background: #020617 !important;
-
-    color: #cbd5e1 !important;
-
-    border-top:
-        1px solid #334155 !important;
+    background: #0B1220 !important;
+    color: #94A3B8 !important;
+    border-top: 1px solid #334155 !important;
 }
 
 
@@ -501,6 +461,38 @@ html body.dark-mode footer {
    FOCO
 ========================================================= */
 
+html body.dark-mode .skip-link {
+    background: #294C6D !important;
+    color: #FFFFFF !important;
+}
+
 html body.dark-mode *:focus-visible {
-    outline-color: #60a5fa !important;
+    outline-color: #60A5FA !important;
+}
+
+
+/* =========================================================
+   SCROLLBAR
+========================================================= */
+
+html body.dark-mode .configuracoes-conteudo {
+    scrollbar-color: #475569 #0F172A;
+}
+
+html body.dark-mode .configuracoes-conteudo::-webkit-scrollbar {
+    width: 10px;
+}
+
+html body.dark-mode .configuracoes-conteudo::-webkit-scrollbar-track {
+    background: #0F172A;
+}
+
+html body.dark-mode .configuracoes-conteudo::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 999px;
+    border: 2px solid #0F172A;
+}
+
+html body.dark-mode .configuracoes-conteudo::-webkit-scrollbar-thumb:hover {
+    background: #64748B;
 }
