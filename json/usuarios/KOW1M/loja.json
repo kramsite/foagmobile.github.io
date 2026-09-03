@@ -1,5 +1,10 @@
 {
-    "itens_comprados": [],
+    "itens_comprados": [
+        "emoji_freddy",
+        "fundo_galaxia",
+        "moldura_gato_preto",
+        "tema_preto"
+    ],
     "itens_ativos": {
         "tema": null,
         "fundo": null,

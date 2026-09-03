@@ -1,5 +1,5 @@
 {
-    "estrelas": 600,
+    "estrelas": 297,
     "historico": [
         {
             "id": "estrela_fc771971c9f0",
@@ -9,6 +9,42 @@
             "data": "2026-09-03 08:54:24",
             "timestamp": 1788440064,
             "chave": "sequencia_presenca_2026-09"
+        },
+        {
+            "id": "gasto_2d59a4c7f1ec",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Freddy",
+            "estrelas": -20,
+            "data": "2026-09-03 09:02:44",
+            "timestamp": 1788440564,
+            "chave": "compra_loja_emoji_freddy"
+        },
+        {
+            "id": "gasto_42caba05f8c0",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Fundo Galáxia",
+            "estrelas": -120,
+            "data": "2026-09-03 09:02:53",
+            "timestamp": 1788440573,
+            "chave": "compra_loja_fundo_galaxia"
+        },
+        {
+            "id": "gasto_b72209bc6fb9",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Moldura Gato Preto",
+            "estrelas": -98,
+            "data": "2026-09-03 09:02:57",
+            "timestamp": 1788440577,
+            "chave": "compra_loja_moldura_gato_preto"
+        },
+        {
+            "id": "gasto_249db113a196",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Tema Preto",
+            "estrelas": -65,
+            "data": "2026-09-03 09:03:03",
+            "timestamp": 1788440583,
+            "chave": "compra_loja_tema_preto"
         }
     ],
     "controle": {

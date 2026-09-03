@@ -206,7 +206,6 @@ function getInsigniasUsuario($codigoUsuario) {
     });
 }
 
-// Função para verificar e desbloquear insígnias automaticamente
 function verificarDesbloquearInsignias($codigoUsuario) {
     global $insignias_disponiveis;
     
