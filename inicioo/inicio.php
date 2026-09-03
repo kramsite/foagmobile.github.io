@@ -660,13 +660,64 @@ $anotacoesImportantes =
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOAG - Início</title>
     <link rel="stylesheet" href="inicioo.css?v=10">
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css?v=10">
-    <link rel="stylesheet" href="dark_ini.css?v=10">
+<link rel="stylesheet" href="dark_ini.css?v=11">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="../acessibilidade/acessibilidade.js?v=5" defer></script>
 </head>
 <body>
+
+<script>
+/* =========================================================
+   FOAG — TEMA GLOBAL NA PÁGINA INICIAL
+   Lê exatamente as mesmas chaves salvas em Configurações.
+========================================================= */
+(function () {
+    'use strict';
+
+    function temaEscuroAtivo() {
+        const temaSalvo = localStorage.getItem('foagTema');
+
+        if (temaSalvo === 'escuro') {
+            return true;
+        }
+
+        if (temaSalvo === 'claro') {
+            return false;
+        }
+
+        if (temaSalvo === 'sistema') {
+            return window.matchMedia &&
+                window.matchMedia('(prefers-color-scheme: dark)').matches;
+        }
+
+        // Compatibilidade com o sistema antigo do FOAG
+        return localStorage.getItem('darkMode') === 'true';
+    }
+
+    document.body.classList.toggle(
+        'dark-mode',
+        temaEscuroAtivo()
+    );
+
+    // Se o usuário escolheu "Tema do dispositivo",
+    // acompanha alterações do sistema operacional.
+    if (window.matchMedia) {
+        const mediaTema = window.matchMedia(
+            '(prefers-color-scheme: dark)'
+        );
+
+        mediaTema.addEventListener('change', function () {
+            if (localStorage.getItem('foagTema') === 'sistema') {
+                document.body.classList.toggle(
+                    'dark-mode',
+                    mediaTema.matches
+                );
+            }
+        });
+    }
+})();
+</script>
+
 
 
 <?php
@@ -1657,6 +1708,8 @@ window.INICIO_NOTE_SAVE_URL = 'salvar_anotacao.php';
 </script>
 <script src="inicio.js"></script>
 
+<!-- LIBRAS GLOBAL FOAG -->
+<script src="../configuracoes/acessibilidade.js?v=19"></script>
 
 </body>
 

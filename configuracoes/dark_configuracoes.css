@@ -1,162 +1,506 @@
-/* dark_configuracoes.css - Estilos específicos para configurações no modo escuro */
+/* =========================================================
+   FOAG — CONFIGURAÇÕES
+   MODO ESCURO
+========================================================= */
 
-body.dark-mode .configuracoes-conteudo {
-  background: var(--dark-bg) !important;
+/* =========================================================
+   FUNDO GERAL
+========================================================= */
+
+html body.dark-mode {
+    background: #0f172a !important;
+    color: #f8fafc !important;
 }
 
-body.dark-mode .configuracoes-topo h1,
-body.dark-mode .card-cabecalho h2,
-body.dark-mode .configuracao-texto label,
-body.dark-mode .configuracao-texto strong,
-body.dark-mode .titulo-opcao,
-body.dark-mode .sobre-foag h3 {
-  color: var(--dark-text) !important;
+html body.dark-mode .configuracoes-conteudo,
+html body.dark-mode .configuracoes-pagina {
+    background: #0f172a !important;
 }
 
-body.dark-mode .configuracoes-topo p,
-body.dark-mode .card-cabecalho p,
-body.dark-mode .configuracao-texto span,
-body.dark-mode .configuracao-texto small,
-body.dark-mode .sobre-foag p,
-body.dark-mode .sobre-texto,
-body.dark-mode .barra-salvar p {
-  color: var(--dark-text-muted) !important;
+
+/* =========================================================
+   TOPO — CORREÇÃO PRINCIPAL
+========================================================= */
+
+html body.dark-mode .configuracoes-topo {
+    background: transparent !important;
+    color: #f8fafc !important;
+
+    opacity: 1 !important;
+    filter: none !important;
 }
 
-body.dark-mode .configuracao-card,
-body.dark-mode .barra-salvar {
-  background: var(--dark-surface) !important;
-  border-color: var(--dark-border) !important;
+html body.dark-mode .configuracoes-topo h1 {
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+
+    opacity: 1 !important;
+    filter: none !important;
+
+    text-shadow: none !important;
 }
 
-body.dark-mode .card-cabecalho {
-  border-bottom-color: var(--dark-border) !important;
+html body.dark-mode .configuracoes-topo p {
+    color: #cbd5e1 !important;
+    -webkit-text-fill-color: #cbd5e1 !important;
+
+    opacity: 1 !important;
+    filter: none !important;
 }
 
-body.dark-mode .card-cabecalho:hover {
-  background: rgba(96, 165, 250, 0.06) !important;
+
+/* =========================================================
+   TÍTULOS E TEXTOS GERAIS
+========================================================= */
+
+html body.dark-mode .configuracoes-pagina h1,
+html body.dark-mode .configuracoes-pagina h2,
+html body.dark-mode .configuracoes-pagina h3,
+html body.dark-mode .configuracoes-pagina h4 {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
 }
 
-body.dark-mode .card-cabecalho .card-toggle {
-  color: var(--dark-text-muted) !important;
+html body.dark-mode .configuracoes-pagina strong,
+html body.dark-mode .configuracoes-pagina label,
+html body.dark-mode .titulo-opcao {
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
 }
 
-body.dark-mode .card-conteudo .configuracao-item {
-  border-color: var(--dark-border) !important;
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+html body.dark-mode .configuracao-card {
+    background: #1e293b !important;
+
+    border: 1px solid #334155 !important;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.25) !important;
 }
 
-body.dark-mode .card-icone {
-  background: rgba(59, 130, 246, 0.16) !important;
-  color: var(--dark-primary-light) !important;
+html body.dark-mode .card-cabecalho {
+    background: #1e293b !important;
+
+    border-bottom-color: #334155 !important;
 }
 
-/* Selects */
-body.dark-mode .configuracao-item select {
-  background: var(--dark-bg) !important;
-  color: var(--dark-text) !important;
-  border-color: var(--dark-border) !important;
+html body.dark-mode .card-cabecalho:hover {
+    background: #263449 !important;
 }
 
-body.dark-mode .configuracao-item select:focus {
-  border-color: var(--dark-primary-light) !important;
-  box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2) !important;
+html body.dark-mode .card-cabecalho h2 {
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
 }
 
-/* Botões secundários */
-body.dark-mode .btn-secundario {
-  background: #334155 !important;
-  color: #e2e8f0 !important;
+html body.dark-mode .card-cabecalho p {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
 }
 
-body.dark-mode .btn-secundario:hover {
-  background: #475569 !important;
+html body.dark-mode .card-cabecalho .card-toggle {
+    color: #94a3b8 !important;
 }
 
-body.dark-mode .btn-principal,
-body.dark-mode .btn-salvar-topo {
-  background: var(--dark-primary) !important;
-  color: #ffffff !important;
+
+/* =========================================================
+   ÍCONE DOS CARDS
+========================================================= */
+
+html body.dark-mode .card-icone {
+    background: rgba(56, 165, 255, 0.15) !important;
+    color: #60a5fa !important;
 }
 
-body.dark-mode .btn-principal:hover,
-body.dark-mode .btn-salvar-topo:hover {
-  background: #2563eb !important;
+html body.dark-mode .card-icone i {
+    color: #60a5fa !important;
 }
 
-/* Zona de perigo */
-body.dark-mode .zona-perigo {
-  background: var(--dark-danger-bg) !important;
-  border-color: rgba(220, 53, 69, 0.4) !important;
+
+/* =========================================================
+   CONTEÚDO DOS CARDS
+========================================================= */
+
+html body.dark-mode .card-conteudo {
+    background: #1e293b !important;
 }
 
-body.dark-mode .zona-perigo h3 {
-  color: var(--dark-danger) !important;
+html body.dark-mode .configuracao-item {
+    border-bottom-color: #334155 !important;
 }
 
-body.dark-mode .zona-perigo p {
-  color: #fca5a5 !important;
+html body.dark-mode .configuracao-texto {
+    color: #f1f5f9 !important;
 }
 
-/* Links sobre */
-body.dark-mode .sobre-links a {
-  background: rgba(59, 130, 246, 0.12) !important;
-  border-color: rgba(59, 130, 246, 0.25) !important;
-  color: var(--dark-primary-light) !important;
+html body.dark-mode .configuracao-texto label,
+html body.dark-mode .configuracao-texto strong {
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
 }
 
-body.dark-mode .sobre-links a:hover {
-  background: rgba(59, 130, 246, 0.2) !important;
+html body.dark-mode .configuracao-texto span,
+html body.dark-mode .configuracao-texto small {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
 }
 
-/* Logo */
-body.dark-mode .logo-foag {
-  background: var(--dark-primary) !important;
+
+/* =========================================================
+   SELECTS
+========================================================= */
+
+html body.dark-mode .configuracao-item select {
+    background: #0f172a !important;
+
+    color: #f8fafc !important;
+    -webkit-text-fill-color: #f8fafc !important;
+
+    border: 1px solid #475569 !important;
 }
 
-/* Switch */
-body.dark-mode .slider {
-  background: #475569 !important;
+html body.dark-mode .configuracao-item select:hover {
+    border-color: #64748b !important;
 }
 
-body.dark-mode .switch input:checked + .slider {
-  background: var(--dark-primary) !important;
+html body.dark-mode .configuracao-item select:focus,
+html body.dark-mode .configuracao-item select:focus-visible {
+    border-color: #38a5ff !important;
+
+    box-shadow:
+        0 0 0 3px rgba(56, 165, 255, 0.18) !important;
+
+    outline: none !important;
 }
 
-/* Cores */
-body.dark-mode .cor input:checked + span {
-  border-color: var(--dark-bg) !important;
-  box-shadow: 0 0 0 3px var(--dark-primary-light) !important;
+html body.dark-mode .configuracao-item select option {
+    background: #0f172a !important;
+    color: #f8fafc !important;
 }
 
-body.dark-mode .cor span {
-  box-shadow: 0 0 0 1px var(--dark-border) !important;
+
+/* =========================================================
+   SWITCH
+========================================================= */
+
+html body.dark-mode .slider {
+    background: #475569 !important;
 }
 
-/* Botões de perigo outline */
-body.dark-mode .btn-perigo-outline {
-  color: var(--dark-danger) !important;
-  border-color: var(--dark-danger) !important;
+html body.dark-mode .slider::before {
+    background: #ffffff !important;
 }
 
-body.dark-mode .btn-perigo-outline:hover {
-  background: var(--dark-danger) !important;
-  color: #ffffff !important;
+html body.dark-mode .switch input:checked + .slider {
+    background: #38a5ff !important;
 }
 
-body.dark-mode .btn-perigo {
-  background: #dc3545 !important;
+html body.dark-mode .switch input:focus-visible + .slider {
+    outline: 3px solid #60a5fa !important;
+    outline-offset: 2px !important;
 }
 
-body.dark-mode .btn-perigo:hover {
-  background: #bd2130 !important;
+
+/* =========================================================
+   BOTÕES
+========================================================= */
+
+html body.dark-mode .btn-principal,
+html body.dark-mode .btn-salvar-topo {
+    background: #38a5ff !important;
+    color: #ffffff !important;
+
+    -webkit-text-fill-color: #ffffff !important;
 }
 
-/* Seções específicas */
-body.dark-mode .sobre-foag,
-body.dark-mode .sobre-texto {
-  border-color: var(--dark-border) !important;
+html body.dark-mode .btn-principal:hover,
+html body.dark-mode .btn-salvar-topo:hover {
+    background: #168ce8 !important;
 }
 
-body.dark-mode .sobre-texto {
-  color: var(--dark-text-muted) !important;
+html body.dark-mode .btn-secundario {
+    background: #334155 !important;
+
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
+
+    border-color: #475569 !important;
+}
+
+html body.dark-mode .btn-secundario:hover {
+    background: #475569 !important;
+
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   BARRA SALVAR
+========================================================= */
+
+html body.dark-mode .barra-salvar {
+    background: #1e293b !important;
+
+    border-color: #334155 !important;
+
+    box-shadow:
+        0 -5px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+html body.dark-mode .barra-salvar p {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+}
+
+
+/* =========================================================
+   ZONA DE PERIGO
+========================================================= */
+
+html body.dark-mode .zona-perigo {
+    background: rgba(220, 38, 38, 0.08) !important;
+
+    border-color:
+        rgba(248, 113, 113, 0.35) !important;
+}
+
+html body.dark-mode .zona-perigo h3 {
+    color: #f87171 !important;
+    -webkit-text-fill-color: #f87171 !important;
+}
+
+html body.dark-mode .zona-perigo p {
+    color: #fecaca !important;
+    -webkit-text-fill-color: #fecaca !important;
+}
+
+html body.dark-mode .btn-perigo {
+    background: #dc3545 !important;
+    color: #ffffff !important;
+}
+
+html body.dark-mode .btn-perigo:hover {
+    background: #bd2130 !important;
+}
+
+html body.dark-mode .btn-perigo-outline {
+    background: transparent !important;
+
+    color: #f87171 !important;
+    -webkit-text-fill-color: #f87171 !important;
+
+    border-color: #f87171 !important;
+}
+
+html body.dark-mode .btn-perigo-outline:hover {
+    background: #dc3545 !important;
+
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   SOBRE
+========================================================= */
+
+html body.dark-mode .sobre-foag,
+html body.dark-mode .sobre-texto {
+    border-color: #334155 !important;
+}
+
+html body.dark-mode .sobre-foag h3 {
+    color: #f8fafc !important;
+}
+
+html body.dark-mode .sobre-foag p {
+    color: #cbd5e1 !important;
+}
+
+html body.dark-mode .sobre-foag span {
+    color: #94a3b8 !important;
+}
+
+html body.dark-mode .sobre-texto {
+    color: #cbd5e1 !important;
+}
+
+html body.dark-mode .logo-foag {
+    background: #38a5ff !important;
+    color: #ffffff !important;
+}
+
+html body.dark-mode .sobre-links a {
+    background:
+        rgba(56, 165, 255, 0.12) !important;
+
+    border-color:
+        rgba(96, 165, 250, 0.25) !important;
+
+    color: #60a5fa !important;
+    -webkit-text-fill-color: #60a5fa !important;
+}
+
+html body.dark-mode .sobre-links a:hover {
+    background:
+        rgba(56, 165, 255, 0.20) !important;
+
+    color: #93c5fd !important;
+}
+
+
+/* =========================================================
+   MODAIS
+========================================================= */
+
+html body.dark-mode .modal-content {
+    background: #1e293b !important;
+
+    color: #f8fafc !important;
+
+    border: 1px solid #334155 !important;
+}
+
+html body.dark-mode .modal-content h3 {
+    color: #f8fafc !important;
+}
+
+html body.dark-mode .modal-content h4,
+html body.dark-mode .modal-content p {
+    color: #cbd5e1 !important;
+}
+
+html body.dark-mode #cancel-logout,
+html body.dark-mode #cancelar-acao {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+
+/* =========================================================
+   EXCLUIR CONTA
+========================================================= */
+
+html body.dark-mode .modal-excluir-conta {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+html body.dark-mode .modal-excluir-conta h3,
+html body.dark-mode #form-excluir-conta > label {
+    color: #f8fafc !important;
+}
+
+html body.dark-mode .modal-excluir-conta > p {
+    color: #cbd5e1 !important;
+}
+
+html body.dark-mode #senha-excluir-conta {
+    background: #0f172a !important;
+
+    color: #f8fafc !important;
+
+    border-color: #475569 !important;
+}
+
+html body.dark-mode #senha-excluir-conta::placeholder {
+    color: #64748b !important;
+}
+
+html body.dark-mode .btn-toggle-senha-excluir {
+    color: #cbd5e1 !important;
+}
+
+html body.dark-mode .btn-toggle-senha-excluir:hover {
+    background: #334155 !important;
+}
+
+html body.dark-mode .btn-cancelar-exclusao {
+    background: #334155 !important;
+    color: #f1f5f9 !important;
+}
+
+
+/* =========================================================
+   TOAST
+========================================================= */
+
+html body.dark-mode #toast-configuracoes {
+    background: #020617 !important;
+
+    color: #f8fafc !important;
+
+    border: 1px solid #334155 !important;
+}
+
+
+/* =========================================================
+   MENU LATERAL
+========================================================= */
+
+html body.dark-mode nav.menu {
+    background: #0b1a2e !important;
+
+    border-right:
+        1px solid #334155 !important;
+}
+
+html body.dark-mode nav.menu a {
+    color: #e2e8f0 !important;
+    -webkit-text-fill-color: #e2e8f0 !important;
+}
+
+html body.dark-mode nav.menu a:hover,
+html body.dark-mode nav.menu a.active {
+    background:
+        rgba(96, 165, 250, 0.16) !important;
+
+    color: #ffffff !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+
+/* =========================================================
+   CABEÇALHO
+========================================================= */
+
+html body.dark-mode header.cabecalho {
+    background: #0b1a2e !important;
+
+    color: #ffffff !important;
+
+    border-bottom:
+        1px solid #334155 !important;
+}
+
+html body.dark-mode .header-icons i {
+    color: #ffffff !important;
+}
+
+
+/* =========================================================
+   RODAPÉ
+========================================================= */
+
+html body.dark-mode footer {
+    background: #020617 !important;
+
+    color: #cbd5e1 !important;
+
+    border-top:
+        1px solid #334155 !important;
+}
+
+
+/* =========================================================
+   FOCO
+========================================================= */
+
+html body.dark-mode *:focus-visible {
+    outline-color: #60a5fa !important;
 }
