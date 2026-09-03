@@ -496,6 +496,113 @@ function gerarCalendario(
             min-width: 0;
             box-sizing: border-box;
         }
+
+        /* Área da página: conteúdo + footer, sem invadir o menu lateral */
+        .page-area {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+        }
+
+        .conteudo {
+            width: 100%;
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        /* Footer no mesmo padrão da Comunidade */
+        .footer {
+            width: 100%;
+            margin-top: 30px;
+            padding: 0;
+            background: #ffffff;
+            border-top: 1px solid #e5edf5;
+            color: inherit;
+            text-align: initial;
+        }
+
+        .footer-content {
+            width: 100%;
+            max-width: 1180px;
+            min-height: 50px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 38px;
+        }
+
+        .footer-brand {
+            color: #38a5ff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .footer-links a {
+            color: #667085;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #38a5ff;
+        }
+
+        .footer-copy {
+            color: #98a2b3;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .page-area {
+                width: 100%;
+            }
+
+            .conteudo {
+                padding: 16px 12px;
+            }
+
+            .footer-content {
+                min-height: auto;
+                padding: 16px 18px;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 16px 20px;
+            }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -615,10 +722,11 @@ function gerarCalendario(
             <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-store"></i> Loja
             </a>
-            </nav>
+        </nav>
 
+        <div class="page-area">
 
-        <div class="conteudo">
+            <div class="conteudo">
 
             <div class="calendario-area">
 
@@ -1136,12 +1244,30 @@ function gerarCalendario(
             </div>
 
             </div>
-            <!-- /.calendario-area -->
-
         </div>
 
-    </div>
+            <footer class="footer">
+                <div class="footer-content">
 
+                    <div class="footer-left">
+                        <span class="footer-brand">FOAG</span>
+
+                        <nav class="footer-links">
+                            <a href="../sobre/sobre.php">Sobre</a>
+                            <a href="../contato/contato.php">Contato</a>
+                            <a href="../privacidade/privacidade.php">Privacidade</a>
+                        </nav>
+                    </div>
+
+                    <span class="footer-copy">
+                        © <?= date('Y') ?> FOAG
+                    </span>
+
+                </div>
+            </footer>
+
+        </div>
+    </div>
 
     <!-- ======================================
          MODAL LOGOUT
@@ -1177,44 +1303,6 @@ function gerarCalendario(
         </div>
 
     </div>
-
-
-    <!-- ======================================
-         MODAL FOGI
-    ======================================= -->
-
-    <div id="fogi-modal">
-
-        <div class="fogi-container">
-
-            <div class="fogi-header">
-
-                <span>
-                    FOGi — Assistente de Estudos
-                </span>
-
-                <button id="fogi-close">
-                    Fechar
-                </button>
-
-            </div>
-
-            <iframe
-                id="fogi-iframe"
-                src="about:blank"
-                title="FOGi — Assistente de Estudos"
-            ></iframe>
-
-        </div>
-
-    </div>
-
-
-    <footer>
-        &copy; 2026 FOAG.
-        Todos os direitos reservados.
-    </footer>
-
 
     <script src="../estrelas/modal_estrelas.js?v=1"></script>
 

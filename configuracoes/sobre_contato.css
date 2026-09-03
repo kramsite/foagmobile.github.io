@@ -1,0 +1,272 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", Arial, sans-serif;
+  background: #f4f8fc;
+  color: #2b2b2b;
+}
+
+.page-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 45px 30px 70px;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #3fa9f5;
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.page-header h1 {
+  font-size: 30px;
+  font-weight: 700;
+  color: #252525;
+  margin-bottom: 8px;
+}
+
+.page-header p {
+  color: #6f6f6f;
+  font-size: 15px;
+  line-height: 1.6;
+  max-width: 700px;
+}
+
+/* SOBRE */
+
+.about-main {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  margin-bottom: 20px;
+  border: 1px solid #e8eef5;
+}
+
+.about-main h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.about-main p {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.about-card {
+  background: white;
+  border-radius: 16px;
+  padding: 22px;
+  border: 1px solid #e8eef5;
+}
+
+.about-card .icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #eaf5ff;
+  color: #3fa9f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.about-card h3 {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.about-card p {
+  color: #707070;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.features {
+  background: white;
+  border-radius: 16px;
+  padding: 26px;
+  border: 1px solid #e8eef5;
+}
+
+.features h2 {
+  font-size: 20px;
+  margin-bottom: 18px;
+}
+
+.features-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+.feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #f7fbff;
+  padding: 13px 15px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.feature i {
+  color: #3fa9f5;
+}
+
+/* CONTATO */
+
+.contact-container {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 20px;
+}
+
+.contact-info,
+.contact-form {
+  background: white;
+  border-radius: 16px;
+  padding: 26px;
+  border: 1px solid #e8eef5;
+}
+
+.contact-info h2,
+.contact-form h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.contact-info > p {
+  color: #707070;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 22px;
+}
+
+.contact-item {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.contact-item .icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background: #eaf5ff;
+  color: #3fa9f5;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-item h3 {
+  font-size: 14px;
+  margin-bottom: 3px;
+}
+
+.contact-item p {
+  color: #777;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* FORMULÁRIO */
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  border: 1px solid #dce5ed;
+  border-radius: 10px;
+  padding: 11px 12px;
+  font-family: inherit;
+  font-size: 14px;
+  background: #fbfdff;
+  outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: #3fa9f5;
+}
+
+.form-group textarea {
+  min-height: 130px;
+  resize: vertical;
+}
+
+.send-button {
+  border: none;
+  border-radius: 10px;
+  background: #3fa9f5;
+  color: white;
+  padding: 11px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background: #2799eb;
+}
+
+.help-message {
+  margin-top: 12px;
+  color: #999;
+  font-size: 11px;
+}
+
+@media (max-width: 800px) {
+  .about-grid,
+  .contact-container,
+  .features-list,
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .page-content {
+    padding: 30px 18px 50px;
+  }
+}

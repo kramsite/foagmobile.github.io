@@ -427,7 +427,8 @@ if ($filtroBusca !== '') {
     </a>
     </nav>
 
-    <main class="main-content" id="conteudo-principal" tabindex="-1">
+    <div class="page-area">
+        <main class="main-content" id="conteudo-principal" tabindex="-1">
 
         <section class="chat-card">
 
@@ -613,7 +614,24 @@ if ($filtroBusca !== '') {
             </div>
 
         </section>
-    </main>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-brand">FOAG</span>
+
+                    <nav class="footer-links">
+                        <a href="../sobre/sobre.php">Sobre</a>
+                        <a href="../contato/contato.php">Contato</a>
+                        <a href="../privacidade/privacidade.php">Privacidade</a>
+                    </nav>
+                </div>
+
+                <span class="footer-copy">© <?= date('Y') ?> FOAG</span>
+            </div>
+        </footer>
+    </div>
 </div>
 
 <div
@@ -671,9 +689,6 @@ if ($filtroBusca !== '') {
     </div>
 </div>
 
-<footer>
-    &copy; 2025 FOAG. Todos os direitos reservados.
-</footer>
 
 <script src="comunidade.js?v=2"></script>
 

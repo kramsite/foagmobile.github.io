@@ -99,6 +99,14 @@ header.cabecalho {
     min-height: 0;
 }
 
+.page-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+}
+
 /* =========================
    MENU LATERAL
 ========================= */
@@ -1010,13 +1018,91 @@ nav.menu a:hover {
    RODAPÉ
 ========================= */
 
-footer {
+.footer {
     width: 100%;
-    padding: 10px;
-    background: #232323;
-    color: #ffffff;
-    text-align: center;
-    font-size: 12px;
+    margin-top: auto;
+    padding: 0 28px;
+    background: #ffffff;
+    border-top: 1px solid #e5edf5;
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1180px;
+    min-height: 50px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
+
+.footer-brand {
+    color: #38a5ff;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+}
+
+.footer-links a {
+    color: #667085;
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-links a:hover {
+    color: #38a5ff;
+}
+
+.footer-copy {
+    color: #98a2b3;
+    font-size: 11px;
+    white-space: nowrap;
+}
+
+@media (max-width: 900px) {
+    .footer {
+        padding: 0 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .footer {
+        padding: 0 12px;
+    }
+
+    .footer-content {
+        min-height: auto;
+        padding: 20px 0;
+        flex-direction: column;
+        justify-content: center;
+        gap: 13px;
+        text-align: center;
+    }
+
+    .footer-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-links {
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 16px 22px;
+    }
 }
 
 /* =========================
