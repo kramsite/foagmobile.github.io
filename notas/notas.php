@@ -2090,6 +2090,107 @@ $current =
       }
 
       
+
+
+      /* ==========================================
+         ÁREA PRINCIPAL + FOOTER
+      ========================================== */
+      .page-area {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .page-area .main-content {
+        flex: 1;
+        min-width: 0;
+        width: 100%;
+      }
+
+      .footer {
+        width: 100%;
+        margin: 30px 0 0;
+        padding: 0;
+        background: #ffffff;
+        color: #232323;
+        border-top: 1px solid #e5edf5;
+        box-shadow: none;
+        text-align: left;
+      }
+
+      .footer-content {
+        width: 100%;
+        max-width: 1180px;
+        min-height: 50px;
+        margin: 0 auto;
+        padding: 0 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 25px;
+      }
+
+      .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 38px;
+      }
+
+      .footer-brand {
+        color: #38a5ff;
+        font-size: 17px;
+        font-weight: 700;
+      }
+
+      .footer-links {
+        display: flex;
+        align-items: center;
+        gap: 25px;
+      }
+
+      .footer-links a {
+        color: #667085;
+        font-size: 12px;
+        font-weight: 500;
+        text-decoration: none;
+        transition: color 0.2s ease;
+      }
+
+      .footer-links a:hover {
+        color: #38a5ff;
+      }
+
+      .footer-copy {
+        color: #98a2b3;
+        font-size: 10px;
+        white-space: nowrap;
+      }
+
+      @media (max-width: 768px) {
+        .page-area {
+          width: 100%;
+        }
+
+        .footer-content {
+          min-height: auto;
+          padding: 18px;
+          flex-direction: column;
+          justify-content: center;
+          gap: 12px;
+        }
+
+        .footer-left {
+          flex-direction: column;
+          gap: 10px;
+        }
+
+        .footer-links {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 16px 22px;
+        }
+      }
   </style>
 </head>
 
@@ -2112,32 +2213,36 @@ $current =
                 <i class="fa-solid fa-house"></i> Início
             </a>
 
-            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-calendar-days"></i> Calendário
+            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-graduation-cap"></i> Estudos
             </a>
 
             <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-book"></i> Agenda
             </a>
 
-            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-graduation-cap"></i> Estudos
+            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-calendar-days"></i> Calendário
             </a>
 
             <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-check-double"></i> Boletim 
+                <i class="fa-solid fa-check-double"></i> Boletim
             </a>
 
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja 
+            <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-comments"></i> Comunidade
             </a>
 
             <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-trophy"></i> Ranking
             </a>
 
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
+            </a>
         </nav>
 
+        <div class="page-area">
         <main class="main-content">
 
       <!-- ==========================================
@@ -2509,7 +2614,27 @@ $current =
       </section>
 
     </main>
-  </div>
+
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-left">
+          <span class="footer-brand">FOAG</span>
+
+          <nav class="footer-links">
+            <a href="../sobre/sobre.php">Sobre</a>
+            <a href="../contato/contato.php">Contato</a>
+            <a href="../privacidade/privacidade.php">Privacidade</a>
+          </nav>
+        </div>
+
+        <span class="footer-copy">
+          © <?= date('Y') ?> FOAG
+        </span>
+      </div>
+    </footer>
+
+        </div>
+    </div>
 
   <!-- Modal da FOGi -->
   <div id="fogi-modal">
@@ -2533,10 +2658,6 @@ $current =
       </div>
     </div>
   </div>
-
-  <footer>
-    &copy; 2025 FOAG. Todos os direitos reservados.
-  </footer>
 
   <script src="../estrelas/modal_estrelas.js?v=<?= time() ?>"></script>
   <script src="notas.js?v=<?= time() ?>"></script>

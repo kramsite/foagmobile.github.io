@@ -1130,6 +1130,103 @@ foreach (
 <script src="<?= get_aparencia_path() ?>"></script>
  <script src="../configuracoes/aparencia.js?v=1"></script>
 
+
+<style>
+/* ==========================================
+   ÁREA PRINCIPAL + FOOTER
+========================================== */
+.page-area {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer {
+    width: 100%;
+    margin-top: 30px;
+    background: #ffffff;
+    border-top: 1px solid #e5edf5;
+}
+
+.footer-content {
+    width: 100%;
+    max-width: 1180px;
+    min-height: 50px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 38px;
+}
+
+.footer-brand {
+    color: #38a5ff;
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.footer-links {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.footer-links a {
+    color: #667085;
+    font-size: 12px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color .2s ease;
+}
+
+.footer-links a:hover {
+    color: #38a5ff;
+}
+
+.footer-copy {
+    color: #98a2b3;
+    font-size: 10px;
+    white-space: nowrap;
+}
+
+@media (max-width: 768px) {
+    .page-area {
+        width: 100%;
+    }
+
+    .footer {
+        margin-top: 20px;
+    }
+
+    .footer-content {
+        min-height: auto;
+        padding: 18px 20px;
+        flex-direction: column;
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .footer-left {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .footer-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 16px 22px;
+    }
+}
+</style>
+
 </head>
 
 <body>
@@ -1199,6 +1296,8 @@ foreach (
     <i class="fa-solid fa-store"></i> Loja
   </a>
 </nav>
+
+<div class="page-area">
 
 <main class="main-content">
 
@@ -1773,6 +1872,26 @@ foreach (
 
 </main>
 
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-left">
+                <span class="footer-brand">FOAG</span>
+
+                <nav class="footer-links">
+                    <a href="../sobre/sobre.php">Sobre</a>
+                    <a href="../contato/contato.php">Contato</a>
+                    <a href="../privacidade/privacidade.php">Privacidade</a>
+                </nav>
+            </div>
+
+            <span class="footer-copy">
+                © <?= date('Y') ?> FOAG
+            </span>
+        </div>
+    </footer>
+
+</div>
+
 </div>
 
 <!-- ======================================
@@ -1807,10 +1926,6 @@ foreach (
     </div>
 
 </div>
-
-<footer>
-    &copy; 2026 FOAG. Todos os direitos reservados.
-</footer>
 
 <script>
 
