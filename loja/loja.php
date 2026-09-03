@@ -2,870 +2,486 @@
 session_start();
 
 // ======================================
-// VERIFICAR LOGIN
+// LOGIN
 // ======================================
 
 if (empty($_SESSION['codigo_usuario'])) {
-    header("Location: ../login/index.php");
+    header('Location: ../login/index.php');
     exit;
 }
 
-$codigoUsuario = $_SESSION['codigo_usuario'];
+$codigoUsuario =
+    $_SESSION['codigo_usuario'];
 
-$current = basename($_SERVER['PHP_SELF']);
+$current =
+    basename(
+        $_SERVER['PHP_SELF']
+    );
+
+// ======================================
+// SISTEMA CENTRAL DE PONTOS
+// ======================================
+
+$arquivoSistemaPontos =
+    __DIR__ .
+    '/../estrelas/adicionar_estrelas.php';
+
+if (!file_exists($arquivoSistemaPontos)) {
+    exit(
+        'Sistema central de pontos não encontrado.'
+    );
+}
+
+require_once
+    $arquivoSistemaPontos;
 
 // ======================================
 // PASTA DO USUÁRIO
 // ======================================
 
-$baseJsonDir = __DIR__ . '/../json/usuarios';
-
-$pastaUsuario = $baseJsonDir . '/' . $codigoUsuario;
+$pastaUsuario =
+    __DIR__ .
+    '/../json/usuarios/' .
+    $codigoUsuario;
 
 if (!is_dir($pastaUsuario)) {
-    exit("Pasta do usuário não encontrada.");
+    if (!mkdir(
+        $pastaUsuario,
+        0777,
+        true
+    )) {
+        exit(
+            'Não foi possível criar a pasta do usuário.'
+        );
+    }
 }
 
 // ======================================
-// FUNÇÃO PARA SALVAR JSON
+// FUNÇÕES AUXILIARES
 // ======================================
 
-function salvarJson($caminho, $dados)
-{
-    $json = json_encode(
-        $dados,
-        JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-    );
+function salvarJsonLojaPagina(
+    string $arquivo,
+    array $dados
+): bool {
+
+    $json =
+        json_encode(
+            $dados,
+            JSON_PRETTY_PRINT |
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES
+        );
 
     if ($json === false) {
         return false;
     }
 
     return file_put_contents(
-        $caminho,
+        $arquivo,
         $json,
         LOCK_EX
     ) !== false;
 }
 
-// ======================================
-// ARQUIVO DA LOJA
-// ======================================
-
-$arquivoLoja = $pastaUsuario . '/loja.json';
-
-// ======================================
-// ESTRUTURA PADRÃO DA LOJA (SEM INSÍGNIAS)
-// ======================================
-
-$estruturaLojaPadrao = [
-
-    'estrelas' => 0,
-
-    'total_estudado' => 0,
-
-    'itens_comprados' => [],
-
-    'itens' => [
-
-        // ===================================
-        // TEMAS
-        // ===================================
-
-        [
-            'id' => 'tema_roxo',
-            'nome' => 'Tema Roxo',
-            'descricao' => 'Mude o tema do perfil para roxo',
-            'preco' => 50,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/roxo.jpg'
-        ],
-
-        [
-            'id' => 'tema_verde',
-            'nome' => 'Tema Verde',
-            'descricao' => 'Mude o tema do perfil para verde',
-            'preco' => 50,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/verde.png'
-        ],
-
-        [
-            'id' => 'tema_vermelho',
-            'nome' => 'Tema Vermelho',
-            'descricao' => 'Mude o tema do perfil para vermelho',
-            'preco' => 55,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/vermelho.png'
-        ],
-
-        [
-            'id' => 'tema_amarelo',
-            'nome' => 'Tema Amarelo',
-            'descricao' => 'Mude o tema do perfil para amarelo',
-            'preco' => 55,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/amarelo.png'
-        ],
-
-        [
-            'id' => 'tema_rosa',
-            'nome' => 'Tema Rosa',
-            'descricao' => 'Mude o tema do perfil para rosa',
-            'preco' => 60,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/rosa.jpg'
-        ],
-
-        [
-            'id' => 'tema_preto',
-            'nome' => 'Tema Preto',
-            'descricao' => 'Mude o tema do perfil para preto',
-            'preco' => 65,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/preto.jpg'
-        ],
-
-        [
-            'id' => 'tema_laranja',
-            'nome' => 'Tema Laranja',
-            'descricao' => 'Mude o tema do perfil para laranja',
-            'preco' => 55,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/laranja.png'
-        ],
-
-        [
-            'id' => 'tema_magenta',
-            'nome' => 'Tema Magenta',
-            'descricao' => 'Mude o tema do perfil para magenta',
-            'preco' => 65,
-            'icone' => 'fa-solid fa-palette',
-            'categoria' => 'temas',
-            'imagem' => '../img/loja/tema/magenta.jpg'
-        ],
-
-        // ===================================
-        // EMOJIS
-        // ===================================
-
-        [
-            'id' => 'emoji_feliz',
-            'nome' => 'Felizinho',
-            'descricao' => 'Um gatinho contente e tranquilo',
-            'preco' => 20,
-            'icone' => 'fa-solid fa-rocket',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/aaa.jpg'
-        ],
-
-        [
-            'id' => 'emoji_explode',
-            'nome' => 'Explodindo',
-            'descricao' => 'Gatinho no limite da paciência',
-            'preco' => 15,
-            'icone' => 'fa-solid fa-book',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/blom.jpg'
-        ],
-
-        [
-            'id' => 'emoji_coracao',
-            'nome' => 'Carinho',
-            'descricao' => 'Gatinho espalhando carinho',
-            'preco' => 25,
-            'icone' => 'fa-solid fa-lightbulb',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/coracao.jpg'
-        ],
-
-        [
-            'id' => 'emoji_olhinho',
-            'nome' => 'Olhinhos',
-            'descricao' => 'Gatinho quer algo',
-            'preco' => 22,
-            'icone' => 'fa-solid fa-bullseye',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/favor.jpg'
-        ],
-
-        [
-            'id' => 'emoji_flor',
-            'nome' => 'Tome uma flor',
-            'descricao' => 'Gatinho uma flor para uma flor',
-            'preco' => 28,
-            'icone' => 'fa-solid fa-brain',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/flor.jpg'
-        ],
-
-        [
-            'id' => 'emoji_freddy',
-            'nome' => 'Freddy',
-            'descricao' => 'Five nights at cat',
-            'preco' => 20,
-            'icone' => 'fa-solid fa-bolt',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/freddy.jpg'
-        ],
-
-        [
-            'id' => 'emoji_risada',
-            'nome' => 'Risonho',
-            'descricao' => 'Gatinho KAKAKAKAKA',
-            'preco' => 30,
-            'icone' => 'fa-solid fa-star',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/ha.jpg'
-        ],
-
-        [
-            'id' => 'emoji_nuquiditu',
-            'nome' => 'Nuquidito',
-            'descricao' => 'Gatinho OMG',
-            'preco' => 35,
-            'icone' => 'fa-solid fa-trophy',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/nem.jpg'
-        ],
-
-        [
-            'id' => 'emoji_vibes',
-            'nome' => 'Vibes',
-            'descricao' => 'Gatinho vibes',
-            'preco' => 15,
-            'icone' => 'fa-solid fa-heart',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/ouvindo.jpg'
-        ],
-
-        [
-            'id' => 'emoji_nerd',
-            'nome' => 'Eu sei a resposta',
-            'descricao' => 'Gatinho Well, actually...',
-            'preco' => 25,
-            'icone' => 'fa-solid fa-globe',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/sabia.jpg'
-        ],
-
-        [
-            'id' => 'emoji_nuvem',
-            'nome' => 'Dumi',
-            'descricao' => 'Gatinho sla',
-            'preco' => 18,
-            'icone' => 'fa-solid fa-cloud',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/sem.jpg'
-        ],
-
-        [
-            'id' => 'emoji_sorriso',
-            'nome' => 'Sorriso',
-            'descricao' => 'Gatinho feliz',
-            'preco' => 22,
-            'icone' => 'fa-solid fa-key',
-            'categoria' => 'emojis',
-            'imagem' => '../img/loja/emoji/sorrindo.jpg'
-        ],
-
-        // ===================================
-        // FUNDOS
-        // ===================================
-
-        [
-            'id' => 'fundo_neon',
-            'nome' => 'Fundo Neon',
-            'descricao' => 'Um fundo neon para seu perfil',
-            'preco' => 100,
-            'icone' => 'fa-solid fa-star',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/neon.jpg'
-        ],
-
-        [
-            'id' => 'fundo_galaxia',
-            'nome' => 'Fundo Galáxia',
-            'descricao' => 'Viaje pelas estrelas',
-            'preco' => 120,
-            'icone' => 'fa-solid fa-star',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/galaxia.jpg'
-        ],
-
-        [
-            'id' => 'fundo_por_do_sol',
-            'nome' => 'Fundo Pôr do Sol',
-            'descricao' => '🌅 Um pôr do sol relaxante',
-            'preco' => 130,
-            'icone' => 'fa-solid fa-sun',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/sol.jpg'
-        ],
-
-        [
-            'id' => 'fundo_oceano',
-            'nome' => 'Fundo Oceano',
-            'descricao' => '🌊 A calma do oceano',
-            'preco' => 110,
-            'icone' => 'fa-solid fa-water',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/mar.jpg'
-        ],
-
-        [
-            'id' => 'fundo_nebulosa',
-            'nome' => 'Fundo Nebulosa',
-            'descricao' => '🌌 Cores cósmicas',
-            'preco' => 150,
-            'icone' => 'fa-solid fa-cloud',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/nevoa.jpg'
-        ],
-
-        [
-            'id' => 'fundo_montanha',
-            'nome' => 'Fundo Montanha',
-            'descricao' => '🏔️ Picos e natureza',
-            'preco' => 100,
-            'icone' => 'fa-solid fa-mountain',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/montanha.jpg'
-        ],
-
-        [
-            'id' => 'fundo_floresta',
-            'nome' => 'Fundo Floresta',
-            'descricao' => '🌲 Natureza exuberante',
-            'preco' => 110,
-            'icone' => 'fa-solid fa-tree',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/floresta.jpg'
-        ],
-
-        [
-            'id' => 'fundo_cidade',
-            'nome' => 'Fundo Cidade',
-            'descricao' => '🏙️ A vida urbana',
-            'preco' => 105,
-            'icone' => 'fa-solid fa-city',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/cidade.jpg'
-        ],
-
-        [
-            'id' => 'fundo_praia',
-            'nome' => 'Fundo Praia',
-            'descricao' => '🏖️ Areia e mar',
-            'preco' => 115,
-            'icone' => 'fa-solid fa-umbrella-beach',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/praia.jpg'
-        ],
-
-        [
-            'id' => 'fundo_castelo',
-            'nome' => 'Fundo Castelo',
-            'descricao' => '🏰 Um mundo de fantasia',
-            'preco' => 125,
-            'icone' => 'fa-solid fa-castle',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/castelo.jpg'
-        ],
-
-        [
-            'id' => 'fundo_jardim',
-            'nome' => 'Fundo Jardim',
-            'descricao' => '🌺 Flores e cores',
-            'preco' => 105,
-            'icone' => 'fa-solid fa-flower',
-            'categoria' => 'fundos',
-            'imagem' => '../img/loja/fundo/jardim.jpg'
-        ],
-
-        // ===================================
-        // MOLDURAS
-        // ===================================
-
-
-        [
-            'id' => 'moldura_natureza',
-            'nome' => 'Moldura Natureza',
-            'descricao' => 'Folhas verdes ao redor do perfil',
-            'preco' => 70,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/natureza.png'
-        ],
-
-        [
-            'id' => 'moldura_nuvens',
-            'nome' => 'Moldura Nuvens',
-            'descricao' => 'Nuvens azuis leves e delicadas',
-            'preco' => 75,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/nuvens.png'
-        ],
-
-        [
-            'id' => 'moldura_estrelas',
-            'nome' => 'Moldura Estrelas',
-            'descricao' => 'Estrelas brilhando ao redor do perfil',
-            'preco' => 75,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/estrelas.png'
-        ],
-
-        [
-            'id' => 'moldura_agua',
-            'nome' => 'Moldura Água',
-            'descricao' => 'Ondas azuis envolvendo o perfil',
-            'preco' => 80,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/agua.png'
-        ],
-
-        [
-            'id' => 'moldura_borboletas',
-            'nome' => 'Moldura Borboletas',
-            'descricao' => 'Borboletas delicadas ao redor do perfil',
-            'preco' => 85,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/borboletas.png'
-        ],
-
-        [
-            'id' => 'moldura_cachorro',
-            'nome' => 'Moldura Cachorrinho',
-            'descricao' => 'Um cachorrinho descansando na moldura',
-            'preco' => 90,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/cachorro.png'
-        ],
-
-        [
-            'id' => 'moldura_gato_laranja',
-            'nome' => 'Moldura Gato Laranja',
-            'descricao' => 'Um gatinho laranja descansando na moldura',
-            'preco' => 90,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/gatolaranja.png'
-        ],
-
-        [
-            'id' => 'moldura_neon',
-            'nome' => 'Moldura Neon',
-            'descricao' => 'Brilho neon em azul e rosa',
-            'preco' => 80,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/neon.png'
-        ],
-
-        [
-            'id' => 'moldura_campeao',
-            'nome' => 'Moldura Campeão',
-            'descricao' => 'Louros dourados de campeão',
-            'preco' => 92,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/campeao.png'
-        ],
-
-         [
-            'id' => 'moldura_gato_preto',
-            'nome' => 'Moldura Gato Preto',
-            'descricao' => 'Um gatinho preto acompanhando seu perfil',
-            'preco' => 98,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/gatopreto.png'
-        ],
-
-        [
-            'id' => 'moldura_fogo',
-            'nome' => 'Moldura Fogo',
-            'descricao' => 'Chamas intensas ao redor do perfil',
-            'preco' => 100,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/fogo.png'
-        ],
-
-        [
-            'id' => 'moldura_galaxia',
-            'nome' => 'Moldura Galáxia',
-            'descricao' => 'Energia cósmica em tons roxos',
-            'preco' => 90,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/galaxia.png'
-        ],
-
-        [
-            'id' => 'moldura_livros',
-            'nome' => 'Moldura Livros',
-            'descricao' => 'Livros e estrelas para quem vive estudando',
-            'preco' => 80,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/livros.png'
-        ],
-
-        [
-            'id' => 'moldura_sakura',
-            'nome' => 'Moldura Sakura',
-            'descricao' => 'Flores de sakura ao redor do perfil',
-            'preco' => 75,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/sakura.png'
-        ],
-
-        [
-            'id' => 'moldura_querubim',
-            'nome' => 'Moldura Querubim',
-            'descricao' => 'Asas claras com detalhes dourados',
-            'preco' => 95,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/querubim.png'
-        ],
-
-        [
-            'id' => 'moldura_dragao',
-            'nome' => 'Moldura Dragão',
-            'descricao' => 'Energia azul de dragão ao redor do perfil',
-            'preco' => 100,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/dragao.png'
-        ],
-
-        [
-            'id' => 'moldura_rei',
-            'nome' => 'Moldura Rei',
-            'descricao' => 'Detalhes dourados dignos de realeza',
-            'preco' => 100,
-            'icone' => 'fa-regular fa-image',
-            'categoria' => 'molduras',
-            'imagem' => '../img/loja/moldura/rei.png'
-        ],
-
-        // ===================================
-        // ESPECIAIS (CURSORES)
-        // ===================================
-
-        [
-            'id' => 'cursor_estrela',
-            'nome' => 'Cursor Estrela',
-            'descricao' => '⭐ Um cursor em forma de estrela',
-            'preco' => 40,
-            'icone' => 'fa-solid fa-star',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_foguete',
-            'nome' => 'Cursor Foguete',
-            'descricao' => '🚀 Um cursor de foguete espacial',
-            'preco' => 45,
-            'icone' => 'fa-solid fa-rocket',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_coracao',
-            'nome' => 'Cursor Coração',
-            'descricao' => '❤️ Um cursor em formato de coração',
-            'preco' => 35,
-            'icone' => 'fa-solid fa-heart',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_lampada',
-            'nome' => 'Cursor Lâmpada',
-            'descricao' => '💡 Um cursor com uma lâmpada brilhante',
-            'preco' => 40,
-            'icone' => 'fa-solid fa-lightbulb',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_raio',
-            'nome' => 'Cursor Raio',
-            'descricao' => '⚡ Um cursor com um raio de energia',
-            'preco' => 50,
-            'icone' => 'fa-solid fa-bolt',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_trofeu',
-            'nome' => 'Cursor Troféu',
-            'descricao' => '🏆 Um cursor de vencedor',
-            'preco' => 55,
-            'icone' => 'fa-solid fa-trophy',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_alvo',
-            'nome' => 'Cursor Alvo',
-            'descricao' => '🎯 Um cursor preciso como um alvo',
-            'preco' => 45,
-            'icone' => 'fa-solid fa-bullseye',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-
-        [
-            'id' => 'cursor_flor',
-            'nome' => 'Cursor Flor',
-            'descricao' => '🌸 Um cursor com uma flor delicada',
-            'preco' => 35,
-            'icone' => 'fa-solid fa-flower',
-            'categoria' => 'especiais',
-            'imagem' => '../img/loja/especial/'
-        ],
-    ]
-];
-
-// ======================================
-// CRIAR LOJA.JSON SE NÃO EXISTIR
-// ======================================
-
-if (!file_exists($arquivoLoja)) {
-
-    if (!salvarJson(
-        $arquivoLoja,
-        $estruturaLojaPadrao
-    )) {
-        exit("Não foi possível criar os dados da loja.");
+function estruturaLojaUsuarioPagina(): array
+{
+    return [
+        'itens_comprados' => [],
+        'itens_ativos' => [
+            'tema' => null,
+            'fundo' => null,
+            'moldura' => null,
+            'cursor' => null
+        ]
+    ];
+}
+
+function normalizarLojaUsuarioPagina(
+    $dados
+): array {
+
+    $padrao =
+        estruturaLojaUsuarioPagina();
+
+    if (!is_array($dados)) {
+        return $padrao;
     }
+
+    if (
+        isset($dados['itens_comprados']) &&
+        is_array($dados['itens_comprados'])
+    ) {
+        $padrao['itens_comprados'] =
+            array_values(
+                array_unique(
+                    array_filter(
+                        array_map(
+                            'strval',
+                            $dados['itens_comprados']
+                        ),
+                        static fn($id) =>
+                            trim($id) !== ''
+                    )
+                )
+            );
+    }
+
+    if (
+        isset($dados['itens_ativos']) &&
+        is_array($dados['itens_ativos'])
+    ) {
+        foreach (
+            $padrao['itens_ativos']
+            as $tipo => $valor
+        ) {
+            $id =
+                $dados[
+                    'itens_ativos'
+                ][$tipo] ?? null;
+
+            $padrao[
+                'itens_ativos'
+            ][$tipo] =
+                is_string($id) &&
+                trim($id) !== ''
+                    ? trim($id)
+                    : null;
+        }
+    }
+
+    return $padrao;
+}
+
+function tipoEquipavelPagina(
+    array $produto
+): ?string {
+
+    $categoria =
+        (string)(
+            $produto[
+                'categoria'
+            ] ?? ''
+        );
+
+    return match (
+        $categoria
+    ) {
+        'temas' =>
+            'tema',
+
+        'fundos' =>
+            'fundo',
+
+        'molduras' =>
+            'moldura',
+
+        'especiais' =>
+            'cursor',
+
+        default =>
+            null
+    };
+}
+
+function localizarProdutoPagina(
+    array $itens,
+    string $itemId
+): ?array {
+
+    foreach (
+        $itens
+        as $item
+    ) {
+        if (
+            is_array($item) &&
+            (string)(
+                $item['id'] ?? ''
+            ) ===
+            $itemId
+        ) {
+            return $item;
+        }
+    }
+
+    return null;
 }
 
 // ======================================
-// CARREGAR LOJA.JSON
+// CATÁLOGO GLOBAL
 // ======================================
 
-$conteudoLoja = file_get_contents($arquivoLoja);
+$arquivoProdutos =
+    __DIR__ .
+    '/../json/loja/produtos.json';
 
-if ($conteudoLoja === false) {
+if (!file_exists($arquivoProdutos)) {
+    exit(
+        'Catálogo não encontrado em json/loja/produtos.json.'
+    );
+}
 
-    $lojaData = $estruturaLojaPadrao;
-
-} else {
-
-    $lojaData = json_decode(
-        $conteudoLoja,
+$produtosData =
+    json_decode(
+        file_get_contents(
+            $arquivoProdutos
+        ),
         true
     );
 
-    if (!is_array($lojaData)) {
-        $lojaData = $estruturaLojaPadrao;
+if (
+    !is_array($produtosData) ||
+    !isset($produtosData['itens']) ||
+    !is_array($produtosData['itens'])
+) {
+    exit(
+        'O arquivo produtos.json está inválido.'
+    );
+}
+
+$catalogoItens =
+    $produtosData['itens'];
+
+// ======================================
+// LOJA.JSON DO USUÁRIO
+// ======================================
+
+$arquivoLoja =
+    $pastaUsuario .
+    '/loja.json';
+
+$lojaUsuario =
+    estruturaLojaUsuarioPagina();
+
+$lojaAntiga = [];
+
+if (file_exists($arquivoLoja)) {
+    $conteudoLoja =
+        file_get_contents(
+            $arquivoLoja
+        );
+
+    if ($conteudoLoja !== false) {
+        $lojaAntiga =
+            json_decode(
+                $conteudoLoja,
+                true
+            );
+
+        $lojaUsuario =
+            normalizarLojaUsuarioPagina(
+                $lojaAntiga
+            );
     }
 }
 
 // ======================================
-// GARANTIR ESTRUTURA DA LOJA
+// MIGRAÇÃO DO ITEM ATIVO ANTIGO
+// ======================================
+//
+// A Loja antiga guardava apenas um item_ativo
+// dentro do perfil.json. Se existir, migramos
+// uma vez para o novo itens_ativos.
+//
 // ======================================
 
-if (
-    !isset($lojaData['estrelas']) ||
-    !is_numeric($lojaData['estrelas'])
-) {
-    $lojaData['estrelas'] = 0;
-}
+$temAlgumAtivo =
+    count(
+        array_filter(
+            $lojaUsuario[
+                'itens_ativos'
+            ],
+            static fn($id) =>
+                is_string($id) &&
+                trim($id) !== ''
+        )
+    ) > 0;
 
-if (
-    !isset($lojaData['total_estudado']) ||
-    !is_numeric($lojaData['total_estudado'])
-) {
-    $lojaData['total_estudado'] = 0;
-}
+if (!$temAlgumAtivo) {
+    $arquivoPerfil =
+        $pastaUsuario .
+        '/perfil.json';
 
-if (
-    !isset($lojaData['itens_comprados']) ||
-    !is_array($lojaData['itens_comprados'])
-) {
-    $lojaData['itens_comprados'] = [];
-}
+    if (file_exists($arquivoPerfil)) {
+        $perfilAntigo =
+            json_decode(
+                file_get_contents(
+                    $arquivoPerfil
+                ),
+                true
+            );
 
-/*
-|--------------------------------------------------------------------------
-| IMPORTANTE
-|--------------------------------------------------------------------------
-|
-| O catálogo sempre vem da estrutura padrão.
-| Assim, mesmo que loja.json esteja vazio ou seja antigo,
-| os itens continuam aparecendo.
-|
-*/
+        $itemAtivoAntigo =
+            is_array($perfilAntigo)
+                ? trim(
+                    (string)(
+                        $perfilAntigo[
+                            'item_ativo'
+                        ] ?? ''
+                    )
+                )
+                : '';
 
-$lojaData['itens'] = $estruturaLojaPadrao['itens'];
+        if (
+            $itemAtivoAntigo !== '' &&
+            in_array(
+                $itemAtivoAntigo,
+                $lojaUsuario[
+                    'itens_comprados'
+                ],
+                true
+            )
+        ) {
+            $produtoAntigo =
+                localizarProdutoPagina(
+                    $catalogoItens,
+                    $itemAtivoAntigo
+                );
 
-// ======================================
-// DADOS DO PERFIL
-// ======================================
+            if ($produtoAntigo) {
+                $tipo =
+                    tipoEquipavelPagina(
+                        $produtoAntigo
+                    );
 
-$arquivoPerfil = $pastaUsuario . '/perfil.json';
-
-$perfilData = [];
-
-if (file_exists($arquivoPerfil)) {
-
-    $conteudoPerfil = file_get_contents(
-        $arquivoPerfil
-    );
-
-    if ($conteudoPerfil !== false) {
-
-        $perfilData = json_decode(
-            $conteudoPerfil,
-            true
-        );
-    }
-}
-
-if (!is_array($perfilData)) {
-    $perfilData = [];
-}
-
-// ======================================
-// CALCULAR ESTRELAS PELO POMODORO
-// ======================================
-
-$arquivoPomodoro = $pastaUsuario . '/pomodoro.json';
-
-$totalMinutos = 0;
-
-if (file_exists($arquivoPomodoro)) {
-
-    $conteudoPomodoro = file_get_contents(
-        $arquivoPomodoro
-    );
-
-    if ($conteudoPomodoro !== false) {
-
-        $pomodoroData = json_decode(
-            $conteudoPomodoro,
-            true
-        );
-
-        if (is_array($pomodoroData)) {
-
-            if (
-                isset($pomodoroData['total_minutos']) &&
-                is_numeric($pomodoroData['total_minutos'])
-            ) {
-
-                $totalMinutos = (int)
-                    $pomodoroData['total_minutos'];
-            }
-
-            elseif (
-                isset($pomodoroData['sessions']) &&
-                is_array($pomodoroData['sessions'])
-            ) {
-
-                foreach (
-                    $pomodoroData['sessions']
-                    as $sessao
-                ) {
-
-                    if (!is_array($sessao)) {
-                        continue;
-                    }
-
-                    if (
-                        isset($sessao['duration']) &&
-                        is_numeric($sessao['duration'])
-                    ) {
-                        $totalMinutos +=
-                            (int) $sessao['duration'];
-                    }
-
-                    elseif (
-                        isset($sessao['duracao']) &&
-                        is_numeric($sessao['duracao'])
-                    ) {
-                        $totalMinutos +=
-                            (int) $sessao['duracao'];
-                    }
-
-                    elseif (
-                        isset($sessao['minutos']) &&
-                        is_numeric($sessao['minutos'])
-                    ) {
-                        $totalMinutos +=
-                            (int) $sessao['minutos'];
-                    }
+                if ($tipo) {
+                    $lojaUsuario[
+                        'itens_ativos'
+                    ][$tipo] =
+                        $itemAtivoAntigo;
                 }
             }
         }
     }
 }
 
-// 1 estrela a cada 15 minutos
-$estrelasCalculadas = floor(
-    $totalMinutos / 15
+// Salva somente inventário + itens ativos.
+// estrelas e catálogo deixam de ficar em loja.json.
+salvarJsonLojaPagina(
+    $arquivoLoja,
+    $lojaUsuario
 );
 
 // ======================================
-// NÃO PERDER ESTRELAS JÁ GANHAS
+// SALDO REAL DO PONTOS.JSON
 // ======================================
 
-$estrelasSalvas =
-    isset($lojaData['estrelas'])
-        ? (int) $lojaData['estrelas']
-        : 0;
+$pontosData =
+    carregarPontos(
+        $codigoUsuario
+    );
 
-if ($estrelasSalvas > $estrelasCalculadas) {
+$saldoEstrelas =
+    max(
+        0,
+        (int)(
+            $pontosData[
+                'estrelas'
+            ] ?? 0
+        )
+    );
 
-    $estrelasGanhas =
-        $estrelasSalvas;
+// ======================================
+// TEMPO TOTAL ESTUDADO
+// ======================================
 
-} else {
+$arquivoPomodoro =
+    $pastaUsuario .
+    '/pomodoro.json';
 
-    $estrelasGanhas =
-        $estrelasCalculadas;
+$totalMinutos =
+    0;
+
+if (file_exists($arquivoPomodoro)) {
+    $pomodoroData =
+        json_decode(
+            file_get_contents(
+                $arquivoPomodoro
+            ),
+            true
+        );
+
+    if (
+        is_array($pomodoroData) &&
+        isset(
+            $pomodoroData[
+                'sessions'
+            ]
+        ) &&
+        is_array(
+            $pomodoroData[
+                'sessions'
+            ]
+        )
+    ) {
+        foreach (
+            $pomodoroData[
+                'sessions'
+            ]
+            as $sessao
+        ) {
+            if (!is_array($sessao)) {
+                continue;
+            }
+
+            if (
+                ($sessao[
+                    'mode'
+                ] ?? '') !==
+                'focus'
+            ) {
+                continue;
+            }
+
+            $minutos =
+                (int)(
+                    $sessao[
+                        'minutes'
+                    ] ??
+                    $sessao[
+                        'minutos'
+                    ] ??
+                    $sessao[
+                        'duration'
+                    ] ??
+                    $sessao[
+                        'duracao'
+                    ] ??
+                    0
+                );
+
+            if ($minutos > 0) {
+                $totalMinutos +=
+                    $minutos;
+            }
+        }
+    }
 }
 
-$lojaData['estrelas'] =
-    $estrelasGanhas;
-
-$lojaData['total_estudado'] =
-    $totalMinutos;
-
 // ======================================
-// SALVAR ESTRUTURA ATUALIZADA
+// DADOS ENVIADOS AO JAVASCRIPT
 // ======================================
 
-salvarJson(
-    $arquivoLoja,
-    $lojaData
-);
+$lojaData = [
+    'estrelas' =>
+        $saldoEstrelas,
+
+    'total_estudado' =>
+        $totalMinutos,
+
+    'itens' =>
+        $catalogoItens,
+
+    'itens_comprados' =>
+        $lojaUsuario[
+            'itens_comprados'
+        ],
+
+    'itens_ativos' =>
+        $lojaUsuario[
+            'itens_ativos'
+        ]
+];
 
 ?>
 <!DOCTYPE html>
@@ -928,15 +544,7 @@ salvarJson(
                 JSON_UNESCAPED_UNICODE |
                 JSON_UNESCAPED_SLASHES
             ); ?>;
-
-        window.PERFIL_DATA =
-            <?= json_encode(
-                $perfilData,
-                JSON_UNESCAPED_UNICODE |
-                JSON_UNESCAPED_SLASHES
-            ); ?>;
-
-        window.LOJA_SAVE_URL =
+        window.LOJA_ACTION_URL =
             "salvar_loja.php";
 
         window.USER_ID =
@@ -1231,63 +839,6 @@ salvarJson(
 
         </div>
 
-        <!-- ==================================
-             BOTÃO SECRETO
-        =================================== -->
-
-        <div class="botao-secreto-container">
-
-            <button
-                id="botaoEstrelasSecretas"
-                class="botao-secreto"
-                title="Clique 5 vezes rapidamente para ganhar 10 estrelas!"
-            >
-
-                <i class="fa-solid fa-star"></i>
-
-                <span class="texto-secreto">
-                    🔮
-                </span>
-
-            </button>
-
-        </div>
-
-        <!-- ==================================
-             MODAL ESTRELAS
-        =================================== -->
-
-        <div
-            id="modal-estrelas"
-            class="modal-estrelas"
-        >
-
-            <div class="modal-content">
-
-                <div class="estrelas-icon">
-                    <i class="fa-solid fa-star"></i>
-                </div>
-
-                <h3>
-                    🌟 Estrelas adicionadas!
-                </h3>
-
-                <p id="mensagemEstrelas">
-                    Você ganhou
-                    <strong>10 estrelas</strong>!
-                </p>
-
-                <button
-                    id="fechar-estrelas"
-                    class="btn-modal"
-                >
-                    Legal! 🚀
-                </button>
-
-            </div>
-
-        </div>
-
     </main>
 
 </div>
@@ -1335,191 +886,7 @@ salvarJson(
      JAVASCRIPT DA LOJA
 ======================================= -->
 
-<script src="loja.js"></script>
-
-<script>
-
-document.addEventListener(
-    'DOMContentLoaded',
-    function () {
-
-        // ==================================
-        // CONFIGURAÇÕES
-        // ==================================
-
-        const configuracoesIcon =
-            document.getElementById(
-                'icon-configuracoes'
-            );
-
-        if (configuracoesIcon) {
-
-            configuracoesIcon.addEventListener(
-                'click',
-                function () {
-
-                    window.location.href =
-                        '../configuracoes/configuracoes.php';
-                }
-            );
-        }
-
-        // ==================================
-        // PERFIL
-        // ==================================
-
-        const perfilIcon =
-            document.getElementById(
-                'icon-perfil'
-            );
-
-        const modalPerfil =
-            document.getElementById(
-                'modal-perfil'
-            );
-
-        perfilIcon?.addEventListener(
-            'click',
-            function () {
-
-                if (!modalPerfil) {
-                    return;
-                }
-
-                modalPerfil.style.display =
-                    'flex';
-
-                document.body.style.overflow =
-                    'hidden';
-            }
-        );
-
-        // ==================================
-        // LOGOUT
-        // ==================================
-
-        const logoutModal =
-            document.getElementById(
-                'logout-modal'
-            );
-
-        const iconSair =
-            document.getElementById(
-                'icon-sair'
-            );
-
-        const confirmarLogout =
-            document.getElementById(
-                'confirm-logout'
-            );
-
-        const cancelarLogout =
-            document.getElementById(
-                'cancel-logout'
-            );
-
-        iconSair?.addEventListener(
-            'click',
-            function () {
-
-                if (logoutModal) {
-                    logoutModal.style.display =
-                        'flex';
-                }
-            }
-        );
-
-        confirmarLogout?.addEventListener(
-            'click',
-            function () {
-
-                window.location.href =
-                    '../login/logout.php';
-            }
-        );
-
-        cancelarLogout?.addEventListener(
-            'click',
-            function () {
-
-                if (logoutModal) {
-                    logoutModal.style.display =
-                        'none';
-                }
-            }
-        );
-
-        logoutModal?.addEventListener(
-            'click',
-            function (evento) {
-
-                if (
-                    evento.target ===
-                    logoutModal
-                ) {
-                    logoutModal.style.display =
-                        'none';
-                }
-            }
-        );
-
-        // ==================================
-        // FECHAR PERFIL
-        // ==================================
-
-        document.getElementById(
-            'fechar-perfil'
-        )?.addEventListener(
-            'click',
-            function () {
-
-                if (modalPerfil) {
-                    modalPerfil.style.display =
-                        'none';
-                }
-
-                document.body.style.overflow =
-                    '';
-            }
-        );
-
-        document.getElementById(
-            'fechar-perfil-btn'
-        )?.addEventListener(
-            'click',
-            function () {
-
-                if (modalPerfil) {
-                    modalPerfil.style.display =
-                        'none';
-                }
-
-                document.body.style.overflow =
-                    '';
-            }
-        );
-
-        modalPerfil?.addEventListener(
-            'click',
-            function (evento) {
-
-                if (
-                    evento.target ===
-                    modalPerfil
-                ) {
-
-                    modalPerfil.style.display =
-                        'none';
-
-                    document.body.style.overflow =
-                        '';
-                }
-            }
-        );
-    }
-);
-
-</script>
+<script src="loja.js?v=<?= time() ?>"></script>
 
 </body>
 </html>

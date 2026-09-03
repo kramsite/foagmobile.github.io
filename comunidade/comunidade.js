@@ -1,107 +1,84 @@
-// comunidade.js - Versão corrigida com a mesma lógica da agenda
-
-document.addEventListener('DOMContentLoaded', function() {
+// comunidade.js — Comunidade FOAG corrigida
+document.addEventListener('DOMContentLoaded', function () {
     'use strict';
 
     // =================================================
-    // CONFIGURAÇÕES
+    // DADOS / CONFIGURAÇÕES
     // =================================================
 
     let chatData = window.CHAT_DATA || { perguntas: [] };
     let todasPerguntas = window.TODAS_PERGUNTAS || [];
     let interacoes = window.INTERACOES || { curtidas: [], salvos: [] };
 
-    const usuarioCodigo = window.USUARIO_CODIGO || '';
+    const usuarioCodigo = String(window.USUARIO_CODIGO || '');
     const usuarioNome = window.USUARIO_NOME || 'Usuário';
-    const CHAT_SAVE_URL = window.CHAT_SAVE_URL || 'salvar_chat.php';
-    const INTERACOES_SAVE_URL = window.INTERACOES_SAVE_URL || 'salvar_interacoes.php';
 
-    const palavrasProibidas = window.PALAVRAS_PROIBIDAS || [];
+    const CHAT_ACTION_URL = window.CHAT_SAVE_URL || 'salvar_chat.php';
+    const INTERACAO_URL = window.INTERACAO_URL || 'interacao.php';
+    const INTERACOES_SAVE_URL = window.INTERACOES_SAVE_URL || 'salvar_interacao.php';
 
-    if (!Array.isArray(chatData.perguntas)) {
-        chatData.perguntas = [];
-    }
+    const palavrasProibidas = Array.isArray(window.PALAVRAS_PROIBIDAS)
+        ? window.PALAVRAS_PROIBIDAS
+        : [];
 
-    if (!Array.isArray(todasPerguntas)) {
-        todasPerguntas = [];
-    }
-
-    if (!Array.isArray(interacoes.curtidas)) {
-        interacoes.curtidas = [];
-    }
-
-    if (!Array.isArray(interacoes.salvos)) {
-        interacoes.salvos = [];
-    }
+    if (!Array.isArray(chatData.perguntas)) chatData.perguntas = [];
+    if (!Array.isArray(todasPerguntas)) todasPerguntas = [];
+    if (!Array.isArray(interacoes.curtidas)) interacoes.curtidas = [];
+    if (!Array.isArray(interacoes.salvos)) interacoes.salvos = [];
 
     // =================================================
-    // FUNÇÃO DE DEBOUNCE (igual da agenda)
-    // =================================================
-
-    function debounce(funcao, tempo = 500) {
-        let temporizador;
-        return function(...argumentos) {
-            clearTimeout(temporizador);
-            temporizador = setTimeout(function() {
-                funcao.apply(null, argumentos);
-            }, tempo);
-        };
-    }
-
-    // =================================================
-    // CENSURA
+    // AUXILIARES
     // =================================================
 
     function escaparRegex(texto) {
-        return texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        return String(texto).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
 
     function censurarTexto(texto) {
         if (!texto) return '';
 
-        let textoCensurado = String(texto);
-        const palavras = [...palavrasProibidas].filter(Boolean).sort((a, b) => b.length - a.length);
+        let resultado = String(texto);
 
-        palavras.forEach(function(palavra) {
-            const padrao = new RegExp('\\b' + escaparRegex(palavra) + '\\b', 'gi');
-            textoCensurado = textoCensurado.replace(padrao, function(match) {
-                return '*'.repeat(match.length);
-            });
+        const palavras = [...palavrasProibidas]
+            .map(p => String(p).trim())
+            .filter(Boolean)
+            .sort((a, b) => b.length - a.length);
+
+        palavras.forEach(function (palavra) {
+            const regex = new RegExp(
+                '\\b' + escaparRegex(palavra) + '\\b',
+                'gi'
+            );
+
+            resultado = resultado.replace(
+                regex,
+                match => '*'.repeat(match.length)
+            );
         });
 
-        return textoCensurado;
+        return resultado;
     }
 
     function verificarCensura(texto) {
-        if (!texto) {
-            return { censurado: false, palavras: [] };
-        }
+        if (!texto) return false;
 
-        const palavrasEncontradas = [];
-        palavrasProibidas.forEach(function(palavra) {
-            if (!palavra) return;
-            const padrao = new RegExp('\\b' + escaparRegex(palavra) + '\\b', 'i');
-            if (padrao.test(texto)) {
-                palavrasEncontradas.push(palavra);
-            }
+        return palavrasProibidas.some(function (palavra) {
+            palavra = String(palavra || '').trim();
+
+            if (!palavra) return false;
+
+            const regex = new RegExp(
+                '\\b' + escaparRegex(palavra) + '\\b',
+                'i'
+            );
+
+            return regex.test(texto);
         });
-
-        return {
-            censurado: palavrasEncontradas.length > 0,
-            palavras: [...new Set(palavrasEncontradas)]
-        };
-    }
-
-    // =================================================
-    // FUNÇÕES AUXILIARES
-    // =================================================
-
-    function gerarId() {
-        return Date.now() + '_' + Math.random().toString(36).substring(2, 8);
     }
 
     function escaparHtml(valor) {
         if (valor === null || valor === undefined) return '';
+
         return String(valor)
             .replaceAll('&', '&amp;')
             .replaceAll('<', '&lt;')
@@ -111,17 +88,32 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function obterIniciais(nome) {
-        if (!nome) return '?';
-        const partes = nome.trim().split(/\s+/).filter(Boolean);
-        if (partes.length === 0) return '?';
-        if (partes.length === 1) return partes[0].charAt(0).toUpperCase();
-        return (partes[0].charAt(0) + partes[partes.length - 1].charAt(0)).toUpperCase();
+        const partes = String(nome || '')
+            .trim()
+            .split(/\s+/)
+            .filter(Boolean);
+
+        if (!partes.length) return '?';
+
+        if (partes.length === 1) {
+            return partes[0].charAt(0).toUpperCase();
+        }
+
+        return (
+            partes[0].charAt(0) +
+            partes[partes.length - 1].charAt(0)
+        ).toUpperCase();
     }
 
     function formatarData(data) {
         if (!data) return 'Data desconhecida';
+
         const d = new Date(data);
-        if (Number.isNaN(d.getTime())) return 'Data inválida';
+
+        if (Number.isNaN(d.getTime())) {
+            return 'Data inválida';
+        }
+
         return d.toLocaleString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
@@ -131,22 +123,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
+    function ehMinhaResposta(resposta) {
+        if (
+            resposta.usuario_id !== undefined &&
+            resposta.usuario_id !== null
+        ) {
+            return String(resposta.usuario_id) === usuarioCodigo;
+        }
+
+        // Compatibilidade com respostas antigas
+        // que ainda não possuíam usuario_id
+        return String(resposta.autor || '') === String(usuarioNome);
+    }
+
     function isCurtido(id) {
-        return interacoes.curtidas.includes(id);
+        return interacoes.curtidas.includes(String(id));
     }
 
     function isSalvo(id) {
-        return interacoes.salvos.includes(id);
+        return interacoes.salvos.includes(String(id));
     }
 
     // =================================================
-    // SALVAR CHAT (com fila igual à agenda)
+    // REQUISIÇÃO JSON
     // =================================================
 
-    let filaSalvamentoChat = Promise.resolve();
-
-    async function enviarChatParaServidor(payload) {
-        const resposta = await fetch(CHAT_SAVE_URL, {
+    async function requisicaoJson(url, dados) {
+        const resposta = await fetch(url, {
             method: 'POST',
             credentials: 'same-origin',
             cache: 'no-store',
@@ -154,146 +157,323 @@ document.addEventListener('DOMContentLoaded', function() {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json'
             },
-            body: payload
+            body: JSON.stringify(dados)
         });
 
-        const textoResposta = await resposta.text();
+        const texto = await resposta.text();
+
         let retorno = null;
+
         try {
-            retorno = JSON.parse(textoResposta);
+            retorno = texto ? JSON.parse(texto) : {};
         } catch (_) {
             retorno = null;
         }
 
         if (!resposta.ok) {
-            throw new Error(retorno?.mensagem || retorno?.erro || textoResposta || `Erro HTTP ${resposta.status}`);
+            throw new Error(
+                retorno?.mensagem ||
+                retorno?.erro ||
+                texto ||
+                `Erro HTTP ${resposta.status}`
+            );
         }
 
-        if (retorno && retorno.ok === false) {
-            throw new Error(retorno.mensagem || retorno.erro || 'Não foi possível salvar o chat.');
+        if (!retorno || retorno.ok === false) {
+            throw new Error(
+                retorno?.mensagem ||
+                retorno?.erro ||
+                'Não foi possível concluir a operação.'
+            );
         }
 
-        return true;
+        return retorno;
     }
 
-    function salvarChatNoServidor() {
-        const payload = JSON.stringify(chatData);
+    // =================================================
+    // CONTADORES
+    // =================================================
 
-        filaSalvamentoChat = filaSalvamentoChat.then(
-            function() {
-                return enviarChatParaServidor(payload);
-            },
-            function() {
-                return enviarChatParaServidor(payload);
-            }
+    function atualizarContadores() {
+        const badgeMinhas = document.querySelector(
+            '.aba-btn[data-aba="minhas"] .badge'
         );
 
-        filaSalvamentoChat = filaSalvamentoChat
-            .then(function() {
-                return true;
-            })
-            .catch(function(erro) {
-                console.error('Erro ao salvar o chat:', erro);
-                return false;
-            });
+        const badgeExplorar = document.querySelector(
+            '.aba-btn[data-aba="explorar"] .badge'
+        );
 
-        return filaSalvamentoChat;
+        const totalMinhas = document.getElementById('total-perguntas');
+        const totalExplorar = document.getElementById('total-explorar');
+
+        if (badgeMinhas) {
+            badgeMinhas.textContent = chatData.perguntas.length;
+        }
+
+        if (badgeExplorar) {
+            badgeExplorar.textContent = todasPerguntas.length;
+        }
+
+        if (totalMinhas) {
+            totalMinhas.textContent = chatData.perguntas.length;
+        }
+
+        if (totalExplorar) {
+            totalExplorar.textContent = todasPerguntas.length;
+        }
     }
 
-    const salvarChatDebounce = debounce(salvarChatNoServidor, 500);
-
     // =================================================
-    // SALVAR INTERAÇÕES
+    // LOCALIZAR DADOS
     // =================================================
 
-    async function salvarInteracoes() {
-        try {
-            const resposta = await fetch(INTERACOES_SAVE_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(interacoes)
-            });
+    function obterContainerRespostas(perguntaId, origem) {
+        return document.getElementById(
+            `${origem}-respostas-${perguntaId}`
+        );
+    }
 
-            if (!resposta.ok) {
-                console.error('Erro HTTP ao salvar interações:', resposta.status);
-                return false;
+    function encontrarPergunta(perguntaId) {
+        const id = String(perguntaId);
+
+        return (
+            chatData.perguntas.find(
+                p => String(p.id) === id
+            ) ||
+            todasPerguntas.find(
+                p => String(p.id) === id
+            ) ||
+            null
+        );
+    }
+
+    // =================================================
+    // ATUALIZAÇÃO LOCAL DAS RESPOSTAS
+    // =================================================
+
+    function adicionarRespostaLocal(perguntaId, resposta) {
+        const id = String(perguntaId);
+
+        [
+            chatData.perguntas,
+            todasPerguntas
+        ].forEach(function (lista) {
+
+            const pergunta = lista.find(
+                p => String(p.id) === id
+            );
+
+            if (!pergunta) return;
+
+            if (!Array.isArray(pergunta.respostas)) {
+                pergunta.respostas = [];
             }
 
-            return true;
-        } catch (erro) {
-            console.error('Erro ao salvar interações:', erro);
-            return false;
-        }
+            const jaExiste = pergunta.respostas.some(
+                r => String(r.id) === String(resposta.id)
+            );
+
+            if (!jaExiste) {
+                pergunta.respostas.push({ ...resposta });
+            }
+        });
+    }
+
+    function removerRespostaLocal(perguntaId, respostaId) {
+        const pid = String(perguntaId);
+        const rid = String(respostaId);
+
+        [
+            chatData.perguntas,
+            todasPerguntas
+        ].forEach(function (lista) {
+
+            const pergunta = lista.find(
+                p => String(p.id) === pid
+            );
+
+            if (
+                !pergunta ||
+                !Array.isArray(pergunta.respostas)
+            ) {
+                return;
+            }
+
+            pergunta.respostas = pergunta.respostas.filter(
+                r => String(r.id) !== rid
+            );
+        });
     }
 
     // =================================================
     // RENDERIZAR RESPOSTAS
     // =================================================
 
-    function renderizarRespostas(respostas) {
-        if (!Array.isArray(respostas) || respostas.length === 0) {
-            return `<div class="sem-respostas">Nenhuma resposta ainda.</div>`;
-        }
-
-        let html = '';
-        respostas.forEach(function(resposta) {
-            const texto = resposta.texto || resposta.texto_original || '';
-            const ehDoUsuario = resposta.autor === usuarioNome;
-
-            html += `
-                <div class="resposta-item" data-id="${escaparHtml(resposta.id || '')}">
-                    <div class="resposta-header">
-                        <div class="avatar-pequeno">${escaparHtml(obterIniciais(resposta.autor || '?'))}</div>
-                        <span class="nome">
-                            ${escaparHtml(resposta.autor || 'Anônimo')}
-                            ${ehDoUsuario ? '<span class="usuario-tag-resposta">Você</span>' : ''}
-                        </span>
-                        <span class="data">${formatarData(resposta.data)}</span>
-                        ${ehDoUsuario ? `
-                            <button class="btn-excluir-resposta" data-id="${escaparHtml(resposta.id || '')}" title="Excluir resposta">
-                                <i class="fa-regular fa-trash-can"></i>
-                            </button>
-                        ` : ''}
-                    </div>
-                    <div class="resposta-texto">${escaparHtml(censurarTexto(texto))}</div>
+    function renderizarRespostas(
+        respostas,
+        perguntaId,
+        origem
+    ) {
+        if (
+            !Array.isArray(respostas) ||
+            respostas.length === 0
+        ) {
+            return `
+                <div class="sem-respostas">
+                    Nenhuma resposta ainda.
                 </div>
             `;
-        });
+        }
 
-        return html;
+        return respostas.map(function (resposta) {
+
+            const minha = ehMinhaResposta(resposta);
+
+            const texto = censurarTexto(
+                resposta.texto ??
+                resposta.texto_original ??
+                ''
+            );
+
+            return `
+                <div
+                    class="resposta-item"
+                    data-id="${escaparHtml(resposta.id || '')}"
+                >
+
+                    <div class="resposta-header">
+
+                        <div class="avatar-pequeno">
+                            ${escaparHtml(
+                                obterIniciais(
+                                    resposta.autor || '?'
+                                )
+                            )}
+                        </div>
+
+                        <span class="nome">
+
+                            ${escaparHtml(
+                                resposta.autor || 'Anônimo'
+                            )}
+
+                            ${
+                                minha
+                                    ? `
+                                        <span class="usuario-tag-resposta">
+                                            Você
+                                        </span>
+                                    `
+                                    : ''
+                            }
+
+                        </span>
+
+                        <span class="data">
+                            ${escaparHtml(
+                                formatarData(resposta.data)
+                            )}
+                        </span>
+
+                        ${
+                            minha
+                                ? `
+                                    <button
+                                        type="button"
+                                        class="btn-excluir-resposta"
+                                        data-id="${escaparHtml(
+                                            resposta.id || ''
+                                        )}"
+                                        data-pergunta-id="${escaparHtml(
+                                            perguntaId
+                                        )}"
+                                        data-origem="${escaparHtml(
+                                            origem
+                                        )}"
+                                        title="Excluir resposta"
+                                    >
+                                        <i class="fa-regular fa-trash-can"></i>
+                                    </button>
+                                `
+                                : ''
+                        }
+
+                    </div>
+
+                    <div class="resposta-texto">
+                        ${escaparHtml(texto)}
+                    </div>
+
+                </div>
+            `;
+        }).join('');
     }
 
     // =================================================
-    // RENDERIZAR FORMULÁRIO DE RESPOSTA
+    // FORMULÁRIO DE RESPOSTA
     // =================================================
 
-    function renderizarFormularioResposta(perguntaId) {
+    function renderizarFormularioResposta(
+        perguntaId,
+        origem
+    ) {
         return `
-            <div class="resposta-form" id="resposta-form-${escaparHtml(perguntaId)}" style="display:none;">
+            <div
+                class="resposta-form"
+                data-pergunta-id="${escaparHtml(perguntaId)}"
+                data-origem="${escaparHtml(origem)}"
+                style="display:none;"
+            >
+
                 <div class="resposta-form-wrapper">
-                    <textarea 
-                        placeholder="Escreva sua resposta..." 
+
+                    <textarea
+                        class="resposta-textarea"
+                        placeholder="Escreva sua resposta..."
                         rows="3"
-                        id="resposta-texto-${escaparHtml(perguntaId)}"
-                        data-pergunta-id="${escaparHtml(perguntaId)}"
                     ></textarea>
+
                     <div class="resposta-form-actions">
-                        <div class="resposta-censure-preview" id="resposta-censure-${escaparHtml(perguntaId)}" style="display:none;">
+
+                        <div
+                            class="resposta-censure-preview"
+                            style="display:none;"
+                        >
                             <i class="fa-solid fa-triangle-exclamation"></i>
-                            <span>Palavra ofensiva detectada. Ela será censurada automaticamente.</span>
+
+                            <span>
+                                Palavra ofensiva detectada.
+                                Ela será censurada automaticamente.
+                            </span>
                         </div>
+
                         <div class="resposta-buttons">
-                            <button class="btn-cancelar-resposta" data-id="${escaparHtml(perguntaId)}">
+
+                            <button
+                                type="button"
+                                class="btn-cancelar-resposta"
+                                data-id="${escaparHtml(perguntaId)}"
+                                data-origem="${escaparHtml(origem)}"
+                            >
                                 Cancelar
                             </button>
-                            <button class="btn-enviar-resposta" data-id="${escaparHtml(perguntaId)}">
-                                <i class="fa-regular fa-paper-plane"></i> Responder
+
+                            <button
+                                type="button"
+                                class="btn-enviar-resposta"
+                                data-id="${escaparHtml(perguntaId)}"
+                                data-origem="${escaparHtml(origem)}"
+                            >
+                                <i class="fa-regular fa-paper-plane"></i>
+                                Responder
                             </button>
+
                         </div>
+
                     </div>
+
                 </div>
+
             </div>
         `;
     }
@@ -303,71 +483,167 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     function renderizarMinhasPerguntas() {
-        const container = document.getElementById('minhas-perguntas-lista');
+        const container = document.getElementById(
+            'minhas-perguntas-lista'
+        );
+
         if (!container) return;
 
-        const perguntas = Array.isArray(chatData.perguntas) ? chatData.perguntas : [];
+        const perguntas = [...chatData.perguntas].sort(
+            (a, b) =>
+                new Date(b.data) -
+                new Date(a.data)
+        );
 
-        if (perguntas.length === 0) {
+        if (!perguntas.length) {
             container.innerHTML = `
                 <div class="sem-resultados">
+
                     <i class="fa-regular fa-comment-dots"></i>
-                    <h3>Nenhuma pergunta sua ainda</h3>
-                    <p>Seja o primeiro a fazer uma pergunta para a comunidade!</p>
+
+                    <h3>
+                        Nenhuma pergunta sua ainda
+                    </h3>
+
+                    <p>
+                        Faça uma pergunta para a comunidade.
+                    </p>
+
                 </div>
             `;
+
             return;
         }
 
-        const perguntasOrdenadas = [...perguntas].sort(function(a, b) {
-            return new Date(b.data) - new Date(a.data);
-        });
+        container.innerHTML = perguntas.map(
+            function (pergunta) {
 
-        let html = '';
-        perguntasOrdenadas.forEach(function(pergunta) {
-            const respostas = Array.isArray(pergunta.respostas) ? pergunta.respostas : [];
-            const totalRespostas = respostas.length;
-            const id = pergunta.id || '';
-            const texto = pergunta.texto || pergunta.texto_original || '';
-            const textoCensurado = censurarTexto(texto);
+                const id = String(
+                    pergunta.id || ''
+                );
 
-            html += `
-                <div class="pergunta-item" data-id="${escaparHtml(id)}">
-                    <div class="pergunta-topo">
-                        <div class="pergunta-autor">
-                            <div class="avatar">${escaparHtml(obterIniciais(usuarioNome))}</div>
-                            <div>
-                                <span class="nome">${escaparHtml(usuarioNome)}</span>
-                                <span class="data">${formatarData(pergunta.data)}</span>
-                                <span class="usuario-tag"><i class="fa-regular fa-user"></i> Você</span>
+                const respostas =
+                    Array.isArray(pergunta.respostas)
+                        ? pergunta.respostas
+                        : [];
+
+                const texto = censurarTexto(
+                    pergunta.texto ??
+                    pergunta.texto_original ??
+                    ''
+                );
+
+                return `
+                    <div
+                        class="pergunta-item"
+                        data-id="${escaparHtml(id)}"
+                    >
+
+                        <div class="pergunta-topo">
+
+                            <div class="pergunta-autor">
+
+                                <div class="avatar">
+                                    ${escaparHtml(
+                                        obterIniciais(usuarioNome)
+                                    )}
+                                </div>
+
+                                <div>
+
+                                    <span class="nome">
+                                        ${escaparHtml(usuarioNome)}
+                                    </span>
+
+                                    <span class="data">
+                                        ${escaparHtml(
+                                            formatarData(pergunta.data)
+                                        )}
+                                    </span>
+
+                                    <span class="usuario-tag">
+                                        <i class="fa-regular fa-user"></i>
+                                        Você
+                                    </span>
+
+                                </div>
+
                             </div>
-                        </div>
-                        <span class="pergunta-materia">${escaparHtml(pergunta.materia || 'Geral')}</span>
-                    </div>
-                    <div class="pergunta-texto">${escaparHtml(textoCensurado)}</div>
-                    <div class="pergunta-rodape">
-                        <div class="pergunta-acoes">
-                            <button type="button" class="btn-ver-respostas" data-id="${escaparHtml(id)}">
-                                <i class="fa-regular fa-comment"></i>
-                                ${totalRespostas} resposta${totalRespostas !== 1 ? 's' : ''}
-                            </button>
-                            <button type="button" class="btn-responder" data-id="${escaparHtml(id)}">
-                                <i class="fa-regular fa-pen-to-square"></i> Responder
-                            </button>
-                            <button type="button" class="btn-excluir" data-id="${escaparHtml(id)}">
-                                <i class="fa-regular fa-trash-can"></i> Excluir
-                            </button>
-                        </div>
-                    </div>
-                    <div class="respostas-container" id="minhas-respostas-${escaparHtml(id)}">
-                        ${renderizarRespostas(respostas)}
-                        ${renderizarFormularioResposta(id)}
-                    </div>
-                </div>
-            `;
-        });
 
-        container.innerHTML = html;
+                            <span class="pergunta-materia">
+                                ${escaparHtml(
+                                    pergunta.materia || 'Geral'
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div class="pergunta-texto">
+                            ${escaparHtml(texto)}
+                        </div>
+
+                        <div class="pergunta-rodape">
+
+                            <div class="pergunta-acoes">
+
+                                <button
+                                    type="button"
+                                    class="btn-ver-respostas"
+                                    data-id="${escaparHtml(id)}"
+                                    data-origem="minhas"
+                                >
+                                    <i class="fa-regular fa-comment"></i>
+
+                                    ${respostas.length}
+                                    resposta${respostas.length !== 1 ? 's' : ''}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-responder"
+                                    data-id="${escaparHtml(id)}"
+                                    data-origem="minhas"
+                                >
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                    Responder
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-excluir"
+                                    data-id="${escaparHtml(id)}"
+                                >
+                                    <i class="fa-regular fa-trash-can"></i>
+                                    Excluir
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="respostas-container"
+                            id="minhas-respostas-${escaparHtml(id)}"
+                        >
+
+                            ${renderizarRespostas(
+                                respostas,
+                                id,
+                                'minhas'
+                            )}
+
+                            ${renderizarFormularioResposta(
+                                id,
+                                'minhas'
+                            )}
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        ).join('');
+
         adicionarEventosMinhasPerguntas();
         adicionarEventosRespostas();
     }
@@ -377,165 +653,216 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     function renderizarExplorar() {
-        const container = document.getElementById('explorar-perguntas-lista');
+        const container = document.getElementById(
+            'explorar-perguntas-lista'
+        );
+
         if (!container) return;
 
-        const perguntas = Array.isArray(todasPerguntas) ? todasPerguntas : [];
-
-        if (perguntas.length === 0) {
+        if (!todasPerguntas.length) {
             container.innerHTML = `
                 <div class="sem-resultados">
+
                     <i class="fa-regular fa-face-frown"></i>
-                    <h3>Nenhuma pergunta encontrada</h3>
-                    <p>Tente ajustar os filtros de busca.</p>
+
+                    <h3>
+                        Nenhuma pergunta encontrada
+                    </h3>
+
+                    <p>
+                        Tente ajustar os filtros de busca.
+                    </p>
+
                 </div>
             `;
+
             return;
         }
 
-        let html = '';
-        perguntas.forEach(function(pergunta) {
-            const respostas = Array.isArray(pergunta.respostas) ? pergunta.respostas : [];
-            const totalRespostas = respostas.length;
-            const id = pergunta.id || '';
-            const ehDoUsuario = String(pergunta.usuario_id || '') === String(usuarioCodigo);
-            const curtido = isCurtido(id);
-            const salvo = isSalvo(id);
-            const texto = pergunta.texto || pergunta.texto_original || '';
+        container.innerHTML = todasPerguntas.map(
+            function (pergunta) {
 
-            html += `
-                <div class="pergunta-item" data-id="${escaparHtml(id)}">
-                    <div class="pergunta-topo">
-                        <div class="pergunta-autor">
-                            <div class="avatar">${escaparHtml(obterIniciais(pergunta.autor || '?'))}</div>
-                            <div>
-                                <span class="nome">${escaparHtml(pergunta.autor || 'Anônimo')}</span>
-                                <span class="data">${formatarData(pergunta.data)}</span>
-                                ${ehDoUsuario ? `<span class="usuario-tag"><i class="fa-regular fa-user"></i> Você</span>` : ''}
+                const id = String(
+                    pergunta.id || ''
+                );
+
+                const respostas =
+                    Array.isArray(pergunta.respostas)
+                        ? pergunta.respostas
+                        : [];
+
+                const ehDoUsuario =
+                    String(
+                        pergunta.usuario_id || ''
+                    ) === usuarioCodigo;
+
+                const curtido = isCurtido(id);
+                const salvo = isSalvo(id);
+
+                const texto = censurarTexto(
+                    pergunta.texto ??
+                    pergunta.texto_original ??
+                    ''
+                );
+
+                return `
+                    <div
+                        class="pergunta-item"
+                        data-id="${escaparHtml(id)}"
+                    >
+
+                        <div class="pergunta-topo">
+
+                            <div class="pergunta-autor">
+
+                                <div class="avatar">
+                                    ${escaparHtml(
+                                        obterIniciais(
+                                            pergunta.autor || '?'
+                                        )
+                                    )}
+                                </div>
+
+                                <div>
+
+                                    <span class="nome">
+                                        ${escaparHtml(
+                                            pergunta.autor || 'Anônimo'
+                                        )}
+                                    </span>
+
+                                    <span class="data">
+                                        ${escaparHtml(
+                                            formatarData(pergunta.data)
+                                        )}
+                                    </span>
+
+                                    ${
+                                        ehDoUsuario
+                                            ? `
+                                                <span class="usuario-tag">
+                                                    <i class="fa-regular fa-user"></i>
+                                                    Você
+                                                </span>
+                                            `
+                                            : ''
+                                    }
+
+                                </div>
+
                             </div>
-                        </div>
-                        <span class="pergunta-materia">${escaparHtml(pergunta.materia || 'Geral')}</span>
-                    </div>
-                    <div class="pergunta-texto">${escaparHtml(censurarTexto(texto))}</div>
-                    <div class="pergunta-rodape">
-                        <div class="pergunta-acoes">
-                            <button type="button" class="btn-curtir ${curtido ? 'curtido' : ''}" data-id="${escaparHtml(id)}">
-                                <i class="${curtido ? 'fa-solid' : 'fa-regular'} fa-heart"></i>
-                                <span>${curtido ? 'Curtido' : 'Curtir'}</span>
-                            </button>
-                            <button type="button" class="btn-salvar ${salvo ? 'salvo' : ''}" data-id="${escaparHtml(id)}">
-                                <i class="${salvo ? 'fa-solid' : 'fa-regular'} fa-bookmark"></i>
-                                <span>${salvo ? 'Salvo' : 'Salvar'}</span>
-                            </button>
-                            <button type="button" class="btn-ver-respostas" data-id="${escaparHtml(id)}">
-                                <i class="fa-regular fa-comment"></i>
-                                ${totalRespostas} resposta${totalRespostas !== 1 ? 's' : ''}
-                            </button>
-                            <button type="button" class="btn-responder" data-id="${escaparHtml(id)}">
-                                <i class="fa-regular fa-pen-to-square"></i> Responder
-                            </button>
-                        </div>
-                    </div>
-                    <div class="respostas-container" id="explorar-respostas-${escaparHtml(id)}">
-                        ${renderizarRespostas(respostas)}
-                        ${renderizarFormularioResposta(id)}
-                    </div>
-                </div>
-            `;
-        });
 
-        container.innerHTML = html;
+                            <span class="pergunta-materia">
+                                ${escaparHtml(
+                                    pergunta.materia || 'Geral'
+                                )}
+                            </span>
+
+                        </div>
+
+                        <div class="pergunta-texto">
+                            ${escaparHtml(texto)}
+                        </div>
+
+                        <div class="pergunta-rodape">
+
+                            <div class="pergunta-acoes">
+
+                                <button
+                                    type="button"
+                                    class="btn-curtir ${
+                                        curtido ? 'curtido' : ''
+                                    }"
+                                    data-id="${escaparHtml(id)}"
+                                >
+                                    <i class="${
+                                        curtido
+                                            ? 'fa-solid'
+                                            : 'fa-regular'
+                                    } fa-heart"></i>
+
+                                    <span>
+                                        ${
+                                            curtido
+                                                ? 'Curtido'
+                                                : 'Curtir'
+                                        }
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-salvar ${
+                                        salvo ? 'salvo' : ''
+                                    }"
+                                    data-id="${escaparHtml(id)}"
+                                >
+                                    <i class="${
+                                        salvo
+                                            ? 'fa-solid'
+                                            : 'fa-regular'
+                                    } fa-bookmark"></i>
+
+                                    <span>
+                                        ${
+                                            salvo
+                                                ? 'Salvo'
+                                                : 'Salvar'
+                                        }
+                                    </span>
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-ver-respostas"
+                                    data-id="${escaparHtml(id)}"
+                                    data-origem="explorar"
+                                >
+                                    <i class="fa-regular fa-comment"></i>
+
+                                    ${respostas.length}
+                                    resposta${respostas.length !== 1 ? 's' : ''}
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="btn-responder"
+                                    data-id="${escaparHtml(id)}"
+                                    data-origem="explorar"
+                                >
+                                    <i class="fa-regular fa-pen-to-square"></i>
+                                    Responder
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                        <div
+                            class="respostas-container"
+                            id="explorar-respostas-${escaparHtml(id)}"
+                        >
+
+                            ${renderizarRespostas(
+                                respostas,
+                                id,
+                                'explorar'
+                            )}
+
+                            ${renderizarFormularioResposta(
+                                id,
+                                'explorar'
+                            )}
+
+                        </div>
+
+                    </div>
+                `;
+            }
+        ).join('');
+
         adicionarEventosExplorar();
         adicionarEventosRespostas();
-    }
-
-    // =================================================
-    // FUNÇÃO PARA ENVIAR RESPOSTA (separada igual à agenda)
-    // =================================================
-
-    async function enviarResposta(perguntaId, texto) {
-        console.log('Enviando resposta para pergunta:', perguntaId);
-        console.log('Texto:', texto);
-
-        if (!texto || texto.trim() === '') {
-            alert('Escreva sua resposta antes de enviar.');
-            return false;
-        }
-
-        const textoCensurado = censurarTexto(texto);
-
-        // Procura a pergunta em ambos os arrays
-        let pergunta = null;
-        let encontradaEm = null;
-
-        // Procura em chatData.perguntas
-        for (let i = 0; i < chatData.perguntas.length; i++) {
-            if (chatData.perguntas[i].id === perguntaId) {
-                pergunta = chatData.perguntas[i];
-                encontradaEm = 'chatData';
-                break;
-            }
-        }
-
-        // Se não encontrou, procura em todasPerguntas
-        if (!pergunta) {
-            for (let i = 0; i < todasPerguntas.length; i++) {
-                if (todasPerguntas[i].id === perguntaId) {
-                    pergunta = todasPerguntas[i];
-                    encontradaEm = 'todasPerguntas';
-                    break;
-                }
-            }
-        }
-
-        if (!pergunta) {
-            alert('Não foi possível encontrar a pergunta.');
-            console.error('Pergunta não encontrada com ID:', perguntaId);
-            return false;
-        }
-
-        console.log('Pergunta encontrada em:', encontradaEm);
-
-        if (!pergunta.respostas) {
-            pergunta.respostas = [];
-        }
-
-        const novaResposta = {
-            id: gerarId(),
-            autor: usuarioNome,
-            texto: textoCensurado,
-            texto_original: texto,
-            data: new Date().toISOString()
-        };
-
-        pergunta.respostas.push(novaResposta);
-
-        // Atualiza em chatData
-        for (let i = 0; i < chatData.perguntas.length; i++) {
-            if (chatData.perguntas[i].id === perguntaId) {
-                chatData.perguntas[i] = pergunta;
-                break;
-            }
-        }
-
-        // Atualiza em todasPerguntas
-        for (let i = 0; i < todasPerguntas.length; i++) {
-            if (todasPerguntas[i].id === perguntaId) {
-                todasPerguntas[i] = pergunta;
-                break;
-            }
-        }
-
-        // Salva usando a mesma lógica da agenda (com fila)
-        const salvou = await salvarChatNoServidor();
-
-        if (salvou) {
-            console.log('Resposta salva com sucesso!');
-            return true;
-        } else {
-            alert('Erro ao salvar a resposta. Tente novamente.');
-            return false;
-        }
     }
 
     // =================================================
@@ -543,305 +870,348 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     function adicionarEventosRespostas() {
-        console.log('Adicionando eventos de resposta...');
 
-        // ======================================
-        // BOTÃO RESPONDER - ABRE O FORMULÁRIO
-        // ======================================
-        document.querySelectorAll('.btn-responder').forEach(function(botao) {
-            botao.removeEventListener('click', botao._handleResponder);
+        // =========================================
+        // ABRIR FORMULÁRIO
+        // =========================================
 
-            botao._handleResponder = function(e) {
+        document.querySelectorAll(
+            '.btn-responder'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const id = this.dataset.id;
-                console.log('Botão Responder clicado para pergunta:', id);
+                const id = String(
+                    this.dataset.id || ''
+                );
 
-                let container = document.getElementById(`explorar-respostas-${id}`);
-                if (!container) {
-                    container = document.getElementById(`minhas-respostas-${id}`);
-                }
+                const origem =
+                    this.dataset.origem ||
+                    'explorar';
 
-                if (!container) {
-                    console.error('Container não encontrado para a pergunta:', id);
-                    return;
-                }
+                const container =
+                    obterContainerRespostas(
+                        id,
+                        origem
+                    );
 
-                container.classList.add('visivel');
+                if (!container) return;
 
-                const form = container.querySelector(`#resposta-form-${id}`);
-                if (form) {
-                    form.style.display = 'block';
-                    const textarea = form.querySelector('textarea');
-                    if (textarea) {
-                        setTimeout(function() {
-                            textarea.focus();
-                        }, 300);
-                    }
-                } else {
-                    console.error('Formulário não encontrado para a pergunta:', id);
+                container.classList.add(
+                    'visivel'
+                );
+
+                const form =
+                    container.querySelector(
+                        '.resposta-form'
+                    );
+
+                if (!form) return;
+
+                form.style.display = 'block';
+
+                const textarea =
+                    form.querySelector(
+                        '.resposta-textarea'
+                    );
+
+                if (textarea) {
+                    setTimeout(
+                        () => textarea.focus(),
+                        50
+                    );
                 }
             };
-
-            botao.addEventListener('click', botao._handleResponder);
         });
 
-        // ======================================
-        // BOTÃO VER RESPOSTAS
-        // ======================================
-        document.querySelectorAll('.btn-ver-respostas').forEach(function(botao) {
-            botao.removeEventListener('click', botao._handleClick);
+        // =========================================
+        // MOSTRAR / ESCONDER RESPOSTAS
+        // =========================================
 
-            botao._handleClick = function(e) {
+        document.querySelectorAll(
+            '.btn-ver-respostas'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const id = this.dataset.id;
-                console.log('Botão Ver Respostas clicado para pergunta:', id);
+                const id = String(
+                    this.dataset.id || ''
+                );
 
-                const container = document.getElementById(`minhas-respostas-${id}`) ||
-                    document.getElementById(`explorar-respostas-${id}`);
+                const origem =
+                    this.dataset.origem ||
+                    'explorar';
+
+                const container =
+                    obterContainerRespostas(
+                        id,
+                        origem
+                    );
 
                 if (container) {
-                    container.classList.toggle('visivel');
-
-                    if (container.classList.contains('visivel')) {
-                        const form = container.querySelector(`#resposta-form-${id}`);
-                        if (form) {
-                            form.style.display = 'block';
-                            const textarea = form.querySelector('textarea');
-                            if (textarea) {
-                                setTimeout(function() {
-                                    textarea.focus();
-                                }, 300);
-                            }
-                        }
-                    }
+                    container.classList.toggle(
+                        'visivel'
+                    );
                 }
             };
-
-            botao.addEventListener('click', botao._handleClick);
         });
 
-        // ======================================
+        // =========================================
         // ENVIAR RESPOSTA
-        // ======================================
-        document.querySelectorAll('.btn-enviar-resposta').forEach(function(botao) {
-            botao.removeEventListener('click', botao._handleEnviar);
+        // =========================================
 
-            botao._handleEnviar = async function(e) {
+        document.querySelectorAll(
+            '.btn-enviar-resposta'
+        ).forEach(function (botao) {
+
+            botao.onclick = async function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const perguntaId = this.dataset.id;
-                console.log('Botão Enviar Resposta clicado para pergunta:', perguntaId);
+                const id = String(
+                    this.dataset.id || ''
+                );
 
-                const textarea = document.getElementById(`resposta-texto-${perguntaId}`);
-                if (!textarea) {
-                    console.error('Textarea não encontrado para pergunta:', perguntaId);
-                    alert('Erro: campo de texto não encontrado.');
+                const form =
+                    this.closest(
+                        '.resposta-form'
+                    );
+
+                const textarea =
+                    form?.querySelector(
+                        '.resposta-textarea'
+                    );
+
+                const texto =
+                    textarea?.value.trim() ||
+                    '';
+
+                if (!texto) {
+                    alert(
+                        'Escreva sua resposta antes de enviar.'
+                    );
+
+                    textarea?.focus();
+
                     return;
                 }
 
-                const texto = textarea.value.trim();
-                console.log('Texto digitado:', texto);
+                const htmlOriginal =
+                    this.innerHTML;
 
-                const sucesso = await enviarResposta(perguntaId, texto);
+                this.disabled = true;
 
-                if (sucesso) {
-                    textarea.value = '';
-                    const form = document.getElementById(`resposta-form-${perguntaId}`);
-                    if (form) {
-                        form.style.display = 'none';
-                    }
+                this.innerHTML = `
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    Enviando...
+                `;
 
-                    const container = document.getElementById(`explorar-respostas-${perguntaId}`) ||
-                        document.getElementById(`minhas-respostas-${perguntaId}`);
-                    if (container) {
-                        container.classList.remove('visivel');
-                    }
+                try {
+
+                    const retorno =
+                        await requisicaoJson(
+                            INTERACAO_URL,
+                            {
+                                acao: 'responder',
+                                pergunta_id: id,
+                                texto: texto
+                            }
+                        );
+
+                    adicionarRespostaLocal(
+                        id,
+                        retorno.resposta
+                    );
 
                     renderizarMinhasPerguntas();
                     renderizarExplorar();
 
-                    // Atualiza badges
-                    const badge = document.querySelector('.aba-btn[data-aba="minhas"] .badge');
-                    if (badge) {
-                        badge.textContent = chatData.perguntas.length;
-                    }
+                    atualizarContadores();
 
-                    const badgeExplorar = document.querySelector('.aba-btn[data-aba="explorar"] .badge');
-                    if (badgeExplorar) {
-                        badgeExplorar.textContent = todasPerguntas.length;
-                    }
+                } catch (erro) {
+
+                    console.error(
+                        'Erro ao responder:',
+                        erro
+                    );
+
+                    alert(
+                        erro.message ||
+                        'Não foi possível salvar a resposta.'
+                    );
+
+                    this.disabled = false;
+                    this.innerHTML = htmlOriginal;
                 }
             };
-
-            botao.addEventListener('click', botao._handleEnviar);
         });
 
-        // ======================================
+        // =========================================
         // CANCELAR RESPOSTA
-        // ======================================
-        document.querySelectorAll('.btn-cancelar-resposta').forEach(function(botao) {
-            botao.removeEventListener('click', botao._handleCancelar);
+        // =========================================
 
-            botao._handleCancelar = function(e) {
+        document.querySelectorAll(
+            '.btn-cancelar-resposta'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const id = this.dataset.id;
-                console.log('Botão Cancelar Resposta clicado para pergunta:', id);
+                const form =
+                    this.closest(
+                        '.resposta-form'
+                    );
 
-                const form = document.getElementById(`resposta-form-${id}`);
-                if (form) {
-                    const textarea = document.getElementById(`resposta-texto-${id}`);
-                    if (textarea) {
-                        textarea.value = '';
-                    }
-                    form.style.display = 'none';
+                if (!form) return;
 
-                    const container = document.getElementById(`explorar-respostas-${id}`) ||
-                        document.getElementById(`minhas-respostas-${id}`);
-                    if (container) {
-                        container.classList.remove('visivel');
-                    }
+                const textarea =
+                    form.querySelector(
+                        '.resposta-textarea'
+                    );
+
+                const preview =
+                    form.querySelector(
+                        '.resposta-censure-preview'
+                    );
+
+                if (textarea) {
+                    textarea.value = '';
                 }
-            };
 
-            botao.addEventListener('click', botao._handleCancelar);
+                if (preview) {
+                    preview.style.display = 'none';
+                }
+
+                form.style.display = 'none';
+            };
         });
 
-        // ======================================
+        // =========================================
         // EXCLUIR RESPOSTA
-        // ======================================
-        document.querySelectorAll('.btn-excluir-resposta').forEach(function(botao) {
-            botao.removeEventListener('click', botao._handleExcluir);
+        // =========================================
 
-            botao._handleExcluir = function(e) {
+        document.querySelectorAll(
+            '.btn-excluir-resposta'
+        ).forEach(function (botao) {
+
+            botao.onclick = async function (e) {
                 e.preventDefault();
                 e.stopPropagation();
 
-                const respostaId = this.dataset.id;
-                console.log('Botão Excluir Resposta clicado para resposta:', respostaId);
+                const respostaId =
+                    String(
+                        this.dataset.id || ''
+                    );
 
-                let perguntaEncontrada = null;
-                let perguntaId = null;
+                const perguntaId =
+                    String(
+                        this.dataset.perguntaId ||
+                        ''
+                    );
 
-                // Busca em todas as perguntas
-                for (let i = 0; i < chatData.perguntas.length; i++) {
-                    const p = chatData.perguntas[i];
-                    if (p.respostas) {
-                        for (let j = 0; j < p.respostas.length; j++) {
-                            if (p.respostas[j].id === respostaId) {
-                                perguntaEncontrada = p;
-                                perguntaId = p.id;
-                                break;
-                            }
-                        }
-                    }
-                    if (perguntaEncontrada) break;
-                }
-
-                if (!perguntaEncontrada) {
-                    for (let i = 0; i < todasPerguntas.length; i++) {
-                        const p = todasPerguntas[i];
-                        if (p.respostas) {
-                            for (let j = 0; j < p.respostas.length; j++) {
-                                if (p.respostas[j].id === respostaId) {
-                                    perguntaEncontrada = p;
-                                    perguntaId = p.id;
-                                    break;
-                                }
-                            }
-                        }
-                        if (perguntaEncontrada) break;
-                    }
-                }
-
-                if (!perguntaEncontrada) {
-                    alert('Não foi possível encontrar a resposta.');
+                if (
+                    !confirm(
+                        'Tem certeza que deseja excluir esta resposta?'
+                    )
+                ) {
                     return;
                 }
 
-                if (confirm('Tem certeza que deseja excluir esta resposta?')) {
-                    perguntaEncontrada.respostas = perguntaEncontrada.respostas.filter(function(r) {
-                        return r.id !== respostaId;
-                    });
+                this.disabled = true;
 
-                    for (let i = 0; i < chatData.perguntas.length; i++) {
-                        if (chatData.perguntas[i].id === perguntaId) {
-                            chatData.perguntas[i] = perguntaEncontrada;
-                            break;
+                try {
+
+                    await requisicaoJson(
+                        INTERACAO_URL,
+                        {
+                            acao: 'excluir_resposta',
+                            pergunta_id: perguntaId,
+                            resposta_id: respostaId
                         }
-                    }
+                    );
 
-                    for (let i = 0; i < todasPerguntas.length; i++) {
-                        if (todasPerguntas[i].id === perguntaId) {
-                            todasPerguntas[i] = perguntaEncontrada;
-                            break;
-                        }
-                    }
+                    removerRespostaLocal(
+                        perguntaId,
+                        respostaId
+                    );
 
-                    salvarChatNoServidor().then(function() {
-                        renderizarMinhasPerguntas();
-                        renderizarExplorar();
-                    });
+                    renderizarMinhasPerguntas();
+                    renderizarExplorar();
+
+                } catch (erro) {
+
+                    console.error(
+                        'Erro ao excluir resposta:',
+                        erro
+                    );
+
+                    alert(
+                        erro.message ||
+                        'Não foi possível excluir a resposta.'
+                    );
+
+                    this.disabled = false;
                 }
             };
-
-            botao.addEventListener('click', botao._handleExcluir);
         });
 
-        // ======================================
-        // CENSURA EM TEMPO REAL NAS RESPOSTAS
-        // ======================================
-        document.querySelectorAll('.resposta-form textarea').forEach(function(textarea) {
-            textarea.removeEventListener('input', textarea._handleCensure);
+        // =========================================
+        // CENSURA EM TEMPO REAL
+        // =========================================
 
-            textarea._handleCensure = function() {
-                const form = this.closest('.resposta-form');
-                if (!form) return;
+        document.querySelectorAll(
+            '.resposta-textarea'
+        ).forEach(function (textarea) {
 
-                const id = form.id.replace('resposta-form-', '');
-                const preview = document.getElementById(`resposta-censure-${id}`);
+            textarea.oninput = function () {
+
+                const form =
+                    this.closest(
+                        '.resposta-form'
+                    );
+
+                const preview =
+                    form?.querySelector(
+                        '.resposta-censure-preview'
+                    );
 
                 if (!preview) return;
 
-                const resultado = verificarCensura(this.value);
-
-                if (resultado.censurado && this.value.trim()) {
-                    preview.style.display = 'flex';
-                } else {
-                    preview.style.display = 'none';
-                }
+                preview.style.display =
+                    verificarCensura(
+                        this.value
+                    ) &&
+                    this.value.trim()
+                        ? 'flex'
+                        : 'none';
             };
 
-            textarea.addEventListener('input', textarea._handleCensure);
-        });
+            // CTRL + ENTER
+            textarea.onkeydown = function (e) {
 
-        // ======================================
-        // CTRL+ENTER PARA ENVIAR RESPOSTA
-        // ======================================
-        document.querySelectorAll('.resposta-form textarea').forEach(function(textarea) {
-            textarea.removeEventListener('keydown', textarea._handleKeyDown);
-
-            textarea._handleKeyDown = function(e) {
-                if (e.key === 'Enter' && e.ctrlKey) {
+                if (
+                    e.key === 'Enter' &&
+                    e.ctrlKey
+                ) {
                     e.preventDefault();
-                    const form = this.closest('.resposta-form');
-                    if (form) {
-                        const id = form.id.replace('resposta-form-', '');
-                        const btnEnviar = form.querySelector('.btn-enviar-resposta');
-                        if (btnEnviar) {
-                            btnEnviar.click();
-                        }
-                    }
+
+                    const form =
+                        this.closest(
+                            '.resposta-form'
+                        );
+
+                    form
+                        ?.querySelector(
+                            '.btn-enviar-resposta'
+                        )
+                        ?.click();
                 }
             };
-
-            textarea.addEventListener('keydown', textarea._handleKeyDown);
         });
     }
 
@@ -850,12 +1220,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     function adicionarEventosMinhasPerguntas() {
-        document.querySelectorAll('#aba-minhas .btn-excluir').forEach(function(botao) {
-            botao.addEventListener('click', function(e) {
+
+        document.querySelectorAll(
+            '#aba-minhas .btn-excluir'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                abrirModalExclusao(this.dataset.id);
-            });
+
+                abrirModalExclusao(
+                    String(
+                        this.dataset.id || ''
+                    )
+                );
+            };
         });
     }
 
@@ -864,21 +1243,56 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     function adicionarEventosExplorar() {
-        document.querySelectorAll('#aba-explorar .btn-curtir').forEach(function(botao) {
-            botao.addEventListener('click', function(e) {
+
+        document.querySelectorAll(
+            '#aba-explorar .btn-curtir'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                toggleCurtir(this.dataset.id);
-            });
+
+                toggleCurtir(
+                    String(
+                        this.dataset.id || ''
+                    )
+                );
+            };
         });
 
-        document.querySelectorAll('#aba-explorar .btn-salvar').forEach(function(botao) {
-            botao.addEventListener('click', function(e) {
+        document.querySelectorAll(
+            '#aba-explorar .btn-salvar'
+        ).forEach(function (botao) {
+
+            botao.onclick = function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                toggleSalvar(this.dataset.id);
-            });
+
+                toggleSalvar(
+                    String(
+                        this.dataset.id || ''
+                    )
+                );
+            };
         });
+    }
+
+    // =================================================
+    // SALVAR INTERAÇÕES
+    // =================================================
+
+    async function salvarInteracoes() {
+
+        return requisicaoJson(
+            INTERACOES_SAVE_URL,
+            {
+                curtidas:
+                    interacoes.curtidas,
+
+                salvos:
+                    interacoes.salvos
+            }
+        );
     }
 
     // =================================================
@@ -886,16 +1300,48 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     async function toggleCurtir(id) {
-        const index = interacoes.curtidas.indexOf(id);
+
+        const backup = [
+            ...interacoes.curtidas
+        ];
+
+        const index =
+            interacoes.curtidas.indexOf(id);
 
         if (index >= 0) {
-            interacoes.curtidas.splice(index, 1);
+
+            interacoes.curtidas.splice(
+                index,
+                1
+            );
+
         } else {
+
             interacoes.curtidas.push(id);
         }
 
         renderizarExplorar();
-        await salvarInteracoes();
+
+        try {
+
+            await salvarInteracoes();
+
+        } catch (erro) {
+
+            interacoes.curtidas =
+                backup;
+
+            renderizarExplorar();
+
+            console.error(
+                'Erro ao salvar curtida:',
+                erro
+            );
+
+            alert(
+                'Não foi possível salvar a curtida.'
+            );
+        }
     }
 
     // =================================================
@@ -903,308 +1349,757 @@ document.addEventListener('DOMContentLoaded', function() {
     // =================================================
 
     async function toggleSalvar(id) {
-        const index = interacoes.salvos.indexOf(id);
+
+        const backup = [
+            ...interacoes.salvos
+        ];
+
+        const index =
+            interacoes.salvos.indexOf(id);
 
         if (index >= 0) {
-            interacoes.salvos.splice(index, 1);
+
+            interacoes.salvos.splice(
+                index,
+                1
+            );
+
         } else {
+
             interacoes.salvos.push(id);
         }
 
         renderizarExplorar();
-        await salvarInteracoes();
+
+        try {
+
+            await salvarInteracoes();
+
+        } catch (erro) {
+
+            interacoes.salvos =
+                backup;
+
+            renderizarExplorar();
+
+            console.error(
+                'Erro ao salvar pergunta:',
+                erro
+            );
+
+            alert(
+                'Não foi possível salvar esta pergunta.'
+            );
+        }
     }
 
     // =================================================
-    // POSTAR PERGUNTA
+    // PUBLICAR PERGUNTA
     // =================================================
 
-    const btnPostar = document.getElementById('btn-postar-pergunta');
-    const perguntaTexto = document.getElementById('pergunta-texto');
-    const perguntaMateria = document.getElementById('pergunta-materia');
-    const censurePreview = document.getElementById('censure-preview');
-    const censurePreviewText = document.getElementById('censure-preview-text');
+    const btnPostar =
+        document.getElementById(
+            'btn-postar-pergunta'
+        );
 
-    // Verificar censura enquanto digita
-    perguntaTexto?.addEventListener('input', function() {
-        const resultado = verificarCensura(this.value);
+    const perguntaTexto =
+        document.getElementById(
+            'pergunta-texto'
+        );
 
-        if (resultado.censurado && censurePreview && censurePreviewText) {
-            censurePreview.style.display = 'block';
-            censurePreviewText.textContent = 'Palavra ofensiva detectada. Ela será censurada automaticamente ao publicar.';
-        } else if (censurePreview) {
-            censurePreview.style.display = 'none';
+    const perguntaMateria =
+        document.getElementById(
+            'pergunta-materia'
+        );
+
+    const censurePreview =
+        document.getElementById(
+            'censure-preview'
+        );
+
+    const censurePreviewText =
+        document.getElementById(
+            'censure-preview-text'
+        );
+
+    // =================================================
+    // CENSURA AO DIGITAR PERGUNTA
+    // =================================================
+
+    perguntaTexto?.addEventListener(
+        'input',
+        function () {
+
+            const temCensura =
+                verificarCensura(
+                    this.value
+                );
+
+            if (censurePreview) {
+
+                censurePreview.style.display =
+                    temCensura
+                        ? 'block'
+                        : 'none';
+            }
+
+            if (
+                temCensura &&
+                censurePreviewText
+            ) {
+
+                censurePreviewText.textContent =
+                    'Palavra ofensiva detectada. Ela será censurada automaticamente ao publicar.';
+            }
         }
-    });
+    );
 
-    // Publicar pergunta
-    btnPostar?.addEventListener('click', async function() {
-        const texto = perguntaTexto?.value.trim() || '';
+    // =================================================
+    // PUBLICAR
+    // =================================================
 
-        if (!texto) {
-            alert('Escreva sua pergunta antes de publicar.');
-            perguntaTexto?.focus();
-            return;
+    btnPostar?.addEventListener(
+        'click',
+        async function () {
+
+            const texto =
+                perguntaTexto?.value.trim() ||
+                '';
+
+            if (!texto) {
+
+                alert(
+                    'Escreva sua pergunta antes de publicar.'
+                );
+
+                perguntaTexto?.focus();
+
+                return;
+            }
+
+            if (texto.length < 5) {
+
+                alert(
+                    'Sua pergunta é muito curta. Escreva mais detalhes.'
+                );
+
+                perguntaTexto?.focus();
+
+                return;
+            }
+
+            const materia =
+                perguntaMateria?.value ||
+                'Geral';
+
+            const htmlOriginal =
+                this.innerHTML;
+
+            this.disabled = true;
+
+            this.innerHTML = `
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                Publicando...
+            `;
+
+            try {
+
+                const retorno =
+                    await requisicaoJson(
+                        CHAT_ACTION_URL,
+                        {
+                            acao:
+                                'criar_pergunta',
+
+                            texto:
+                                texto,
+
+                            materia:
+                                materia
+                        }
+                    );
+
+                const novaPergunta =
+                    retorno.pergunta;
+
+                chatData.perguntas.push({
+                    ...novaPergunta
+                });
+
+                // =====================================
+                // SE NÃO HÁ FILTRO, JÁ COLOCA NO EXPLORAR
+                // =====================================
+
+                const params =
+                    new URLSearchParams(
+                        window.location.search
+                    );
+
+                const temFiltro =
+                    Boolean(
+                        params.get('busca')
+                    ) ||
+                    (
+                        params.get('materia') &&
+                        params.get('materia') !==
+                        'todas'
+                    );
+
+                if (!temFiltro) {
+
+                    todasPerguntas.unshift({
+                        ...novaPergunta
+                    });
+                }
+
+                if (perguntaTexto) {
+
+                    perguntaTexto.value = '';
+                }
+
+                if (censurePreview) {
+
+                    censurePreview.style.display =
+                        'none';
+                }
+
+                renderizarMinhasPerguntas();
+                renderizarExplorar();
+
+                atualizarContadores();
+
+            } catch (erro) {
+
+                console.error(
+                    'Erro ao publicar pergunta:',
+                    erro
+                );
+
+                alert(
+                    erro.message ||
+                    'Não foi possível publicar a pergunta.'
+                );
+
+            } finally {
+
+                this.disabled = false;
+                this.innerHTML =
+                    htmlOriginal;
+            }
         }
+    );
 
-        if (texto.length < 5) {
-            alert('Sua pergunta é muito curta. Escreva mais detalhes.');
-            perguntaTexto?.focus();
-            return;
+    // =================================================
+    // CTRL + ENTER PARA PUBLICAR
+    // =================================================
+
+    perguntaTexto?.addEventListener(
+        'keydown',
+        function (e) {
+
+            if (
+                e.key === 'Enter' &&
+                e.ctrlKey
+            ) {
+
+                e.preventDefault();
+
+                btnPostar?.click();
+            }
         }
-
-        const materia = perguntaMateria?.value || 'Geral';
-        const textoCensurado = censurarTexto(texto);
-
-        const novaPergunta = {
-            id: gerarId(),
-            autor: usuarioNome,
-            texto: textoCensurado,
-            texto_original: texto,
-            materia: materia,
-            data: new Date().toISOString(),
-            respostas: []
-        };
-
-        chatData.perguntas.push(novaPergunta);
-        todasPerguntas.push({
-            ...novaPergunta,
-            usuario_id: usuarioCodigo
-        });
-
-        this.disabled = true;
-        this.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Publicando...';
-
-        const salvou = await salvarChatNoServidor();
-
-        this.disabled = false;
-        this.innerHTML = '<i class="fa-regular fa-paper-plane"></i> Publicar pergunta';
-
-        if (!salvou) {
-            chatData.perguntas = chatData.perguntas.filter(function(pergunta) {
-                return pergunta.id !== novaPergunta.id;
-            });
-            todasPerguntas = todasPerguntas.filter(function(pergunta) {
-                return pergunta.id !== novaPergunta.id;
-            });
-            alert('Não foi possível publicar a pergunta.');
-            return;
-        }
-
-        if (perguntaTexto) perguntaTexto.value = '';
-        if (censurePreview) censurePreview.style.display = 'none';
-
-        renderizarMinhasPerguntas();
-        renderizarExplorar();
-
-        const badge = document.querySelector('.aba-btn[data-aba="minhas"] .badge');
-        if (badge) badge.textContent = chatData.perguntas.length;
-
-        const badgeExplorar = document.querySelector('.aba-btn[data-aba="explorar"] .badge');
-        if (badgeExplorar) badgeExplorar.textContent = todasPerguntas.length;
-    });
-
-    // CTRL + ENTER para publicar
-    perguntaTexto?.addEventListener('keydown', function(evento) {
-        if (evento.key === 'Enter' && evento.ctrlKey) {
-            evento.preventDefault();
-            btnPostar?.click();
-        }
-    });
+    );
 
     // =================================================
     // MODAL DE EXCLUSÃO
     // =================================================
 
-    const modalExcluir = document.getElementById('modal-excluir');
-    const btnConfirmarExclusao = document.getElementById('confirmar-exclusao');
-    const btnCancelarExclusao = document.getElementById('cancelar-exclusao');
+    const modalExcluir =
+        document.getElementById(
+            'modal-excluir'
+        );
+
+    const btnConfirmarExclusao =
+        document.getElementById(
+            'confirmar-exclusao'
+        );
+
+    const btnCancelarExclusao =
+        document.getElementById(
+            'cancelar-exclusao'
+        );
+
     let idParaExcluir = null;
 
     function abrirModalExclusao(id) {
+
         idParaExcluir = id;
-        if (modalExcluir) modalExcluir.style.display = 'flex';
+
+        if (modalExcluir) {
+
+            modalExcluir.style.display =
+                'flex';
+        }
     }
 
     function fecharModalExclusao() {
-        if (modalExcluir) modalExcluir.style.display = 'none';
+
+        if (modalExcluir) {
+
+            modalExcluir.style.display =
+                'none';
+        }
+
         idParaExcluir = null;
     }
 
-    btnCancelarExclusao?.addEventListener('click', fecharModalExclusao);
+    btnCancelarExclusao?.addEventListener(
+        'click',
+        fecharModalExclusao
+    );
 
-    modalExcluir?.addEventListener('click', function(evento) {
-        if (evento.target === modalExcluir) fecharModalExclusao();
-    });
+    modalExcluir?.addEventListener(
+        'click',
+        function (e) {
 
-    btnConfirmarExclusao?.addEventListener('click', async function() {
-        if (!idParaExcluir) return;
+            if (e.target === modalExcluir) {
 
-        const perguntasAnteriores = [...chatData.perguntas];
-
-        chatData.perguntas = chatData.perguntas.filter(function(pergunta) {
-            return pergunta.id !== idParaExcluir;
-        });
-
-        todasPerguntas = todasPerguntas.filter(function(pergunta) {
-            return pergunta.id !== idParaExcluir;
-        });
-
-        const salvou = await salvarChatNoServidor();
-
-        if (!salvou) {
-            chatData.perguntas = perguntasAnteriores;
-            alert('Não foi possível excluir a pergunta.');
-            return;
+                fecharModalExclusao();
+            }
         }
+    );
 
-        fecharModalExclusao();
-        renderizarMinhasPerguntas();
-        renderizarExplorar();
+    // =================================================
+    // CONFIRMAR EXCLUSÃO
+    // =================================================
 
-        const badge = document.querySelector('.aba-btn[data-aba="minhas"] .badge');
-        if (badge) badge.textContent = chatData.perguntas.length;
+    btnConfirmarExclusao?.addEventListener(
+        'click',
+        async function () {
 
-        const badgeExplorar = document.querySelector('.aba-btn[data-aba="explorar"] .badge');
-        if (badgeExplorar) badgeExplorar.textContent = todasPerguntas.length;
-    });
+            if (!idParaExcluir) {
+                return;
+            }
+
+            this.disabled = true;
+
+            try {
+
+                await requisicaoJson(
+                    CHAT_ACTION_URL,
+                    {
+                        acao:
+                            'excluir_pergunta',
+
+                        pergunta_id:
+                            idParaExcluir
+                    }
+                );
+
+                chatData.perguntas =
+                    chatData.perguntas.filter(
+                        p =>
+                            String(p.id) !==
+                            String(idParaExcluir)
+                    );
+
+                todasPerguntas =
+                    todasPerguntas.filter(
+                        p =>
+                            String(p.id) !==
+                            String(idParaExcluir)
+                    );
+
+                interacoes.curtidas =
+                    interacoes.curtidas.filter(
+                        id =>
+                            String(id) !==
+                            String(idParaExcluir)
+                    );
+
+                interacoes.salvos =
+                    interacoes.salvos.filter(
+                        id =>
+                            String(id) !==
+                            String(idParaExcluir)
+                    );
+
+                fecharModalExclusao();
+
+                renderizarMinhasPerguntas();
+                renderizarExplorar();
+
+                atualizarContadores();
+
+                // Salva as interações,
+                // mas a exclusão da pergunta não depende disso.
+                salvarInteracoes().catch(
+                    console.error
+                );
+
+            } catch (erro) {
+
+                console.error(
+                    'Erro ao excluir pergunta:',
+                    erro
+                );
+
+                alert(
+                    erro.message ||
+                    'Não foi possível excluir a pergunta.'
+                );
+
+            } finally {
+
+                this.disabled = false;
+            }
+        }
+    );
 
     // =================================================
     // ABAS
     // =================================================
 
-    document.querySelectorAll('.aba-btn').forEach(function(botao) {
-        botao.addEventListener('click', function() {
-            const aba = this.dataset.aba;
+    document.querySelectorAll(
+        '.aba-btn'
+    ).forEach(function (botao) {
 
-            document.querySelectorAll('.aba-btn').forEach(function(item) {
-                item.classList.remove('ativo');
-            });
+        botao.addEventListener(
+            'click',
+            function () {
 
-            document.querySelectorAll('.aba-conteudo').forEach(function(item) {
-                item.classList.remove('ativo');
-            });
+                const aba =
+                    this.dataset.aba;
 
-            this.classList.add('ativo');
+                document.querySelectorAll(
+                    '.aba-btn'
+                ).forEach(
+                    item =>
+                        item.classList.remove(
+                            'ativo'
+                        )
+                );
 
-            const conteudo = document.getElementById(`aba-${aba}`);
-            if (conteudo) conteudo.classList.add('ativo');
+                document.querySelectorAll(
+                    '.aba-conteudo'
+                ).forEach(
+                    item =>
+                        item.classList.remove(
+                            'ativo'
+                        )
+                );
 
-            const url = new URL(window.location.href);
-            url.searchParams.set('aba', aba);
-            window.history.replaceState({}, '', url);
-        });
+                this.classList.add(
+                    'ativo'
+                );
+
+                document
+                    .getElementById(
+                        `aba-${aba}`
+                    )
+                    ?.classList.add(
+                        'ativo'
+                    );
+
+                const url =
+                    new URL(
+                        window.location.href
+                    );
+
+                url.searchParams.set(
+                    'aba',
+                    aba
+                );
+
+                window.history.replaceState(
+                    {},
+                    '',
+                    url
+                );
+            }
+        );
     });
 
     // =================================================
     // FILTROS
     // =================================================
 
-    const buscaInput = document.getElementById('busca-input');
-    const btnBuscar = document.getElementById('btn-buscar');
-    const filtroMateriaSelect = document.getElementById('filtro-materia');
-    const btnLimparFiltros = document.getElementById('btn-limpar-filtros');
+    const buscaInput =
+        document.getElementById(
+            'busca-input'
+        );
+
+    const btnBuscar =
+        document.getElementById(
+            'btn-buscar'
+        );
+
+    const filtroMateriaSelect =
+        document.getElementById(
+            'filtro-materia'
+        );
+
+    const btnLimparFiltros =
+        document.getElementById(
+            'btn-limpar-filtros'
+        );
 
     function aplicarFiltros() {
-        const busca = buscaInput?.value.trim() || '';
-        const materia = filtroMateriaSelect?.value || 'todas';
 
-        const url = new URL(window.location.href);
-        url.searchParams.set('aba', 'explorar');
+        const busca =
+            buscaInput?.value.trim() ||
+            '';
+
+        const materia =
+            filtroMateriaSelect?.value ||
+            'todas';
+
+        const url =
+            new URL(
+                window.location.href
+            );
+
+        url.searchParams.set(
+            'aba',
+            'explorar'
+        );
 
         if (busca) {
-            url.searchParams.set('busca', busca);
+
+            url.searchParams.set(
+                'busca',
+                busca
+            );
+
         } else {
-            url.searchParams.delete('busca');
+
+            url.searchParams.delete(
+                'busca'
+            );
         }
 
         if (materia !== 'todas') {
-            url.searchParams.set('materia', materia);
+
+            url.searchParams.set(
+                'materia',
+                materia
+            );
+
         } else {
-            url.searchParams.delete('materia');
+
+            url.searchParams.delete(
+                'materia'
+            );
         }
 
-        window.location.href = url.toString();
+        window.location.href =
+            url.toString();
     }
 
-    btnBuscar?.addEventListener('click', aplicarFiltros);
+    btnBuscar?.addEventListener(
+        'click',
+        aplicarFiltros
+    );
 
-    buscaInput?.addEventListener('keydown', function(evento) {
-        if (evento.key === 'Enter') {
-            evento.preventDefault();
-            aplicarFiltros();
+    buscaInput?.addEventListener(
+        'keydown',
+        function (e) {
+
+            if (e.key === 'Enter') {
+
+                e.preventDefault();
+
+                aplicarFiltros();
+            }
         }
-    });
+    );
 
-    filtroMateriaSelect?.addEventListener('change', aplicarFiltros);
+    filtroMateriaSelect?.addEventListener(
+        'change',
+        aplicarFiltros
+    );
 
-    btnLimparFiltros?.addEventListener('click', function() {
-        const url = new URL(window.location.href);
-        url.searchParams.delete('busca');
-        url.searchParams.delete('materia');
-        url.searchParams.set('aba', 'explorar');
-        window.location.href = url.toString();
-    });
+    btnLimparFiltros?.addEventListener(
+        'click',
+        function () {
 
-    // =================================================
-    // HEADER - CONFIGURAÇÕES, PERFIL, LOGOUT
-    // =================================================
+            const url =
+                new URL(
+                    window.location.href
+                );
 
-    document.getElementById('icon-configuracoes')?.addEventListener('click', function() {
-        window.location.href = '../configuracoes/configuracoes.php';
-    });
+            url.searchParams.delete(
+                'busca'
+            );
 
-    document.getElementById('icon-perfil')?.addEventListener('click', function() {
-        window.location.href = '../perfil/perfil.php';
-    });
+            url.searchParams.delete(
+                'materia'
+            );
 
-    const iconSair = document.getElementById('icon-sair');
-    const logoutModal = document.getElementById('logout-modal');
-    const confirmLogout = document.getElementById('confirm-logout');
-    const cancelLogout = document.getElementById('cancel-logout');
+            url.searchParams.set(
+                'aba',
+                'explorar'
+            );
 
-    iconSair?.addEventListener('click', function() {
-        if (logoutModal) logoutModal.style.display = 'flex';
-    });
-
-    cancelLogout?.addEventListener('click', function() {
-        if (logoutModal) logoutModal.style.display = 'none';
-    });
-
-    logoutModal?.addEventListener('click', function(evento) {
-        if (evento.target === logoutModal) logoutModal.style.display = 'none';
-    });
-
-    confirmLogout?.addEventListener('click', function() {
-        window.location.href = '../login/logout.php';
-    });
+            window.location.href =
+                url.toString();
+        }
+    );
 
     // =================================================
-    // ESC FECHA OS MODAIS
+    // HEADER
     // =================================================
 
-    document.addEventListener('keydown', function(evento) {
-        if (evento.key !== 'Escape') return;
+    document
+        .getElementById(
+            'icon-configuracoes'
+        )
+        ?.addEventListener(
+            'click',
+            function () {
 
-        if (logoutModal) logoutModal.style.display = 'none';
-        fecharModalExclusao();
+                window.location.href =
+                    '../configuracoes/configuracoes.php';
+            }
+        );
 
-        document.querySelectorAll('.resposta-form.visivel').forEach(function(form) {
-            form.classList.remove('visivel');
-            const textarea = form.querySelector('textarea');
-            if (textarea) textarea.value = '';
-        });
-    });
+    document
+        .getElementById(
+            'icon-perfil'
+        )
+        ?.addEventListener(
+            'click',
+            function () {
+
+                window.location.href =
+                    '../perfil/perfil.php';
+            }
+        );
 
     // =================================================
-    // INICIALIZAR
+    // LOGOUT
+    // =================================================
+
+    const iconSair =
+        document.getElementById(
+            'icon-sair'
+        );
+
+    const logoutModal =
+        document.getElementById(
+            'logout-modal'
+        );
+
+    const confirmLogout =
+        document.getElementById(
+            'confirm-logout'
+        );
+
+    const cancelLogout =
+        document.getElementById(
+            'cancel-logout'
+        );
+
+    iconSair?.addEventListener(
+        'click',
+        function () {
+
+            if (logoutModal) {
+
+                logoutModal.style.display =
+                    'flex';
+            }
+        }
+    );
+
+    cancelLogout?.addEventListener(
+        'click',
+        function () {
+
+            if (logoutModal) {
+
+                logoutModal.style.display =
+                    'none';
+            }
+        }
+    );
+
+    logoutModal?.addEventListener(
+        'click',
+        function (e) {
+
+            if (
+                e.target === logoutModal
+            ) {
+
+                logoutModal.style.display =
+                    'none';
+            }
+        }
+    );
+
+    confirmLogout?.addEventListener(
+        'click',
+        function () {
+
+            window.location.href =
+                '../login/logout.php';
+        }
+    );
+
+    // =================================================
+    // ESC
+    // =================================================
+
+    document.addEventListener(
+        'keydown',
+        function (e) {
+
+            if (e.key !== 'Escape') {
+                return;
+            }
+
+            if (logoutModal) {
+
+                logoutModal.style.display =
+                    'none';
+            }
+
+            fecharModalExclusao();
+
+            document.querySelectorAll(
+                '.resposta-form'
+            ).forEach(function (form) {
+
+                form.style.display =
+                    'none';
+
+                form
+                    .querySelector(
+                        '.resposta-textarea'
+                    )
+                    ?.blur();
+            });
+
+            document.querySelectorAll(
+                '.respostas-container'
+            ).forEach(function (container) {
+
+                container.classList.remove(
+                    'visivel'
+                );
+            });
+        }
+    );
+
+    // =================================================
+    // INICIALIZAÇÃO
     // =================================================
 
     renderizarMinhasPerguntas();
     renderizarExplorar();
+    atualizarContadores();
 
-    console.log('Comunidade FOAG carregada ✅');
-    console.log('Palavras proibidas:', palavrasProibidas.length);
-    console.log('Minhas perguntas:', chatData.perguntas.length);
-    console.log('Perguntas da comunidade:', todasPerguntas.length);
+    console.log(
+        'Comunidade FOAG carregada ✅'
+    );
 });

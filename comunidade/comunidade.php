@@ -1,10 +1,10 @@
 <?php
-// comunidade.php — Página principal da comunidade com censura
+// comunidade.php — Comunidade FOAG
 
 session_start();
 
 // ======================================
-// VERIFICAR LOGIN
+// LOGIN
 // ======================================
 
 if (empty($_SESSION['codigo_usuario'])) {
@@ -12,13 +12,17 @@ if (empty($_SESSION['codigo_usuario'])) {
     exit;
 }
 
-$codigoUsuario = $_SESSION['codigo_usuario'];
-$nomeUsuario = $_SESSION['user_nome'] ?? 'Usuário';
+$codigoUsuario = (string) $_SESSION['codigo_usuario'];
+$nomeUsuario =
+    $_SESSION['user_nome']
+    ?? $_SESSION['nome_usuario']
+    ?? $_SESSION['nome']
+    ?? 'Usuário';
 
 $current = basename($_SERVER['PHP_SELF']);
 
 // ======================================
-// PASTA DO USUÁRIO
+// PASTAS
 // ======================================
 
 $baseJsonDir = __DIR__ . '/../json/usuarios';
@@ -29,163 +33,119 @@ if (!is_dir($pastaUsuario)) {
 }
 
 // ======================================
-// CARREGAR PALAVRAS PROIBIDAS
+// PALAVRAS PROIBIDAS
 // ======================================
 
-$palavrasProibidas = require __DIR__ . '/palavram.php';
+$arquivoPalavras = __DIR__ . '/palavram.php';
+$palavrasProibidas = file_exists($arquivoPalavras)
+    ? require $arquivoPalavras
+    : [];
 
 if (!is_array($palavrasProibidas)) {
     $palavrasProibidas = [];
 }
 
-// ======================================
-// FUNÇÃO DE CENSURA
-// ======================================
+function censurarTexto($texto, $palavrasProibidas)
+{
+    if ($texto === null || $texto === '') return '';
 
-function censurarTexto($texto, $palavrasProibidas) {
-    if (empty($texto)) return $texto;
-    
-    $textoOriginal = $texto;
-    
-    // Ordenar por tamanho (maiores primeiro) para evitar problemas com palavras compostas
-    usort($palavrasProibidas, function($a, $b) {
-        return strlen($b) - strlen($a);
+    $resultado = (string) $texto;
+
+    usort($palavrasProibidas, function ($a, $b) {
+        return mb_strlen((string) $b) <=> mb_strlen((string) $a);
     });
-    
+
     foreach ($palavrasProibidas as $palavra) {
-        $palavra = trim($palavra);
-        if (empty($palavra)) continue;
-        
-        // Criar padrão para encontrar a palavra com variações de case
-        $padrao = '/\b' . preg_quote($palavra, '/') . '\b/i';
-        
-        // Substituir por asteriscos mantendo o comprimento original
-        $texto = preg_replace_callback($padrao, function($matches) {
-            return str_repeat('*', mb_strlen($matches[0]));
-        }, $texto);
-        
-        // Também substituir variações com números (leet speak) - apenas se a palavra original tiver letras
-        if (preg_match('/[a-zA-Z]/', $palavra)) {
-            // Gerar variações leet speak
-            $leetVariations = gerarLeetVariations($palavra);
-            foreach ($leetVariations as $leet) {
-                $padraoLeet = '/\b' . preg_quote($leet, '/') . '\b/i';
-                $texto = preg_replace_callback($padraoLeet, function($matches) {
-                    return str_repeat('*', mb_strlen($matches[0]));
-                }, $texto);
-            }
-        }
+        $palavra = trim((string) $palavra);
+        if ($palavra === '') continue;
+
+        $padrao = '/\b' . preg_quote($palavra, '/') . '\b/iu';
+
+        $resultado = preg_replace_callback(
+            $padrao,
+            function ($matches) {
+                return str_repeat('*', mb_strlen($matches[0]));
+            },
+            $resultado
+        );
     }
-    
-    return $texto;
+
+    return $resultado;
 }
 
-function gerarLeetVariations($palavra) {
-    $leetMap = [
-        'a' => ['4', '@'],
-        'e' => ['3'],
-        'i' => ['1', '!'],
-        'o' => ['0'],
-        's' => ['5', '$'],
-        't' => ['7'],
-        'b' => ['8'],
-        'g' => ['6', '9'],
-        'l' => ['1'],
-        'z' => ['2'],
-        'c' => ['('],
-        'u' => ['v'],
-        'v' => ['u'],
-    ];
+function limparPerguntaParaExibicao($pergunta, $palavrasProibidas)
+{
+    if (!is_array($pergunta)) return null;
 
-    $variacoes = [$palavra];
-    $palavraLower = mb_strtolower($palavra);
-    $chars = str_split($palavraLower);
-    $substituicoes = [];
+    $pergunta['texto'] = censurarTexto(
+        $pergunta['texto'] ?? $pergunta['texto_original'] ?? '',
+        $palavrasProibidas
+    );
 
-    foreach ($chars as $i => $char) {
-        if (isset($leetMap[$char])) {
-            $substituicoes[$i] = $leetMap[$char];
-        }
+    // Não envia texto bruto/ofensivo para o navegador.
+    unset($pergunta['texto_original']);
+
+    if (!isset($pergunta['respostas']) || !is_array($pergunta['respostas'])) {
+        $pergunta['respostas'] = [];
     }
 
-    if (empty($substituicoes)) {
-        return $variacoes;
+    foreach ($pergunta['respostas'] as &$resposta) {
+        if (!is_array($resposta)) continue;
+
+        $resposta['texto'] = censurarTexto(
+            $resposta['texto'] ?? $resposta['texto_original'] ?? '',
+            $palavrasProibidas
+        );
+
+        unset($resposta['texto_original']);
     }
+    unset($resposta);
 
-    $keys = array_keys($substituicoes);
-
-    // Limita a quantidade de posições alteradas para evitar combinações demais
-    if (count($keys) > 3) {
-        $keys = array_slice($keys, 0, 3);
-    }
-
-    $gerarCombinacoes = function($charsAtual, $index = 0) use (&$gerarCombinacoes, $substituicoes, $keys) {
-        if ($index >= count($keys)) {
-            return [implode('', $charsAtual)];
-        }
-
-        $key = $keys[$index];
-        $resultados = [];
-
-        foreach ($substituicoes[$key] as $opcao) {
-            $charsCopy = $charsAtual;
-            $charsCopy[$key] = $opcao;
-
-            $resultados = array_merge(
-                $resultados,
-                $gerarCombinacoes($charsCopy, $index + 1)
-            );
-        }
-
-        return $resultados;
-    };
-
-    $combinacoes = $gerarCombinacoes($chars);
-
-    foreach ($combinacoes as $combinacao) {
-        if (!in_array($combinacao, $variacoes, true)) {
-            $variacoes[] = $combinacao;
-        }
-    }
-
-    return $variacoes;
+    return $pergunta;
 }
 
 // ======================================
-// DADOS DO CHAT
+// CHAT DO USUÁRIO
 // ======================================
 
-$arquivoChat = $pastaUsuario . '/chat.json';
+$arquivoChatUsuario = $pastaUsuario . '/chat.json';
+$estruturaChatPadrao = ['perguntas' => []];
 
-$estruturaChatPadrao = [
-    'perguntas' => []
-];
-
-if (!file_exists($arquivoChat)) {
+if (!file_exists($arquivoChatUsuario)) {
     file_put_contents(
-        $arquivoChat,
+        $arquivoChatUsuario,
         json_encode(
             $estruturaChatPadrao,
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE
-        )
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        ),
+        LOCK_EX
     );
 }
 
 $chatData = json_decode(
-    file_get_contents($arquivoChat),
+    (string) @file_get_contents($arquivoChatUsuario),
     true
 );
 
-if (!is_array($chatData) || !isset($chatData['perguntas'])) {
+if (!is_array($chatData) || !isset($chatData['perguntas']) || !is_array($chatData['perguntas'])) {
     $chatData = $estruturaChatPadrao;
 }
 
+$chatDataExibicao = ['perguntas' => []];
+
+foreach ($chatData['perguntas'] as $pergunta) {
+    $limpa = limparPerguntaParaExibicao($pergunta, $palavrasProibidas);
+    if ($limpa) {
+        $limpa['usuario_id'] = $codigoUsuario;
+        $chatDataExibicao['perguntas'][] = $limpa;
+    }
+}
+
 // ======================================
-// INTERAÇÕES DO USUÁRIO
+// INTERAÇÕES
 // ======================================
 
 $arquivoInteracoes = $pastaUsuario . '/interacoes.json';
-
 $interacoesPadrao = [
     'curtidas' => [],
     'salvos' => []
@@ -194,159 +154,134 @@ $interacoesPadrao = [
 if (!file_exists($arquivoInteracoes)) {
     file_put_contents(
         $arquivoInteracoes,
-        json_encode($interacoesPadrao, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+        json_encode(
+            $interacoesPadrao,
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        ),
+        LOCK_EX
     );
 }
 
-$interacoes = json_decode(file_get_contents($arquivoInteracoes), true);
-if (!is_array($interacoes) || !isset($interacoes['curtidas'])) {
+$interacoes = json_decode(
+    (string) @file_get_contents($arquivoInteracoes),
+    true
+);
+
+if (!is_array($interacoes)) {
     $interacoes = $interacoesPadrao;
 }
 
+if (!isset($interacoes['curtidas']) || !is_array($interacoes['curtidas'])) {
+    $interacoes['curtidas'] = [];
+}
+
+if (!isset($interacoes['salvos']) || !is_array($interacoes['salvos'])) {
+    $interacoes['salvos'] = [];
+}
+
 // ======================================
-// CARREGAR PERGUNTAS DE TODOS OS USUÁRIOS
+// TODAS AS PERGUNTAS
 // ======================================
 
 $todasPerguntas = [];
 
-$usuariosDir = $baseJsonDir;
-if (is_dir($usuariosDir)) {
-    $pastas = scandir($usuariosDir);
-    
+if (is_dir($baseJsonDir)) {
+    $pastas = scandir($baseJsonDir);
+
     foreach ($pastas as $pasta) {
         if ($pasta === '.' || $pasta === '..') continue;
-        if (!is_dir($usuariosDir . '/' . $pasta)) continue;
-        
-        $arquivoChat = $usuariosDir . '/' . $pasta . '/chat.json';
+
+        $pastaCompleta = $baseJsonDir . '/' . $pasta;
+        if (!is_dir($pastaCompleta)) continue;
+
+        $arquivoChat = $pastaCompleta . '/chat.json';
         if (!file_exists($arquivoChat)) continue;
-        
-        $dados = json_decode(file_get_contents($arquivoChat), true);
-        if (!is_array($dados) || !isset($dados['perguntas'])) continue;
-        
+
+        $dados = json_decode(
+            (string) @file_get_contents($arquivoChat),
+            true
+        );
+
+        if (
+            !is_array($dados) ||
+            !isset($dados['perguntas']) ||
+            !is_array($dados['perguntas'])
+        ) {
+            continue;
+        }
+
         foreach ($dados['perguntas'] as $pergunta) {
-            $pergunta['usuario_id'] = $pasta;
-            $pergunta['usuario_nome'] = $pergunta['autor'] ?? 'Anônimo';
-            
-            // Censurar o texto da pergunta
-            if (isset($pergunta['texto'])) {
-                $pergunta['texto_original'] = $pergunta['texto'];
-                $pergunta['texto'] = censurarTexto($pergunta['texto'], $palavrasProibidas);
-            }
-            
-            // Censurar respostas
-            if (isset($pergunta['respostas']) && is_array($pergunta['respostas'])) {
-                foreach ($pergunta['respostas'] as &$resposta) {
-                    if (isset($resposta['texto'])) {
-                        $resposta['texto_original'] = $resposta['texto'];
-                        $resposta['texto'] = censurarTexto($resposta['texto'], $palavrasProibidas);
-                    }
-                }
-            }
-            
-            $todasPerguntas[] = $pergunta;
+            $limpa = limparPerguntaParaExibicao(
+                $pergunta,
+                $palavrasProibidas
+            );
+
+            if (!$limpa) continue;
+
+            $limpa['usuario_id'] = (string) $pasta;
+            $todasPerguntas[] = $limpa;
         }
     }
 }
 
-// Também censurar as perguntas do usuário atual
-if (isset($chatData['perguntas']) && is_array($chatData['perguntas'])) {
-    foreach ($chatData['perguntas'] as &$pergunta) {
-        if (isset($pergunta['texto']) && !isset($pergunta['texto_original'])) {
-            $pergunta['texto_original'] = $pergunta['texto'];
-            $pergunta['texto'] = censurarTexto($pergunta['texto'], $palavrasProibidas);
-        }
-        if (isset($pergunta['respostas']) && is_array($pergunta['respostas'])) {
-            foreach ($pergunta['respostas'] as &$resposta) {
-                if (isset($resposta['texto']) && !isset($resposta['texto_original'])) {
-                    $resposta['texto_original'] = $resposta['texto'];
-                    $resposta['texto'] = censurarTexto($resposta['texto'], $palavrasProibidas);
-                }
-            }
-        }
-    }
-}
-
-// Ordenar por data
-usort($todasPerguntas, function($a, $b) {
-    return strtotime($b['data'] ?? 0) - strtotime($a['data'] ?? 0);
+usort($todasPerguntas, function ($a, $b) {
+    return strtotime($b['data'] ?? '1970-01-01')
+        <=> strtotime($a['data'] ?? '1970-01-01');
 });
+
+// ======================================
+// MATÉRIAS — antes dos filtros
+// ======================================
+
+$materias = ['Geral'];
+
+foreach ($todasPerguntas as $pergunta) {
+    $materia = trim((string) ($pergunta['materia'] ?? 'Geral'));
+    if ($materia !== '' && !in_array($materia, $materias, true)) {
+        $materias[] = $materia;
+    }
+}
+
+sort($materias, SORT_NATURAL | SORT_FLAG_CASE);
 
 // ======================================
 // FILTROS
 // ======================================
 
-$filtroMateria = $_GET['materia'] ?? 'todas';
-$filtroBusca = trim($_GET['busca'] ?? '');
-$abaAtiva = $_GET['aba'] ?? 'minhas';
+$filtroMateria = trim((string) ($_GET['materia'] ?? 'todas'));
+$filtroBusca = trim((string) ($_GET['busca'] ?? ''));
+$abaAtiva = ($_GET['aba'] ?? 'minhas') === 'explorar'
+    ? 'explorar'
+    : 'minhas';
 
-if ($abaAtiva === 'explorar') {
-    if ($filtroMateria !== 'todas') {
-        $todasPerguntas = array_filter($todasPerguntas, function($p) use ($filtroMateria) {
-            return ($p['materia'] ?? 'Geral') === $filtroMateria;
-        });
-    }
-
-    if (!empty($filtroBusca)) {
-        $buscaLower = mb_strtolower($filtroBusca);
-        $todasPerguntas = array_filter($todasPerguntas, function($p) use ($buscaLower) {
-            $texto = mb_strtolower($p['texto'] ?? '');
-            $autor = mb_strtolower($p['autor'] ?? '');
-            $materia = mb_strtolower($p['materia'] ?? '');
-            return strpos($texto, $buscaLower) !== false || 
-                   strpos($autor, $buscaLower) !== false ||
-                   strpos($materia, $buscaLower) !== false;
-        });
-    }
+if ($filtroMateria !== 'todas') {
+    $todasPerguntas = array_values(array_filter(
+        $todasPerguntas,
+        function ($pergunta) use ($filtroMateria) {
+            return (string) ($pergunta['materia'] ?? 'Geral') === $filtroMateria;
+        }
+    ));
 }
 
-$todasPerguntas = array_values($todasPerguntas);
+if ($filtroBusca !== '') {
+    $buscaLower = mb_strtolower($filtroBusca);
 
-// ======================================
-// LISTA DE MATÉRIAS
-// ======================================
+    $todasPerguntas = array_values(array_filter(
+        $todasPerguntas,
+        function ($pergunta) use ($buscaLower) {
+            $texto = mb_strtolower((string) ($pergunta['texto'] ?? ''));
+            $autor = mb_strtolower((string) ($pergunta['autor'] ?? ''));
+            $materia = mb_strtolower((string) ($pergunta['materia'] ?? ''));
 
-$materias = ['Geral'];
-foreach ($todasPerguntas as $p) {
-    $materia = $p['materia'] ?? 'Geral';
-    if (!in_array($materia, $materias)) {
-        $materias[] = $materia;
-    }
-}
-sort($materias);
-
-// ======================================
-// FUNÇÕES AUXILIARES
-// ======================================
-
-function obterIniciais($nome) {
-    if (empty($nome)) return '?';
-    $partes = explode(' ', trim($nome));
-    if (count($partes) === 1) return strtoupper(substr($partes[0], 0, 1));
-    return strtoupper(substr($partes[0], 0, 1) . substr(end($partes), 0, 1));
-}
-
-function formatarData($data) {
-    if (empty($data)) return 'Data desconhecida';
-    try {
-        $d = new DateTime($data);
-        return $d->format('d/m/Y H:i');
-    } catch (Exception $e) {
-        return 'Data inválida';
-    }
-}
-
-function isCurtido($perguntaId, $interacoes) {
-    return in_array($perguntaId, $interacoes['curtidas'] ?? []);
-}
-
-function isSalvo($perguntaId, $interacoes) {
-    return in_array($perguntaId, $interacoes['salvos'] ?? []);
+            return mb_strpos($texto, $buscaLower) !== false
+                || mb_strpos($autor, $buscaLower) !== false
+                || mb_strpos($materia, $buscaLower) !== false;
+        }
+    ));
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -358,278 +293,389 @@ function isSalvo($perguntaId, $interacoes) {
     <link rel="stylesheet" href="dark_comu.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    >
 
-    <!-- ======================================
-         MODO ESCURO GLOBAL
-    ======================================= -->
     <script src="../m.escuro/dark-mode.js"></script>
-
-    <!-- ======================================
-         APARÊNCIA GLOBAL (TAMANHO DA FONTE)
-    ======================================= -->
     <script src="../configuracoes/aparencia.js?v=1"></script>
 
-    <!-- ======================================
-         ACESSIBILIDADE GLOBAL
-    ======================================= -->
     <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
     <script src="../acessibilidade/acessibilidade.js?v=13" defer></script>
 
     <script>
         window.CHAT_DATA = <?= json_encode(
-            $chatData,
+            $chatDataExibicao,
             JSON_UNESCAPED_UNICODE |
-            JSON_UNESCAPED_SLASHES
+            JSON_UNESCAPED_SLASHES |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
         ); ?>;
 
         window.TODAS_PERGUNTAS = <?= json_encode(
             $todasPerguntas,
             JSON_UNESCAPED_UNICODE |
-            JSON_UNESCAPED_SLASHES
+            JSON_UNESCAPED_SLASHES |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
         ); ?>;
 
         window.CHAT_SAVE_URL = "salvar_chat.php";
-        window.INTERACOES_SAVE_URL = "salvar_interacoes.php";
-        window.USUARIO_NOME = <?= json_encode($nomeUsuario, JSON_UNESCAPED_UNICODE); ?>;
-        window.USUARIO_CODIGO = <?= json_encode($codigoUsuario, JSON_UNESCAPED_UNICODE); ?>;
-        window.INTERACOES = <?= json_encode($interacoes, JSON_UNESCAPED_UNICODE); ?>;
-        window.ABA_ATIVA = <?= json_encode($abaAtiva, JSON_UNESCAPED_UNICODE); ?>;
-        window.FILTRO_MATERIA = <?= json_encode($filtroMateria, JSON_UNESCAPED_UNICODE); ?>;
-        window.FILTRO_BUSCA = <?= json_encode($filtroBusca, JSON_UNESCAPED_UNICODE); ?>;
-        
-        // Palavras proibidas para censura no front-end
-        window.PALAVRAS_PROIBIDAS = <?= json_encode($palavrasProibidas, JSON_UNESCAPED_UNICODE); ?>;
+        window.INTERACAO_URL = "interacao.php";
+
+        // O arquivo enviado está no singular.
+        window.INTERACOES_SAVE_URL = "salvar_interacao.php";
+
+        window.USUARIO_NOME = <?= json_encode(
+            $nomeUsuario,
+            JSON_UNESCAPED_UNICODE |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
+        ); ?>;
+
+        window.USUARIO_CODIGO = <?= json_encode(
+            $codigoUsuario,
+            JSON_UNESCAPED_UNICODE |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
+        ); ?>;
+
+        window.INTERACOES = <?= json_encode(
+            $interacoes,
+            JSON_UNESCAPED_UNICODE |
+            JSON_UNESCAPED_SLASHES |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
+        ); ?>;
+
+        window.ABA_ATIVA = <?= json_encode($abaAtiva); ?>;
+        window.FILTRO_MATERIA = <?= json_encode($filtroMateria); ?>;
+        window.FILTRO_BUSCA = <?= json_encode($filtroBusca); ?>;
+
+        window.PALAVRAS_PROIBIDAS = <?= json_encode(
+            $palavrasProibidas,
+            JSON_UNESCAPED_UNICODE |
+            JSON_HEX_TAG |
+            JSON_HEX_AMP |
+            JSON_HEX_APOS |
+            JSON_HEX_QUOT
+        ); ?>;
     </script>
 </head>
+
 <body>
 
-    <!-- ======================================
-         CABEÇALHO
-    ======================================= -->
+<header class="cabecalho">
+    FOAG
 
-    <header class="cabecalho">
-        FOAG
+    <div class="header-icons">
+        <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
+        <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
+        <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
+    </div>
+</header>
 
-        <div class="header-icons">
-            <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
-            <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
-            <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
-        </div>
-    </header>
+<div class="container">
 
-    <div class="container">
+    <nav class="menu">
+        <a href="../inicioo/inicio.php">
+            <i class="fa-solid fa-house"></i> Início
+        </a>
 
-        <!-- ======================================
-             MENU
-        ======================================= -->
+        <a href="../calend/calendario.php">
+            <i class="fa-solid fa-calendar-days"></i> Calendário
+        </a>
 
-        <nav class="menu">
-            <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-house"></i> Início
-            </a>
+        <a href="../bloco/agenda.php">
+            <i class="fa-solid fa-book"></i> Agenda
+        </a>
 
-            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-calendar-days"></i> Calendário
-            </a>
+        <a href="../estudos/estudos.php">
+            <i class="fa-solid fa-graduation-cap"></i> Estudos
+        </a>
 
-            <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-book"></i> Agenda
-            </a>
+        <a href="../notas/notas.php">
+            <i class="fa-solid fa-check-double"></i> Boletim
+        </a>
 
-            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-graduation-cap"></i> Estudos
-            </a>
+        <a href="../comunidade/comunidade.php" class="active">
+            <i class="fa-solid fa-comments"></i> Comunidade
+        </a>
 
-            <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-check-double"></i> Boletim
-            </a>
+        <a href="../loja/loja.php">
+            <i class="fa-solid fa-store"></i> Loja
+        </a>
 
-            <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-comments"></i> Comunidade
-            </a>
+        <a href="../rank/rank.php">
+            <i class="fa-solid fa-trophy"></i> Ranking
+        </a>
+    </nav>
 
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja
-            </a>
+    <main class="main-content" id="conteudo-principal" tabindex="-1">
 
-            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-trophy"></i> Ranking
-            </a>
-        </nav>
+        <section class="chat-card">
 
-        <!-- ======================================
-             CONTEÚDO
-        ======================================= -->
-
-        <main class="main-content" id="conteudo-principal" tabindex="-1">
-
-            <section class="chat-card">
-
-                <div class="chat-header">
-                    <div>
-                        <h2>
-                            <i class="fa-solid fa-comments"></i>
-                            Comunidade FOAG
-                        </h2>
-                        <p>Tire dúvidas, ajude outros alunos e compartilhe conhecimento.</p>
-                    </div>
-                    <div class="chat-stats">
-                        <span><i class="fa-regular fa-message"></i> <span id="total-perguntas"><?= count($chatData['perguntas'] ?? []) ?></span> minhas</span>
-                        <span><i class="fa-regular fa-compass"></i> <span id="total-explorar"><?= count($todasPerguntas) ?></span> comunidade</span>
-                    </div>
+            <div class="chat-header">
+                <div>
+                    <h2>
+                        <i class="fa-solid fa-comments"></i>
+                        Comunidade FOAG
+                    </h2>
+                    <p>Tire dúvidas, ajude outros alunos e compartilhe conhecimento.</p>
                 </div>
 
-                <!-- Aviso de Censura -->
-                <div class="censure-notice">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Este espaço é para aprendizado. Palavras ofensivas serão automaticamente censuradas com <strong>*</strong>.</span>
+                <div class="chat-stats">
+                    <span>
+                        <i class="fa-regular fa-message"></i>
+                        <span id="total-perguntas">
+                            <?= count($chatDataExibicao['perguntas']) ?>
+                        </span>
+                        minhas
+                    </span>
+
+                    <span>
+                        <i class="fa-regular fa-compass"></i>
+                        <span id="total-explorar">
+                            <?= count($todasPerguntas) ?>
+                        </span>
+                        comunidade
+                    </span>
                 </div>
+            </div>
 
-                <!-- ======================================
-                     ABAS
-                ====================================== -->
+            <div class="censure-notice">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>
+                    Este espaço é para aprendizado. Palavras ofensivas serão
+                    automaticamente censuradas com <strong>*</strong>.
+                </span>
+            </div>
 
-                <div class="abas-container">
-                    <button class="aba-btn <?= $abaAtiva === 'minhas' ? 'ativo' : '' ?>" data-aba="minhas">
-                        <i class="fa-regular fa-user"></i> Minhas Perguntas
-                        <span class="badge"><?= count($chatData['perguntas'] ?? []) ?></span>
-                    </button>
-                    <button class="aba-btn <?= $abaAtiva === 'explorar' ? 'ativo' : '' ?>" data-aba="explorar">
-                        <i class="fa-solid fa-compass"></i> Explorar
-                        <span class="badge"><?= count($todasPerguntas) ?></span>
-                    </button>
-                </div>
+            <div class="abas-container">
+                <button
+                    class="aba-btn <?= $abaAtiva === 'minhas' ? 'ativo' : '' ?>"
+                    data-aba="minhas"
+                >
+                    <i class="fa-regular fa-user"></i>
+                    Minhas Perguntas
+                    <span class="badge">
+                        <?= count($chatDataExibicao['perguntas']) ?>
+                    </span>
+                </button>
 
-                <!-- ======================================
-                     ABA: MINHAS PERGUNTAS
-                ====================================== -->
+                <button
+                    class="aba-btn <?= $abaAtiva === 'explorar' ? 'ativo' : '' ?>"
+                    data-aba="explorar"
+                >
+                    <i class="fa-solid fa-compass"></i>
+                    Explorar
+                    <span class="badge"><?= count($todasPerguntas) ?></span>
+                </button>
+            </div>
 
-                <div class="aba-conteudo <?= $abaAtiva === 'minhas' ? 'ativo' : '' ?>" id="aba-minhas">
+            <div
+                class="aba-conteudo <?= $abaAtiva === 'minhas' ? 'ativo' : '' ?>"
+                id="aba-minhas"
+            >
 
-                    <!-- Formulário de Pergunta -->
-                    <div class="pergunta-form">
-                        <textarea id="pergunta-texto" placeholder="Faça sua pergunta para a comunidade..." rows="3"></textarea>
-                        <div class="form-actions">
-                            <div class="left">
-                                <select id="pergunta-materia">
-                                    <option value="Geral">Geral</option>
-                                    <option value="Matemática">Matemática</option>
-                                    <option value="Português">Português</option>
-                                    <option value="Ciências">Ciências</option>
-                                    <option value="História">História</option>
-                                    <option value="Geografia">Geografia</option>
-                                    <option value="Inglês">Inglês</option>
-                                    <option value="Artes">Artes</option>
-                                    <option value="Educação Física">Educação Física</option>
-                                    <option value="Química">Química</option>
-                                    <option value="Física">Física</option>
-                                    <option value="Biologia">Biologia</option>
-                                    <option value="Filosofia">Filosofia</option>
-                                    <option value="Sociologia">Sociologia</option>
-                                    <option value="Programação">Programação</option>
-                                    <option value="Outro">Outro</option>
-                                </select>
-                            </div>
-                            <button class="btn-postar" id="btn-postar-pergunta">
-                                <i class="fa-regular fa-paper-plane"></i> Publicar pergunta
-                            </button>
-                        </div>
-                        <div id="censure-preview" style="display:none; margin-top:10px; padding:10px; background:#fef2f2; border-radius:8px; font-size:14px; color:#ef4444;">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
-                            <span id="censure-preview-text"></span>
-                        </div>
-                    </div>
+                <div class="pergunta-form">
+                    <textarea
+                        id="pergunta-texto"
+                        placeholder="Faça sua pergunta para a comunidade..."
+                        rows="3"
+                    ></textarea>
 
-                    <!-- Perguntas -->
-                    <div class="perguntas-lista" id="minhas-perguntas-lista">
-                        <!-- Renderizado pelo JavaScript -->
-                    </div>
-                </div>
-
-                <!-- ======================================
-                     ABA: EXPLORAR
-                ====================================== -->
-
-                <div class="aba-conteudo <?= $abaAtiva === 'explorar' ? 'ativo' : '' ?>" id="aba-explorar">
-
-                    <!-- Filtros -->
-                    <div class="filtros-container">
-                        <div class="busca-wrapper">
-                            <input type="text" id="busca-input" placeholder="Buscar perguntas, autores ou matérias..." value="<?= htmlspecialchars($filtroBusca) ?>">
-                            <button id="btn-buscar"><i class="fa-solid fa-search"></i> Buscar</button>
-                        </div>
-                        <div class="filtro-materia">
-                            <label for="filtro-materia"><i class="fa-solid fa-tag"></i> Matéria:</label>
-                            <select id="filtro-materia">
-                                <option value="todas" <?= $filtroMateria === 'todas' ? 'selected' : '' ?>>Todas</option>
-                                <?php foreach ($materias as $materia): ?>
-                                    <option value="<?= htmlspecialchars($materia) ?>" <?= $filtroMateria === $materia ? 'selected' : '' ?>>
-                                        <?= htmlspecialchars($materia) ?>
-                                    </option>
-                                <?php endforeach; ?>
+                    <div class="form-actions">
+                        <div class="left">
+                            <select id="pergunta-materia">
+                                <option value="Geral">Geral</option>
+                                <option value="Matemática">Matemática</option>
+                                <option value="Português">Português</option>
+                                <option value="Ciências">Ciências</option>
+                                <option value="História">História</option>
+                                <option value="Geografia">Geografia</option>
+                                <option value="Inglês">Inglês</option>
+                                <option value="Artes">Artes</option>
+                                <option value="Educação Física">Educação Física</option>
+                                <option value="Química">Química</option>
+                                <option value="Física">Física</option>
+                                <option value="Biologia">Biologia</option>
+                                <option value="Filosofia">Filosofia</option>
+                                <option value="Sociologia">Sociologia</option>
+                                <option value="Programação">Programação</option>
+                                <option value="Outro">Outro</option>
                             </select>
                         </div>
-                        <button class="btn-limpar-filtros" id="btn-limpar-filtros">
-                            <i class="fa-solid fa-rotate-left"></i> Limpar
+
+                        <button class="btn-postar" id="btn-postar-pergunta">
+                            <i class="fa-regular fa-paper-plane"></i>
+                            Publicar pergunta
                         </button>
                     </div>
 
-                    <!-- Perguntas da Comunidade -->
-                    <div class="perguntas-lista" id="explorar-perguntas-lista">
-                        <!-- Renderizado pelo JavaScript -->
+                    <div
+                        id="censure-preview"
+                        style="
+                            display:none;
+                            margin-top:10px;
+                            padding:10px;
+                            background:#fef2f2;
+                            border-radius:8px;
+                            font-size:14px;
+                            color:#ef4444;
+                        "
+                    >
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        <span id="censure-preview-text"></span>
                     </div>
                 </div>
 
-            </section>
-        </main>
-    </div>
-
-    <!-- ======================================
-         MODAL: LOGOUT
-    ======================================= -->
-
-    <div id="logout-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="titulo-logout">
-        <div class="modal-content">
-            <h3 id="titulo-logout">Ah... já vai?</h3>
-            <h4>Tem certeza de que deseja sair?</h4>
-            <div class="modal-buttons">
-                <button id="confirm-logout">Sim</button>
-                <button id="cancel-logout">Cancelar</button>
+                <div
+                    class="perguntas-lista"
+                    id="minhas-perguntas-lista"
+                ></div>
             </div>
+
+            <div
+                class="aba-conteudo <?= $abaAtiva === 'explorar' ? 'ativo' : '' ?>"
+                id="aba-explorar"
+            >
+
+                <div class="filtros-container">
+                    <div class="busca-wrapper">
+                        <input
+                            type="text"
+                            id="busca-input"
+                            placeholder="Buscar perguntas, autores ou matérias..."
+                            value="<?= htmlspecialchars($filtroBusca, ENT_QUOTES, 'UTF-8') ?>"
+                        >
+
+                        <button id="btn-buscar">
+                            <i class="fa-solid fa-search"></i>
+                            Buscar
+                        </button>
+                    </div>
+
+                    <div class="filtro-materia">
+                        <label for="filtro-materia">
+                            <i class="fa-solid fa-tag"></i>
+                            Matéria:
+                        </label>
+
+                        <select id="filtro-materia">
+                            <option
+                                value="todas"
+                                <?= $filtroMateria === 'todas' ? 'selected' : '' ?>
+                            >
+                                Todas
+                            </option>
+
+                            <?php foreach ($materias as $materia): ?>
+                                <option
+                                    value="<?= htmlspecialchars($materia, ENT_QUOTES, 'UTF-8') ?>"
+                                    <?= $filtroMateria === $materia ? 'selected' : '' ?>
+                                >
+                                    <?= htmlspecialchars($materia, ENT_QUOTES, 'UTF-8') ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
+
+                    <button
+                        class="btn-limpar-filtros"
+                        id="btn-limpar-filtros"
+                    >
+                        <i class="fa-solid fa-rotate-left"></i>
+                        Limpar
+                    </button>
+                </div>
+
+                <div
+                    class="perguntas-lista"
+                    id="explorar-perguntas-lista"
+                ></div>
+            </div>
+
+        </section>
+    </main>
+</div>
+
+<div
+    id="logout-modal"
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="titulo-logout"
+>
+    <div class="modal-content">
+        <h3 id="titulo-logout">Ah... já vai?</h3>
+        <h4>Tem certeza de que deseja sair?</h4>
+
+        <div class="modal-buttons">
+            <button id="confirm-logout">Sim</button>
+            <button id="cancel-logout">Cancelar</button>
         </div>
     </div>
+</div>
 
-    <!-- ======================================
-         MODAL: EXCLUSÃO
-    ======================================= -->
+<div
+    id="modal-excluir"
+    class="modal-excluir"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="excluir-titulo"
+>
+    <div class="modal-content">
+        <div class="excluir-icon">
+            <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+        </div>
 
-    <div id="modal-excluir" class="modal-excluir" role="dialog" aria-modal="true" aria-labelledby="excluir-titulo">
-        <div class="modal-content">
-            <div class="excluir-icon">
-                <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
-            </div>
-            <h3 id="excluir-titulo">Excluir Pergunta</h3>
-            <p id="excluir-mensagem">Tem certeza que deseja excluir esta pergunta? Todas as respostas também serão removidas.</p>
-            <div class="modal-buttons">
-                <button id="confirmar-exclusao" class="btn-excluir-confirmar">Excluir</button>
-                <button id="cancelar-exclusao" class="btn-cancelar">Cancelar</button>
-            </div>
+        <h3 id="excluir-titulo">Excluir Pergunta</h3>
+
+        <p id="excluir-mensagem">
+            Tem certeza que deseja excluir esta pergunta?
+            Todas as respostas também serão removidas.
+        </p>
+
+        <div class="modal-buttons">
+            <button
+                id="confirmar-exclusao"
+                class="btn-excluir-confirmar"
+            >
+                Excluir
+            </button>
+
+            <button
+                id="cancelar-exclusao"
+                class="btn-cancelar"
+            >
+                Cancelar
+            </button>
         </div>
     </div>
+</div>
 
-    <footer>
-        &copy; 2025 FOAG. Todos os direitos reservados.
-    </footer>
+<footer>
+    &copy; 2025 FOAG. Todos os direitos reservados.
+</footer>
 
-    <!-- ======================================
-         JAVASCRIPT
-    ====================================== -->
-
-    <script src="comunidade.js"></script>
+<script src="comunidade.js?v=2"></script>
 
 </body>
-
 </html>

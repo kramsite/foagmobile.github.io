@@ -1,3 +1,13 @@
 {
-    "perguntas": []
+    "perguntas": [
+        {
+            "id": "1788440425683_04985817",
+            "usuario_id": "WBFRL",
+            "autor": "Rafaella Gomes",
+            "texto": "batata com arroz é bom?",
+            "materia": "Geral",
+            "data": "2026-09-03T13:00:25+00:00",
+            "respostas": []
+        }
+    ]
 }
