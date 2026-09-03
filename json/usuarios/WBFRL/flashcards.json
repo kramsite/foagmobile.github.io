@@ -34,34 +34,6 @@
             "icone": "fa-language",
             "cartoes": [
                 {
-                    "id": "CARD_3F6323B4",
-                    "pergunta": "adad",
-                    "resposta": "ada",
-                    "acertos": 1,
-                    "erros": 0,
-                    "revisoes": [
-                        {
-                            "ts": 1788437547903,
-                            "resultado": "acerto"
-                        }
-                    ],
-                    "criado_em": "2026-09-03 14:09:49"
-                },
-                {
-                    "id": "CARD_79C90A22",
-                    "pergunta": "dads",
-                    "resposta": "dsad",
-                    "acertos": 1,
-                    "erros": 0,
-                    "revisoes": [
-                        {
-                            "ts": 1788437548984,
-                            "resultado": "acerto"
-                        }
-                    ],
-                    "criado_em": "2026-09-03 14:09:52"
-                },
-                {
                     "id": "CARD_E8A7E386",
                     "pergunta": "asdasd",
                     "resposta": "ads",
@@ -469,9 +441,9 @@
                 }
             ],
             "estatisticas": {
-                "acertos": 31,
+                "acertos": 29,
                 "erros": 0,
-                "revisoes": 31
+                "revisoes": 29
             },
             "criado_em": "2026-09-03 14:09:43"
         }
