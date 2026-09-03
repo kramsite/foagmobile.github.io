@@ -639,3 +639,60 @@ body.dark-mode footer {
     }
 
 }
+
+/* ===========================================
+   DARK MODE - INSÍGNIAS
+============================================ */
+
+body.dark-mode .insignias-card {
+    background: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .insignias-icone {
+    background: #0f172a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .insignias-cabecalho h3 {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .insignias-cabecalho p {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .contador-insignias {
+    background: #0f172a !important;
+    color: #669ada !important;
+}
+
+body.dark-mode .insignia-item {
+    background: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .insignia-item:hover {
+    border-color: #669ada !important;
+}
+
+body.dark-mode .insignia-item .insignia-imagem {
+    background: #1e293b !important;
+}
+
+body.dark-mode .insignia-item .insignia-nome {
+    color: #e2e8f0 !important;
+}
+
+body.dark-mode .insignia-item .insignia-categoria {
+    background: #1e293b !important;
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .sem-insignias {
+    color: #94a3b8 !important;
+}
+
+body.dark-mode .sem-insignias p {
+    color: #e2e8f0 !important;
+}
