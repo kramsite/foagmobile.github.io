@@ -420,6 +420,87 @@ $caminho_foto =
         </main>
     </div>
 
+  <!-- ===========================================
+     INSÍGNIAS DO USUÁRIO
+============================================ -->
+
+<?php
+// Carregar configuração das insígnias
+require_once __DIR__ . '/config/insignias.php';
+
+// Verificar e desbloquear insígnias automaticamente
+verificarDesbloquearInsignias($codigoUsuario);
+
+$insignias_usuario = getInsigniasUsuario($codigoUsuario);
+?>
+
+<section class="insignias-card">
+    <div class="insignias-cabecalho">
+        <div class="insignias-icone">
+            <i class="fa-solid fa-award"></i>
+        </div>
+        <div>
+            <h3>Minhas Insígnias</h3>
+            <p>Conquistas desbloqueadas durante sua jornada</p>
+        </div>
+        <span class="contador-insignias">
+            <?= count($insignias_usuario) ?> / <?= count($insignias_disponiveis) ?>
+        </span>
+    </div>
+
+    <?php if (empty($insignias_usuario)): ?>
+        <div class="sem-insignias">
+            <i class="fa-solid fa-trophy"></i>
+            <p>Você ainda não desbloqueou nenhuma insígnia</p>
+            <small>Continue estudando e conquistando!</small>
+        </div>
+    <?php else: ?>
+        <div class="insignias-grid">
+            <?php 
+            // Organizar por categoria para melhor visualização
+            $categorias = [];
+            foreach ($insignias_usuario as $insignia) {
+                $cat = $insignia['categoria'] ?? 'conquista';
+                if (!isset($categorias[$cat])) {
+                    $categorias[$cat] = [];
+                }
+                $categorias[$cat][] = $insignia;
+            }
+            
+            foreach ($categorias as $categoria => $itens):
+            ?>
+                <div class="insignia-categoria-grupo">
+                    <div class="insignia-categoria-titulo">
+                        <?php 
+                        $iconeCat = $categorias_insignias[$categoria]['icone'] ?? 'fa-solid fa-trophy';
+                        $nomeCat = $categorias_insignias[$categoria]['nome'] ?? ucfirst($categoria);
+                        ?>
+                        <i class="<?= $iconeCat ?>"></i>
+                        <?= $nomeCat ?>
+                        <span class="categoria-contador"><?= count($itens) ?></span>
+                    </div>
+                    <div class="insignias-grid-sub">
+                        <?php foreach ($itens as $insignia): ?>
+                            <div class="insignia-item" data-id="<?= escapar($insignia['id']) ?>" title="<?= escapar($insignia['descricao']) ?>">
+                                <div class="insignia-imagem">
+                                    <?php if (file_exists(__DIR__ . '/../img/insignias/' . $insignia['imagem'])): ?>
+                                        <img src="../img/insignias/<?= escapar($insignia['imagem']) ?>" alt="<?= escapar($insignia['nome']) ?>">
+                                    <?php else: ?>
+                                        <i class="<?= escapar($insignia['icone']) ?>" style="color: <?= escapar($insignia['cor']) ?>;"></i>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="insignia-info">
+                                    <span class="insignia-nome"><?= escapar($insignia['nome']) ?></span>
+                                    <span class="insignia-categoria"><?= escapar(ucfirst($insignia['categoria'])) ?></span>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+</section>
     <div id="logout-modal" class="modal">
         <div class="modal-content">
             <h3>Ah... já vai?</h3>
