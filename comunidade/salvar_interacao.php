@@ -1,68 +1,113 @@
 <?php
-// salvar_interacoes.php — Salva as interações do usuário (curtidas e salvos)
+// salvar_interacao.php — Salva curtidas e perguntas salvas do usuário.
 
 session_start();
 
 header('Content-Type: application/json; charset=utf-8');
 
-// Verifica se o usuário está logado
-if (!isset($_SESSION['codigo_usuario'])) {
-    http_response_code(401);
-    echo json_encode(['error' => 'Usuário não autenticado']);
+function responderJson($dados, $status = 200)
+{
+    http_response_code($status);
+    echo json_encode(
+        $dados,
+        JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+    );
     exit;
 }
 
-// Verifica se é uma requisição POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['error' => 'Método inválido']);
-    exit;
+if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
+    responderJson([
+        'ok' => false,
+        'erro' => 'METODO_INVALIDO',
+        'mensagem' => 'Use uma requisição POST.'
+    ], 405);
 }
 
-$userId = $_SESSION['codigo_usuario'];
+$codigoUsuario =
+    $_SESSION['codigo_usuario']
+    ?? $_SESSION['user_id']
+    ?? null;
 
-// Caminho do arquivo
+if (!$codigoUsuario) {
+    responderJson([
+        'ok' => false,
+        'erro' => 'USUARIO_NAO_LOGADO',
+        'mensagem' => 'Usuário não autenticado.'
+    ], 401);
+}
+
+$raw = file_get_contents('php://input');
+$dados = json_decode($raw ?: '', true);
+
+if (!is_array($dados) || json_last_error() !== JSON_ERROR_NONE) {
+    responderJson([
+        'ok' => false,
+        'erro' => 'JSON_INVALIDO',
+        'mensagem' => 'JSON inválido.'
+    ], 400);
+}
+
+$curtidas = isset($dados['curtidas']) && is_array($dados['curtidas'])
+    ? $dados['curtidas']
+    : [];
+
+$salvos = isset($dados['salvos']) && is_array($dados['salvos'])
+    ? $dados['salvos']
+    : [];
+
+$normalizarIds = function ($lista) {
+    $resultado = [];
+
+    foreach ($lista as $id) {
+        if (!is_scalar($id)) continue;
+
+        $id = trim((string) $id);
+        if ($id === '') continue;
+
+        if (!in_array($id, $resultado, true)) {
+            $resultado[] = $id;
+        }
+    }
+
+    return $resultado;
+};
+
+$interacoes = [
+    'curtidas' => $normalizarIds($curtidas),
+    'salvos' => $normalizarIds($salvos)
+];
+
 $baseJsonDir = __DIR__ . '/../json/usuarios';
-$pastaUsuario = $baseJsonDir . '/' . $userId;
+$pastaUsuario = $baseJsonDir . '/' . (string) $codigoUsuario;
 $arquivoInteracoes = $pastaUsuario . '/interacoes.json';
 
-// Cria a pasta se não existir
 if (!is_dir($pastaUsuario)) {
-    mkdir($pastaUsuario, 0755, true);
+    if (!@mkdir($pastaUsuario, 0755, true) && !is_dir($pastaUsuario)) {
+        responderJson([
+            'ok' => false,
+            'erro' => 'ERRO_CRIAR_PASTA',
+            'mensagem' => 'Não foi possível criar a pasta do usuário.'
+        ], 500);
+    }
 }
 
-// Lê os dados enviados
-$input = file_get_contents('php://input');
-$data = json_decode($input, true);
-
-if ($data === null) {
-    http_response_code(400);
-    echo json_encode(['error' => 'JSON inválido']);
-    exit;
-}
-
-// Garante a estrutura mínima
-if (!isset($data['curtidas']) || !is_array($data['curtidas'])) {
-    $data['curtidas'] = [];
-}
-if (!isset($data['salvos']) || !is_array($data['salvos'])) {
-    $data['salvos'] = [];
-}
-
-// Salva no arquivo
-$resultado = file_put_contents(
-    $arquivoInteracoes,
-    json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE)
+$json = json_encode(
+    $interacoes,
+    JSON_PRETTY_PRINT |
+    JSON_UNESCAPED_UNICODE |
+    JSON_UNESCAPED_SLASHES
 );
 
-if ($resultado === false) {
-    http_response_code(500);
-    echo json_encode(['error' => 'Erro ao salvar interações']);
-    exit;
+if ($json === false || @file_put_contents($arquivoInteracoes, $json, LOCK_EX) === false) {
+    responderJson([
+        'ok' => false,
+        'erro' => 'ERRO_SALVAR_INTERACOES',
+        'mensagem' => 'Não foi possível salvar as interações.'
+    ], 500);
 }
 
-echo json_encode([
-    'success' => true,
-    'message' => 'Interações salvas com sucesso'
+responderJson([
+    'ok' => true,
+    'mensagem' => 'Interações salvas com sucesso.',
+    'interacoes' => $interacoes
 ]);
-?>

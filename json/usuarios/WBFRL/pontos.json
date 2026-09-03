@@ -1,5 +1,5 @@
 {
-    "estrelas": 130,
+    "estrelas": 100,
     "historico": [
         {
             "id": "estrela_d63d0474bd6e",
@@ -90,6 +90,24 @@
             "data": "2026-09-03 08:12:59",
             "timestamp": 1788437579,
             "chave": "flashcards_revisao_2026-09-03_BAR_F299F4FB"
+        },
+        {
+            "id": "gasto_fd7720da6cb3",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Tema Verde",
+            "estrelas": -50,
+            "data": "2026-09-03 08:45:24",
+            "timestamp": 1788439524,
+            "chave": "compra_loja_tema_verde"
+        },
+        {
+            "id": "gasto_16785c8205b4",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Moldura Dragão",
+            "estrelas": -100,
+            "data": "2026-09-03 08:55:49",
+            "timestamp": 1788440149,
+            "chave": "compra_loja_moldura_dragao"
         }
     ],
     "controle": {
