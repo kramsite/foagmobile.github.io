@@ -584,64 +584,38 @@ function gerarCalendario(
         ======================================= -->
 
         <nav class="menu">
-
-            <a
-                href="../inicioo/inicio.php"
-                class="<?= $current === 'inicio.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-house"></i>
-                Início
-            </a>
-
-            <a
-                href="../calend/calendario.php"
-                class="<?= $current === 'calendario.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-calendar-days"></i>
-                Calendário
-            </a>
-
-            <a
-                href="../bloco/agenda.php"
-                class="<?= $current === 'agenda.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-book"></i>
-                Agenda
+            <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-house"></i> Início
             </a>
 
             <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-graduation-cap"></i> Estudos
             </a>
 
-            <a
-                href="../notas/notas.php"
-                class="<?= $current === 'notas.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-check-double"></i>
-                Boletim
+            <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-book"></i> Agenda
             </a>
 
-                        <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
+            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-calendar-days"></i> Calendário
+            </a>
+
+            <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-check-double"></i> Boletim
+            </a>
+
+            <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-comments"></i> Comunidade
             </a>
 
-            <a
-                href="../loja/loja.php"
-                class="<?= $current === 'loja.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-store"></i>
-                Loja
+            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
             </a>
 
-            <a
-                href="../rank/rank.php"
-                class="<?= $current === 'rank.php' ? 'active' : '' ?>"
-            >
-                <i class="fa-solid fa-trophy"></i>
-                Ranking
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
             </a>
-
-        </nav>
+            </nav>
 
 
         <div class="conteudo">
