@@ -1178,6 +1178,74 @@ document.addEventListener(
           );
 
 
+          // ==========================================
+          // MODAL DE ESTRELAS
+          // ==========================================
+
+          if (!estaEditando) {
+
+            const estrelas =
+              Number(
+                result.pontos?.estrelas ||
+                0
+              );
+
+            const recompensas =
+              Array.isArray(
+                result.pontos?.recompensas
+              )
+                ? result.pontos.recompensas
+                : [];
+
+            if (
+              estrelas > 0 &&
+              typeof window.mostrarModalEstrelas ===
+                'function'
+            ) {
+
+              const marcos =
+                recompensas
+                  .map((item) =>
+                    Number(item.marco || 0)
+                  )
+                  .filter((marco) =>
+                    marco > 0
+                  );
+
+              let mensagem =
+                'Seu baralho ficou ainda mais completo! :)';
+
+              if (
+                marcos.includes(15) &&
+                marcos.includes(31)
+              ) {
+
+                mensagem =
+                  'Seu baralho alcançou 15 cartões e também ultrapassou 30 cartões! :)';
+
+              } else if (
+                marcos.includes(31)
+              ) {
+
+                mensagem =
+                  'Seu baralho ultrapassou 30 cartões! Continue assim! :)';
+
+              } else if (
+                marcos.includes(15)
+              ) {
+
+                mensagem =
+                  'Seu baralho alcançou 15 cartões! Agora ele já está pronto para render muitos estudos! :)';
+              }
+
+              window.mostrarModalEstrelas(
+                estrelas,
+                mensagem
+              );
+            }
+          }
+
+
         } catch (error) {
 
           console.error(

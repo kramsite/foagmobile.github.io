@@ -1,5 +1,5 @@
 {
-    "estrelas": 124,
+    "estrelas": 136,
     "historico": [
         {
             "id": "estrela_d63d0474bd6e",
@@ -63,6 +63,33 @@
             "data": "2026-08-29 23:08:50",
             "timestamp": 1788059330,
             "chave": "cronometro_628b0acf-a85d-4af5-88c9-ad79bd6561ac"
+        },
+        {
+            "id": "estrela_fb9b238995d9",
+            "tipo": "flashcards",
+            "descricao": "Baralho “batata” alcançou 15 cartões",
+            "estrelas": 5,
+            "data": "2026-09-03 08:10:27",
+            "timestamp": 1788437427,
+            "chave": "flashcards_baralho_15_BAR_F299F4FB"
+        },
+        {
+            "id": "estrela_fc3f0c909c5d",
+            "tipo": "flashcards",
+            "descricao": "Baralho “batata” ultrapassou 30 cartões",
+            "estrelas": 5,
+            "data": "2026-09-03 08:12:09",
+            "timestamp": 1788437529,
+            "chave": "flashcards_baralho_31_BAR_F299F4FB"
+        },
+        {
+            "id": "estrela_63cfd76ace4c",
+            "tipo": "flashcards_revisao",
+            "descricao": "Revisão do baralho “batata” concluída",
+            "estrelas": 2,
+            "data": "2026-09-03 08:12:59",
+            "timestamp": 1788437579,
+            "chave": "flashcards_revisao_2026-09-03_BAR_F299F4FB"
         }
     ],
     "controle": {
@@ -101,7 +128,10 @@
             "sequencia_presenca_2026-08",
             "nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
             "evolucao_nota_MAT_ADEFFDD5_0758c00e6ea0_avaliacao_3",
-            "cronometro_628b0acf-a85d-4af5-88c9-ad79bd6561ac"
+            "cronometro_628b0acf-a85d-4af5-88c9-ad79bd6561ac",
+            "flashcards_baralho_15_BAR_F299F4FB",
+            "flashcards_baralho_31_BAR_F299F4FB",
+            "flashcards_revisao_2026-09-03_BAR_F299F4FB"
         ]
     }
 }

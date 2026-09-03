@@ -33,10 +33,7 @@ $config_padrao = [
     'som_pomodoro' => 1,
     'antecedencia_lembrete' => 15,
     // ===== ACESSIBILIDADE =====
-    'alto_contraste' => 0,
-    'destacar_links' => 0,
-    'libras' => 0,
-    'leitura_voz' => 0
+    'libras' => 0
 ];
 
 function carregarConfiguracoes() {
@@ -77,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao']) && $_POST['ac
                        'notificacoes_navegador', 'lembrete_atividades',
                        'lembrete_provas', 'lembrete_metas', 'notificacao_pomodoro', 'som_pomodoro',
                        // ===== ACESSIBILIDADE =====
-                       'alto_contraste', 'destacar_links', 'libras', 'leitura_voz'];
+                       'libras'];
         foreach ($checkboxes as $campo) {
             $dados[$campo] = isset($dados[$campo]) ? 1 : 0;
         }
@@ -152,10 +149,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     <link rel="stylesheet" href="configuracoes.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- ======================================
-         ACESSIBILIDADE GLOBAL
-    ======================================= -->
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
 </head>
 <body>
     <!-- ===== SKIP LINK ===== -->
@@ -494,17 +487,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                     </section>
 
                     <!-- ========================================== -->
-                    <!-- ACESSIBILIDADE -->
+                    <!-- ACESSIBILIDADE — SOMENTE LIBRAS -->
                     <!-- ========================================== -->
                     <section class="configuracao-card" id="acessibilidade" aria-labelledby="cabecalho-acessibilidade">
                         <div class="card-cabecalho" id="cabecalho-acessibilidade" role="button" tabindex="0" aria-expanded="false" aria-controls="conteudo-acessibilidade">
                             <div class="card-icone" aria-hidden="true">
-                                <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+                                <i class="fa-solid fa-hands-asl-interpreting" aria-hidden="true"></i>
                             </div>
 
                             <div>
                                 <h2>Acessibilidade</h2>
-                                <p>Opções para tornar o FOAG mais inclusivo.</p>
+                                <p>Ative a tradução do conteúdo do FOAG para Libras.</p>
                             </div>
 
                             <span class="card-toggle" aria-hidden="true">
@@ -513,96 +506,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                         </div>
 
                         <div class="card-conteudo" id="conteudo-acessibilidade" role="region" aria-labelledby="cabecalho-acessibilidade">
-
-                            <!-- ALTO CONTRASTE -->
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Alto contraste</strong>
-                                    <small>Aumenta o contraste das cores para facilitar a leitura.</small>
-                                </span>
-
-                                <span class="switch">
-                                    <input
-                                        type="checkbox"
-                                        name="alto_contraste"
-                                        <?= ($config['alto_contraste'] ?? 0) ? 'checked' : '' ?>
-                                    >
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
-
-                            <!-- DESTACAR LINKS -->
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Destacar links</strong>
-                                    <small>Sublinha e realça os links para facilitar a identificação.</small>
-                                </span>
-
-                                <span class="switch">
-                                    <input
-                                        type="checkbox"
-                                        name="destacar_links"
-                                        <?= ($config['destacar_links'] ?? 0) ? 'checked' : '' ?>
-                                    >
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
-
-                            <!-- LIBRAS -->
                             <label class="configuracao-item configuracao-switch">
                                 <span class="configuracao-texto">
                                     <strong>Libras</strong>
-                                    <small>Ativa o tradutor VLibras nas páginas do FOAG.</small>
+                                    <small>Ativa o tradutor VLibras em todas as páginas do FOAG e mantém a opção ativa ao navegar pelo site.</small>
                                 </span>
 
                                 <span class="switch">
                                     <input
                                         type="checkbox"
                                         name="libras"
-                                        <?= ($config['libras'] ?? 0) ? 'checked' : '' ?>
+                                        id="config-libras"
                                     >
                                     <span class="slider" aria-hidden="true"></span>
                                 </span>
                             </label>
-
-                            <!-- LEITURA EM VOZ ALTA -->
-                            <label class="configuracao-item configuracao-switch">
-                                <span class="configuracao-texto">
-                                    <strong>Leitura em voz alta</strong>
-                                    <small>Ativa a leitura do texto ao clicar sobre ele.</small>
-                                </span>
-
-                                <span class="switch">
-                                    <input
-                                        type="checkbox"
-                                        name="leitura_voz"
-                                        <?= ($config['leitura_voz'] ?? 0) ? 'checked' : '' ?>
-                                    >
-                                    <span class="slider" aria-hidden="true"></span>
-                                </span>
-                            </label>
-
-                            <div class="linha-botao" style="margin-top:1rem; padding-top:1rem; border-top:1px solid var(--cor-borda, #e5e7eb); gap:10px; flex-wrap:wrap;">
-                                <button
-                                    type="button"
-                                    class="btn-secundario"
-                                    id="btn-testar-voz"
-                                    aria-label="Testar leitura em voz alta"
-                                >
-                                    <i class="fa-solid fa-volume-high" aria-hidden="true"></i>
-                                    Testar leitura
-                                </button>
-
-                                <button
-                                    type="button"
-                                    class="btn-secundario"
-                                    id="btn-restaurar-acessibilidade"
-                                    aria-label="Restaurar configurações de acessibilidade"
-                                >
-                                    <i class="fa-solid fa-rotate-left" aria-hidden="true"></i>
-                                    Restaurar acessibilidade
-                                </button>
-                            </div>
                         </div>
                     </section>
 
@@ -1017,26 +935,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                         );
                     }
 
-                    // ===== SALVAR ACESSIBILIDADE NO LOCALSTORAGE =====
-                    const configAcessibilidade = {
-                        alto_contraste: document.querySelector('[name="alto_contraste"]')?.checked || false,
-                        destacar_links: document.querySelector('[name="destacar_links"]')?.checked || false,
-                        libras: document.querySelector('[name="libras"]')?.checked || false,
-                        leitura_voz: document.querySelector('[name="leitura_voz"]')?.checked || false
-                    };
+                    // =============================================
+                    // LIBRAS — SOMENTE DEPOIS DE CLICAR EM SALVAR
+                    // =============================================
+                    const campoLibras =
+                        document.querySelector('[name="libras"]');
 
-                    localStorage.setItem(
-                        'foag_acessibilidade',
-                        JSON.stringify(configAcessibilidade)
-                    );
+                    const librasAtiva =
+                        campoLibras ? campoLibras.checked : false;
 
-                    if (typeof window.atualizarAcessibilidade === 'function') {
-                        window.atualizarAcessibilidade(configAcessibilidade);
+                    if (
+                        window.FOAGLibras &&
+                        typeof window.FOAGLibras.salvar === 'function'
+                    ) {
+                        window.FOAGLibras.salvar(librasAtiva);
+                    } else {
+                        console.error(
+                            'FOAG: acessibilidade.js não foi carregado.'
+                        );
                     }
 
                     // ==================================================
-                    
-                    mostrarToast('✅ ' + data.message, 'sucesso');
+
+mostrarToast('✅ ' + data.message, 'sucesso');
                     document.getElementById('status-configuracoes').innerHTML = 
                         '<i class="fa-solid fa-circle" style="color:#22c55e;font-size:0.6rem;" aria-hidden="true"></i> ' +
                         new Date().toLocaleTimeString() + ' - Configurações salvas';
@@ -1545,54 +1466,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
         });
 
         // ============================================
-        // 13. RESTAURAR ACESSIBILIDADE
+        // 13. LIBRAS — SWITCH SEMPRE DESLIGADO AO ABRIR
+        //
+        // O estado salvo do site NÃO é copiado para o botão.
+        // Marcar/desmarcar aqui NÃO faz nada sozinho.
+        // A alteração só acontece depois de clicar em SALVAR.
         // ============================================
-        document.getElementById('btn-restaurar-acessibilidade')?.addEventListener('click', function() {
-            const campoContraste = document.querySelector('[name="alto_contraste"]');
-            const campoLinks = document.querySelector('[name="destacar_links"]');
-            const campoLibras = document.querySelector('[name="libras"]');
-            const campoVoz = document.querySelector('[name="leitura_voz"]');
+        const campoLibrasConfig =
+            document.querySelector('[name="libras"]');
 
-            if (campoContraste) campoContraste.checked = false;
-            if (campoLinks) campoLinks.checked = false;
-            if (campoLibras) campoLibras.checked = false;
-            if (campoVoz) campoVoz.checked = false;
+        if (campoLibrasConfig) {
+            campoLibrasConfig.checked = false;
+        }
 
-            const configAcessibilidade = {
-                alto_contraste: false,
-                destacar_links: false,
-                libras: false,
-                leitura_voz: false
-            };
-
-            localStorage.setItem(
-                'foag_acessibilidade',
-                JSON.stringify(configAcessibilidade)
-            );
-
-            if (typeof window.atualizarAcessibilidade === 'function') {
-                window.atualizarAcessibilidade(configAcessibilidade);
-            }
-
-            mostrarToast('♿ Acessibilidade restaurada ao padrão.', 'sucesso');
-        });
-
-        // ============================================
-        // 14. TESTAR VOZ
-        // ============================================
-        document.getElementById('btn-testar-voz')?.addEventListener('click', function() {
-            if (window.speechSynthesis) {
-                const utterance = new SpeechSynthesisUtterance('Teste de leitura em voz alta do FOAG. Acessibilidade ativada!');
-                utterance.lang = 'pt-BR';
-                utterance.rate = 1;
-                window.speechSynthesis.speak(utterance);
-                mostrarToast('🔊 Testando leitura em voz alta...', 'info');
-            } else {
-                mostrarToast('❌ Seu navegador não suporta leitura em voz alta.', 'erro');
-            }
-        });
-
-        console.log('⚙️ Configurações FOAG carregadas com acessibilidade! ♿');
+        console.log('⚙️ Configurações FOAG carregadas. Switch de Libras iniciado desligado.');
     });
     </script>
 
@@ -2175,43 +2062,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
 </style>
 
     <!-- ======================================
-         VLIBRAS OFICIAL
-    ======================================= -->
-
-    <div vw class="enabled">
-
-        <div
-            vw-access-button
-            class="active">
-        </div>
-
-        <div vw-plugin-wrapper>
-
-            <div
-                class="vw-plugin-top-wrapper">
-            </div>
-
-        </div>
-
-    </div>
-
-    <script
-        src="https://vlibras.gov.br/app/vlibras-plugin.js">
-    </script>
-
-    <script>
-        new window.VLibras.Widget(
-            'https://vlibras.gov.br/app'
-        );
-    </script>
-
-
-    <!-- ======================================
          ACESSIBILIDADE FOAG
     ======================================= -->
 
     <script
-        src="../acessibilidade/acessibilidade.js?v=13">
+        src="acessibilidade.js?v=17">
     </script>
 
     <!-- ======================================

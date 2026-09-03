@@ -30,6 +30,28 @@ $codigoUsuario =
 
 
 // ======================================
+// SISTEMA DE ESTRELAS
+// ======================================
+
+$arquivoEstrelas =
+    __DIR__ . '/../../estrelas/adicionar_estrelas.php';
+
+if (!file_exists($arquivoEstrelas)) {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'sucesso' => false,
+        'mensagem' => 'Arquivo do sistema de estrelas não encontrado.'
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+require_once $arquivoEstrelas;
+
+
+// ======================================
 // SOMENTE POST
 // ======================================
 
@@ -566,6 +588,102 @@ if ($resultado === false) {
 
 
 // ======================================
+// RECOMPENSAS DO BARALHO
+// ======================================
+
+$totalCartoes =
+    count(
+        $flashcardsData[
+            'baralhos'
+        ][
+            $indiceBaralho
+        ][
+            'cartoes'
+        ]
+    );
+
+$nomeBaralho =
+    trim(
+        (string)(
+            $flashcardsData[
+                'baralhos'
+            ][
+                $indiceBaralho
+            ][
+                'nome'
+            ] ?? 'Baralho'
+        )
+    );
+
+$estrelasGanhas = 0;
+$recompensasConcedidas = [];
+
+
+// ======================================
+// MARCO: 15 CARTÕES
+// ======================================
+
+if ($totalCartoes >= 15) {
+
+    $chave15 =
+        'flashcards_baralho_15_' .
+        $idBaralho;
+
+    $adicionou15 =
+        adicionarEstrelas(
+            $codigoUsuario,
+            'flashcards',
+            'Baralho “' . $nomeBaralho . '” alcançou 15 cartões',
+            5,
+            $chave15
+        );
+
+    if ($adicionou15) {
+
+        $estrelasGanhas += 5;
+
+        $recompensasConcedidas[] = [
+            'tipo' => 'baralho_15',
+            'marco' => 15,
+            'estrelas' => 5
+        ];
+    }
+}
+
+
+// ======================================
+// MARCO: MAIS DE 30 CARTÕES
+// ======================================
+
+if ($totalCartoes >= 31) {
+
+    $chave31 =
+        'flashcards_baralho_31_' .
+        $idBaralho;
+
+    $adicionou31 =
+        adicionarEstrelas(
+            $codigoUsuario,
+            'flashcards',
+            'Baralho “' . $nomeBaralho . '” ultrapassou 30 cartões',
+            5,
+            $chave31
+        );
+
+    if ($adicionou31) {
+
+        $estrelasGanhas += 5;
+
+        $recompensasConcedidas[] = [
+            'tipo' => 'baralho_31',
+            'marco' => 31,
+            'estrelas' => 5
+        ];
+    }
+}
+
+
+// ======================================
 // RESPOSTA
 // ======================================
 
@@ -578,6 +696,17 @@ echo json_encode([
         'Cartão criado com sucesso.',
 
     'cartao' =>
-        $novoCartao
+        $novoCartao,
+
+    'pontos' => [
+        'estrelas' =>
+            $estrelasGanhas,
+
+        'total_cartoes' =>
+            $totalCartoes,
+
+        'recompensas' =>
+            $recompensasConcedidas
+    ]
 
 ], JSON_UNESCAPED_UNICODE);

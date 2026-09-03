@@ -417,7 +417,11 @@ document.addEventListener(
                     cartao.id,
 
                   resultado:
-                    resultado
+                    resultado,
+
+                  concluiu_baralho:
+                    indiceAtual ===
+                    cartoes.length - 1
 
                 })
 
@@ -452,6 +456,60 @@ document.addEventListener(
             'Não foi possível salvar a revisão.'
           );
 
+        }
+
+
+        // ==========================================
+        // MODAL DE ESTRELAS
+        // ==========================================
+
+        const estrelas =
+          Number(
+            result.pontos?.estrelas ||
+            0
+          );
+
+        const estrelasRevisao =
+          Number(
+            result.pontos?.revisao_baralho ||
+            0
+          );
+
+        const bonusTresBaralhos =
+          Number(
+            result.pontos?.bonus_3_baralhos ||
+            0
+          );
+
+        if (
+          estrelas > 0 &&
+          typeof window.mostrarModalEstrelas ===
+            'function'
+        ) {
+
+          let mensagem =
+            'Revisão concluída! Continue assim! :)';
+
+          if (
+            estrelasRevisao > 0 &&
+            bonusTresBaralhos > 0
+          ) {
+
+            mensagem =
+              'Revisão concluída e você revisou 3 baralhos diferentes hoje! :)';
+
+          } else if (
+            bonusTresBaralhos > 0
+          ) {
+
+            mensagem =
+              'Você revisou 3 baralhos diferentes hoje! Excelente! :)';
+          }
+
+          window.mostrarModalEstrelas(
+            estrelas,
+            mensagem
+          );
         }
 
 
