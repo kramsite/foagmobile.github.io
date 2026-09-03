@@ -28,6 +28,28 @@ $codigoUsuario =
 
 
 // ======================================
+// SISTEMA DE ESTRELAS
+// ======================================
+
+$arquivoEstrelas =
+    __DIR__ . '/../../estrelas/adicionar_estrelas.php';
+
+if (!file_exists($arquivoEstrelas)) {
+
+    http_response_code(500);
+
+    echo json_encode([
+        'sucesso' => false,
+        'mensagem' => 'Arquivo do sistema de estrelas não encontrado.'
+    ], JSON_UNESCAPED_UNICODE);
+
+    exit;
+}
+
+require_once $arquivoEstrelas;
+
+
+// ======================================
 // POST
 // ======================================
 
@@ -127,6 +149,12 @@ $resultado =
     trim(
         $data['resultado']
         ?? ''
+    );
+
+
+$concluiuBaralho =
+    !empty(
+        $data['concluiu_baralho']
     );
 
 
@@ -539,6 +567,157 @@ if ($resultadoEscrita === false) {
 
 
 // ======================================
+// RECOMPENSAS DA REVISÃO
+// ======================================
+
+$estrelasGanhas = 0;
+$estrelasRevisao = 0;
+$estrelasBonusTres = 0;
+$baralhosRevisadosHoje = 0;
+
+if ($concluiuBaralho) {
+
+    $timezone =
+        new DateTimeZone(
+            'America/Cuiaba'
+        );
+
+    $agora =
+        new DateTimeImmutable(
+            'now',
+            $timezone
+        );
+
+    $hoje =
+        $agora->format(
+            'Y-m-d'
+        );
+
+    $nomeBaralho =
+        trim(
+            (string)(
+                $baralho['nome'] ??
+                'Baralho'
+            )
+        );
+
+
+    // ==================================
+    // CONCLUIR UM BARALHO
+    // ==================================
+
+    $chaveRevisao =
+        'flashcards_revisao_' .
+        $hoje .
+        '_' .
+        $idBaralho;
+
+    $adicionouRevisao =
+        adicionarEstrelas(
+            $codigoUsuario,
+            'flashcards_revisao',
+            'Revisão do baralho “' . $nomeBaralho . '” concluída',
+            2,
+            $chaveRevisao
+        );
+
+    if ($adicionouRevisao) {
+
+        $estrelasRevisao = 2;
+        $estrelasGanhas += 2;
+    }
+
+
+    // ==================================
+    // CONTAR BARALHOS DIFERENTES HOJE
+    // ==================================
+
+    $pontosAtuais =
+        carregarPontos(
+            $codigoUsuario
+        );
+
+    $recompensasRecebidas =
+        $pontosAtuais[
+            'controle'
+        ][
+            'recompensas_recebidas'
+        ] ?? [];
+
+    if (!is_array($recompensasRecebidas)) {
+        $recompensasRecebidas = [];
+    }
+
+    $prefixoRevisaoHoje =
+        'flashcards_revisao_' .
+        $hoje .
+        '_';
+
+    $baralhosDoDia = [];
+
+    foreach (
+        $recompensasRecebidas
+        as $chaveRecebida
+    ) {
+
+        $chaveRecebida =
+            (string)$chaveRecebida;
+
+        if (
+            strpos(
+                $chaveRecebida,
+                $prefixoRevisaoHoje
+            ) !== 0
+        ) {
+            continue;
+        }
+
+        $idRevisado =
+            substr(
+                $chaveRecebida,
+                strlen(
+                    $prefixoRevisaoHoje
+                )
+            );
+
+        if ($idRevisado !== '') {
+            $baralhosDoDia[$idRevisado] = true;
+        }
+    }
+
+    $baralhosRevisadosHoje =
+        count($baralhosDoDia);
+
+
+    // ==================================
+    // 3 BARALHOS DIFERENTES NO DIA
+    // ==================================
+
+    if ($baralhosRevisadosHoje >= 3) {
+
+        $chaveBonusTres =
+            'flashcards_3_baralhos_' .
+            $hoje;
+
+        $adicionouBonusTres =
+            adicionarEstrelas(
+                $codigoUsuario,
+                'flashcards_bonus',
+                '3 baralhos diferentes revisados no dia',
+                5,
+                $chaveBonusTres
+            );
+
+        if ($adicionouBonusTres) {
+
+            $estrelasBonusTres = 5;
+            $estrelasGanhas += 5;
+        }
+    }
+}
+
+
+// ======================================
 // RESPOSTA
 // ======================================
 
@@ -557,6 +736,21 @@ echo json_encode([
         $cartao['acertos'],
 
     'erros' =>
-        $cartao['erros']
+        $cartao['erros'],
+
+    'pontos' => [
+
+        'estrelas' =>
+            $estrelasGanhas,
+
+        'revisao_baralho' =>
+            $estrelasRevisao,
+
+        'bonus_3_baralhos' =>
+            $estrelasBonusTres,
+
+        'baralhos_revisados_hoje' =>
+            $baralhosRevisadosHoje
+    ]
 
 ], JSON_UNESCAPED_UNICODE);

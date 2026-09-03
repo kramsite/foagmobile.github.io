@@ -288,11 +288,12 @@ $icone =
 <link rel="stylesheet" href="baralho.css">
 <link rel="stylesheet" href="dark_flash.css">  <!-- Adicione esta linha -->
 <link rel="stylesheet" href="../../m.escuro/dark_basee.css">
+<link rel="stylesheet" href="../../estrelas/modal_estrelas.css?v=<?= time() ?>">
 <script src="../../m.escuro/dark-mode.js"></script>
 
-      <?php include '../configuracoes/geral.php'; ?>
+      <?php include '../../configuracoes/geral.php'; ?>
 <script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+ <script src="../../configuracoes/aparencia.js?v=1"></script>
 
     <script>
 
@@ -854,6 +855,11 @@ $icone =
     &copy; 2025 FOAG. Todos os direitos reservados.
 
 </footer>
+
+
+<script
+    src="../../estrelas/modal_estrelas.js?v=<?= time() ?>"
+></script>
 
 
 <script

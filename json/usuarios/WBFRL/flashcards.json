@@ -24,6 +24,456 @@
                 "revisoes": 0
             },
             "criado_em": "2026-08-20 16:48:26"
+        },
+        {
+            "id": "BAR_F299F4FB",
+            "nome": "batata",
+            "materia": "matematica",
+            "descricao": "",
+            "cor": "#38ffbd",
+            "icone": "fa-language",
+            "cartoes": [
+                {
+                    "id": "CARD_3F6323B4",
+                    "pergunta": "adad",
+                    "resposta": "ada",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437547903,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:09:49"
+                },
+                {
+                    "id": "CARD_79C90A22",
+                    "pergunta": "dads",
+                    "resposta": "dsad",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437548984,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:09:52"
+                },
+                {
+                    "id": "CARD_E8A7E386",
+                    "pergunta": "asdasd",
+                    "resposta": "ads",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437550088,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:09:55"
+                },
+                {
+                    "id": "CARD_E2C73635",
+                    "pergunta": "asddsa",
+                    "resposta": "asdads",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437551161,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:09:57"
+                },
+                {
+                    "id": "CARD_69DCB552",
+                    "pergunta": "sdads",
+                    "resposta": "asdasd",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437552185,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:09:59"
+                },
+                {
+                    "id": "CARD_28E39FAD",
+                    "pergunta": "sdasd",
+                    "resposta": "asddas",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437553225,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:02"
+                },
+                {
+                    "id": "CARD_9B07C8CC",
+                    "pergunta": "asdsda",
+                    "resposta": "dsadad",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437554248,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:05"
+                },
+                {
+                    "id": "CARD_C439547D",
+                    "pergunta": "sdsd",
+                    "resposta": "asd",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437555201,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:08"
+                },
+                {
+                    "id": "CARD_0AC8A8A5",
+                    "pergunta": "asd",
+                    "resposta": "asd",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437556233,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:10"
+                },
+                {
+                    "id": "CARD_30EC41F3",
+                    "pergunta": "fasf",
+                    "resposta": "fd",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437557224,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:13"
+                },
+                {
+                    "id": "CARD_3E6BA2D1",
+                    "pergunta": "ggg",
+                    "resposta": "ghjd",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437558257,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:16"
+                },
+                {
+                    "id": "CARD_84BB21A4",
+                    "pergunta": "gjjdg",
+                    "resposta": "dgjh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437559282,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:19"
+                },
+                {
+                    "id": "CARD_01F0BD96",
+                    "pergunta": "jhg",
+                    "resposta": "dhj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437560306,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:21"
+                },
+                {
+                    "id": "CARD_1ED0024B",
+                    "pergunta": "dgjhj",
+                    "resposta": "dghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437561467,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:24"
+                },
+                {
+                    "id": "CARD_385CA322",
+                    "pergunta": "dghj",
+                    "resposta": "dghjgh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437562505,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:10:27"
+                },
+                {
+                    "id": "CARD_4AD9FCDD",
+                    "pergunta": "fghjf",
+                    "resposta": "hjfghjfgh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437563514,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:22"
+                },
+                {
+                    "id": "CARD_3C71A0C5",
+                    "pergunta": "fghjfhg",
+                    "resposta": "jfghjfghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437564793,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:25"
+                },
+                {
+                    "id": "CARD_D7B274CD",
+                    "pergunta": "fghj",
+                    "resposta": "fghjfghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437565753,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:28"
+                },
+                {
+                    "id": "CARD_11418A78",
+                    "pergunta": "ghjfghj",
+                    "resposta": "djdg",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437567017,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:31"
+                },
+                {
+                    "id": "CARD_CB466EE6",
+                    "pergunta": "gjdgj",
+                    "resposta": "dghjdgh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437567976,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:34"
+                },
+                {
+                    "id": "CARD_47FBC6BA",
+                    "pergunta": "ghjdghj",
+                    "resposta": "dghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437568960,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:36"
+                },
+                {
+                    "id": "CARD_804DDD59",
+                    "pergunta": "ghj",
+                    "resposta": "dghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437570129,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:39"
+                },
+                {
+                    "id": "CARD_790876F0",
+                    "pergunta": "hshtsr",
+                    "resposta": "dghj",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437571393,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:47"
+                },
+                {
+                    "id": "CARD_C4EA9E80",
+                    "pergunta": "srhts",
+                    "resposta": "srthsrht",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437572449,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:50"
+                },
+                {
+                    "id": "CARD_5C8BAC0F",
+                    "pergunta": "rthsh",
+                    "resposta": "shtrsh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437573561,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:53"
+                },
+                {
+                    "id": "CARD_1D4C2849",
+                    "pergunta": "rthshtr",
+                    "resposta": "shtsr",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437574697,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:56"
+                },
+                {
+                    "id": "CARD_E80DAB98",
+                    "pergunta": "thsrth",
+                    "resposta": "srthtr",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437575649,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:11:58"
+                },
+                {
+                    "id": "CARD_627AB747",
+                    "pergunta": "rhtshtr",
+                    "resposta": "srthshrt",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437576746,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:12:01"
+                },
+                {
+                    "id": "CARD_8048B5EA",
+                    "pergunta": "tmm",
+                    "resposta": "dmdgh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437577745,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:12:04"
+                },
+                {
+                    "id": "CARD_A639829A",
+                    "pergunta": "mghmgh",
+                    "resposta": "dghm",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437578777,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:12:07"
+                },
+                {
+                    "id": "CARD_2EB16FAF",
+                    "pergunta": "dgmdgm",
+                    "resposta": "dmhmh",
+                    "acertos": 1,
+                    "erros": 0,
+                    "revisoes": [
+                        {
+                            "ts": 1788437579769,
+                            "resultado": "acerto"
+                        }
+                    ],
+                    "criado_em": "2026-09-03 14:12:09"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 31,
+                "erros": 0,
+                "revisoes": 31
+            },
+            "criado_em": "2026-09-03 14:09:43"
         }
     ]
 }
