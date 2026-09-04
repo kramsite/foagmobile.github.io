@@ -1,0 +1,17 @@
+{
+    "materias": [
+        {
+            "id": "MAT_EC97F41F",
+            "nome": "matematica",
+            "cor": "#38a5ff",
+            "icone": "fa-calculator",
+            "criado_em": "2026-09-04 04:07:23"
+        },
+        {
+            "id": "mat_8ec4c3859eed",
+            "nome": "biologia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        }
+    ]
+}

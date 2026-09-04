@@ -121,8 +121,8 @@
         "frequencia": {
             "meses_processados": [],
             "sequencia_presenca": {
-                "dias": 0,
-                "ultima_data": "2026-08-28",
+                "dias": 2,
+                "ultima_data": "2026-09-03",
                 "marcos_recebidos": {
                     "2026-08": 5
                 }
