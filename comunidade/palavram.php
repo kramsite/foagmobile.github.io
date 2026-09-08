@@ -146,7 +146,5 @@ return [
     'cega',
     'surdo',
     'surda',
-    'mudo',
-    'muda',
 ];
 ?>
