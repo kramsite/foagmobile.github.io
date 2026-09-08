@@ -7,7 +7,15 @@
             "texto": "gente, eu não tô entendendo direito como faz balanceamento de equação química 😭\n alguém consegue me explicar de um jeito mais fácil?",
             "materia": "Química",
             "data": "2026-09-08T13:47:21+00:00",
-            "respostas": []
+            "respostas": [
+                {
+                    "id": "1788875614957_d08440d6",
+                    "usuario_id": "KOW1M",
+                    "autor": "fica esperto",
+                    "texto": "pensa que a quantidade de átomos de cada elemento tem que ser igual dos dois lados da equação. Você vai colocando números na frente das substâncias até deixar tudo igual. O segredo é ir elemento por elemento.",
+                    "data": "2026-09-08T13:53:34+00:00"
+                }
+            ]
         },
         {
             "id": "1788875265030_a9d3980d",
@@ -16,7 +24,15 @@
             "texto": "socorro 😭 qual a diferença entre velocidade e aceleração? pra mim parece praticamente a mesma coisa",
             "materia": "Física",
             "data": "2026-09-08T13:47:45+00:00",
-            "respostas": []
+            "respostas": [
+                {
+                    "id": "1788875634345_152b66fe",
+                    "usuario_id": "KOW1M",
+                    "autor": "fica esperto",
+                    "texto": "velocidade mostra o quanto a posição **** com o tempo. Aceleração mostra o quanto a velocidade **** com o tempo. Tipo: um carro pode estar a 60 km/h e continuar nessa velocidade, então a aceleração dele é zero.",
+                    "data": "2026-09-08T13:53:54+00:00"
+                }
+            ]
         }
     ]
 }
