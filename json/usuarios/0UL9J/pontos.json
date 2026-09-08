@@ -1,0 +1,62 @@
+{
+    "estrelas": 102,
+    "historico": [
+        {
+            "id": "estrela_2de857520f7e",
+            "tipo": "sequencia_presenca",
+            "descricao": "25 dias seguidos de presença",
+            "estrelas": 40,
+            "data": "2026-09-03 21:59:41",
+            "timestamp": 1788487181,
+            "chave": "sequencia_presenca_2026-09"
+        },
+        {
+            "id": "gasto_50e5fbe9e433",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Carinho",
+            "estrelas": -25,
+            "data": "2026-09-03 22:02:16",
+            "timestamp": 1788487336,
+            "chave": "compra_loja_emoji_coracao"
+        },
+        {
+            "id": "gasto_cb1797836191",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Moldura Gato Preto",
+            "estrelas": -98,
+            "data": "2026-09-03 22:03:40",
+            "timestamp": 1788487420,
+            "chave": "compra_loja_moldura_gato_preto"
+        }
+    ],
+    "controle": {
+        "pomodoro": {
+            "bonus_diarios": []
+        },
+        "flashcards": {
+            "ultimo_dia": null,
+            "estrelas_dia": 0
+        },
+        "frequencia": {
+            "meses_processados": [],
+            "sequencia_presenca": {
+                "dias": 47,
+                "ultima_data": "2026-09-03",
+                "marcos_recebidos": {
+                    "2026-09": 25
+                }
+            }
+        },
+        "notas": {
+            "recompensas": []
+        },
+        "sequencia_estudo": {
+            "dias": 0,
+            "ultima_data_estudo": null,
+            "marcos_recebidos": []
+        },
+        "recompensas_recebidas": [
+            "sequencia_presenca_2026-09"
+        ]
+    }
+}

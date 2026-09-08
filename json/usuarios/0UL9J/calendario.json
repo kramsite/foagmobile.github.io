@@ -1,0 +1,23 @@
+{
+    "dias": {
+        "2026-05-14": "vermelho",
+        "2026-05-11": "vermelho",
+        "2026-05-21": "vermelho",
+        "2026-05-20": "vermelho",
+        "2026-05-18": "vermelho",
+        "2026-05-26": "vermelho",
+        "2026-05-27": "vermelho"
+    },
+    "metas": {
+        "2026-5": 70
+    },
+    "configuracoes": {
+        "2026": {
+            "meta_anual": 80,
+            "inicio_ano_letivo": "2026-02-02",
+            "fim_ano_letivo": "2026-11-30",
+            "inicio_ferias_meio": "2026-07-07",
+            "fim_ferias_meio": "2026-08-07"
+        }
+    }
+}
