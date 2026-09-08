@@ -26,11 +26,11 @@
             "data": "2026-09-08T13:47:45+00:00",
             "respostas": [
                 {
-                    "id": "1788875634345_152b66fe",
+                    "id": "1788875781541_81d6bfee",
                     "usuario_id": "KOW1M",
                     "autor": "fica esperto",
-                    "texto": "velocidade mostra o quanto a posição **** com o tempo. Aceleração mostra o quanto a velocidade **** com o tempo. Tipo: um carro pode estar a 60 km/h e continuar nessa velocidade, então a aceleração dele é zero.",
-                    "data": "2026-09-08T13:53:54+00:00"
+                    "texto": "Velocidade mostra o quanto a posição muda com o tempo. Aceleração mostra o quanto a velocidade muda com o tempo. Tipo: um carro pode estar a 60 km/h e continuar nessa velocidade, então a aceleração dele é zero.",
+                    "data": "2026-09-08T13:56:21+00:00"
                 }
             ]
         }
