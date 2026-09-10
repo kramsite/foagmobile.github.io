@@ -1,0 +1,42 @@
+{
+    "estrelas": 2,
+    "historico": [
+        {
+            "id": "estrela_d4aa1f5181ba",
+            "tipo": "flashcards_revisao",
+            "descricao": "Revisão do baralho “matematica” concluída",
+            "estrelas": 2,
+            "data": "2026-09-10 08:56:32",
+            "timestamp": 1789044992,
+            "chave": "flashcards_revisao_2026-09-10_BAR_B89D27EE"
+        }
+    ],
+    "controle": {
+        "pomodoro": {
+            "bonus_diarios": []
+        },
+        "flashcards": {
+            "ultimo_dia": null,
+            "estrelas_dia": 0
+        },
+        "frequencia": {
+            "meses_processados": [],
+            "sequencia_presenca": {
+                "dias": 0,
+                "ultima_data": null,
+                "marcos_recebidos": []
+            }
+        },
+        "notas": {
+            "recompensas": []
+        },
+        "sequencia_estudo": {
+            "dias": 0,
+            "ultima_data_estudo": null,
+            "marcos_recebidos": []
+        },
+        "recompensas_recebidas": [
+            "flashcards_revisao_2026-09-10_BAR_B89D27EE"
+        ]
+    }
+}

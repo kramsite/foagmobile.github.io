@@ -1,0 +1,19 @@
+{
+    "baralhos": [
+        {
+            "id": "BAR_B89D27EE",
+            "nome": "matematica",
+            "materia": "matemática",
+            "descricao": "",
+            "cor": "#38a5ff",
+            "icone": "fa-book",
+            "cartoes": [],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-09-10 14:56:05"
+        }
+    ]
+}
