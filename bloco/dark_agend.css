@@ -126,3 +126,124 @@ body.dark-mode #cancelar-nome-nota {
 body.dark-mode #cancelar-nome-nota:hover {
   background-color: var(--dark-primary) !important;
 }
+
+/* ==================== FUNDO GERAL DA PÁGINA ==================== */
+body.dark-mode {
+  background-color: #0f172a !important;
+  color: #e2e8f0 !important;
+}
+
+/* ==================== ÁREA DE CONTEÚDO + FOOTER ==================== */
+body.dark-mode .page-area {
+  background: #0f172a !important;
+}
+
+/* ==================== CONTEÚDO PRINCIPAL ==================== */
+body.dark-mode .main-content {
+  background: #0f172a !important;
+}
+
+/* ==================== CARDS DA AGENDA ==================== */
+body.dark-mode .horario-agenda-card {
+  background: linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%) !important;
+  border-color: #669ada !important;
+  border-left-color: #669ada !important;
+  box-shadow: 0 8px 30px rgba(102, 154, 218, 0.15) !important;
+}
+
+body.dark-mode #tarefas.agenda-painel,
+body.dark-mode #lembretes.agenda-painel,
+body.dark-mode #notas.agenda-notas-card {
+  background: #1e293b !important;
+  border-color: #334155 !important;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* ==================== TEXTOS DAS TABELAS ==================== */
+body.dark-mode #tabela-tarefas td,
+body.dark-mode #tabela-nao-esquecer td {
+  background: #243247 !important;
+  color: #e2e8f0 !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode #tabela-tarefas th,
+body.dark-mode #tabela-nao-esquecer th {
+  background: #669ada !important;
+  color: #ffffff !important;
+  border-color: #334155 !important;
+}
+
+body.dark-mode #tabela-tarefas tbody tr:nth-child(even) td,
+body.dark-mode #tabela-nao-esquecer tbody tr:nth-child(even) td {
+  background: #1e293b !important;
+}
+
+/* ==================== BOTÃO DE ADICIONAR ==================== */
+body.dark-mode #add-tarefa,
+body.dark-mode #add-nao-esquecer,
+body.dark-mode #btn-salvar-nota {
+  background: #669ada !important;
+  color: #ffffff !important;
+}
+
+body.dark-mode #add-tarefa:hover,
+body.dark-mode #add-nao-esquecer:hover,
+body.dark-mode #btn-salvar-nota:hover {
+  background: #3b82f6 !important;
+}
+
+/* ==================== HEADER ==================== */
+body.dark-mode header.cabecalho {
+  background-color: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* ==================== MENU LATERAL ==================== */
+body.dark-mode nav.menu {
+  background: #1e293b !important;
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+body.dark-mode nav.menu a {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+  background: rgba(102, 154, 218, 0.18) !important;
+  color: #ffffff !important;
+}
+
+/* ==================== FOOTER ==================== */
+body.dark-mode .footer {
+  background: #0f172a !important;
+  border-top: 1px solid #334155 !important;
+}
+
+body.dark-mode .footer-links a {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .footer-links a:hover {
+  color: #669ada !important;
+}
+
+body.dark-mode .footer-copy {
+  color: #64748b !important;
+}
+
+/* ==================== ÁREA DE CONTEÚDO ==================== */
+body.dark-mode .agenda-page-title h1 {
+  color: #e2e8f0 !important;
+}
+
+body.dark-mode .agenda-page-title p {
+  color: #94a3b8 !important;
+}
+
+body.dark-mode .agenda-auto-save {
+  background: rgba(102, 154, 218, 0.16) !important;
+  color: #7fb0ea !important;
+}

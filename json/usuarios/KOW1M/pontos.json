@@ -1,5 +1,5 @@
 {
-    "estrelas": 700,
+    "estrelas": 605,
     "historico": [
         {
             "id": "estrela_fc771971c9f0",
@@ -90,6 +90,15 @@
             "data": "2026-09-08 10:00:24",
             "timestamp": 1788876024,
             "chave": "compra_loja_fundo_nebulosa"
+        },
+        {
+            "id": "gasto_5e5cd2491319",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Moldura Querubim",
+            "estrelas": -95,
+            "data": "2026-09-10 07:51:26",
+            "timestamp": 1789041086,
+            "chave": "compra_loja_moldura_querubim"
         }
     ],
     "controle": {

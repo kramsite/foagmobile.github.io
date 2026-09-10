@@ -201,7 +201,7 @@
         {
             "id": "fundo_por_do_sol",
             "nome": "Fundo Pôr do Sol",
-            "descricao": "🌅 Um pôr do sol relaxante",
+            "descricao": " Um pôr do sol relaxante",
             "preco": 130,
             "icone": "fa-solid fa-sun",
             "categoria": "fundos",
@@ -210,7 +210,7 @@
         {
             "id": "fundo_oceano",
             "nome": "Fundo Oceano",
-            "descricao": "🌊 A calma do oceano",
+            "descricao": " A calma do oceano",
             "preco": 110,
             "icone": "fa-solid fa-water",
             "categoria": "fundos",
@@ -219,7 +219,7 @@
         {
             "id": "fundo_nebulosa",
             "nome": "Fundo Nebulosa",
-            "descricao": "🌌 Cores cósmicas",
+            "descricao": " Cores cósmicas",
             "preco": 150,
             "icone": "fa-solid fa-cloud",
             "categoria": "fundos",
@@ -228,7 +228,7 @@
         {
             "id": "fundo_montanha",
             "nome": "Fundo Montanha",
-            "descricao": "🏔️ Picos e natureza",
+            "descricao": " Picos e natureza",
             "preco": 100,
             "icone": "fa-solid fa-mountain",
             "categoria": "fundos",
@@ -237,7 +237,7 @@
         {
             "id": "fundo_floresta",
             "nome": "Fundo Floresta",
-            "descricao": "🌲 Natureza exuberante",
+            "descricao": " Natureza exuberante",
             "preco": 110,
             "icone": "fa-solid fa-tree",
             "categoria": "fundos",
@@ -246,7 +246,7 @@
         {
             "id": "fundo_cidade",
             "nome": "Fundo Cidade",
-            "descricao": "🏙️ A vida urbana",
+            "descricao": " A vida urbana",
             "preco": 105,
             "icone": "fa-solid fa-city",
             "categoria": "fundos",
@@ -255,7 +255,7 @@
         {
             "id": "fundo_praia",
             "nome": "Fundo Praia",
-            "descricao": "🏖️ Areia e mar",
+            "descricao": " Areia e mar",
             "preco": 115,
             "icone": "fa-solid fa-umbrella-beach",
             "categoria": "fundos",
@@ -264,7 +264,7 @@
         {
             "id": "fundo_castelo",
             "nome": "Fundo Castelo",
-            "descricao": "🏰 Um mundo de fantasia",
+            "descricao": " Um mundo de fantasia",
             "preco": 125,
             "icone": "fa-solid fa-castle",
             "categoria": "fundos",
@@ -273,7 +273,7 @@
         {
             "id": "fundo_jardim",
             "nome": "Fundo Jardim",
-            "descricao": "🌺 Flores e cores",
+            "descricao": " Flores e cores",
             "preco": 105,
             "icone": "fa-solid fa-flower",
             "categoria": "fundos",
@@ -435,7 +435,7 @@
         {
             "id": "cursor_estrela",
             "nome": "Cursor Estrela",
-            "descricao": "⭐ Um cursor em forma de estrela",
+            "descricao": " Um cursor em forma de estrela",
             "preco": 40,
             "icone": "fa-solid fa-star",
             "categoria": "especiais",
@@ -444,7 +444,7 @@
         {
             "id": "cursor_foguete",
             "nome": "Cursor Foguete",
-            "descricao": "🚀 Um cursor de foguete espacial",
+            "descricao": " Um cursor de foguete espacial",
             "preco": 45,
             "icone": "fa-solid fa-rocket",
             "categoria": "especiais",
@@ -453,7 +453,7 @@
         {
             "id": "cursor_coracao",
             "nome": "Cursor Coração",
-            "descricao": "❤️ Um cursor em formato de coração",
+            "descricao": " Um cursor em formato de coração",
             "preco": 35,
             "icone": "fa-solid fa-heart",
             "categoria": "especiais",
@@ -462,7 +462,7 @@
         {
             "id": "cursor_lampada",
             "nome": "Cursor Lâmpada",
-            "descricao": "💡 Um cursor com uma lâmpada brilhante",
+            "descricao": " Um cursor com uma lâmpada brilhante",
             "preco": 40,
             "icone": "fa-solid fa-lightbulb",
             "categoria": "especiais",
@@ -471,7 +471,7 @@
         {
             "id": "cursor_raio",
             "nome": "Cursor Raio",
-            "descricao": "⚡ Um cursor com um raio de energia",
+            "descricao": " Um cursor com um raio de energia",
             "preco": 50,
             "icone": "fa-solid fa-bolt",
             "categoria": "especiais",
@@ -480,7 +480,7 @@
         {
             "id": "cursor_trofeu",
             "nome": "Cursor Troféu",
-            "descricao": "🏆 Um cursor de vencedor",
+            "descricao": " Um cursor de vencedor",
             "preco": 55,
             "icone": "fa-solid fa-trophy",
             "categoria": "especiais",
@@ -489,7 +489,7 @@
         {
             "id": "cursor_alvo",
             "nome": "Cursor Alvo",
-            "descricao": "🎯 Um cursor preciso como um alvo",
+            "descricao": " Um cursor preciso como um alvo",
             "preco": 45,
             "icone": "fa-solid fa-bullseye",
             "categoria": "especiais",
@@ -498,7 +498,7 @@
         {
             "id": "cursor_flor",
             "nome": "Cursor Flor",
-            "descricao": "🌸 Um cursor com uma flor delicada",
+            "descricao": " Um cursor com uma flor delicada",
             "preco": 35,
             "icone": "fa-solid fa-flower",
             "categoria": "especiais",
