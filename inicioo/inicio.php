@@ -1709,7 +1709,7 @@ window.INICIO_NOTE_SAVE_URL = 'salvar_anotacao.php';
 <script src="inicio.js"></script>
 
 <!-- LIBRAS GLOBAL FOAG -->
-<script src="../configuracoes/acessibilidade.js?v=19"></script>
+<script src="../configuracoes/acessibilidade.js?v=22"></script>
 
 </body>
 
