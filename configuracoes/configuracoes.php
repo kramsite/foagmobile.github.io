@@ -1201,6 +1201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
                  */
                 localStorage.removeItem('foag_aparencia');
                 localStorage.removeItem('foag_acessibilidade');
+                localStorage.removeItem('foag_libras_v19');
                 localStorage.removeItem('darkMode');
                 localStorage.removeItem('foagTema');
 
@@ -2017,7 +2018,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['acao_perigo'])) {
     ======================================= -->
 
     <script
-        src="acessibilidade.js?v=21">
+        src="acessibilidade.js?v=22">
     </script>
 
     <!-- ======================================
