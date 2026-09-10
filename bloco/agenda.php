@@ -256,14 +256,11 @@ if (file_exists($arquivoMaterias)) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <!-- ACESSIBILIDADE GLOBAL -->
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-    <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
-      <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
 
 
     <script src="../m.escuro/dark-mode.js"></script>
+
+
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.24/jspdf.plugin.autotable.min.js"></script>
@@ -1109,6 +1106,9 @@ if (file_exists($arquivoMaterias)) {
             atualizarResumoAgenda();
         });
     </script>
+
+    <script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
 
 </body>
 

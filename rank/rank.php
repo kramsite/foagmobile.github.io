@@ -1004,15 +1004,7 @@ foreach (
     >
 
     <!-- ACESSIBILIDADE GLOBAL -->
-    <link
-        rel="stylesheet"
-        href="../acessibilidade/acessibilidade.css"
-    >
 
-    <script
-        src="../acessibilidade/acessibilidade.js?v=4"
-        defer
-    ></script>
 
     <link
         rel="preconnect"
@@ -1126,9 +1118,7 @@ foreach (
         }
     </style>
 
-          <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+
 
 
 <style>
@@ -2325,6 +2315,9 @@ document.addEventListener(
 );
 
 </script>
+
+<script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
 
 </body>
 </html>

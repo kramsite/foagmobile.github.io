@@ -293,9 +293,6 @@ $current = basename($_SERVER['PHP_SELF']);
 <link rel="stylesheet" href="../../estrelas/modal_estrelas.css?v=<?= time() ?>">
 <script src="../../m.escuro/dark-mode.js"></script>
 
-      <?php include '../../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../../configuracoes/aparencia.js?v=1"></script>
 
     <script>
 
@@ -940,6 +937,8 @@ $current = basename($_SERVER['PHP_SELF']);
     src="baralho.js?v=<?= time() ?>"
 ></script>
 
+<script src="../../configuracoes/aparencia.js?v=6"></script>
+<script src="../../configuracoes/acessibilidade.js?v=26" defer></script>
 
 </body>
 

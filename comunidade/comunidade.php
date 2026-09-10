@@ -692,5 +692,8 @@ if ($filtroBusca !== '') {
 
 <script src="comunidade.js?v=2"></script>
 
+<script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
+
 </body>
 </html>

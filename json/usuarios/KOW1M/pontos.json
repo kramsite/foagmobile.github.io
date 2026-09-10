@@ -1,5 +1,5 @@
 {
-    "estrelas": 605,
+    "estrelas": 607,
     "historico": [
         {
             "id": "estrela_fc771971c9f0",
@@ -99,6 +99,15 @@
             "data": "2026-09-10 07:51:26",
             "timestamp": 1789041086,
             "chave": "compra_loja_moldura_querubim"
+        },
+        {
+            "id": "estrela_23b262c7ba16",
+            "tipo": "flashcards_revisao",
+            "descricao": "Revisão do baralho “quimica” concluída",
+            "estrelas": 2,
+            "data": "2026-09-10 08:53:53",
+            "timestamp": 1789044833,
+            "chave": "flashcards_revisao_2026-09-10_BAR_5562F0C7"
         }
     ],
     "controle": {
@@ -128,7 +137,8 @@
             "marcos_recebidos": []
         },
         "recompensas_recebidas": [
-            "sequencia_presenca_2026-09"
+            "sequencia_presenca_2026-09",
+            "flashcards_revisao_2026-09-10_BAR_5562F0C7"
         ]
     }
 }

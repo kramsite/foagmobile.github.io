@@ -2019,17 +2019,14 @@ $current =
   <link rel="stylesheet" href="../estrelas/modal_estrelas.css?v=<?= time() ?>">
 
   <!-- ACESSIBILIDADE GLOBAL -->
-  <link rel="stylesheet" href="../acessibilidade/acessibilidade.css">
-  <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
   <script src="../m.escuro/dark-mode.js"></script>
 
-        <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+
   <style>
       #icon-fogi {
         cursor: pointer;
@@ -2697,5 +2694,8 @@ $current =
     });
   </script>
   <?php endif; ?>
+  
+  <script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
 </body>
 </html>
