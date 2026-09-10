@@ -736,110 +736,49 @@ $anotacoesImportantes =
             FOAG
         </div>
 
+        <!-- ======================================
+             MENU
+        ======================================= -->
 
-        <nav
-            class="top-menu"
-            aria-label="Menu principal"
-        >
-
-            <a
-                href="../inicioo/inicio.php"
-                class="active"
-                aria-current="page"
-            >
-                <i
-                    class="fa-solid fa-house"
-                    aria-hidden="true"
-                ></i>
-
-                Início
+        <nav class="top-menu">
+            <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-house"></i> Início
             </a>
 
-
-            <a href="../calend/calendario.php">
-
-                <i
-                    class="fa-solid fa-calendar-days"
-                    aria-hidden="true"
-                ></i>
-
-                Calendário
+            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-graduation-cap"></i> Estudos
             </a>
 
-
-            <a href="../bloco/agenda.php">
-
-                <i
-                    class="fa-solid fa-book"
-                    aria-hidden="true"
-                ></i>
-
-                Agenda
+            <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-book"></i> Agenda
             </a>
 
-
-            <a href="../estudos/estudos.php">
-
-                <i
-                    class="fa-solid fa-graduation-cap"
-                    aria-hidden="true"
-                ></i>
-
-                Estudos
+            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-calendar-days"></i> Calendário
             </a>
 
-
-            <a href="../notas/notas.php">
-
-                <i
-                    class="fa-solid fa-check-double"
-                    aria-hidden="true"
-                ></i>
-
-                Boletim
+            <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-check-double"></i> Boletim
             </a>
 
-
-            <a
-                href="../loja/loja.php"
-                class="<?= $current === 'loja.php'
-                    ? 'active'
-                    : '' ?>"
-            >
-
-                <i
-                    class="fa-solid fa-store"
-                    aria-hidden="true"
-                ></i>
-
-                Loja
+            <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-comments"></i> Comunidade
             </a>
 
-
-            <a
-                href="../rank/rank.php"
-                class="<?= $current === 'rank.php'
-                    ? 'active'
-                    : '' ?>"
-            >
-
-                <i
-                    class="fa-solid fa-trophy"
-                    aria-hidden="true"
-                ></i>
-
-                Ranking
+            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-trophy"></i> Ranking
             </a>
 
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja
+            </a>
         </nav>
 
     </div>
 
-
     <!-- ÍCONES DO CABEÇALHO -->
 
     <div class="header-icons">
-
 
         <a
             href="../configuracoes/configuracoes.php"
@@ -847,14 +786,11 @@ $anotacoesImportantes =
             title="Configurações"
             aria-label="Abrir configurações"
         >
-
             <i
                 class="fa-solid fa-gear"
                 aria-hidden="true"
             ></i>
-
         </a>
-
 
         <button
             type="button"
@@ -863,14 +799,11 @@ $anotacoesImportantes =
             title="Perfil"
             aria-label="Abrir perfil"
         >
-
             <i
                 class="fa-regular fa-user"
                 aria-hidden="true"
             ></i>
-
         </button>
-
 
         <button
             type="button"
@@ -879,18 +812,15 @@ $anotacoesImportantes =
             title="Sair"
             aria-label="Sair da conta"
         >
-
             <i
                 class="fa-solid fa-right-from-bracket"
                 aria-hidden="true"
             ></i>
-
         </button>
 
     </div>
 
 </header>
-
 
 
 <!-- ===========================
