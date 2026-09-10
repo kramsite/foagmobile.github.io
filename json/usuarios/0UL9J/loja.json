@@ -1,0 +1,12 @@
+{
+    "itens_comprados": [
+        "emoji_coracao",
+        "moldura_gato_preto"
+    ],
+    "itens_ativos": {
+        "tema": null,
+        "fundo": null,
+        "moldura": null,
+        "cursor": null
+    }
+}

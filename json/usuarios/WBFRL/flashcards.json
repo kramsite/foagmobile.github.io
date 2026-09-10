@@ -446,6 +446,49 @@
                 "revisoes": 29
             },
             "criado_em": "2026-09-03 14:09:43"
+        },
+        {
+            "id": "BAR_9189B894",
+            "nome": "Sociologia",
+            "materia": "Sociologia",
+            "descricao": "",
+            "cor": "#ff6bd0",
+            "icone": "fa-landmark",
+            "cartoes": [
+                {
+                    "id": "CARD_1D44E419",
+                    "pergunta": "O que é fato social para Émile Durkheim?",
+                    "resposta": "Maneiras de agir, pensar e sentir que existem fora do indivíduo e exercem influência sobre ele.",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-09-08 15:43:49"
+                },
+                {
+                    "id": "CARD_50A46BA6",
+                    "pergunta": "O que significa solidariedade mecânica em Durkheim?",
+                    "resposta": "União social baseada na semelhança entre os indivíduos, comum em sociedades mais tradicionais.",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-09-08 15:44:18"
+                },
+                {
+                    "id": "CARD_5E288853",
+                    "pergunta": "Para Karl Marx, o que são classes sociais?",
+                    "resposta": "Grupos definidos principalmente pela posição que ocupam nas relações de produção.",
+                    "acertos": 0,
+                    "erros": 0,
+                    "revisoes": [],
+                    "criado_em": "2026-09-08 15:44:30"
+                }
+            ],
+            "estatisticas": {
+                "acertos": 0,
+                "erros": 0,
+                "revisoes": 0
+            },
+            "criado_em": "2026-09-08 15:43:01"
         }
     ]
 }

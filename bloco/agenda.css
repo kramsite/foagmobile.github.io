@@ -1174,19 +1174,81 @@ body.dark-mode .horario-buttons button:first-child {
     box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3) !important;
 }
 
-/* =========================
-   RODAPÉ
-========================= */
 
-footer {
+.footer {
+  width: 100%;
+  margin-top: 24px;
+  padding: 0;
+  background: #f8fbfe;
+  border-top: 1px solid #e7edf3;
+  border-bottom: none;
+  box-shadow: none;
+}
+
+.footer-content {
+  width: calc(100% - 40px);
+  max-width: 1180px;
+  min-height: 52px;
+  margin: 0 auto;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 25px;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+}
+
+.footer-brand {
+  color: #38a5ff;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.footer-links {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+}
+
+.footer-links a {
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: 0.2s ease;
+}
+
+.footer-links a:hover {
+  color: #38a5ff;
+}
+
+.footer-copy {
+  color: #a0a9b5;
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+@media (max-width: 700px) {
+  .footer-content {
     width: 100%;
-    padding: 10px;
+    padding: 15px 18px;
+    flex-direction: column;
+    gap: 10px;
+  }
 
-    background-color: #232323;
-    color: #ffffff;
+  .footer-left {
+    flex-direction: column;
+    gap: 8px;
+  }
 
-    text-align: center;
-    font-size: 14px;
+  .footer-links {
+    gap: 18px;
+  }
 }
 
 /* =====================================================

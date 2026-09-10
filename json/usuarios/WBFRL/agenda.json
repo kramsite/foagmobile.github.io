@@ -1,10 +1,5 @@
 {
     "notas": [],
     "tarefas": [],
-    "nao_esquecer": [
-        {
-            "texto": "prova de quimica",
-            "data": "2026-08-31"
-        }
-    ]
+    "nao_esquecer": []
 }

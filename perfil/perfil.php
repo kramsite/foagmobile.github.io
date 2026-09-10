@@ -1,16 +1,172 @@
+<?php
+session_start();
+
+$current = basename($_SERVER['PHP_SELF']);
+
+/*
+|--------------------------------------------------------------------------
+| Verificar login
+|--------------------------------------------------------------------------
+*/
+
+if (empty($_SESSION['codigo_usuario'])) {
+    header('Location: ../login/index.php');
+    exit;
+}
+
+$codigoUsuario = $_SESSION['codigo_usuario'];
+
+/*
+|--------------------------------------------------------------------------
+| Localizar pasta e perfil do usuário
+|--------------------------------------------------------------------------
+*/
+
+$pastaUsuario = __DIR__ . '/../json/usuarios/' . $codigoUsuario;
+$caminhoPerfil = $pastaUsuario . '/perfil.json';
+
+$pasta_fotos_url = "../img/perfil/";
+$pasta_fotos_arquivo = __DIR__ . "/../img/perfil/";
+$foto_padrao = "foto_padrao.png";
+
+/*
+|--------------------------------------------------------------------------
+| Funções
+|--------------------------------------------------------------------------
+*/
+
+function escapar($valor)
+{
+    return htmlspecialchars(
+        $valor ?? "Não informado",
+        ENT_QUOTES,
+        "UTF-8"
+    );
+}
+
+function formatarData($data)
+{
+    if (empty($data)) {
+        return "Não informado";
+    }
+
+    $dataFormatada = DateTime::createFromFormat("Y-m-d", $data);
+    return $dataFormatada ? $dataFormatada->format("d/m/Y") : $data;
+}
+
+/*
+|--------------------------------------------------------------------------
+| Verificar pasta individual
+|--------------------------------------------------------------------------
+*/
+
+if (!is_dir($pastaUsuario)) {
+    exit("Pasta do usuário não encontrada.");
+}
+
+if (!file_exists($caminhoPerfil)) {
+    exit("Perfil do usuário não encontrado.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Carregar perfil.json
+|--------------------------------------------------------------------------
+*/
+
+$conteudoPerfil = file_get_contents($caminhoPerfil);
+
+if ($conteudoPerfil === false) {
+    exit("Não foi possível carregar o perfil.");
+}
+
+$usuario_logado = json_decode($conteudoPerfil, true);
+
+if (!is_array($usuario_logado)) {
+    exit("Os dados do perfil estão inválidos.");
+}
+
+/*
+|--------------------------------------------------------------------------
+| Dados exibidos
+|--------------------------------------------------------------------------
+*/
+
+$nome = $usuario_logado["nome"] ?? "Usuário FOAG";
+$email = $usuario_logado["email"] ?? $_SESSION["user_email"] ?? "Não informado";
+$nascimento = formatarData($usuario_logado["nascimento"] ?? "");
+$telefone = $usuario_logado["telefone"] ?? "Não informado";
+$serie = $usuario_logado["serie"] ?? "Não informado";
+$escola = $usuario_logado["escola"] ?? "Não informado";
+
+$cidade = $usuario_logado["cidade"] ?? "";
+$estado = $usuario_logado["estado"] ?? "";
+
+if ($cidade !== '' && $estado !== '') {
+    $localidade = $cidade . ' - ' . $estado;
+} elseif ($cidade !== '') {
+    $localidade = $cidade;
+} elseif ($estado !== '') {
+    $localidade = $estado;
+} else {
+    $localidade = "Não informado";
+}
+
+/*
+|--------------------------------------------------------------------------
+| Foto
+|--------------------------------------------------------------------------
+*/
+
+$foto_perfil = $foto_padrao;
+
+if (!empty($usuario_logado["foto"])) {
+    $foto_usuario = basename($usuario_logado["foto"]);
+    if (file_exists($pasta_fotos_arquivo . $foto_usuario)) {
+        $foto_perfil = $foto_usuario;
+    }
+}
+
+$caminho_foto = $pasta_fotos_url . $foto_perfil;
+
+/*
+|--------------------------------------------------------------------------
+| Carregar insígnias
+|--------------------------------------------------------------------------
+*/
+
+require_once __DIR__ . '/config/insignias.php';
+verificarDesbloquearInsignias($codigoUsuario);
+$insignias_usuario = getInsigniasUsuario($codigoUsuario);
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FOAG - Perfil</title>
-    <link rel="stylesheet" href="perfilfil.css?v=12">
-    <link rel="stylesheet" href="../m.escuro/dark_basee.css?v=12">
-    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css?v=12">
-    <link rel="stylesheet" href="dark-per.css?v=12">
-    <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
+    
+    <!-- FONTES -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FONT AWESOME -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS PRINCIPAL DO PERFIL -->
+    <link rel="stylesheet" href="perfilfil.css?v=12">
+    
+    <!-- DARK MODE BASE -->
+    <link rel="stylesheet" href="../m.escuro/dark_basee.css?v=12">
+    
+    <!-- ACESSIBILIDADE -->
+    <link rel="stylesheet" href="../acessibilidade/acessibilidade.css?v=12">
+    
+    <!-- DARK MODE ESPECÍFICO DO PERFIL (DEIXAR POR ÚLTIMO) -->
+    <link rel="stylesheet" href="dark-per.css?v=12">
+    
+    <!-- SCRIPTS (DEFER PARA CARREGAR DEPOIS) -->
+    <script src="../acessibilidade/acessibilidade.js?v=4" defer></script>
     <script src="../m.escuro/dark-mode.js"></script>
 </head>
 
@@ -18,33 +174,42 @@
     <header class="cabecalho">
         FOAG
         <div class="header-icons">
-            <i id="icon-configuracoes" class="fa-solid fa-gear" title="Configurações"></i>
+            <a href="../configuracoes/configuracoes.php" class="link-configuracoes" title="Configurações">
+                <i class="fa-solid fa-gear"></i>
+            </a>
             <i id="icon-perfil" class="fa-regular fa-user" title="Perfil"></i>
             <i id="icon-sair" class="fa-solid fa-right-from-bracket" title="Sair"></i>
         </div>
     </header>
 
     <div class="container">
+        <!-- Menu lateral -->
         <nav class="menu">
-            <a href="../inicioo/inicio.php" class="<?= $current === "inicio.php" ? "active" : "" ?>">
+            <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-house"></i> Início
             </a>
-            <a href="../calend/calendario.php" class="<?= $current === "calendario.php" ? "active" : "" ?>">
+
+            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-calendar-days"></i> Calendário
             </a>
-            <a href="../bloco/agenda.php" class="<?= $current === "agenda.php" ? "active" : "" ?>">
+
+            <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-book"></i> Agenda
             </a>
-            <a href="../pomodoro/pomodoro.php" class="<?= $current === "pomodoro.php" ? "active" : "" ?>">
-                <i class="fa-solid fa-stopwatch"></i> Pomodoro
+
+            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-graduation-cap"></i> Estudos
             </a>
-            <a href="../notas/notas.php" class="<?= $current === "notas.php" ? "active" : "" ?>">
-                <i class="fa-solid fa-check-double"></i> Boletim
+
+            <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-check-double"></i> Boletim 
             </a>
-            <a href="../loja/loja.php" class="<?= $current === "loja.php" ? "active" : "" ?>">
-                <i class="fa-solid fa-store"></i> Loja
+
+            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+                <i class="fa-solid fa-store"></i> Loja 
             </a>
-            <a href="../rank/rank.php" class="<?= $current === "rank.php" ? "active" : "" ?>">
+
+            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
                 <i class="fa-solid fa-trophy"></i> Ranking
             </a>
         </nav>
@@ -61,7 +226,9 @@
                     </a>
                 </div>
 
-                <!-- CARD DE DESTAQUE -->
+                <!-- ===========================================
+                     PERFIL DESTAQUE
+                ============================================ -->
                 <section class="perfil-destaque">
                     <div class="perfil-identidade">
                         <div class="foto-container">
@@ -265,7 +432,9 @@
         </main>
     </div>
 
-    <!-- MODAIS -->
+    <!-- ===========================================
+         MODAL LOGOUT
+    ============================================ -->
     <div id="logout-modal" class="modal">
         <div class="modal-content">
             <h3>Ah... já vai?</h3>
@@ -277,16 +446,6 @@
         </div>
     </div>
 
-    <div id="fogi-modal">
-        <div class="fogi-container">
-            <div class="fogi-header">
-                <span>FOGi — Assistente de Estudos</span>
-                <button id="fogi-close">Fechar</button>
-            </div>
-            <iframe id="fogi-iframe" src="about:blank"></iframe>
-        </div>
-    </div>
-
     <footer>&copy; 2025 FOAG. Todos os direitos reservados.</footer>
 
     <script>
@@ -294,32 +453,12 @@
         console.log('Perfil carregado ✅');
 
         // ===========================================
-        // FOGI
+        // REDIRECIONAMENTO - PERFIL
         // ===========================================
-        const fogiBtn = document.getElementById("icon-fogi");
-        const fogiModal = document.getElementById("fogi-modal");
-        const fogiFrame = document.getElementById("fogi-iframe");
-        const fogiClose = document.getElementById("fogi-close");
-
-        if (fogiBtn && fogiModal && fogiFrame && fogiClose) {
-            fogiBtn.addEventListener("click", function() {
-                fogiFrame.src = "http://127.0.0.1:5000";
-                fogiModal.style.display = "flex";
-                document.body.style.overflow = "hidden";
-            });
-
-            fogiClose.addEventListener("click", function() {
-                fogiModal.style.display = "none";
-                fogiFrame.src = "about:blank";
-                document.body.style.overflow = "";
-            });
-
-            window.addEventListener("message", function(evento) {
-                if (evento.data && evento.data.type === "FOGI_CLOSE") {
-                    fogiModal.style.display = "none";
-                    fogiFrame.src = "about:blank";
-                    document.body.style.overflow = "";
-                }
+        const perfilBtn = document.getElementById("icon-perfil");
+        if (perfilBtn) {
+            perfilBtn.addEventListener("click", function() {
+                window.location.href = "perfil.php";
             });
         }
 

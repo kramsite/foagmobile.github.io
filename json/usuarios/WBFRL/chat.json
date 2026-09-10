@@ -1,19 +1,36 @@
 {
     "perguntas": [
         {
-            "id": "1788440425683_04985817",
+            "id": "1788875241113_8482ab57",
             "usuario_id": "WBFRL",
             "autor": "Rafaella Gomes",
-            "texto": "batata com arroz é bom?",
-            "materia": "Geral",
-            "data": "2026-09-03T13:00:25+00:00",
+            "texto": "gente, eu não tô entendendo direito como faz balanceamento de equação química 😭\n alguém consegue me explicar de um jeito mais fácil?",
+            "materia": "Química",
+            "data": "2026-09-08T13:47:21+00:00",
             "respostas": [
                 {
-                    "id": "1788440497603_4bf2c1f8",
+                    "id": "1788875614957_d08440d6",
                     "usuario_id": "KOW1M",
                     "autor": "fica esperto",
-                    "texto": "fgfd",
-                    "data": "2026-09-03T13:01:37+00:00"
+                    "texto": "pensa que a quantidade de átomos de cada elemento tem que ser igual dos dois lados da equação. Você vai colocando números na frente das substâncias até deixar tudo igual. O segredo é ir elemento por elemento.",
+                    "data": "2026-09-08T13:53:34+00:00"
+                }
+            ]
+        },
+        {
+            "id": "1788875265030_a9d3980d",
+            "usuario_id": "WBFRL",
+            "autor": "Rafaella Gomes",
+            "texto": "socorro 😭 qual a diferença entre velocidade e aceleração? pra mim parece praticamente a mesma coisa",
+            "materia": "Física",
+            "data": "2026-09-08T13:47:45+00:00",
+            "respostas": [
+                {
+                    "id": "1788875781541_81d6bfee",
+                    "usuario_id": "KOW1M",
+                    "autor": "fica esperto",
+                    "texto": "Velocidade mostra o quanto a posição muda com o tempo. Aceleração mostra o quanto a velocidade muda com o tempo. Tipo: um carro pode estar a 60 km/h e continuar nessa velocidade, então a aceleração dele é zero.",
+                    "data": "2026-09-08T13:56:21+00:00"
                 }
             ]
         }

@@ -295,6 +295,119 @@ if (file_exists($arquivoMaterias)) {
     </script>
 
 
+
+    <style>
+        /* ======================================
+           ESTRUTURA: CONTEÚDO + FOOTER
+        ======================================= */
+
+        .page-area {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            background: #ffffff;
+        }
+
+        .page-area > .main-content {
+            flex: 1;
+            width: 100%;
+        }
+
+        /* ======================================
+           FOOTER FOAG
+        ======================================= */
+
+        .footer {
+            width: 100%;
+            margin-top: 30px;
+            padding: 0;
+            background: #ffffff;
+            color: inherit;
+            border-top: 1px solid #e5edf5;
+            text-align: initial;
+            font-size: inherit;
+        }
+
+        .footer-content {
+            width: 100%;
+            max-width: 1180px;
+            min-height: 50px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 38px;
+        }
+
+        .footer-brand {
+            color: #38a5ff;
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+        .footer-links {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .footer-links a {
+            color: #667085;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: #38a5ff;
+        }
+
+        .footer-copy {
+            color: #98a2b3;
+            font-size: 10px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .page-area {
+                width: 100%;
+            }
+
+            .footer {
+                margin-top: 20px;
+            }
+
+            .footer-content {
+                min-height: auto;
+                padding: 16px 18px;
+                flex-direction: column;
+                justify-content: center;
+                gap: 10px;
+                text-align: center;
+            }
+
+            .footer-left {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 14px 20px;
+            }
+        }
+    </style>
+
 </head>
 
 <body>
@@ -334,39 +447,44 @@ if (file_exists($arquivoMaterias)) {
         ======================================= -->
 
         <nav class="menu">
-            <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-house"></i> Início
-            </a>
+        <a href="../inicioo/inicio.php" class="<?= $current === 'inicio.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-house"></i> Início
+        </a>
 
-            <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-calendar-days"></i> Calendário
-            </a>
+        <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-graduation-cap"></i> Estudos
+        </a>
 
-            <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-book"></i> Agenda
-            </a>
+        <a href="../bloco/agenda.php" class="<?= $current === 'agenda.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-book"></i> Agenda
+        </a>
 
-            <a href="../estudos/estudos.php" class="<?= $current === 'estudos.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-graduation-cap"></i> Estudos
-            </a>
+        <a href="../calend/calendario.php" class="<?= $current === 'calendario.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-calendar-days"></i> Calendário
+        </a>
 
-            <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-check-double"></i> Boletim 
-            </a>
+        <a href="../notas/notas.php" class="<?= $current === 'notas.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-check-double"></i> Boletim
+        </a>
 
-            <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-store"></i> Loja 
-            </a>
+        <a href="../comunidade/comunidade.php" class="<?= $current === 'comunidade.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-comments"></i> Comunidade
+        </a>
 
-            <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
-                <i class="fa-solid fa-trophy" aria-hidden="true"></i> Ranking
-            </a>
+        <a href="../rank/rank.php" class="<?= $current === 'rank.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-trophy"></i> Ranking
+        </a>
 
+        <a href="../loja/loja.php" class="<?= $current === 'loja.php' ? 'active' : '' ?>">
+            <i class="fa-solid fa-store"></i> Loja
+        </a>
         </nav>
 
         <!-- ======================================
-             CONTEÚDO
+             CONTEÚDO + FOOTER
         ======================================= -->
+
+        <div class="page-area">
 
         <main class="main-content" id="conteudo-principal" tabindex="-1">
 
@@ -613,6 +731,26 @@ if (file_exists($arquivoMaterias)) {
                 </div>
             </section>
         </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <span class="footer-brand">FOAG</span>
+
+                    <nav class="footer-links">
+                        <a href="../sobre/sobre.php">Sobre</a>
+                        <a href="../contato/contato.php">Contato</a>
+                        <a href="../privacidade/privacidade.php">Privacidade</a>
+                    </nav>
+                </div>
+
+                <span class="footer-copy">
+                    © <?= date('Y') ?> FOAG
+                </span>
+            </div>
+        </footer>
+
+        </div>
     </div>
 
     <!-- ======================================
@@ -773,10 +911,6 @@ if (file_exists($arquivoMaterias)) {
             </iframe>
         </div>
     </div>
-
-    <footer>
-        &copy; 2025 FOAG. Todos os direitos reservados.
-    </footer>
 
     <!-- ======================================
          FUNÇÕES GERAIS
