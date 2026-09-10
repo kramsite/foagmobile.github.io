@@ -1,5 +1,5 @@
 {
-    "estrelas": 91,
+    "estrelas": 101,
     "historico": [
         {
             "id": "estrela_d4aa1f5181ba",
@@ -117,6 +117,24 @@
             "data": "2026-09-10 09:45:17",
             "timestamp": 1789047917,
             "chave": "pomodoro_38d75df2-4f89-41df-a359-0674d86fe5a7"
+        },
+        {
+            "id": "estrela_c9d5f0453231",
+            "tipo": "nota",
+            "descricao": "Nota 7,00 em matemática — 2º Bimestre",
+            "estrelas": 3,
+            "data": "2026-09-10 10:14:37",
+            "timestamp": 1789049677,
+            "chave": "nota_MAT_0D15E9A1_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_9ab33d0e6805",
+            "tipo": "nota",
+            "descricao": "Nota 9,00 em história — 1º Bimestre",
+            "estrelas": 7,
+            "data": "2026-09-10 10:14:37",
+            "timestamp": 1789049677,
+            "chave": "nota_mat_45eda0a19c17_0758c00e6ea0_avaliacao_1"
         }
     ],
     "controle": {
@@ -147,7 +165,9 @@
                 "boletim_completo_0758c00e6ea0_avaliacao_1",
                 "boletim_aprovado_0758c00e6ea0_avaliacao_1",
                 "boletim_completo_0758c00e6ea0_avaliacao_2",
-                "boletim_aprovado_0758c00e6ea0_avaliacao_2"
+                "boletim_aprovado_0758c00e6ea0_avaliacao_2",
+                "nota_MAT_0D15E9A1_0758c00e6ea0_avaliacao_2",
+                "nota_mat_45eda0a19c17_0758c00e6ea0_avaliacao_1"
             ]
         },
         "sequencia_estudo": {
@@ -168,7 +188,9 @@
             "boletim_aprovado_0758c00e6ea0_avaliacao_1",
             "boletim_completo_0758c00e6ea0_avaliacao_2",
             "boletim_aprovado_0758c00e6ea0_avaliacao_2",
-            "pomodoro_38d75df2-4f89-41df-a359-0674d86fe5a7"
+            "pomodoro_38d75df2-4f89-41df-a359-0674d86fe5a7",
+            "nota_MAT_0D15E9A1_0758c00e6ea0_avaliacao_2",
+            "nota_mat_45eda0a19c17_0758c00e6ea0_avaliacao_1"
         ]
     }
 }
