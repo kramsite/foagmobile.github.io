@@ -13,6 +13,66 @@
             "cor": "#38a5ff",
             "icone": "fa-dna",
             "criado_em": "2026-09-10 14:55:52"
+        },
+        {
+            "id": "mat_19b2fd97133e",
+            "nome": "filosofia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_7511be2fd10e",
+            "nome": "geografia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_45eda0a19c17",
+            "nome": "história",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_08e950fb6015",
+            "nome": "sociologia",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_663b34c602d8",
+            "nome": "artes",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_7267383c099c",
+            "nome": "ed fisica",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_27c5198bc062",
+            "nome": "ingles",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_cffc485dc696",
+            "nome": "português",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_cbde08cd25a3",
+            "nome": "física",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
+        },
+        {
+            "id": "mat_fac324262c28",
+            "nome": "química",
+            "cor": "#94a3b8",
+            "icone": "fa-circle-question"
         }
     ]
 }

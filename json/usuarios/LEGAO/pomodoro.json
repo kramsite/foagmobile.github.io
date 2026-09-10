@@ -1,1 +1,28 @@
-[]
+{
+    "sessions": [
+        {
+            "id": "38d75df2-4f89-41df-a359-0674d86fe5a7",
+            "ts": 1789047917101,
+            "minutes": 30,
+            "mode": "focus",
+            "source": "pomodoro",
+            "discipline": "Geral"
+        }
+    ],
+    "goals": [],
+    "disciplines": [
+        "Geral",
+        "matemática",
+        "biologia",
+        "filosofia",
+        "geografia",
+        "história",
+        "sociologia",
+        "artes",
+        "ed fisica",
+        "ingles",
+        "português",
+        "física",
+        "química"
+    ]
+}

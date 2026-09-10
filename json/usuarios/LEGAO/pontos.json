@@ -1,5 +1,5 @@
 {
-    "estrelas": 2,
+    "estrelas": 91,
     "historico": [
         {
             "id": "estrela_d4aa1f5181ba",
@@ -9,6 +9,114 @@
             "data": "2026-09-10 08:56:32",
             "timestamp": 1789044992,
             "chave": "flashcards_revisao_2026-09-10_BAR_B89D27EE"
+        },
+        {
+            "id": "estrela_6bafcf0a72eb",
+            "tipo": "nota",
+            "descricao": "Nota 8,00 em português — 1º Bimestre",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_1"
+        },
+        {
+            "id": "estrela_4d9453f09bad",
+            "tipo": "nota",
+            "descricao": "Nota 8,00 em português — 2º Bimestre",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_289fb637b17b",
+            "tipo": "nota",
+            "descricao": "Nota 9,50 em física — 2º Bimestre",
+            "estrelas": 7,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_458121d4dd25",
+            "tipo": "evolucao_nota",
+            "descricao": "Evolução em física: nota maior que na avaliação anterior",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "evolucao_nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_6ee6e08038a0",
+            "tipo": "nota",
+            "descricao": "Nota 8,00 em química — 1º Bimestre",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_1"
+        },
+        {
+            "id": "estrela_49bdd79c54dd",
+            "tipo": "nota",
+            "descricao": "Nota 8,12 em química — 2º Bimestre",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_2fd94be76b02",
+            "tipo": "evolucao_nota",
+            "descricao": "Evolução em química: nota maior que na avaliação anterior",
+            "estrelas": 5,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "evolucao_nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_45da62f7b1ae",
+            "tipo": "boletim_completo",
+            "descricao": "1º Bimestre com todas as notas preenchidas",
+            "estrelas": 10,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "boletim_completo_0758c00e6ea0_avaliacao_1"
+        },
+        {
+            "id": "estrela_5b224dc35e13",
+            "tipo": "boletim_aprovado",
+            "descricao": "1º Bimestre aprovado em todas as matérias",
+            "estrelas": 15,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "boletim_aprovado_0758c00e6ea0_avaliacao_1"
+        },
+        {
+            "id": "estrela_6e59b249e242",
+            "tipo": "boletim_completo",
+            "descricao": "2º Bimestre com todas as notas preenchidas",
+            "estrelas": 10,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "boletim_completo_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_cb51cecf1961",
+            "tipo": "boletim_aprovado",
+            "descricao": "2º Bimestre aprovado em todas as matérias",
+            "estrelas": 15,
+            "data": "2026-09-10 09:14:37",
+            "timestamp": 1789046077,
+            "chave": "boletim_aprovado_0758c00e6ea0_avaliacao_2"
+        },
+        {
+            "id": "estrela_9be82416eebc",
+            "tipo": "pomodoro",
+            "descricao": "Sessão de Pomodoro concluída",
+            "estrelas": 2,
+            "data": "2026-09-10 09:45:17",
+            "timestamp": 1789047917,
+            "chave": "pomodoro_38d75df2-4f89-41df-a359-0674d86fe5a7"
         }
     ],
     "controle": {
@@ -28,7 +136,19 @@
             }
         },
         "notas": {
-            "recompensas": []
+            "recompensas": [
+                "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_1",
+                "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_2",
+                "nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2",
+                "evolucao_nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2",
+                "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_1",
+                "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2",
+                "evolucao_nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2",
+                "boletim_completo_0758c00e6ea0_avaliacao_1",
+                "boletim_aprovado_0758c00e6ea0_avaliacao_1",
+                "boletim_completo_0758c00e6ea0_avaliacao_2",
+                "boletim_aprovado_0758c00e6ea0_avaliacao_2"
+            ]
         },
         "sequencia_estudo": {
             "dias": 0,
@@ -36,7 +156,19 @@
             "marcos_recebidos": []
         },
         "recompensas_recebidas": [
-            "flashcards_revisao_2026-09-10_BAR_B89D27EE"
+            "flashcards_revisao_2026-09-10_BAR_B89D27EE",
+            "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_1",
+            "nota_mat_cffc485dc696_0758c00e6ea0_avaliacao_2",
+            "nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2",
+            "evolucao_nota_mat_cbde08cd25a3_0758c00e6ea0_avaliacao_2",
+            "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_1",
+            "nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2",
+            "evolucao_nota_mat_fac324262c28_0758c00e6ea0_avaliacao_2",
+            "boletim_completo_0758c00e6ea0_avaliacao_1",
+            "boletim_aprovado_0758c00e6ea0_avaliacao_1",
+            "boletim_completo_0758c00e6ea0_avaliacao_2",
+            "boletim_aprovado_0758c00e6ea0_avaliacao_2",
+            "pomodoro_38d75df2-4f89-41df-a359-0674d86fe5a7"
         ]
     }
 }

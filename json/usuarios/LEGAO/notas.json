@@ -10,9 +10,108 @@
     },
     "periodos": {
         "Padrão": {
-            "materias": [],
-            "materia_ids": [],
-            "notas": []
+            "materias": [
+                "matemática",
+                "biologia",
+                "filosofia",
+                "geografia",
+                "história",
+                "sociologia",
+                "artes",
+                "ed fisica",
+                "ingles",
+                "português",
+                "física",
+                "química"
+            ],
+            "materia_ids": [
+                "MAT_0D15E9A1",
+                "MAT_9196C6D0",
+                "mat_19b2fd97133e",
+                "mat_7511be2fd10e",
+                "mat_45eda0a19c17",
+                "mat_08e950fb6015",
+                "mat_663b34c602d8",
+                "mat_7267383c099c",
+                "mat_27c5198bc062",
+                "mat_cffc485dc696",
+                "mat_cbde08cd25a3",
+                "mat_fac324262c28"
+            ],
+            "notas": [
+                {
+                    "1": 8,
+                    "2": 6,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8.5,
+                    "2": 7.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 7.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9.5,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 7,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 7,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 10,
+                    "2": 10,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9,
+                    "2": 7.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 9.1,
+                    "2": 8.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 8,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 6.5,
+                    "2": 9.5,
+                    "3": null,
+                    "4": null
+                },
+                {
+                    "1": 8,
+                    "2": 8.12,
+                    "3": null,
+                    "4": null
+                }
+            ]
         }
     },
     "periodo_atual": "Padrão"
