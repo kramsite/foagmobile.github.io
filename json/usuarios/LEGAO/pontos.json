@@ -1,5 +1,5 @@
 {
-    "estrelas": 101,
+    "estrelas": 99999905,
     "historico": [
         {
             "id": "estrela_d4aa1f5181ba",
@@ -135,6 +135,15 @@
             "data": "2026-09-10 10:14:37",
             "timestamp": 1789049677,
             "chave": "nota_mat_45eda0a19c17_0758c00e6ea0_avaliacao_1"
+        },
+        {
+            "id": "gasto_278ae7d36670",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Moldura Querubim",
+            "estrelas": -95,
+            "data": "2026-09-10 10:56:13",
+            "timestamp": 1789052173,
+            "chave": "compra_loja_moldura_querubim"
         }
     ],
     "controle": {

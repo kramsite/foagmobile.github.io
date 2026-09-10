@@ -1,9 +1,11 @@
 {
-    "itens_comprados": [],
+    "itens_comprados": [
+        "moldura_querubim"
+    ],
     "itens_ativos": {
         "tema": null,
         "fundo": null,
-        "moldura": null,
+        "moldura": "moldura_querubim",
         "cursor": null
     }
 }
