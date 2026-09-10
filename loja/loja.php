@@ -532,9 +532,7 @@ $lojaData = [
 
     <script src="../m.escuro/dark-mode.js"></script>
 
-          <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
+
 
     <script>
 
@@ -1006,5 +1004,7 @@ $lojaData = [
 
 <script src="loja.js?v=<?= time() ?>"></script>
 
+<script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
 </body>
 </html>

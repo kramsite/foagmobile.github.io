@@ -4,7 +4,8 @@
    - NÃO carrega o VLibras ao abrir a página.
    - O VLibras só é carregado e aberto depois do clique.
    ========================================================= */
-
+console.log('🟢 acessibilidade.js CARREGOU');
+console.log('🟢 localStorage foag_libras_v19 =', localStorage.getItem('foag_libras_v19'));
 (function () {
     'use strict';
 

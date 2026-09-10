@@ -154,9 +154,6 @@ if (
   <link rel="stylesheet" href="dark_estudos.css">
   <script src="../m.escuro/dark-mode.js"></script>
 
-      <?php include '../configuracoes/geral.php'; ?>
-<script src="<?= get_aparencia_path() ?>"></script>
- <script src="../configuracoes/aparencia.js?v=1"></script>
 
   <script>
 
@@ -633,5 +630,8 @@ if (
 
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <script defer src="estudos.js?v=<?= time() ?>"></script>
+
+<script src="../configuracoes/aparencia.js?v=5"></script>
+<script src="../configuracoes/acessibilidade.js?v=25" defer></script>
 </body>
 </html>

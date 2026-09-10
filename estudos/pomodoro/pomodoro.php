@@ -1228,6 +1228,8 @@ $current = basename($_SERVER['PHP_SELF']);
         src="pomodoro.js?v=<?= time() ?>"
     ></script>
 
+<script src="../../configuracoes/aparencia.js?v=6"></script>
+<script src="../../configuracoes/acessibilidade.js?v=26" defer></script>
 
 </body>
 
