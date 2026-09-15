@@ -191,12 +191,12 @@
         },
                 {
             "id": "emoji_certo",
-            "nome": "ta certo",
-            "descricao": "Gatinho certo",
+            "nome": "beleza",
+            "descricao": "Gatinho beleza",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/certo.jpg"
+            "imagem": "../img/loja/emoji/beleza.png"
         },
                 {
             "id": "emoji_isso",
@@ -214,7 +214,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/vergonha.jpg"
+            "imagem": "../img/loja/emoji/vergonha.png"
         },
                 {
             "id": "emoji_YIPPIE",
@@ -223,16 +223,16 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/yub.jpg"
+            "imagem": "../img/loja/emoji/yippie.png"
         },
                 {
             "id": "emoji_huh",
-            "nome": "nao_sei",
-            "descricao": "Gatinho que nao sabe",
+            "nome": "Foi mal",
+            "descricao": "Gatinho que errou",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/huh.jpg"
+            "imagem": "../img/loja/emoji/huh.png"
         },
                 {
             "id": "emoji_estrela",
@@ -245,12 +245,12 @@
         },
                 {
             "id": "emoji_raiva",
-            "nome": "raiva",
+            "nome": "Bravo",
             "descricao": "Gatinho com raiva",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/raiva.jpg"
+            "imagem": "../img/loja/emoji/bravo.png"
         },
                 {
             "id": "emoji_",
