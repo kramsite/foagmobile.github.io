@@ -124,7 +124,7 @@
             "preco": 20,
             "icone": "fa-solid fa-bolt",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/freddy.jpg"
+            "imagem": "../img/loja/emoji/freddy.png"
         },
         {
             "id": "emoji_risada",
@@ -151,7 +151,7 @@
             "preco": 15,
             "icone": "fa-solid fa-heart",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/boa.jpg"
+            "imagem": "../img/loja/emoji/boa.png"
         },
         {
             "id": "emoji_nerd",
@@ -196,7 +196,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/certo.jpg"
+            "imagem": "../img/loja/emoji/beleza.png"
         },
                 {
             "id": "emoji_isso",
@@ -205,7 +205,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/isso.jpg"
+            "imagem": "../img/loja/emoji/yayyy.png"
         },
                 {
             "id": "emoji_vergonha",
@@ -214,7 +214,16 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/vergonha.jpg"
+            "imagem": "../img/loja/emoji/vergonha.png"
+        },
+        {
+            "id": "emoji_hu",
+            "nome": "Huu?",
+            "descricao": "Gatinho Hu?",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/hu.png"
         },
                 {
             "id": "emoji_YIPPIE",
@@ -223,7 +232,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/yub.jpg"
+            "imagem": "../img/loja/emoji/yippie.png"
         },
                 {
             "id": "emoji_huh",
@@ -232,7 +241,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/huh.jpg"
+            "imagem": "../img/loja/emoji/huh.png"
         },
                 {
             "id": "emoji_estrela",
@@ -241,7 +250,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/estrela.jpg"
+            "imagem": "../img/loja/emoji/estrela.png"
         },
                 {
             "id": "emoji_raiva",
@@ -250,7 +259,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/raiva.jpg"
+            "imagem": "../img/loja/emoji/bravo.png"
         },
                 {
             "id": "emoji_",
