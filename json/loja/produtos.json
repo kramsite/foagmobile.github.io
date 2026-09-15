@@ -79,7 +79,7 @@
             "preco": 20,
             "icone": "fa-solid fa-rocket",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/aaa.jpg"
+            "imagem": "../img/loja/emoji/nhe.png"
         },
         {
             "id": "emoji_explode",
@@ -88,7 +88,7 @@
             "preco": 15,
             "icone": "fa-solid fa-book",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/blom.jpg"
+            "imagem": "../img/loja/emoji/blom.png"
         },
         {
             "id": "emoji_coracao",
@@ -97,7 +97,7 @@
             "preco": 25,
             "icone": "fa-solid fa-lightbulb",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/coracao.jpg"
+            "imagem": "../img/loja/emoji/coracao.png"
         },
         {
             "id": "emoji_olhinho",
@@ -106,7 +106,7 @@
             "preco": 22,
             "icone": "fa-solid fa-bullseye",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/favor.jpg"
+            "imagem": "../img/loja/emoji/favor.png"
         },
         {
             "id": "emoji_flor",
@@ -115,7 +115,7 @@
             "preco": 28,
             "icone": "fa-solid fa-brain",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/flor.jpg"
+            "imagem": "../img/loja/emoji/flor.png"
         },
         {
             "id": "emoji_freddy",
@@ -133,7 +133,7 @@
             "preco": 30,
             "icone": "fa-solid fa-star",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/ha.jpg"
+            "imagem": "../img/loja/emoji/ha.png"
         },
         {
             "id": "emoji_nuquiditu",
@@ -142,7 +142,7 @@
             "preco": 35,
             "icone": "fa-solid fa-trophy",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/nem.jpg"
+            "imagem": "../img/loja/emoji/nem.png"
         },
         {
             "id": "emoji_vibes",
@@ -151,7 +151,7 @@
             "preco": 15,
             "icone": "fa-solid fa-heart",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/ouvindo.jpg"
+            "imagem": "../img/loja/emoji/boa.jpg"
         },
         {
             "id": "emoji_nerd",
@@ -160,7 +160,7 @@
             "preco": 25,
             "icone": "fa-solid fa-globe",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sabia.jpg"
+            "imagem": "../img/loja/emoji/sabia.png"
         },
         {
             "id": "emoji_nuvem",
@@ -169,7 +169,7 @@
             "preco": 18,
             "icone": "fa-solid fa-cloud",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sem.jpg"
+            "imagem": "../img/loja/emoji/sem.png"
         },
         {
             "id": "emoji_sorriso",
@@ -178,7 +178,88 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sorrindo.jpg"
+            "imagem": "../img/loja/emoji/sorrindo.png"
+        },
+                {
+            "id": "emoji_cafe",
+            "nome": "cafe",
+            "descricao": "Gatinho um cafe por favor",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/cafe.png"
+        },
+                {
+            "id": "emoji_certo",
+            "nome": "ta certo",
+            "descricao": "Gatinho certo",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/certo.jpg"
+        },
+                {
+            "id": "emoji_isso",
+            "nome": "isso",
+            "descricao": "Gatinho isso",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/isso.jpg"
+        },
+                {
+            "id": "emoji_vergonha",
+            "nome": "vergonha",
+            "descricao": "Gatinho com vergonha",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/vergonha.jpg"
+        },
+                {
+            "id": "emoji_",
+            "nome": "Sorriso",
+            "descricao": "Gatinho feliz",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/sorrindo.png"
+        },
+                {
+            "id": "emoji_",
+            "nome": "Sorriso",
+            "descricao": "Gatinho feliz",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/sorrindo.png"
+        },
+                {
+            "id": "emoji_",
+            "nome": "Sorriso",
+            "descricao": "Gatinho feliz",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/sorrindo.png"
+        },
+                {
+            "id": "emoji_",
+            "nome": "Sorriso",
+            "descricao": "Gatinho feliz",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/sorrindo.png"
+        },
+                {
+            "id": "emoji_",
+            "nome": "Sorriso",
+            "descricao": "Gatinho feliz",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/sorrindo.png"
         },
         {
             "id": "fundo_neon",
