@@ -1,241 +1,139 @@
 /* =========================================================
-   FOAG - LIBRAS v26
-   - Mostra SOMENTE um ícone flutuante.
-   - NÃO carrega o VLibras ao abrir a página.
-   - O VLibras só é carregado e aberto depois do clique.
+   FOAG - VLIBRAS v28
+   COMPORTAMENTO CORRETO:
+   - Libras desativada: não aparece nada.
+   - Libras ativada: aparece DIRETO o botão OFICIAL do VLibras.
+   - Um único clique no botão oficial abre o tradutor.
+   - Não existe botão intermediário do FOAG.
    ========================================================= */
-console.log('🟢 acessibilidade.js CARREGOU');
-console.log('🟢 localStorage foag_libras_v19 =', localStorage.getItem('foag_libras_v19'));
+
 (function () {
     'use strict';
 
     const CHAVE_LIBRAS = 'foag_libras_v19';
-    const ID_BOTAO = 'foag-botao-libras';
-    const ID_SCRIPT = 'foag-script-vlibras';
-    const ID_CONTAINER = 'foag-container-vlibras';
+    const SCRIPT_ID = 'foag-vlibras-script-oficial';
+    const CONTAINER_ID = 'foag-vlibras-oficial';
 
-    // Se não foi ativado e salvo, não mostra nada.
+    // =====================================================
+    // LIMPAR RESTOS DAS VERSÕES ANTIGAS
+    // =====================================================
+    document.getElementById('foag-botao-libras')?.remove();
+    document.getElementById('foag-container-vlibras')?.remove();
+    document.getElementById('foag-vlibras')?.remove();
+    document.getElementById('foag-vlibras-style')?.remove();
+    document.getElementById('foag-vlibras-style-v27')?.remove();
+    document.getElementById('foag-estilo-libras')?.remove();
+    document.getElementById('foag-estilo-botao-libras')?.remove();
+
+    // =====================================================
+    // LIBRAS DESATIVADA
+    // =====================================================
     if (localStorage.getItem(CHAVE_LIBRAS) !== '1') {
-        document.getElementById(ID_BOTAO)?.remove();
-        document.getElementById(ID_CONTAINER)?.remove();
-        return;
-    }
+        document.querySelectorAll('[vw]').forEach(function (elemento) {
+            elemento.remove();
+        });
 
-    // Evita duplicação.
-    if (document.getElementById(ID_BOTAO)) {
         return;
     }
 
     // =====================================================
-    // BOTÃO FLUTUANTE - SOMENTE ÍCONE
+    // EVITA DUPLICAÇÃO
     // =====================================================
-    const botao = document.createElement('button');
-
-    botao.id = ID_BOTAO;
-    botao.type = 'button';
-    botao.title = 'Libras';
-    botao.setAttribute('aria-label', 'Abrir tradução em Libras');
+    if (document.getElementById(CONTAINER_ID)) {
+        return;
+    }
 
     /*
-     * Usa o ícone do Font Awesome caso esteja disponível.
-     * O FOAG já carrega Font Awesome nas configurações.
+     * Se alguma versão anterior tiver deixado uma estrutura
+     * [vw] na página, remove antes de criar a oficial.
      */
-    botao.innerHTML = `
-        <i class="fa-solid fa-hands-asl-interpreting" aria-hidden="true"></i>
-    `;
-
-    const style = document.createElement('style');
-
-    style.id = 'foag-estilo-libras';
-
-    style.textContent = `
-        #${ID_BOTAO} {
-            position: fixed;
-            right: 22px;
-            bottom: 22px;
-            z-index: 2147483000;
-
-            width: 58px;
-            height: 58px;
-
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            padding: 0;
-
-            border: 0;
-            border-radius: 50%;
-
-            background: #1261c9;
-            color: #ffffff;
-
-            font-size: 27px;
-
-            cursor: pointer;
-
-            box-shadow:
-                0 5px 18px rgba(0, 0, 0, 0.28);
-
-            transition:
-                transform .18s ease,
-                background .18s ease,
-                box-shadow .18s ease;
-        }
-
-        #${ID_BOTAO}:hover {
-            transform: translateY(-2px) scale(1.04);
-            background: #0f55b4;
-            box-shadow:
-                0 7px 22px rgba(0, 0, 0, 0.32);
-        }
-
-        #${ID_BOTAO}:focus-visible {
-            outline: 3px solid #ffffff;
-            outline-offset: 3px;
-        }
-
-        #${ID_BOTAO}:disabled {
-            opacity: .7;
-            cursor: wait;
-        }
-
-        @media (max-width: 600px) {
-            #${ID_BOTAO} {
-                right: 14px;
-                bottom: 14px;
-                width: 54px;
-                height: 54px;
-                font-size: 25px;
-            }
-        }
-    `;
-
-    document.head.appendChild(style);
-    document.body.appendChild(botao);
-
-    let carregando = false;
-    let iniciado = false;
+    document.querySelectorAll('[vw]').forEach(function (elemento) {
+        elemento.remove();
+    });
 
     // =====================================================
     // ESTRUTURA OFICIAL DO VLIBRAS
-    // SÓ É CRIADA DEPOIS DO CLIQUE
+    //
+    // IMPORTANTE:
+    // vw-access-button começa com "active":
+    // isso mostra DIRETO o ícone oficial.
+    //
+    // vw-plugin-wrapper NÃO começa "active":
+    // por isso a janela começa fechada.
     // =====================================================
-    function criarEstrutura() {
-        let container = document.getElementById(ID_CONTAINER);
+    const container = document.createElement('div');
 
-        if (container) {
-            return container;
-        }
+    container.id = CONTAINER_ID;
+    container.setAttribute('vw', '');
+    container.className = 'enabled';
 
-        container = document.createElement('div');
-        container.id = ID_CONTAINER;
-        container.setAttribute('vw', '');
-        container.className = 'enabled';
+    container.innerHTML = `
+        <div vw-access-button class="active"></div>
 
-        container.innerHTML = `
-            <div vw-access-button class="active"></div>
+        <div vw-plugin-wrapper>
+            <div class="vw-plugin-top-wrapper"></div>
+        </div>
+    `;
 
-            <div vw-plugin-wrapper>
-                <div class="vw-plugin-top-wrapper"></div>
-            </div>
-        `;
+    document.body.appendChild(container);
 
-        document.body.appendChild(container);
-
-        return container;
-    }
-
-    function clicarNoBotaoOficial() {
-        let tentativas = 0;
-
-        const procurar = setInterval(function () {
-            tentativas++;
-
-            const botaoOficial =
-                document.querySelector(
-                    `#${ID_CONTAINER} [vw-access-button]`
-                );
-
-            if (botaoOficial) {
-                clearInterval(procurar);
-
-                /*
-                 * O plugin só chegou aqui porque o usuário
-                 * clicou primeiro no botão flutuante do FOAG.
-                 */
-                botaoOficial.click();
-
-                // Depois, o próprio botão oficial fica disponível.
-                botao.remove();
-            }
-
-            if (tentativas >= 30) {
-                clearInterval(procurar);
-                botao.disabled = false;
-                carregando = false;
-            }
-        }, 100);
-    }
+    // =====================================================
+    // INICIALIZAÇÃO
+    // =====================================================
+    let inicializado = false;
 
     function iniciarWidget() {
-        if (!window.VLibras || iniciado) {
+        if (inicializado || !window.VLibras) {
             return;
         }
 
-        criarEstrutura();
+        inicializado = true;
 
         try {
             new window.VLibras.Widget(
                 'https://vlibras.gov.br/app'
             );
 
-            iniciado = true;
+            /*
+             * O Widget oficial monta o botão no evento load.
+             * Se o script terminou de carregar depois do load
+             * da página, disparamos o evento para concluir
+             * a montagem imediatamente.
+             */
+            if (document.readyState === 'complete') {
+                setTimeout(function () {
+                    window.dispatchEvent(new Event('load'));
+                }, 0);
+            }
 
-            clicarNoBotaoOficial();
+            console.log(
+                'FOAG: botão oficial do VLibras carregado.'
+            );
 
         } catch (erro) {
+            inicializado = false;
+
             console.error(
                 'FOAG: erro ao iniciar VLibras:',
                 erro
             );
-
-            botao.disabled = false;
-            carregando = false;
         }
     }
 
     // =====================================================
-    // O VLIBRAS SÓ É CARREGADO AQUI, APÓS CLIQUE
+    // SCRIPT OFICIAL
     // =====================================================
-    function carregarVLibras() {
-        if (carregando || iniciado) {
-            return;
-        }
+    if (window.VLibras) {
+        iniciarWidget();
+        return;
+    }
 
-        carregando = true;
-        botao.disabled = true;
+    let script = document.getElementById(SCRIPT_ID);
 
-        if (window.VLibras) {
-            iniciarWidget();
-            return;
-        }
-
-        let script =
-            document.getElementById(ID_SCRIPT);
-
-        if (script) {
-            script.addEventListener(
-                'load',
-                iniciarWidget,
-                { once: true }
-            );
-            return;
-        }
-
+    if (!script) {
         script = document.createElement('script');
 
-        script.id = ID_SCRIPT;
+        script.id = SCRIPT_ID;
         script.src =
             'https://vlibras.gov.br/app/vlibras-plugin.js';
 
@@ -244,20 +142,18 @@ console.log('🟢 localStorage foag_libras_v19 =', localStorage.getItem('foag_li
         script.onload = iniciarWidget;
 
         script.onerror = function () {
-            carregando = false;
-            botao.disabled = false;
-
             console.error(
                 'FOAG: não foi possível carregar o VLibras.'
             );
         };
 
         document.body.appendChild(script);
+    } else {
+        script.addEventListener(
+            'load',
+            iniciarWidget,
+            { once: true }
+        );
     }
-
-    botao.addEventListener(
-        'click',
-        carregarVLibras
-    );
 
 })();
