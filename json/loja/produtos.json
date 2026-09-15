@@ -217,40 +217,40 @@
             "imagem": "../img/loja/emoji/vergonha.jpg"
         },
                 {
-            "id": "emoji_",
-            "nome": "Sorriso",
-            "descricao": "Gatinho feliz",
+            "id": "emoji_YIPPIE",
+            "nome": "YIPPIE",
+            "descricao": "Gatinho YIPPIE!",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sorrindo.png"
+            "imagem": "../img/loja/emoji/yub.jpg"
         },
                 {
-            "id": "emoji_",
-            "nome": "Sorriso",
-            "descricao": "Gatinho feliz",
+            "id": "emoji_huh",
+            "nome": "nao_sei",
+            "descricao": "Gatinho que nao sabe",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sorrindo.png"
+            "imagem": "../img/loja/emoji/huh.jpg"
         },
                 {
-            "id": "emoji_",
-            "nome": "Sorriso",
-            "descricao": "Gatinho feliz",
+            "id": "emoji_estrela",
+            "nome": "estrela",
+            "descricao": "Gatinho me da estrela",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sorrindo.png"
+            "imagem": "../img/loja/emoji/estrela.jpg"
         },
                 {
-            "id": "emoji_",
-            "nome": "Sorriso",
-            "descricao": "Gatinho feliz",
+            "id": "emoji_raiva",
+            "nome": "raiva",
+            "descricao": "Gatinho com raiva",
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/sorrindo.png"
+            "imagem": "../img/loja/emoji/raiva.jpg"
         },
                 {
             "id": "emoji_",
