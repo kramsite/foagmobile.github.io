@@ -124,7 +124,7 @@
             "preco": 20,
             "icone": "fa-solid fa-bolt",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/freddy.jpg"
+            "imagem": "../img/loja/emoji/freddy.png"
         },
         {
             "id": "emoji_risada",
@@ -151,7 +151,7 @@
             "preco": 15,
             "icone": "fa-solid fa-heart",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/boa.jpg"
+            "imagem": "../img/loja/emoji/boa.png"
         },
         {
             "id": "emoji_nerd",
@@ -205,7 +205,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/isso.jpg"
+            "imagem": "../img/loja/emoji/yayyy.png"
         },
                 {
             "id": "emoji_vergonha",
@@ -215,6 +215,18 @@
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
             "imagem": "../img/loja/emoji/vergonha.png"
+<<<<<<< HEAD
+=======
+        },
+        {
+            "id": "emoji_hu",
+            "nome": "Huu?",
+            "descricao": "Gatinho Hu?",
+            "preco": 22,
+            "icone": "fa-solid fa-key",
+            "categoria": "emojis",
+            "imagem": "../img/loja/emoji/hu.png"
+>>>>>>> fc1c64aab99d739f6f4c51a9a75deee1a3f4c616
         },
                 {
             "id": "emoji_YIPPIE",
@@ -241,7 +253,7 @@
             "preco": 22,
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
-            "imagem": "../img/loja/emoji/estrela.jpg"
+            "imagem": "../img/loja/emoji/estrela.png"
         },
                 {
             "id": "emoji_raiva",
