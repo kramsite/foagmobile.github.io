@@ -4,9 +4,9 @@
         "moldura_dragao"
     ],
     "itens_ativos": {
-        "tema": null,
+        "tema": "tema_verde",
         "fundo": null,
-        "moldura": null,
+        "moldura": "moldura_dragao",
         "cursor": null
     }
 }
