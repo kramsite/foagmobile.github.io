@@ -1,5 +1,5 @@
 {
-    "estrelas": 99999905,
+    "estrelas": 130,
     "historico": [
         {
             "id": "estrela_d4aa1f5181ba",
@@ -144,6 +144,42 @@
             "data": "2026-09-10 10:56:13",
             "timestamp": 1789052173,
             "chave": "compra_loja_moldura_querubim"
+        },
+        {
+            "id": "gasto_acfaaf59d0c3",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Tema Roxo",
+            "estrelas": -50,
+            "data": "2026-09-17 07:36:50",
+            "timestamp": 1789645010,
+            "chave": "compra_loja_tema_roxo"
+        },
+        {
+            "id": "gasto_74bc4c2d49d7",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Tema Verde",
+            "estrelas": -50,
+            "data": "2026-09-17 07:36:55",
+            "timestamp": 1789645015,
+            "chave": "compra_loja_tema_verde"
+        },
+        {
+            "id": "gasto_6be3b3c1c41b",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Felizinho",
+            "estrelas": -20,
+            "data": "2026-09-17 07:37:04",
+            "timestamp": 1789645024,
+            "chave": "compra_loja_emoji_feliz"
+        },
+        {
+            "id": "gasto_5f7b2f2cc828",
+            "tipo": "compra_loja",
+            "descricao": "Compra na loja: Freddy",
+            "estrelas": -20,
+            "data": "2026-09-17 07:37:08",
+            "timestamp": 1789645028,
+            "chave": "compra_loja_emoji_freddy"
         }
     ],
     "controle": {

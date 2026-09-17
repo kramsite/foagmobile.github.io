@@ -1,11 +1,14 @@
 {
     "codigo_usuario": "LEGAO",
-    "nome": "kezia azevedo amorim",
+    "nome": "kezia Azevedo Amorim",
     "email": "keziaazevedo2009@gmail.com",
     "nascimento": "2009-04-21",
-    "telefone": "",
-    "serie": "",
-    "escola": "",
+    "telefone": "(65) 99324-4876",
+    "serie": "3º ano do Ensino Médio",
+    "escola": "Escola Estadual Militar Dom Pedro II",
     "termos_aceitos": true,
-    "cadastrado_em": "2026-08-27 16:44:27"
+    "cadastrado_em": "2026-08-27 16:44:27",
+    "cidade": "Cuiabá",
+    "estado": "MT",
+    "foto": "perfil_LEGAO_da84bae6.png"
 }

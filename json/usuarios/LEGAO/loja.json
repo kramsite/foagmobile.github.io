@@ -1,9 +1,13 @@
 {
     "itens_comprados": [
-        "moldura_querubim"
+        "moldura_querubim",
+        "tema_roxo",
+        "tema_verde",
+        "emoji_feliz",
+        "emoji_freddy"
     ],
     "itens_ativos": {
-        "tema": null,
+        "tema": "tema_roxo",
         "fundo": null,
         "moldura": "moldura_querubim",
         "cursor": null
