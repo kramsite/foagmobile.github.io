@@ -215,8 +215,6 @@
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
             "imagem": "../img/loja/emoji/vergonha.png"
-<<<<<<< HEAD
-=======
         },
         {
             "id": "emoji_hu",
@@ -226,7 +224,6 @@
             "icone": "fa-solid fa-key",
             "categoria": "emojis",
             "imagem": "../img/loja/emoji/hu.png"
->>>>>>> fc1c64aab99d739f6f4c51a9a75deee1a3f4c616
         },
                 {
             "id": "emoji_YIPPIE",
