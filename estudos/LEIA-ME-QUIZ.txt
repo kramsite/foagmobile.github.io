@@ -1,0 +1,13 @@
+FOAG — QUIZ integrado à pasta Estudos
+
+O que foi alterado:
+- estudos.php: o card Quiz agora abre quiz/quiz.php.
+- Nova pasta quiz/ com página, estilos, JavaScript e salvamento dos flashcards de revisão.
+- O Quiz já funciona localmente com os flashcards cadastrados na matéria.
+- No resultado, é possível refazer os erros e criar um novo baralho de flashcards de revisão.
+- A opção Anotações já aparece na interface, mas depende da API do ChatGPT para gerar perguntas a partir delas.
+- gerar_quiz.php está reservado para a próxima etapa de integração com a API.
+
+Importante:
+- Esta versão foi montada em cima do estudos(8).zip enviado agora.
+- Cursor, aparência, acessibilidade, cabeçalho, menu e rodapé foram mantidos no padrão atual do FOAG.

@@ -457,9 +457,9 @@ if (
             <div class="method-icon"><i class="fa-solid fa-stopwatch"></i></div>
             <div class="method-info"><h3>Pomodoro</h3><p id="method-pomodoro-info">Organize seus períodos de foco.</p><span class="method-link">Abrir <i class="fa-solid fa-arrow-right"></i></span></div>
           </a>
-          <a class="method-card coming-soon" href="#" data-coming-soon="Quiz">
-            <span class="soon-badge">Em breve</span><div class="method-icon"><i class="fa-solid fa-circle-question"></i></div>
-            <div class="method-info"><h3>Quiz</h3><p>Teste seus conhecimentos.</p><span class="method-link">Conhecer <i class="fa-solid fa-arrow-right"></i></span></div>
+          <a class="method-card" href="quiz/quiz.php">
+            <div class="method-icon"><i class="fa-solid fa-circle-question"></i></div>
+            <div class="method-info"><h3>Quiz</h3><p>Revise seus conteúdos com perguntas personalizadas.</p><span class="method-link">Abrir <i class="fa-solid fa-arrow-right"></i></span></div>
           </a>
           <a class="method-card coming-soon" href="#" data-coming-soon="Revisão">
             <span class="soon-badge">Em breve</span><div class="method-icon"><i class="fa-solid fa-arrows-rotate"></i></div>

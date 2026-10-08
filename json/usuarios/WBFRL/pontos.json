@@ -1,5 +1,5 @@
 {
-    "estrelas": 7000,
+    "estrelas": 7033,
     "historico": [
         {
             "id": "estrela_d63d0474bd6e",
@@ -513,6 +513,42 @@
             "data": "2026-10-05 20:17:56",
             "timestamp": 1791245876,
             "chave": "compra_loja_cursor_fogo"
+        },
+        {
+            "id": "estrela_6f0837f062a0",
+            "tipo": "nota",
+            "descricao": "Nota 8,00 em Artes — 3º Bimestre",
+            "estrelas": 5,
+            "data": "2026-10-08 08:48:50",
+            "timestamp": 1791463730,
+            "chave": "nota_mat_a0970ead927a_0758c00e6ea0_avaliacao_3"
+        },
+        {
+            "id": "estrela_ac54f016b729",
+            "tipo": "boletim_completo",
+            "descricao": "3º Bimestre com todas as notas preenchidas",
+            "estrelas": 10,
+            "data": "2026-10-08 08:48:53",
+            "timestamp": 1791463733,
+            "chave": "boletim_completo_0758c00e6ea0_avaliacao_3"
+        },
+        {
+            "id": "estrela_ba269a6b9854",
+            "tipo": "nota",
+            "descricao": "Nota 7,00 em Filosofia — 3º Bimestre",
+            "estrelas": 3,
+            "data": "2026-10-08 08:49:58",
+            "timestamp": 1791463798,
+            "chave": "nota_mat_7835f7e43515_0758c00e6ea0_avaliacao_3"
+        },
+        {
+            "id": "estrela_14379b1962f6",
+            "tipo": "boletim_aprovado",
+            "descricao": "3º Bimestre aprovado em todas as matérias",
+            "estrelas": 15,
+            "data": "2026-10-08 08:49:58",
+            "timestamp": 1791463798,
+            "chave": "boletim_aprovado_0758c00e6ea0_avaliacao_3"
         }
     ],
     "controle": {
@@ -557,7 +593,11 @@
                 "evolucao_nota_mat_10e8872c7f32_0758c00e6ea0_avaliacao_3",
                 "nota_mat_c17180db2e01_0758c00e6ea0_avaliacao_3",
                 "nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3",
-                "evolucao_nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3"
+                "evolucao_nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3",
+                "nota_mat_a0970ead927a_0758c00e6ea0_avaliacao_3",
+                "boletim_completo_0758c00e6ea0_avaliacao_3",
+                "nota_mat_7835f7e43515_0758c00e6ea0_avaliacao_3",
+                "boletim_aprovado_0758c00e6ea0_avaliacao_3"
             ]
         },
         "sequencia_estudo": {
@@ -596,7 +636,11 @@
             "evolucao_nota_mat_10e8872c7f32_0758c00e6ea0_avaliacao_3",
             "nota_mat_c17180db2e01_0758c00e6ea0_avaliacao_3",
             "nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3",
-            "evolucao_nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3"
+            "evolucao_nota_mat_68f00281c995_0758c00e6ea0_avaliacao_3",
+            "nota_mat_a0970ead927a_0758c00e6ea0_avaliacao_3",
+            "boletim_completo_0758c00e6ea0_avaliacao_3",
+            "nota_mat_7835f7e43515_0758c00e6ea0_avaliacao_3",
+            "boletim_aprovado_0758c00e6ea0_avaliacao_3"
         ]
     }
 }

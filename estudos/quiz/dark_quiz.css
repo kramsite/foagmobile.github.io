@@ -1,0 +1,180 @@
+body.dark-mode {
+    --text: #edf4fb;
+    --muted: #a6b2c1;
+    --border: #273648;
+    --bg: #111923;
+    --white: #182431;
+    --shadow: 0 12px 34px rgba(0, 0, 0, .18);
+    background: var(--bg);
+    color: var(--text);
+}
+
+body.dark-mode .cabecalho,
+body.dark-mode .menu,
+body.dark-mode .panel,
+body.dark-mode .question-card,
+body.dark-mode .progress-panel,
+body.dark-mode .review-cta,
+body.dark-mode .footer,
+body.dark-mode .modal-card,
+body.dark-mode .choice-card,
+body.dark-mode .type-option span,
+body.dark-mode .select-wrap select,
+body.dark-mode .answer-option {
+    background-color: #182431;
+    color: #e7eef6;
+    border-color: #2b3b4d;
+}
+
+body.dark-mode .menu a {
+    color: #aeb9c6;
+}
+
+body.dark-mode .menu a:hover,
+body.dark-mode .menu a.active {
+    background: rgba(56,165,255,.13);
+    color: #7bc5ff;
+}
+
+body.dark-mode .header-icons a,
+body.dark-mode .back-link,
+body.dark-mode .question-type-label,
+body.dark-mode .field label,
+body.dark-mode .field-label,
+body.dark-mode .choice-card strong {
+    color: #c2ccd7;
+}
+
+body.dark-mode .select-wrap select {
+    color-scheme: dark;
+}
+
+body.dark-mode .choice-card:has(input:checked),
+body.dark-mode .answer-option.selected {
+    background: rgba(56,165,255,.09);
+}
+
+body.dark-mode .type-option input:checked + span {
+    background: rgba(56,165,255,.12);
+    color: #78c4ff;
+}
+
+body.dark-mode .preview-visual {
+    background:
+        radial-gradient(circle at 20% 20%, rgba(61,83,105,.55), rgba(61,83,105,0) 34%),
+        linear-gradient(150deg, #182b3d, #14222f 54%, #173049);
+}
+
+body.dark-mode .preview-card {
+    background: rgba(24,36,49,.88);
+    border-color: rgba(88,111,135,.5);
+}
+
+body.dark-mode .preview-card h3,
+body.dark-mode .result-ring strong,
+body.dark-mode .result-stats strong,
+body.dark-mode .flashcard-preview strong {
+    color: #eef5fb;
+}
+
+body.dark-mode .tip-card,
+body.dark-mode .flashcard-preview {
+    border-color: #2b3b4d;
+}
+
+body.dark-mode .progress-track,
+body.dark-mode .answer-letter {
+    background: #263646;
+}
+
+body.dark-mode .answer-feedback {
+    background: #1b2937;
+    border-color: #2d3e50;
+}
+
+body.dark-mode .answer-option.correct,
+body.dark-mode .answer-feedback.correct {
+    background: rgba(37,169,107,.13);
+    border-color: rgba(83,197,141,.45);
+}
+
+body.dark-mode .answer-option.wrong,
+body.dark-mode .answer-feedback.wrong {
+    background: rgba(224,82,96,.12);
+    border-color: rgba(224,82,96,.38);
+}
+
+body.dark-mode .result-ring {
+    background: conic-gradient(
+        #38a5ff calc(var(--score) * 1%),
+        #293948 0
+    );
+}
+
+body.dark-mode .result-ring::before {
+    background: #182431;
+}
+
+body.dark-mode .result-stats {
+    border-color: #293949;
+}
+
+body.dark-mode .result-stats article,
+body.dark-mode .select-all-row,
+body.dark-mode .modal-close {
+    background: #202e3d;
+}
+
+body.dark-mode .review-cta {
+    background:
+        linear-gradient(105deg, rgba(56,165,255,.10), rgba(24,36,49,.95) 46%),
+        #182431;
+}
+
+body.dark-mode .footer {
+    border-color: #273648;
+}
+
+
+/* FOAG — casca atual no modo escuro */
+body.dark-mode header.cabecalho {
+    background: #0b1a2e !important;
+    border-bottom: 1px solid #334155;
+    box-shadow: 5px 5px 15px rgba(0,0,0,.4) !important;
+}
+
+body.dark-mode .header-icons i {
+    color: #ffffff !important;
+}
+
+body.dark-mode nav.menu {
+    background: #0b1a2e !important;
+    border-right: 1px solid #334155;
+    box-shadow: 5px 5px 15px rgba(0,0,0,.3) !important;
+}
+
+body.dark-mode nav.menu a {
+    color: #cbd5e1;
+}
+
+body.dark-mode nav.menu a:hover,
+body.dark-mode nav.menu a.active {
+    color: #60a5fa;
+    background: rgba(56,165,255,.15);
+}
+
+body.dark-mode .footer {
+    background: #0b1a2e !important;
+    border-color: #334155 !important;
+}
+
+body.dark-mode .footer-links a,
+body.dark-mode .footer-copy,
+body.dark-mode .logout-card p {
+    color: #94a3b8;
+}
+
+body.dark-mode .logout-icon {
+    background: rgba(56,165,255,.15);
+    color: #60a5fa;
+}
