@@ -15,9 +15,35 @@ if (empty($_SESSION['codigo_usuario'])) {
 /*
  * FOAG — endpoint reservado para a API de IA.
  *
- * Por enquanto, o Quiz funciona localmente usando os flashcards do aluno.
- * Quando a OpenAI for configurada, substituiremos este arquivo pela chamada
- * ao modelo e retornaremos:
+ * A tela do Quiz já envia SOMENTE os conteúdos marcados pelo aluno.
+ * O corpo recebido terá este formato:
+ *
+ * {
+ *   "quantidade": 10,
+ *   "dificuldade": "medium",
+ *   "tipo": "mixed",
+ *   "conteudos": [
+ *     {
+ *       "tipo": "anotacao",
+ *       "id": 123,
+ *       "texto": "conteúdo exato da anotação",
+ *       "data": "08/10/2026",
+ *       "materia": null
+ *     },
+ *     {
+ *       "tipo": "flashcard",
+ *       "id": "CARD_...",
+ *       "baralho_id": "BAR_...",
+ *       "baralho": "Citologia",
+ *       "materia": "Biologia",
+ *       "pergunta": "...",
+ *       "resposta": "..."
+ *     }
+ *   ]
+ * }
+ *
+ * Quando a OpenAI for conectada, este endpoint deve usar apenas esse array
+ * `conteudos` para gerar as questões e retornar:
  *
  * {
  *   "sucesso": true,

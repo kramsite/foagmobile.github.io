@@ -178,3 +178,52 @@ body.dark-mode .logout-icon {
     background: rgba(56,165,255,.15);
     color: #60a5fa;
 }
+
+/* Seleção específica de conteúdos */
+body.dark-mode .input-wrap input,
+body.dark-mode .content-source-card,
+body.dark-mode .selectable-content-item,
+body.dark-mode .content-checkmark,
+body.dark-mode .review-save-subject {
+    color: #e4edf5;
+    background: #182431;
+    border-color: #2b3b4d;
+}
+
+body.dark-mode .selection-summary {
+    background: rgba(56,165,255,.08);
+    border-color: #2d4961;
+}
+
+body.dark-mode .selection-summary strong,
+body.dark-mode .content-source-head h3,
+body.dark-mode .content-item-body strong {
+    color: #e7eef6;
+}
+
+body.dark-mode .selectable-content-item {
+    background: #1a2734;
+}
+
+body.dark-mode .selectable-content-item:hover,
+body.dark-mode .selectable-content-item:has(.content-checkbox:checked) {
+    background: rgba(56,165,255,.10);
+}
+
+body.dark-mode .content-checkmark {
+    background: #223242;
+}
+
+body.dark-mode .content-empty {
+    border-color: #344657;
+    color: #8797a7;
+}
+
+body.dark-mode .quiz-options-divider::before,
+body.dark-mode .quiz-options-divider::after {
+    background: #2a3948;
+}
+
+body.dark-mode .review-save-subject {
+    background: #1b2937;
+}

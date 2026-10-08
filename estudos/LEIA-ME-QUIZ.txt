@@ -1,13 +1,20 @@
-FOAG — QUIZ integrado à pasta Estudos
+FOAG — QUIZ com seleção de conteúdo específico
 
-O que foi alterado:
-- estudos.php: o card Quiz agora abre quiz/quiz.php.
-- Nova pasta quiz/ com página, estilos, JavaScript e salvamento dos flashcards de revisão.
-- O Quiz já funciona localmente com os flashcards cadastrados na matéria.
-- No resultado, é possível refazer os erros e criar um novo baralho de flashcards de revisão.
-- A opção Anotações já aparece na interface, mas depende da API do ChatGPT para gerar perguntas a partir delas.
-- gerar_quiz.php está reservado para a próxima etapa de integração com a API.
+O que mudou nesta versão:
+- A matéria NÃO é mais obrigatória para montar o quiz.
+- O campo de matéria virou apenas um filtro opcional para encontrar conteúdos mais rápido.
+- O aluno seleciona individualmente quais ANOTAÇÕES entram no quiz.
+- O aluno seleciona individualmente quais FLASHCARDS entram no quiz, mesmo que estejam em baralhos diferentes.
+- Há busca por texto nos conteúdos.
+- É possível selecionar/desmarcar todos os itens visíveis após aplicar busca ou filtro.
+- A tela mostra quantas anotações e quantos flashcards foram escolhidos.
+- O endpoint da futura API recebe somente os conteúdos que foram marcados.
+- Sem a API, o quiz continua funcionando com os flashcards selecionados.
+- Se houver uma anotação selecionada, o FOAG avisa que a API é necessária em vez de ignorar a anotação.
+- No final, o aluno escolhe em qual matéria quer salvar o baralho de flashcards de revisão, porque um quiz pode misturar conteúdos de matérias diferentes.
 
-Importante:
-- Esta versão foi montada em cima do estudos(8).zip enviado agora.
-- Cursor, aparência, acessibilidade, cabeçalho, menu e rodapé foram mantidos no padrão atual do FOAG.
+Fontes atuais de dados:
+- Flashcards: flashcards.json do usuário.
+- Anotações: inicio.json + anotações antigas salvas no localStorage `foag_important_notes`.
+
+A próxima etapa é ligar gerar_quiz.php à API da OpenAI.

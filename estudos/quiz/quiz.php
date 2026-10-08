@@ -35,12 +35,21 @@ $flashcardsData = carregarJsonQuiz(
     ['baralhos' => []]
 );
 
+$inicioData = carregarJsonQuiz(
+    $pastaUsuario . '/inicio.json',
+    ['anotacoes_importantes' => []]
+);
+
 if (!isset($materiasData['materias']) || !is_array($materiasData['materias'])) {
     $materiasData['materias'] = [];
 }
 
 if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos'])) {
     $flashcardsData['baralhos'] = [];
+}
+
+if (!isset($inicioData['anotacoes_importantes']) || !is_array($inicioData['anotacoes_importantes'])) {
+    $inicioData['anotacoes_importantes'] = [];
 }
 ?>
 <!DOCTYPE html>
@@ -70,6 +79,11 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
 
         window.FLASHCARDS_DATA = <?= json_encode(
             $flashcardsData,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+        ); ?>;
+
+        window.ANOTACOES_DATA = <?= json_encode(
+            $inicioData['anotacoes_importantes'],
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
         ); ?>;
 
@@ -151,59 +165,87 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
 
             <!-- CONFIGURAÇÃO -->
             <section id="screen-setup" class="screen active">
-                <div class="setup-grid">
+                <div class="setup-grid setup-grid-content">
                     <section class="panel setup-panel">
                         <div class="panel-heading">
                             <div>
                                 <span class="step-pill">1</span>
-                                <h2>Monte sua revisão</h2>
+                                <h2>Escolha o que quer revisar</h2>
                             </div>
-                            <p>Escolha o conteúdo e o formato do quiz.</p>
+                            <p>Selecione anotações e flashcards específicos. A matéria serve apenas como filtro.</p>
                         </div>
 
-                        <div class="field">
-                            <label for="quiz-subject">Matéria</label>
-                            <div class="select-wrap">
-                                <i class="fa-solid fa-book-open"></i>
-                                <select id="quiz-subject">
-                                    <option value="">Selecione uma matéria</option>
-                                </select>
+                        <div class="content-toolbar">
+                            <div class="field compact-field">
+                                <label for="content-search">Buscar conteúdo</label>
+                                <div class="input-wrap">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                    <input id="content-search" type="search" placeholder="Buscar em anotações e flashcards...">
+                                </div>
                             </div>
-                            <small id="subject-hint">As matérias cadastradas no FOAG aparecem aqui.</small>
+
+                            <div class="field compact-field">
+                                <label for="quiz-subject">Filtrar por matéria <span class="optional-label">opcional</span></label>
+                                <div class="select-wrap">
+                                    <i class="fa-solid fa-filter"></i>
+                                    <select id="quiz-subject">
+                                        <option value="">Todas as matérias</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
 
-                        <div class="field">
-                            <span class="field-label">Usar como base</span>
-
-                            <div class="source-grid">
-                                <label class="choice-card source-card">
-                                    <input type="checkbox" id="source-notes" value="notes">
-                                    <span class="choice-check">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span class="choice-icon">
-                                        <i class="fa-regular fa-note-sticky"></i>
-                                    </span>
-                                    <span>
-                                        <strong>Anotações</strong>
-                                        <small>Resumos e conteúdos salvos</small>
-                                    </span>
-                                </label>
-
-                                <label class="choice-card source-card">
-                                    <input type="checkbox" id="source-flashcards" value="flashcards" checked>
-                                    <span class="choice-check">
-                                        <i class="fa-solid fa-check"></i>
-                                    </span>
-                                    <span class="choice-icon">
-                                        <i class="fa-solid fa-layer-group"></i>
-                                    </span>
-                                    <span>
-                                        <strong>Flashcards</strong>
-                                        <small>Cartões da matéria escolhida</small>
-                                    </span>
-                                </label>
+                        <div class="selection-summary" id="selection-summary">
+                            <div>
+                                <span class="selection-icon"><i class="fa-solid fa-check"></i></span>
+                                <div>
+                                    <strong id="selected-content-count">0 conteúdos selecionados</strong>
+                                    <small id="selected-content-detail">Escolha pelo menos um item abaixo.</small>
+                                </div>
                             </div>
+                            <button id="clear-content-selection" class="text-button" type="button" disabled>Limpar seleção</button>
+                        </div>
+
+                        <div class="content-source-grid">
+                            <section class="content-source-card">
+                                <div class="content-source-head">
+                                    <div>
+                                        <span class="choice-icon notes-icon"><i class="fa-regular fa-note-sticky"></i></span>
+                                        <div>
+                                            <h3>Anotações</h3>
+                                            <p>Marque somente as anotações que entram neste quiz.</p>
+                                        </div>
+                                    </div>
+                                    <button id="select-all-notes" class="mini-action" type="button">Selecionar visíveis</button>
+                                </div>
+                                <div id="notes-content-list" class="content-item-list"></div>
+                                <div id="notes-empty" class="content-empty" hidden>
+                                    <i class="fa-regular fa-note-sticky"></i>
+                                    <span>Nenhuma anotação encontrada.</span>
+                                </div>
+                            </section>
+
+                            <section class="content-source-card">
+                                <div class="content-source-head">
+                                    <div>
+                                        <span class="choice-icon flash-icon"><i class="fa-solid fa-layer-group"></i></span>
+                                        <div>
+                                            <h3>Flashcards</h3>
+                                            <p>Você pode escolher cartões individuais, mesmo de baralhos diferentes.</p>
+                                        </div>
+                                    </div>
+                                    <button id="select-all-flashcards-content" class="mini-action" type="button">Selecionar visíveis</button>
+                                </div>
+                                <div id="flashcards-content-list" class="content-item-list"></div>
+                                <div id="flashcards-empty" class="content-empty" hidden>
+                                    <i class="fa-solid fa-layer-group"></i>
+                                    <span>Nenhum flashcard encontrado.</span>
+                                </div>
+                            </section>
+                        </div>
+
+                        <div class="quiz-options-divider">
+                            <span>Configurações do quiz</span>
                         </div>
 
                         <div class="settings-row">
@@ -240,26 +282,17 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
                             <div class="type-grid">
                                 <label class="type-option">
                                     <input type="radio" name="quiz-type" value="multiple" checked>
-                                    <span>
-                                        <i class="fa-solid fa-list-check"></i>
-                                        Múltipla escolha
-                                    </span>
+                                    <span><i class="fa-solid fa-list-check"></i>Múltipla escolha</span>
                                 </label>
 
                                 <label class="type-option">
                                     <input type="radio" name="quiz-type" value="truefalse">
-                                    <span>
-                                        <i class="fa-solid fa-toggle-on"></i>
-                                        Verdadeiro ou falso
-                                    </span>
+                                    <span><i class="fa-solid fa-toggle-on"></i>Verdadeiro ou falso</span>
                                 </label>
 
                                 <label class="type-option">
                                     <input type="radio" name="quiz-type" value="mixed">
-                                    <span>
-                                        <i class="fa-solid fa-shuffle"></i>
-                                        Misturado
-                                    </span>
+                                    <span><i class="fa-solid fa-shuffle"></i>Misturado</span>
                                 </label>
                             </div>
                         </div>
@@ -268,41 +301,34 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
 
                         <button id="generate-quiz" class="btn-primary btn-large" type="button">
                             <i class="fa-solid fa-wand-magic-sparkles"></i>
-                            Gerar quiz
+                            Gerar quiz com os conteúdos selecionados
                         </button>
                     </section>
 
-                    <aside class="panel preview-panel">
+                    <aside class="panel preview-panel compact-preview-panel">
                         <div class="preview-visual">
                             <div class="bubble bubble-1"></div>
                             <div class="bubble bubble-2"></div>
 
                             <div class="preview-card">
-                                <span class="preview-tag">Revisão</span>
-                                <div class="preview-question-mark">?</div>
-                                <h3>Teste o que você aprendeu</h3>
-                                <p>
-                                    O FOAG transforma seus conteúdos em perguntas e mostra
-                                    onde você precisa revisar mais.
-                                </p>
+                                <span class="preview-tag">Você escolhe</span>
+                                <div class="preview-question-mark"><i class="fa-solid fa-crosshairs"></i></div>
+                                <h3>Revisão focada no conteúdo certo</h3>
+                                <p>Em vez de revisar uma matéria inteira, monte o quiz só com os pontos que interessam agora.</p>
 
                                 <div class="preview-benefits">
-                                    <span><i class="fa-solid fa-check"></i> Correção na hora</span>
-                                    <span><i class="fa-solid fa-check"></i> Explicação das respostas</span>
-                                    <span><i class="fa-solid fa-check"></i> Flashcards dos erros</span>
+                                    <span><i class="fa-solid fa-check"></i> Anotações específicas</span>
+                                    <span><i class="fa-solid fa-check"></i> Flashcards individuais</span>
+                                    <span><i class="fa-solid fa-check"></i> Pode misturar conteúdos</span>
                                 </div>
                             </div>
                         </div>
 
                         <div class="tip-card">
-                            <div class="tip-icon">
-                                <i class="fa-regular fa-lightbulb"></i>
-                            </div>
+                            <div class="tip-icon"><i class="fa-regular fa-lightbulb"></i></div>
                             <div>
                                 <strong>Dica FOAG</strong>
-                                <p>
-                                    Misture anotações e flashcards para uma revisão mais completa.
-                                </p>
+                                <p>Use o filtro de matéria só para encontrar o conteúdo mais rápido. Você decide item por item o que entra no quiz.</p>
                             </div>
                         </div>
                     </aside>
@@ -313,7 +339,7 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
             <section id="screen-quiz" class="screen">
                 <div class="quiz-topbar">
                     <div>
-                        <span id="quiz-subject-badge" class="subject-badge">Matéria</span>
+                        <span id="quiz-subject-badge" class="subject-badge">Conteúdo selecionado</span>
                         <h2 id="quiz-title">Quiz de revisão</h2>
                     </div>
 
@@ -500,6 +526,17 @@ if (!isset($flashcardsData['baralhos']) || !is_array($flashcardsData['baralhos']
                 <h2>Flashcards de revisão</h2>
                 <p>Escolha quais cartões você quer adicionar ao FOAG.</p>
             </div>
+        </div>
+
+        <div class="review-save-subject field">
+            <label for="review-subject">Salvar este baralho em qual matéria?</label>
+            <div class="select-wrap">
+                <i class="fa-solid fa-book-open"></i>
+                <select id="review-subject">
+                    <option value="">Selecione a matéria</option>
+                </select>
+            </div>
+            <small>Como o quiz pode misturar conteúdos, você escolhe onde guardar os flashcards de revisão.</small>
         </div>
 
         <div class="select-all-row">
